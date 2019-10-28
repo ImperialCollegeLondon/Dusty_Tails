@@ -22,7 +22,7 @@ for line in dataset:
 dataset.close()
 
 
-for i in range(0, 50):
+for i in range(0, 100):
        fig = plt.figure()
        ax = fig.add_subplot(111)
        ax.set_xlim(-1.0, 1.0)
@@ -34,6 +34,6 @@ for i in range(0, 50):
         
        plt.savefig("fig{0:01}.png".format(i))
        
-	   
+       plt.close()
         
 plt.close('all')
