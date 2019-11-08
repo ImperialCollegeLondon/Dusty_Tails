@@ -4,20 +4,20 @@
 #include <vector>
 #include <cmath>
 #include <fstream>
+#include <algorithm>
 #include "constants.h"
-#incude "butcher.h"
+#include "butcher.h"
 
 using namespace std;
 
-//Variable declaration
 
 const double Mstar_kg = 0.8*Msun; //mass of star in kg
 const double Mstar_sun = 0.8; //mass of star in terms of mass of the sun
-const double Period_days = 15.0/24.0; //period of dust grain in days
-const double T = 15*3600.0; //period of dust grain in seconds
+const double Period_days = 0.8; //period of dust grain in days
+const double T = 0.8*24.0*60.0*60.0; //period of dust grain in seconds
 
-const double atol = 1e-6;
-const double rtol = 1e-6;
+const double S = 0.97; //safety factor
+const double tol = 1e-6; //error tolerance
 
 
 double k1_xdot, k2_xdot, k3_xdot, k4_xdot, k5_xdot, k6_xdot, k7_xdot;
@@ -28,7 +28,66 @@ double k1_x, k2_x, k3_x, k4_x, k5_x, k6_x, k7_x;
 double k1_y, k2_y, k3_y, k4_y, k5_y, k6_y, k7_y;
 double k1_z, k2_z, k3_z, k4_z, k5_z, k6_z, k7_z;
 
-double G_dim, a;
+double xdot_new, ydot_new, zdot_new;
+double x_new, y_new, z_new;
+
+double xdot4, ydot4, zdot4, x4, y4, z4;
+double xdot5, ydot5, zdot5, x5, y5, z5;
+
+double del, h_opt, max_delta, scalar;
+
+double xdot_err, ydot_err, zdot_err;
+double x_err, y_err, z_err;
+
+double G_dim, a, h_new, h0, semi;
+double vel_dot;
+
+vector <double> deltas, delta_values, x_positions, y_positions, z_positions, time_plot, semis, t, timing, as;
+vector <double> position_new, velocity_new, r0, v0, x, y, z;
+
+vector <vector <double> > positions, velocities, final_positions, final_velocities;
+
+
+double eval_velocity(double h, double vx, double vy, double vz, double x, double y, double z, bool order7);
+
+
+
+void file_creator(vector<double> x, vector<double> y, vector<double> z);
+
+void file_creator(vector<double> x, vector<double> y, vector<double> z) {
+	ofstream myfile("rk_data.txt");
+	if (myfile.is_open()) {
+		for (int i = 0; i < x.size(); i++) {
+			char string[20];
+            
+			myfile << x[i] << ",";
+			myfile << y[i] << ",";
+            myfile << z[i] << "\n";
+		}
+		myfile.close();
+	}
+    
+	else cout << "unable to open file";
+
+}
+
+void file_plot(vector<double> time, vector<double> semi_major_axis);
+
+void file_plot(vector<double> time, vector<double> semi_major_axis) {
+	ofstream myfile("rk_data.txt");
+	if (myfile.is_open()) {
+		for (int i = 0; i < time.size(); i++) {
+			char string[20];
+            
+			myfile << time[i] << ",";
+			myfile << semi_major_axis[i] << "\n";
+		}
+		myfile.close();
+	}
+    
+	else cout << "unable to open file";
+
+}
 
 
 //function to evaluate ODE for velocity
@@ -117,151 +176,383 @@ void k_velocities(double h, double x, double y, double z, bool order7){
                         y + a61*k1_ydot + a62*k2_ydot + a63*k3_ydot + a64*k4_ydot + a65*k5_ydot, \
                         z + a61*k1_zdot + a62*k2_zdot + a63*k3_zdot + a64*k4_zdot + a65*k5_zdot);
 
- if (order7 = TRUE) {
+ if (order7 = true) {
    
-  k7_xdot = h*vel_ODE(G_dim, x + a71*k1_xdot + a72*k2_xdot + a73*k3_xdot + a74*k4_xdot + a75*k5_xdot + a76*k6_xdot, \
-                         x + a71*k1_xdot + a72*k2_xdot + a73*k3_xdot + a74*k4_xdot + a75*k5_xdot + a76*k6_xdot, \
-                         y + a71*k1_ydot + a72*k2_ydot + a73*k3_ydot + a74*k4_ydot + a75*k5_ydot + a76*k6_ydot, \
-                         z + a71*k1_zdot + a72*k2_zdot + a73*k3_zdot + a74*k4_zdot + a75*k5_zdot + a76*k6_zdot);
+  k7_xdot = h*vel_ODE(G_dim, x + a71*k1_xdot + a73*k3_xdot + a74*k4_xdot + a75*k5_xdot + a76*k6_xdot, \
+                         x + a71*k1_xdot  + a73*k3_xdot + a74*k4_xdot + a75*k5_xdot + a76*k6_xdot, \
+                         y + a71*k1_ydot  + a73*k3_ydot + a74*k4_ydot + a75*k5_ydot + a76*k6_ydot, \
+                         z + a71*k1_zdot  + a73*k3_zdot + a74*k4_zdot + a75*k5_zdot + a76*k6_zdot);
 
-  k7_ydot = h*vel_ODE(G_dim, y + a71*k1_ydot + a72*k2_ydot + a73*k3_ydot + a74*k4_ydot + a75*k5_ydot + a76*k6_ydot, \
-                         x + a71*k1_xdot + a72*k2_xdot + a73*k3_xdot + a74*k4_xdot + a75*k5_xdot + a76*k6_xdot, \
-                         y + a71*k1_ydot + a72*k2_ydot + a73*k3_ydot + a74*k4_ydot + a75*k5_ydot + a76*k6_ydot, \
-                         z + a71*k1_zdot + a72*k2_zdot + a73*k3_zdot + a74*k4_zdot + a75*k5_zdot + a76*k6_zdot);
+  k7_ydot = h*vel_ODE(G_dim, y + a71*k1_ydot + a73*k3_ydot + a74*k4_ydot + a75*k5_ydot + a76*k6_ydot, \
+                         x + a71*k1_xdot  + a73*k3_xdot + a74*k4_xdot + a75*k5_xdot + a76*k6_xdot, \
+                         y + a71*k1_ydot  + a73*k3_ydot + a74*k4_ydot + a75*k5_ydot + a76*k6_ydot, \
+                         z + a71*k1_zdot  + a73*k3_zdot + a74*k4_zdot + a75*k5_zdot + a76*k6_zdot);
 
-  k7_zdot = h*vel_ODE(G_dim, z + a71*k1_zdot + a72*k2_zdot + a73*k3_zdot + a74*k4_zdot + a75*k5_zdot + a76*k6_zdot;  \
-                        x + a71*k1_xdot + a72*k2_xdot + a73*k3_xdot + a74*k4_xdot + a75*k5_xdot + a76*k6_xdot, \
-                        y + a71*k1_ydot + a72*k2_ydot + a73*k3_ydot + a74*k4_ydot + a75*k5_ydot + a76*k6_ydot, \
-                        z + a71*k1_zdot + a72*k2_zdot + a73*k3_zdot + a74*k4_zdot + a75*k5_zdot + a76*k6_zdot); 
+  k7_zdot = h*vel_ODE(G_dim, z + a71*k1_zdot + a73*k3_zdot + a74*k4_zdot + a75*k5_zdot + a76*k6_zdot, \
+                        x + a71*k1_xdot + a73*k3_xdot + a74*k4_xdot + a75*k5_xdot + a76*k6_xdot, \
+                        y + a71*k1_ydot + a73*k3_ydot + a74*k4_ydot + a75*k5_ydot + a76*k6_ydot, \
+                        z + a71*k1_zdot + a73*k3_zdot + a74*k4_zdot + a75*k5_zdot + a76*k6_zdot); 
 
-   }
+ }
 
 
 }
 
-void k_positions(double h, double vx, double vy, double vz, bool order7) {
+
+void k_positions(double h, double vx, double vy, double vz, double x, double y, double z, bool order7) {
     
     k1_x = h*vx;
     k1_y = h*vy;
     k1_z = h*vz;
     
-    k2_x = h* (vx + a21*k1_x);
-    k2_y = h* (vy + a21*k1_y);
-    k2_z = h* (vz + a21*k1_z);
+    eval_velocity(c2*h, vx, vy, vz, x + a21*k1_x, y + a21*k1_y, z + a21*k1_z, order7);
     
-    k3_x = h* (vx + a31*k1_x + a32*k2_x);
-    k3_y = h* (vy + a31*k1_y + a32*k2_y);
-    k3_z = h* (vz + a31*k1_z + a32*k2_z);
+    k2_x = h* xdot_new;
+    k2_y = h* ydot_new;
+    k2_z = h* zdot_new;
     
-    k4_x = h* (vx + a41*k1_x + a42*k2_x + a43*k3_x);
-    k4_y = h* (vy + a41*k1_y + a42*k2_y + a43*k3_y);
-    k4_z = h* (vz + a41*k1_z + a42*k2_z + a43*k3_z);
+    eval_velocity(c3*h, vx, vy, vz, \
+             x + a31*k1_x + a32*k2_x, \
+             y + a31*k1_y + a32*k2_y, \
+             z + a31*k1_z + a32*k2_z , order7);
     
-    k5_x = h* (vx + a51*k1_x + a52*k2_x + a53*k3_x + a54*k4_x);
-    k5_y = h* (vy + a51*k1_y + a52*k2_y + a53*k3_y + a54*k4_y);
-    k5_z = h* (vz + a51*k1_z + a52*k2_z + a53*k3_z + a54*k4_z);
+    k3_x = h* xdot_new;
+    k3_y = h* ydot_new;
+    k3_z = h* zdot_new;
     
-    k6_x = h* (vx + a61*k1_x + a62*k2_x + a63*k3_x + a64*k4_x + a65*k5_x);
-    k6_y = h* (vy + a61*k1_y + a62*k2_y + a63*k3_y + a64*k4_y + a65*k5_y);
-    k6_z = h* (vz + a61*k1_z + a62*k2_z + a63*k3_z + a64*k4_z + a65*k5_z);
+    eval_velocity(c4*h, vx, vy, vz, \
+             x + a41*k1_x + a42*k2_x + a43*k3_x, \
+             y + a41*k1_y + a42*k2_y + a43*k3_y, \
+             z + a41*k1_z + a42*k2_z +  a43*k3_z , order7);
     
-    if (order7 = TRUE) {
+    
+    k4_x = h* xdot_new;
+    k4_y = h* ydot_new;
+    k4_z = h* zdot_new;
+    
+    eval_velocity(c5*h, vx, vy, vz, \
+             x + a51*k1_x + a52*k2_x + a53*k3_x + a54*k4_x, \
+             y + a51*k1_y + a52*k2_y + a53*k3_y + a54*k4_y, \
+             z + a51*k1_z + a52*k2_z + a53*k3_z + a54*k4_z , order7);
+    
+    k5_x = h* xdot_new;
+    k5_y = h* ydot_new;
+    k5_z = h* zdot_new;
+    
+    eval_velocity(c6*h, vx, vy, vz, \
+             x + a61*k1_x + a62*k2_x + a63*k3_x + a64*k4_x + a65*k5_x, \
+             y + a61*k1_y + a62*k2_y + a63*k3_y + a64*k4_y + a65*k5_y, \
+             z + a61*k1_z + a62*k2_z + a63*k3_z + a64*k4_z + a65*k5_z , order7);
+    
+    k6_x = h* xdot_new;
+    k6_y = h* ydot_new;
+    k6_z = h* zdot_new;
+    
+    
+    if (order7 = true) {
+        
+       eval_velocity(c7*h, vx, vy, vz, \
+             x + a71*k1_x  + a73*k3_x + a74*k4_x + a75*k5_x + a76*k6_x, \
+             y + a71*k1_y  + a73*k3_y + a74*k4_y + a75*k5_y + a76*k6_y, \
+             z + a71*k1_z  + a73*k3_z + a74*k4_z + a75*k5_z + a76*k6_z , order7);
    
-       k7_x = h* (vx + a71*k1_x + a72*k2_x + a73*k3_x + a74*k4_x + a75*k5_x + a76*k6_x);
-       k7_y = h* (vy + a71*k1_y + a72*k2_y + a73*k3_y + a74*k4_y + a75*k5_y + a76*k6_y);
-       k7_z = h* (vz + a71*k1_z + a72*k2_z + a73*k3_z + a74*k4_z + a75*k5_z + a76*k6_z); 
+       k7_x = h* xdot_new;
+       k7_y = h* ydot_new;
+       k7_z = h* zdot_new;
        
-
-   }
+    }
 }
 
-void new_velocity(double h, double vx, double vy, double vz, double x, double y, double z, bool order7){
+
+
+double eval_velocity(double h, double vx, double vy, double vz, double x, double y, double z, bool order7){
     
-    if (order7 = FALSE) {
+    if (order7 = false) {
         
-        k_velocities(h, x, y, z, FALSE);
-        xdot_new = vx + b1*k1_xdot + b2* k2_xdot + b3* k3_xdot + b4* k4_xdot + b5* k5_xdot + b6* k6_xdot;        
-        ydot_new = vy + b1*k1_ydot + b2* k2_ydot + b3* k3_ydot + b4* k4_ydot + b5* k5_ydot + b6* k6_ydot;
-        zdot_new = vz + b1*k1_zdot + b2* k2_zdot + b3* k3_zdot + b4* k4_zdot + b5* k5_zdot + b6* k6_zdot;
+        k_velocities(h, x, y, z, false);
         
+        xdot_new = vx + b1*k1_xdot  + b3* k3_xdot + b4* k4_xdot + b5* k5_xdot + b6* k6_xdot;        
+        ydot_new = vy + b1*k1_ydot  + b3* k3_ydot + b4* k4_ydot + b5* k5_ydot + b6* k6_ydot;
+        zdot_new = vz + b1*k1_zdot  + b3* k3_zdot + b4* k4_zdot + b5* k5_zdot + b6* k6_zdot;
+        
+    } else {
+        
+       k_velocities(h, x, y, z, true);
+        
+       xdot_new = vx + \
+          bs1*k1_xdot  + bs3* k3_xdot + bs4* k4_xdot + bs5* k5_xdot + bs6* k6_xdot + bs7* k7_xdot;
+       ydot_new = vy + \
+          bs1*k1_ydot  + bs3* k3_ydot + bs4* k4_ydot + bs5* k5_ydot + bs6* k6_ydot + bs7* k7_ydot;
+       zdot_new = vz + \
+          bs1*k1_zdot  + bs3* k3_zdot + bs4* k4_zdot + bs5* k5_zdot + bs6* k6_zdot + bs7* k7_zdot; 
     }
     
-    else {
-      k_velocities(h, x, y, z, TRUE);
-      xdot_snew = vx + \
-          bs1*k1_xdot + bs2* k2_xdot + bs3* k3_xdot + bs4* k4_xdot + bs5* k5_xdot + bs6* k6_xdot + bs7* k7_xdot;
-      ydot_snew = vy + \
-          bs1*k1_ydot + bs2* k2_ydot + bs3* k3_ydot + bs4* k4_ydot + bs5* k5_ydot + bs6* k6_ydot + bs7* k7_ydot;
-      zdot_snew = vz + \
-          bs1*k1_zdot + bs2* k2_zdot + bs3* k3_zdot + bs4* k4_zdot + bs5* k5_zdot + bs6* k6_zdot + bs7* k7_zdot; 
-    }
-    
+    return xdot_new, ydot_new, zdot_new;
 }
 
 
-void new_position(double h, double vx, double vy, double vz, double x, double y, double z, bool order7){
+double eval_position(double h, double vx, double vy, double vz, double x, double y, double z, bool order7){
     
-    if (order7 = FALSE) {
-     k_positions(h, vx, vy, vx, FALSE);
-     xdot_new = vx + b1*k1_xdot + b2* k2_xdot + b3* k3_xdot + b4* k4_xdot + b5* k5_xdot + b6* k6_xdot;
-     ydot_new = vy + b1*k1_ydot + b2* k2_ydot + b3* k3_ydot + b4* k4_ydot + b5* k5_ydot + b6* k6_ydot;
-     zdot_new = vz + b1*k1_zdot + b2* k2_zdot + b3* k3_zdot + b4* k4_zdot + b5* k5_zdot + b6* k6_zdot;    
+    if (order7 = false) {
+     k_positions(h, vx, vy, vx, x, y, z, false);
+        
+     x_new = x + b1*k1_x + b3* k3_x + b4* k4_x + b5* k5_x + b6* k6_x;
+     y_new = y + b1*k1_y + b3* k3_y + b4* k4_y + b5* k5_y + b6* k6_y;
+     z_new = z + b1*k1_z + b3* k3_z + b4* k4_z + b5* k5_z + b6* k6_z;    
+    
+    } else {
+        
+      k_positions(h, vx, vy, vz, x, y, z, true);
+        
+      x_new = x + bs1*k1_x + bs3* k3_x + bs4* k4_x + bs5* k5_x + bs6* k6_x + bs7 * k7_x;
+      y_new = y + bs1*k1_y + bs3* k3_y + bs4* k4_y + bs5* k5_y + bs6* k6_y + bs7 * k7_y;
+      z_new = z + bs1*k1_z + bs3* k3_z + bs4* k4_z + bs5* k5_z + bs6* k6_z + bs7 * k7_z;
     }
     
-    else {
-      k_positions(h, vx, vy, vz, TRUE);
-      xdot_snew = vx + \
-          bs1*k1_xdot + bs2* k2_xdot + bs3* k3_xdot + bs4* k4_xdot + bs5* k5_xdot + bs6* k6_xdot + bs7* k7_xdot;
-      ydot_snew = vy + \
-          bs1*k1_ydot + bs2* k2_ydot + bs3* k3_ydot + bs4* k4_ydot + bs5* k5_ydot + bs6* k6_ydot + bs7* k7_ydot;
-      zdot_snew = vz + \
-          bs1*k1_zdot + bs2* k2_zdot + bs3* k3_zdot + bs4* k4_zdot + bs5* k5_zdot + bs6* k6_zdot + bs7* k7_zdot; 
-    }
-}
-
-double error(double value1, double value2){
-    
-    scale1 = atol + abs(value1)*rtol;
-    scale2 = atol + abs(value2)*rtol;
-    
-    delta = abs(value1 - value2);
-    
-    err = 
-    
+    return x_new, y_new, z_new;
 }
 
 
 
-void RK_solver(double h0, vector < vector <double> > pos, vector < vector <double> > vel){
+double delta( double value1, double value2){
     
-    for (unsigned int i = 0; i < 1000; i++) {
+    del = abs(value1 - value2) + 1e-10;
+    
+    return del/tol;
+    
+      
+}
+
+double h_optimal(vector <double> deltas, double h){
+    
+    max_delta = *max_element(deltas.begin(), deltas.end()); //includes tolerance
+    
+    h_opt = S * h * pow(1/max_delta, 1.0/5.0);
+    
+    if (h_opt < h){
         
-        if (i = 0) {
-            
-            new_velocity(h0, vel[0][0], vel[0][1], vel[0][2], pos[0][0], pos[0][1], pos[0][2], FALSE);
-            new_velocity(h0, vel[0][0], vel[0][1], vel[0][2], pos[0][0], pos[0][1], pos[0][2], TRUE);
-            
-            new_position(h0, vel[0][0], vel[0][1], vel[0][2], pos[0][0], pos[0][1], pos[0][2], FALSE);
-            new_position(h0, vel[0][0], vel[0][1], vel[0][2], pos[0][0], pos[0][1], pos[0][2], TRUE);
-            
-            
-            
-            
-        }
+        return h_opt;
         
-        else{
-            
+    } else return h;
+
+}
+
+
+
+
+vector <double> h_check(double h, vector <double> velocity, vector <double> position){
+    
+    deltas.clear();
+    
+    //4th order velocity
+    eval_velocity(h, velocity[0], velocity[1], velocity[2], position[0], position[1], position[2], false);
+    
+    xdot4 = xdot_new;
+    ydot4 = ydot_new;
+    zdot4 = zdot_new;
+
+    //5th order velocity
+    eval_velocity(h, velocity[0], velocity[1], velocity[2], position[0], position[1], position[2], true);
+    
+    xdot5 = xdot_new;
+    ydot5 = ydot_new;
+    zdot5 = zdot_new;
+    
+    //4th order position
+    eval_position(h, velocity[0], velocity[1], velocity[2], position[0], position[1], position[2], false);
+    
+    x4 = x_new;
+    y4 = y_new;
+    z4 = z_new; 
+    
+    //5th order postiion
+    eval_position(h, velocity[0], velocity[1], velocity[2], position[0], position[1], position[2], true);
+    
+    x5 = x_new;
+    y5 = y_new;
+    z5 = z_new;
+    
+    //error on xdot
+    xdot_err = delta(xdot4, xdot5);
+    deltas.push_back(xdot_err);
+    
+    //error on ydot
+    ydot_err = delta(ydot4, ydot5);
+    deltas.push_back(ydot_err);
+    
+    //error on zdot
+    zdot_err = delta(zdot4, zdot5);
+    deltas.push_back(zdot_err);
+    
+    
+    //error on x  
+    x_err = delta(x4, x5);
+    deltas.push_back(x_err);
+    
+    //error on y
+    y_err = delta(y4, y5);
+    deltas.push_back(y_err);
+    
+    //error on z
+    z_err = delta(z4, z5);
+    deltas.push_back(z_err);
+    
+    return deltas;
+ 
+}
+
+
+vector <double> new_variables(double h, vector <double> velocity, vector <double> position) {
+    
+    //ensure vector are clear
+    velocity_new.clear();
+    position_new.clear();
+    
+    eval_velocity(h, velocity[0], velocity[1], velocity[2], position[0], position[1], position[2], false); 
+    
+    velocity_new.push_back(xdot_new);
+    velocity_new.push_back(ydot_new);
+    velocity_new.push_back(zdot_new);
+       
+        
+     eval_position(h, velocity[0], velocity[1], velocity[2], position[0], position[1], position[2], false);
+    
+     
+     position_new.push_back(x_new);
+     position_new.push_back(y_new);
+     position_new.push_back(z_new);
+         
+     return velocity_new;
+     return position_new;
+}
+
+
+
+
+
+void RK_solver(double h0, vector < vector <double> > pos, vector < vector <double> > vel, \
+     vector <double> x_positions, vector <double> y_positions, vector <double> z_positions, vector <double> t){
+    
+    h_new = h0;
+    
+    //obtain delta values for the 6 variables
+    delta_values = h_check(h_new, vel[0], pos[0]);
         
         
+        //calculate new h
+    h_new = h_optimal(delta_values, h_new);
         
-            }
-    }
+        
+    new_variables(h_new, vel[0], pos[0]);
+        
+    x_positions.push_back(position_new[0]);
+    y_positions.push_back(position_new[1]);
+    z_positions.push_back(position_new[2]);
+        
+    pos.push_back(position_new);
+    vel.push_back(velocity_new);
+        
+        
+    t.push_back(h_new);
+        
+    
+    for (unsigned int i = 1; i < 500; i++) {
+        
+        //obtain delta values for the 6 variables
+        delta_values = h_check(h_new, vel[i], pos[i]);
+        
+        
+        //calculate new h
+        h_new = h_optimal(delta_values, h_new);
+        
+        
+        new_variables(h_new, vel[i], pos[i]);
+        
+        x_positions.push_back(position_new[0]);
+        y_positions.push_back(position_new[1]);
+        z_positions.push_back(position_new[2]);
+        
+        pos.push_back(position_new);
+        vel.push_back(velocity_new);
+        
+        t.push_back(t[i-1] + h_new);
+        
+       
+       
+     } 
+    
+    
+     final_positions = pos;
+     final_velocities = vel;
+     x = x_positions;
+     y = y_positions;
+     z = z_positions;
+     
+     timing = t;
+     
+     cout << "done!" << endl;
+}
+
+vector <double> semimajor_plot(vector <double> x_pos, vector <double> y_pos, vector <double> z_pos){
+     
+     for (unsigned int i = 0; i < 500; i++) {
+     
+         scalar = pow( pow(x_pos[i], 2.) + pow(y_pos[i], 2.) + pow(z_pos[i], 2.), 0.5 );
+     
+         semis.push_back(scalar);
+     
+     }
+     
+     return semis;
 }
 
 int main() {
     
-    a = semimajor(Period_days);
-    G_dim = (G* pow(T, 2.0) * M_star_kg) / pow(a, 3.0); //dimensionless gravitational constant
     
+    a = semimajor(Period_days);
+    G_dim = (G* pow(T, 2.0) * Mstar_kg) / pow(a, 3.0); //dimensionless gravitational constant
+    
+    h0 = 0.001;
+    
+    //Define initial position in dimensionless units
+    
+    double x0 = 1.0;
+    double y0 = 0.0;
+    double z0 = 0.0;
+    
+    //initial position vector
+    r0.push_back(x0);
+    r0.push_back(y0);
+    r0.push_back(z0);
+    
+    //Define initial velocity in dimensionless units
+    
+    double xdot0 = 0.0;
+    double ydot0 = 2.0*PI;
+    double zdot0 = 0.0; 
+    
+    //initial velocity vector
+    v0.push_back(xdot0);
+    v0.push_back(ydot0);
+    v0.push_back(zdot0);
+    
+    positions.push_back(r0);
+    velocities.push_back(v0);
+    
+    x_positions.push_back(x0);
+    y_positions.push_back(y0);
+    z_positions.push_back(z0);
+    
+    double t0 = 0.0;
+    
+    t.push_back(t0);
+
+    RK_solver(h0, positions, velocities, x_positions, y_positions, z_positions, t);
+    
+    //as = semimajor_plot(x, y, z);
+    
+    //file_creator(timing, as);
+    
+   
     
 }
