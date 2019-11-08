@@ -549,9 +549,9 @@ int main() {
 
     RK_solver(h0, positions, velocities, x_positions, y_positions, z_positions, t);
     
-    //as = semimajor_plot(x, y, z);
+    as = semimajor_plot(x, y, z);
     
-    //file_creator(timing, as);
+    file_plot(timing, as);
     
    
     
