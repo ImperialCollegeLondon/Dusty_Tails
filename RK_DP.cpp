@@ -49,8 +49,6 @@ vector <double> position_new, velocity_new, r0, v0, x, y, z;
 
 vector <vector <double> > positions, velocities, final_positions, final_velocities;
 
-vector <double> x4s, x5s;
-
 double eval_velocity(double h, double vx, double vy, double vz, double x, double y, double z, bool order7);
 
 
@@ -109,13 +107,13 @@ double vel_ODE(double G_dim, double pos, double x, double y, double z){
 
 
 //function to evaluate k values for velocity solver
-void k_velocities(double h, double vx, double vy, double vz, double x, double y, double z, bool order7){
+void k_velocities(double h, double vx, double vy, double vz, double x, double y, double z, bool order){
  
  k1_xdot = h*vel_ODE(G_dim, x, x, y, z);
  k1_ydot = h*vel_ODE(G_dim, y, x, y, z);
  k1_zdot = h*vel_ODE(G_dim, z, x, y, z);
     
- eval_position(c2*h, vx + a21*k1_xdot, vy + a21*k1_ydot, vz + a21*k1_zdot, x, y, z, order7);
+ eval_position(c2*h, vx + a21*k1_xdot, vy + a21*k1_ydot, vz + a21*k1_zdot, x, y, z, order);
 
  k2_xdot = h*vel_ODE(G_dim, x_new , x_new, y_new, z_new);
  k2_ydot = h*vel_ODE(G_dim, y_new,  x_new, y_new, z_new);
@@ -123,80 +121,45 @@ void k_velocities(double h, double vx, double vy, double vz, double x, double y,
     
  eval_position(c3*h, vx + a31*k1_xdot + a32*k2_xdot, \
               vy + a31*k1_ydot + a32*k2_ydot,\
-              vz + a31*k1_zdot + a32*k2_zdot);
+              vz + a31*k1_zdot + a32*k2_zdot, order);
 
  k3_xdot = h*vel_ODE(G_dim, x_new, x_new, y_new, z_new);
-
  k3_ydot = h*vel_ODE(G_dim, y_new, x_new, y_new, z_new);
-
  k3_zdot = h*vel_ODE(G_dim, z_new, x_new, y_new, z_new);
     
  eval_position(c4*h, vx + a41*k1_xdot + a42*k2_xdot + a43*k3_xdot, \
               vy + a41*k1_ydot + a42*k2_ydot + a43*k3_ydot,\
-              vz)
+              vz + a41*k1_zdot + a42*k2_zdot + a43*k3_zdot, order);
 
- k4_xdot = h*vel_ODE(G_dim, x + a41*k1_xdot + a42*k2_xdot + a43*k3_xdot, \
-                     vy + , \
-                        x + a41*k1_xdot + a42*k2_xdot + a43*k3_xdot, \
-                        y + a41*k1_ydot + a42*k2_ydot + a43*k3_ydot, \
-                        z + a41*k1_zdot + a42*k2_zdot + a43*k3_zdot);
-
- k4_ydot = h*vel_ODE(G_dim, y + a41*k1_ydot + a42*k2_ydot + a43*k3_ydot, \
-                        x + a41*k1_xdot + a42*k2_xdot + a43*k3_xdot, \
-                        y + a41*k1_ydot + a42*k2_ydot + a43*k3_ydot, \
-                        z + a41*k1_zdot + a42*k2_zdot + a43*k3_zdot);
-
- k4_zdot = h*vel_ODE(G_dim, z + a41*k1_zdot + a42*k2_zdot + a43*k3_zdot, \
-                        x + a41*k1_xdot + a42*k2_xdot + a43*k3_xdot, \
-                        y + a41*k1_ydot + a42*k2_ydot + a43*k3_ydot, \
-                        z + a41*k1_zdot + a42*k2_zdot + a43*k3_zdot);
+ k4_xdot = h*vel_ODE(G_dim, x_new, x_new, y_new, z_new);
+ k4_ydot = h*vel_ODE(G_dim, y_new, x_new, y_new, z_new);
+ k4_zdot = h*vel_ODE(G_dim, z_new, x_new, y_new, z_new);
+	
+ eval_position(c5*h, vx + a51*k1_xdot + a52*k2_xdot + a53*k3_xdot + a54*k4_xdot, \
+	      vy + a51*k1_ydot + a52*k2_ydot + a53*k3_ydot + a54*k4_ydot, \
+	      vz + a51*k1_zdot + a52*k2_zdot + a53*k3_zdot + a54*k4_zdot, order); 
  
- k5_xdot = h*vel_ODE(G_dim, x + a51*k1_xdot + a52*k2_xdot + a53*k3_xdot + a54*k4_xdot, \
-                        x + a51*k1_xdot + a52*k2_xdot + a53*k3_xdot + a54*k4_xdot, \
-                        y + a51*k1_ydot + a52*k2_ydot + a53*k3_ydot + a54*k4_ydot, \
-                        z + a51*k1_zdot + a52*k2_zdot + a53*k3_zdot + a54*k4_zdot);
+ k5_xdot = h*vel_ODE(G_dim, x_new, x_new, y_new, z_new);
+ k5_ydot = h*vel_ODE(G_dim, y_new, x_new, y_new, z_new);
+ k5_zdot = h*vel_ODE(G_dim, z_new, x_new, y_new, z_new);
+ 
+ eval_position(c6*h, vx + a61*k1_xdot + a62*k2_xdot + a63*k3_xdot + a64*k4_xdot + a65*k5_xdot, \
+	       vy + a61*k1_ydot + a62*k2_ydot + a63*k3_ydot + a64*k4_ydot + a65*k5_ydot, \
+	       vz + a61*k1_zdot + a62*k2_zdot + a63*k3_zdot + a64*k4_zdot + a65*k5_zdot, order);
 
- k5_ydot = h*vel_ODE(G_dim, y + a51*k1_ydot + a52*k2_ydot + a53*k3_ydot + a54*k4_ydot, \
-                        x + a51*k1_xdot + a52*k2_xdot + a53*k3_xdot + a54*k4_xdot, \
-                        y + a51*k1_ydot + a52*k2_ydot + a53*k3_ydot + a54*k4_ydot, \
-                        z + a51*k1_zdot + a52*k2_zdot + a53*k3_zdot + a54*k4_zdot);
+ k6_xdot = h*vel_ODE(G_dim, x_new, x_new, y_new, z_new);
+ k6_ydot = h*vel_ODE(G_dim, y_new, x_new, y_new, z_new);
+ k6_zdot = h*vel_ODE(G_dim, z_new, x_new, y_new, z_new);	
 
- k5_zdot = h*vel_ODE(G_dim, z + a51*k1_zdot + a52*k2_zdot + a53*k3_zdot + a54*k4_zdot, \
-                        x + a51*k1_xdot + a52*k2_xdot + a53*k3_xdot + a54*k4_xdot, \
-                        y + a51*k1_ydot + a52*k2_ydot + a53*k3_ydot + a54*k4_ydot, \
-                        z + a51*k1_zdot + a52*k2_zdot + a53*k3_zdot + a54*k4_zdot);
-
- k6_xdot = h*vel_ODE(G_dim, x + a61*k1_xdot + a62*k2_xdot + a63*k3_xdot + a64*k4_xdot + a65*k5_xdot, \
-                        x + a61*k1_xdot + a62*k2_xdot + a63*k3_xdot + a64*k4_xdot + a65*k5_xdot, \
-                        y + a61*k1_ydot + a62*k2_ydot + a63*k3_ydot + a64*k4_ydot + a65*k5_ydot, \
-                        z + a61*k1_zdot + a62*k2_zdot + a63*k3_zdot + a64*k4_zdot + a65*k5_zdot);
-
- k6_ydot = h*vel_ODE(G_dim, y + a61*k1_ydot + a62*k2_ydot + a63*k3_ydot + a64*k4_ydot + a65*k5_ydot, \
-                        x + a61*k1_xdot + a62*k2_xdot + a63*k3_xdot + a64*k4_xdot + a65*k5_xdot, \
-                        y + a61*k1_ydot + a62*k2_ydot + a63*k3_ydot + a64*k4_ydot + a65*k5_ydot, \
-                        z + a61*k1_zdot + a62*k2_zdot + a63*k3_zdot + a64*k4_zdot + a65*k5_zdot);
-
- k6_zdot = h*vel_ODE(G_dim, z + a61*k1_zdot + a62*k2_zdot + a63*k3_zdot + a64*k4_zdot + a65*k5_zdot, \
-                        x + a61*k1_xdot + a62*k2_xdot + a63*k3_xdot + a64*k4_xdot + a65*k5_xdot, \
-                        y + a61*k1_ydot + a62*k2_ydot + a63*k3_ydot + a64*k4_ydot + a65*k5_ydot, \
-                        z + a61*k1_zdot + a62*k2_zdot + a63*k3_zdot + a64*k4_zdot + a65*k5_zdot);
-
- if (order7 == true) {
+ if (order == true) {
+	 
+  eval_position(c7*h, vx + a71*k1_xdot + a73*k3_xdot + a74*k4_xdot + a75*k5_xdot + a76*k6_xdot, \
+		vy + a71*k1_ydot  + a73*k3_ydot + a74*k4_ydot + a75*k5_ydot + a76*k6_ydot, \
+		vz + a71*k1_zdot  + a73*k3_zdot + a74*k4_zdot + a75*k5_zdot + a76*k6_zdot, order);
    
-  k7_xdot = h*vel_ODE(G_dim, x + a71*k1_xdot + a73*k3_xdot + a74*k4_xdot + a75*k5_xdot + a76*k6_xdot, \
-                         x + a71*k1_xdot  + a73*k3_xdot + a74*k4_xdot + a75*k5_xdot + a76*k6_xdot, \
-                         y + a71*k1_ydot  + a73*k3_ydot + a74*k4_ydot + a75*k5_ydot + a76*k6_ydot, \
-                         z + a71*k1_zdot  + a73*k3_zdot + a74*k4_zdot + a75*k5_zdot + a76*k6_zdot);
-
-  k7_ydot = h*vel_ODE(G_dim, y + a71*k1_ydot + a73*k3_ydot + a74*k4_ydot + a75*k5_ydot + a76*k6_ydot, \
-                         x + a71*k1_xdot  + a73*k3_xdot + a74*k4_xdot + a75*k5_xdot + a76*k6_xdot, \
-                         y + a71*k1_ydot  + a73*k3_ydot + a74*k4_ydot + a75*k5_ydot + a76*k6_ydot, \
-                         z + a71*k1_zdot  + a73*k3_zdot + a74*k4_zdot + a75*k5_zdot + a76*k6_zdot);
-
-  k7_zdot = h*vel_ODE(G_dim, z + a71*k1_zdot + a73*k3_zdot + a74*k4_zdot + a75*k5_zdot + a76*k6_zdot, \
-                        x + a71*k1_xdot + a73*k3_xdot + a74*k4_xdot + a75*k5_xdot + a76*k6_xdot, \
-                        y + a71*k1_ydot + a73*k3_ydot + a74*k4_ydot + a75*k5_ydot + a76*k6_ydot, \
-                        z + a71*k1_zdot + a73*k3_zdot + a74*k4_zdot + a75*k5_zdot + a76*k6_zdot); 
+  k7_xdot = h*vel_ODE(G_dim, x_new, x_new, y_new, z_new);
+  k7_ydot = h*vel_ODE(G_dim, y_new, x_new, y_new, z_new);
+  k7_zdot = h*vel_ODE(G_dim, z_new, x_new, y_new, z_new); 
 
  }
 
@@ -204,13 +167,13 @@ void k_velocities(double h, double vx, double vy, double vz, double x, double y,
 }
 
 
-void k_positions(double h, double vx, double vy, double vz, double x, double y, double z, bool order7) {
+void k_positions(double h, double vx, double vy, double vz, double x, double y, double z, bool order) {
     
     k1_x = h*vx;
     k1_y = h*vy;
     k1_z = h*vz;
     
-    eval_velocity(c2*h, vx, vy, vz, x + a21*k1_x, y + a21*k1_y, z + a21*k1_z, order7);
+    eval_velocity(c2*h, vx, vy, vz, x + a21*k1_x, y + a21*k1_y, z + a21*k1_z, order);
     
     k2_x = h* xdot_new;
     k2_y = h* ydot_new;
@@ -219,7 +182,7 @@ void k_positions(double h, double vx, double vy, double vz, double x, double y, 
     eval_velocity(c3*h, vx, vy, vz, \
              x + a31*k1_x + a32*k2_x, \
              y + a31*k1_y + a32*k2_y, \
-             z + a31*k1_z + a32*k2_z , order7);
+             z + a31*k1_z + a32*k2_z , order);
     
     k3_x = h* xdot_new;
     k3_y = h* ydot_new;
@@ -228,7 +191,7 @@ void k_positions(double h, double vx, double vy, double vz, double x, double y, 
     eval_velocity(c4*h, vx, vy, vz, \
              x + a41*k1_x + a42*k2_x + a43*k3_x, \
              y + a41*k1_y + a42*k2_y + a43*k3_y, \
-             z + a41*k1_z + a42*k2_z +  a43*k3_z , order7);
+             z + a41*k1_z + a42*k2_z +  a43*k3_z , order);
     
     
     k4_x = h* xdot_new;
@@ -238,7 +201,7 @@ void k_positions(double h, double vx, double vy, double vz, double x, double y, 
     eval_velocity(c5*h, vx, vy, vz, \
              x + a51*k1_x + a52*k2_x + a53*k3_x + a54*k4_x, \
              y + a51*k1_y + a52*k2_y + a53*k3_y + a54*k4_y, \
-             z + a51*k1_z + a52*k2_z + a53*k3_z + a54*k4_z , order7);
+             z + a51*k1_z + a52*k2_z + a53*k3_z + a54*k4_z , order);
     
     k5_x = h* xdot_new;
     k5_y = h* ydot_new;
@@ -247,19 +210,19 @@ void k_positions(double h, double vx, double vy, double vz, double x, double y, 
     eval_velocity(c6*h, vx, vy, vz, \
              x + a61*k1_x + a62*k2_x + a63*k3_x + a64*k4_x + a65*k5_x, \
              y + a61*k1_y + a62*k2_y + a63*k3_y + a64*k4_y + a65*k5_y, \
-             z + a61*k1_z + a62*k2_z + a63*k3_z + a64*k4_z + a65*k5_z , order7);
+             z + a61*k1_z + a62*k2_z + a63*k3_z + a64*k4_z + a65*k5_z , order);
     
     k6_x = h* xdot_new;
     k6_y = h* ydot_new;
     k6_z = h* zdot_new;
     
     
-    if (order7 == true) {
+    if (order == true) {
         
        eval_velocity(c7*h, vx, vy, vz, \
              x + a71*k1_x  + a73*k3_x + a74*k4_x + a75*k5_x + a76*k6_x, \
              y + a71*k1_y  + a73*k3_y + a74*k4_y + a75*k5_y + a76*k6_y, \
-             z + a71*k1_z  + a73*k3_z + a74*k4_z + a75*k5_z + a76*k6_z , order7);
+             z + a71*k1_z  + a73*k3_z + a74*k4_z + a75*k5_z + a76*k6_z , order);
    
        k7_x = h* xdot_new;
        k7_y = h* ydot_new;
@@ -270,9 +233,9 @@ void k_positions(double h, double vx, double vy, double vz, double x, double y, 
 
 
 
-double eval_velocity(double h, double vx, double vy, double vz, double x, double y, double z, bool order7){
+double eval_velocity(double h, double vx, double vy, double vz, double x, double y, double z, bool order){
     
-    if (order7 == false) {
+    if (order == false) {
         
         k_velocities(h, x, y, z, false);
         
@@ -296,9 +259,9 @@ double eval_velocity(double h, double vx, double vy, double vz, double x, double
 }
 
 
-double eval_position(double h, double vx, double vy, double vz, double x, double y, double z, bool order7){
+double eval_position(double h, double vx, double vy, double vz, double x, double y, double z, bool order){
     
-    if (order7 == false) {
+    if (order == false) {
      k_positions(h, vx, vy, vx, x, y, z, false);
         
      x_new = x + b1*k1_x + b3* k3_x + b4* k4_x + b5* k5_x + b6* k6_x;
