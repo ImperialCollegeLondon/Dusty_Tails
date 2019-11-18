@@ -22,5 +22,4 @@ double xdot5, ydot5, zdot5, x5, y5, z5;
 double xdot_err, ydot_err, zdot_err;
 double x_err, y_err, z_err;
 
-double del, h_opt, max_delta, scalar;
-
+double del, h_opt, max_delta, s;
