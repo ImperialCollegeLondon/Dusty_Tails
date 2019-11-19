@@ -232,7 +232,7 @@ double h_optimal(vector <double> deltas_list, double h){
 
         return h_opt;
 
-    } else return h;
+    } else return 2.0* h;
 
 }
 
@@ -316,22 +316,28 @@ void RK_solver(double h0, vector <double> V_0, double t_0){
     ofstream file("data.txt");
 
     file << t << ",";
-    file << scalar(V_0) << "\n";
+    file << scalar(V_0) << ",";
+    file << V_0[0] << ",";
+    file << V_0[1] << ",";
+    file << V_0[2] << "\n";
 
     //obtain delta values for the 6 variables
     delta_values = h_check(h0, V_0);
 
     //calculate new h
     h_new = h_optimal(delta_values, h0);
+    cout << "hello 1" << endl;
 
     next_step(h_new, V_0);
+    cout << "hello 2" << endl;
+    cout << h_new << endl;
 
     t = t + h_new;
-    file << t << ",";
-    file << scalar(V_new) << "\n";
+           
+    double next_time = 0.25;
+    double delta_time = 0.5;
 
-
-    for (unsigned int i = 1; i < 1e+6; i++) {
+    for (unsigned int i = 1; i < 1e+8; i++) {
 
         //obtain delta values for the 6 variables
         delta_values = h_check(h_new, V_new);
@@ -342,9 +348,15 @@ void RK_solver(double h0, vector <double> V_0, double t_0){
         next_step(h_new, V_new);
 
         t = t + h_new;
-        if ( i % 100 == 0) {
+        if ( t > next_time) {
+	    
             file << t << ",";
-            file << scalar(V_new) << "\n";
+            file << scalar(V_new) << ",";
+	    file << V_new[0] << "," ;
+	    file << V_new[1] << ",";
+	    file << V_new[2] << "\n";
+
+	    next_time = next_time + delta_time;
         }
 
      }
@@ -357,7 +369,6 @@ double scalar(vector <double> pos){
 
         return s;
 }
-
 
 
 int main() {
@@ -387,13 +398,6 @@ int main() {
     V0.push_back(xdot0);
     V0.push_back(ydot0);
     V0.push_back(zdot0);
-
-    //Vs.push_back(V0);
-
-    //x_positions.push_back(x0);
-    //y_positions.push_back(y0);
-    //z_positions.push_back(z0);
-
 
     RK_solver(h0, V0, 0.0);
 
