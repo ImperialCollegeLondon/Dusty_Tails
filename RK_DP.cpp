@@ -215,24 +215,29 @@ double new_variables(double h, vector <double> V, bool order5){
 
 double delta( double value1, double value2){
 
-    del = fabs(value1 - value2) + 1e-10;
+    del = fabs(value1 - value2);
 
-    return del/tol;
-
+    if (del < (tol + fabs(value1)*tol) ) {
+	    return -1.0;
+    } else { 
+	return del / (tol + fabs(value1)*tol);    
+    }
 
 }
 
 double h_optimal(vector <double> deltas_list, double h){
+       
 
     max_delta = *max_element(deltas_list.begin(), deltas_list.end()); //includes tolerance
-
-    h_opt = S * h * pow(1/max_delta, 1.0/5.0);
-
-    if (h_opt < h){
-
-        return h_opt;
-
-    } else return 2.0* h;
+    
+    if (max_delta == -1.0){
+	return 2.0*h;    
+    } else {
+       
+	    h_opt = S * h * pow(1/max_delta, 1.0/5.0);
+	    return h_opt;
+    }
+    
 
 }
 
@@ -293,7 +298,7 @@ vector <double> h_check(double h, vector <double> V){
 
 vector <double> next_step(double h, vector <double> V) {
 
-    //ensure vector are clear
+    //ensure vector is  clear
     V_new.clear();
 
     new_variables(h, V, false);
@@ -334,10 +339,10 @@ void RK_solver(double h0, vector <double> V_0, double t_0){
 
     t = t + h_new;
            
-    double next_time = 0.25;
+    double next_time = 0.5;
     double delta_time = 0.5;
 
-    for (unsigned int i = 1; i < 1e+8; i++) {
+    for (unsigned int i = 1; i < 1e+6; i++) {
 
         //obtain delta values for the 6 variables
         delta_values = h_check(h_new, V_new);
