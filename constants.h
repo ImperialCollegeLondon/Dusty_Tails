@@ -15,4 +15,6 @@ const double Period_days = 0.8; //period of dust grain in days
 const double T = 0.8*24.0*60.0*60.0; //period of dust grain in seconds
 
 const double S = 0.9; //safety factor
-const double tol = 1e-7; //error tolerance
+const double tol = 1e-8; //error tolerance
+
+const double beta = 0.3; //ratio of radiation pressure to gravity
