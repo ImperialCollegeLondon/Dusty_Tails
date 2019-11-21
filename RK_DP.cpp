@@ -31,7 +31,7 @@ double semimajor(double period) { //function to evaluate semi-major axis value, 
 
 double acceleration( double pos, double x, double y, double z){
 
-  vel_dot = (-G_dim * pos) / pow( ( pow(x, 2.0) + pow(y, 2.0) + pow(z, 2.0) ) , (3.0/2.0) );
+  vel_dot = (-G_dim * pos * (1 - beta)) / pow( ( pow(x, 2.0) + pow(y, 2.0) + pow(z, 2.0) ) , (3.0/2.0) );
   return vel_dot;
 }
 
@@ -197,7 +197,8 @@ double new_variables(double h, vector <double> V, bool order5){
 
         k_values(h, V, true);
 
-        x_new = V[0] + bs1*k1_x + bs3*k3_x + bs4*k4_x + bs5*k5_x + bs6*k6_x + bs7*k7_x;
+        x_new = V[0
+] + bs1*k1_x + bs3*k3_x + bs4*k4_x + bs5*k5_x + bs6*k6_x + bs7*k7_x;
         y_new = V[1] + bs1*k1_y + bs3*k3_y + bs4*k4_y + bs5*k5_y + bs6*k6_y + bs7*k7_y;
         z_new = V[2] + bs1*k1_z + bs3*k3_z + bs4*k4_z + bs5*k5_z + bs6*k6_z + bs7*k7_z;
 
@@ -251,6 +252,7 @@ vector <double> h_check(double h, vector <double> V){
     x4 = x_new;
     y4 = y_new;
     z4 = z_new;
+
     xdot4 = xdot_new;
     ydot4 = ydot_new;
     zdot4 = zdot_new;
@@ -339,8 +341,9 @@ void RK_solver(double h0, vector <double> V_0, double t_0){
 
     t = t + h_new;
            
-    double next_time = 0.5;
-    double delta_time = 0.5;
+    double next_time = 0.1;
+
+    double delta_time = 0.1;
 
     for (unsigned int i = 1; i < 1e+6; i++) {
 
@@ -385,14 +388,14 @@ int main() {
 
     //Define initial position in dimensionless units
 
-    double x0 = 1.0;
+    double x0 = 1.0* pow(1-beta, 1./3.);
     double y0 = 0.0;
     double z0 = 0.0;
 
     //Define initial velocity in dimensionless units
 
     double xdot0 = 0.0;
-    double ydot0 = 2.0*PI;
+    double ydot0 =(2.0*PI)*pow(1-beta, 1./3.);
     double zdot0 = 0.0;
 
     //initial variables vector
