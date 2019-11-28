@@ -60,9 +60,9 @@ vector <double> centrifugal(double x, double y, double z, double vx, double vy, 
 
 	centri_vector.clear();
 
-	omxr = cross_product(0.0, 0.0, 4.0*PI, x, y, z);
+	omxr = cross_product(0.0, 0.0, 2.0*PI, x, y, z);
 
-  finalx = cross_product(0.0, 0.0, 4.0*PI, omxr[0], omxr[1], omxr[2]);
+  finalx = cross_product(0.0, 0.0, 2.0*PI, omxr[0], omxr[1], omxr[2]);
 
 	centri_vector.push_back(finalx[0]);
 	centri_vector.push_back(finalx[1]);
@@ -76,7 +76,7 @@ vector <double> coriolis(double x, double y, double z, double vx, double vy, dou
   vector <double> omxv,  rvxr, finalx;
 
 	coriol_vector.clear();
-  omxv = cross_product(0.0, 0.0, 4.0*PI, vx, vy, vz);
+  omxv = cross_product(0.0, 0.0, 2.0*PI, vx, vy, vz);
 
 	coriol_vector.push_back(omxv[0]);
 	coriol_vector.push_back(omxv[1]);
@@ -475,32 +475,29 @@ vector <double> next_step(double h, vector <double> V) {
 void RK_solver(double h0, vector <double> V_0, double t_0){
 
     double t = t_0;
-    ofstream file("data.txt");
+    ofstream file("data6.txt");
 
     file << t << ",";
-    file << scalar(V_0[0], V_0[1], V_0[2]) << ",";
-    file << V_0[0] << ",";
-    file << V_0[1] << ",";
-    file << V_0[2] << "\n";
+    file << scalar(V_0[0], V_0[1], V_0[2]) << "\n";
+    //file << V_0[0] << ",";
+    //file << V_0[1] << ",";
+    //file << V_0[2] << "\n";
 
     //obtain delta values for the 6 variables
     delta_values = h_check(h0, V_0);
 
     //calculate new h
     h_new = h_optimal(delta_values, h0);
-    cout << "hello 1" << endl;
 
     next_step(h_new, V_0);
-    cout << "hello 2" << endl;
-    cout << h_new << endl;
 
     t = t + h_new;
 
-    double next_time = 0.1;
+    double next_time = 1.0;
 
-    double delta_time = 0.1;
+    double delta_time = 1.0;
 
-    for (unsigned int i = 1; i < 1e+6; i++) {
+    while (next_time < 11.0){
 
         //obtain delta values for the 6 variables
         delta_values = h_check(h_new, V_new);
@@ -514,17 +511,16 @@ void RK_solver(double h0, vector <double> V_0, double t_0){
         if ( t > next_time) {
 
             file << t << ",";
-            file << scalar(V_new[0], V_new[1], V_new[2]) << ",";
-	          file << V_new[0] << "," ;
-	          file << V_new[1] << ",";
-	          file << V_new[2] << "\n";
+            file << scalar(V_new[0], V_new[1], V_new[2]) << "\n";
+	          //file << V_new[0] << "," ;
+	          //file << V_new[1] << ",";
+	          //file << V_new[2] << "\n";
 
 	          next_time = next_time + delta_time;
         }
 
      }
 
-     cout << "done!" << endl;
 }
 
 double scalar(double x, double y, double z){
@@ -550,8 +546,7 @@ int main() {
     //Define initial velocity in dimensionless units
 
     double xdot0 = 0.0;
-    double ydot0 = -2.0*PI;
-		//(2.0*PI)*pow(1-beta, 1./3.);
+    double ydot0 = 0.0;
     double zdot0 = 0.0;
 
     //initial variables vector
