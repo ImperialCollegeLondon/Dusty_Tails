@@ -1,7 +1,7 @@
 //variables for RK solver declared here
-#include <vector>
 
-double a, G_dim, h0, t0, semi, h_new, vel_dot; // semi-major axis, dimensionless G and initial time step
+
+double a, G_dim, c_dim, h0, t0, semi, h_new, vel_dot; // semi-major axis, dimensionless G and initial time step
 
 //k values
 
