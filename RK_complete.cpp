@@ -16,7 +16,7 @@ vector <double> star_pos, planet_pos; //star and planet position in CoM frame
 vector <double> cp_vector, centri_vector, coriol_vector, vrad, rad_vector, s_unit, pr_vector;
 vector <double> x_positions, y_positions, z_positions;
 
-vector <double> x, y, z, V_new;0.8
+vector <double> x, y, z, V_new;
 
 vector <double> deltas, delta_values;
 vector <double> time_plot, semis, timing, as;
@@ -27,7 +27,9 @@ vector <double> cross_product(double m1, double m2, double m3, double n1, double
 
 //end of variables declaration
 
+
 vector <double> to_vector(double x, double y, double z){
+  //function to put any 3 values into a vector
   vector <double> some_vector;
 	some_vector.clear();
 
@@ -39,7 +41,7 @@ vector <double> to_vector(double x, double y, double z){
 }
 
 vector <double> cross_product(double m1, double m2, double m3, double n1, double n2, double n3){
-
+  //function to calculate the cross product between two vectors
 	cp_vector.clear();
 
 	double i_new, j_new, k_new;
@@ -52,14 +54,14 @@ vector <double> cross_product(double m1, double m2, double m3, double n1, double
 	cp_vector.push_back(j_new);
 	cp_vector.push_back(k_new);
 
-	return dp_vector;
+	return cp_vector;
 
 
 }
 
-double dot_product(double m1, double m2, double m3, double n1, double n2, double n3){
-
-     double dp = (m1*n1) + (m2*n2) + (m3*n3);
+double dot_product(vector <double> n,  vector <double> m){
+     //function to calculate the dot product between two vectors
+     double dp = (n[0]*m[0]) + (n[1]*m[1]) + (n[2]*m[2]);
 
 		 return dp;
 
@@ -67,41 +69,43 @@ double dot_product(double m1, double m2, double m3, double n1, double n2, double
 
 
 
-double semimajor(double period) { //function to evaluate semi-major axis value, period in days, a in AU
-
+double semimajor(double period) {
+  //function to evaluate semi-major axis value, period in days, a in AU
    semi = pow(7.496e-6 * Mstar_sun * pow(Period_days, 2.0), (1.0/3.0)); //in AU
    return semi*AU_to_m; //output in meters
 }
 
-double beta_fn(double k, double L_star, double M_star){ //mass of star in terms of mass of sun
-
+double beta_fn(double k, double L_star, double M_star){
+  //mass of star in terms of mass of sun, and everything in cgs units
+  //function to evaluate beta (radiation accel/ gravity accel)
+  double beta;
 	beta = (k*L_star*exp(-tau)) / (4.0*PI*c_cgs*G_cgs*M_star*Msun_cgs);
-
 	return beta;
 
 }
 
 double opacity(double Q_fn){
-
-    return (3.0/4.0)* (Q_fn/ (rho_d * s)) ;
+    //function to calculate opacity in cgs units
+    //might need to add density and size as parameters later
+    return (3.0/4.0)* (Q_fn/ (rho_d * size)) ;
 }
 
 double luminosity(double R_star){
-
+  //function to evaluate stars luminosity with stefan boltzmann law
+  //cgs units
 	return sigma*4.0*PI* pow(R_star*Rsun_cgs, 2.0) * pow(Temp, 4.0);
 
 }
 
 double radial_vel(vector <double> vel, vector <double> s_vector){
-
+  //function to obtain radial velocity term
 	return dot_product(vel, s_vector);
 
 }
 
 vector <double> drag_vel(double x, double y, double z, double vx, double vy, double vz){
-
+   //function to obtain velocity relative to radiation field
 	 vector <double> omegar, vrad;
-
 	 vrad.clear();
 
 	 omegar = cross_product(0.0, 0.0, 2.0*PI, x, y, z);
@@ -114,8 +118,8 @@ vector <double> drag_vel(double x, double y, double z, double vx, double vy, dou
 }
 
 vector <double> s_vector(double x, double y, double z){
+  //function to obtain unit vector of radiation field
   s_unit.clear();
-
 	s_unit.push_back((x - star_pos[0]) /scalar(x,y,z));
 	s_unit.push_back((y - star_pos[1]) /scalar(x,y,z));
 	s_unit.push_back((z - star_pos[2]) /scalar(x,y,z));
@@ -124,7 +128,7 @@ vector <double> s_vector(double x, double y, double z){
 }
 
 vector <double> centrifugal(double x, double y, double z, double vx, double vy, double vz){
-
+  //function to calculate centrifugal force
   vector <double> omxr, finalx;
 
 	centri_vector.clear();
@@ -142,6 +146,7 @@ vector <double> centrifugal(double x, double y, double z, double vx, double vy, 
 
 
 vector <double> coriolis(double x, double y, double z, double vx, double vy, double vz){
+  //function to calculate coriolis force
   vector <double> omxv,  rvxr, finalx;
 
 	coriol_vector.clear();
@@ -156,6 +161,7 @@ vector <double> coriolis(double x, double y, double z, double vx, double vy, dou
 }
 
 vector <double> rad_pressure(double x, double y, double z, double vx, double vy, double vz){
+  //function to calculate radiation pressure force, accounting for red shift
   double beta, k, Lum, rad_x, rad_y, rad_z, constant;
 
 	rad_vector.clear();
@@ -187,7 +193,7 @@ vector <double> rad_pressure(double x, double y, double z, double vx, double vy,
 }
 
 vector <double> pr_drag(double x, double y, double z, double vx, double vy, double vz){
-
+  //function to evaluate poynting roberston drag
 	pr_vector.clear();
 
 	vector <double> v_drag;
@@ -207,22 +213,20 @@ vector <double> pr_drag(double x, double y, double z, double vx, double vy, doub
 }
 
 
-double acceleration( double pos_star, double pos_planet, double x, double y, double z, double coriol, \
-	                   double centri, double radiation, double drag){
+double acceleration( double pos_star, double pos_planet, double x, double y, double z, \
+                     double coriol, double centri, double radiation, double drag){
 
-  vel_dot = ((-G_dim * pos_star ) / pow( scalar(x,y,z) ) , (3.0/2.0) )) \
-
-						+ ((-G_dim * (0.055*Mearth/Mstar_kg)* pos_planet ) / pow( ( pow(x, 2.0) + pow(y, 2.0) + \
-							            pow(z, 2.0) ) , (3.0/2.0) )) \
-							- centri - 2.0*coriol + \
-							radiation - drag;
+  //function to solve final equation
+  vel_dot = ((-G_dim * pos_star ) / pow( scalar(x,y,z), 3.0 )) \
+          + ((-G_dim * (0.055*Mearth/Mstar_kg)* pos_planet ) / pow( scalar(x,y,z), 3.0 )) \
+					- centri - 2.0*coriol + radiation - drag;
 
   return vel_dot;
 }
 
 
 void k_values(double h, vector <double> V, bool order5){
-
+    //function to obtain several k values of RK-DP method
 
     centrifugal(V[0], V[1], V[2], V[3], V[4], V[5]);
     coriolis(V[0], V[1], V[2], V[3], V[4], V[5]);
@@ -266,7 +270,7 @@ void k_values(double h, vector <double> V, bool order5){
 
 
     k2_xdot = h*acceleration( V[0] - star_pos[0] + a21*k1_x,  \
-			                        V[0] - planet_pos[0] + a21*k1_x \
+			                        V[0] - planet_pos[0] + a21*k1_x, \
 			                        V[0] + a21*k1_x, V[1] + a21*k1_y, V[2] + a21*k1_z, \
 			                        coriol_vector[0], centri_vector[0], \
 														  rad_vector[0], pr_vector[0]);
@@ -311,20 +315,30 @@ void k_values(double h, vector <double> V, bool order5){
     k3_xdot = h* acceleration( V[0] - star_pos[0] + a31*k1_x + a32*k2_x, \
 			                         V[0] - planet_pos[0] + a31*k1_x + a32*k2_x, \
                                V[0] + a31*k1_x + a32*k2_x, \
-                              V[1] + a31*k1_y + a32*k2_y, V[2] + a31*k1_z + a32*k2_z, \
-														coriol_vector[0], centri_vector[0]);
+                               V[1] + a31*k1_y + a32*k2_y, \
+                               V[2] + a31*k1_z + a32*k2_z, \
+														   coriol_vector[0], centri_vector[0], \
+                               rad_vector[0], pr_vector[0]);
 
     k3_x = h*(V[3] + a31*k1_xdot + a32*k2_xdot);
 
-    k3_ydot = h* acceleration( V[1] + a31*k1_y + a32*k2_y, V[0] + a31*k1_x + a32*k2_x, \
-                              V[1] + a31*k1_y + a32*k2_y, V[2] + a31*k1_z + a32*k2_z, \
-														  coriol_vector[1], centri_vector[1]);
+    k3_ydot = h* acceleration( V[1] - star_pos[1] + a31*k1_y + a32*k2_y, \
+                               V[1] - planet_pos[1] + a31*k1_y + a32*k2_y, \
+                               V[0] + a31*k1_x + a32*k2_x, \
+                               V[1] + a31*k1_y + a32*k2_y, \
+                               V[2] + a31*k1_z + a32*k2_z, \
+														   coriol_vector[1], centri_vector[1], \
+                               rad_vector[1], pr_vector[1]);
 
     k3_y = h*(V[4] + a31*k1_ydot + a32*k2_ydot);
 
-    k3_zdot = h* acceleration( V[2] + a31*k1_z + a32*k2_z, V[0] + a31*k1_x + a32*k2_x, \
-                              V[1] + a31*k1_y + a32*k2_y, V[2] + a31*k1_z + a32*k2_z, \
-														  coriol_vector[2], centri_vector[2]);
+    k3_zdot = h* acceleration( V[2] - star_pos[2] + a31*k1_z + a32*k2_z, \
+                               V[2] - planet_pos[2] + a31*k1_z + a32*k2_z, \
+                               V[0] + a31*k1_x + a32*k2_x, \
+                               V[1] + a31*k1_y + a32*k2_y, \
+                               V[2] + a31*k1_z + a32*k2_z, \
+														   coriol_vector[2], centri_vector[2], \
+                               rad_vector[2], pr_vector[2]);
 
     k3_z = h*(V[5] + a31*k1_zdot + a32*k2_zdot);
 
@@ -346,27 +360,50 @@ void k_values(double h, vector <double> V, bool order5){
 							  V[4] + a41*k1_ydot + a42*k2_ydot + a43*k3_ydot, \
 							  V[5] + a41*k1_zdot + a42*k2_zdot + a43*k3_zdot);
 
+    rad_pressure(V[0] + a41*k1_x + a42*k2_x + a43*k3_x, \
+		            V[1] + a41*k1_y + a41*k2_y + a43*k3_y, \
+		            V[2] + a41*k1_z + a42*k2_z + a43*k3_z, \
+							  V[3] + a41*k1_xdot + a42*k2_xdot + a43*k3_xdot, \
+							  V[4] + a41*k1_ydot + a42*k2_ydot + a43*k3_ydot, \
+							  V[5] + a41*k1_zdot + a42*k2_zdot + a43*k3_zdot);
+
+    pr_drag(V[0] + a41*k1_x + a42*k2_x + a43*k3_x, \
+		            V[1] + a41*k1_y + a41*k2_y + a43*k3_y, \
+		            V[2] + a41*k1_z + a42*k2_z + a43*k3_z, \
+							  V[3] + a41*k1_xdot + a42*k2_xdot + a43*k3_xdot, \
+							  V[4] + a41*k1_ydot + a42*k2_ydot + a43*k3_ydot, \
+							  V[5] + a41*k1_zdot + a42*k2_zdot + a43*k3_zdot);
+
+
+
+
     k4_xdot = h* acceleration( V[0] - star_pos[0] + a41*k1_x + a42*k2_x + a43*k3_x, \
+                               V[0] - planet_pos[0] + a41*k1_x + a42*k2_x + a43*k3_x, \
                                V[0] + a41*k1_x + a42*k2_x + a43*k3_x, \
                                V[1] + a41*k1_y + a41*k2_y + a43*k3_y, \
                                V[2] + a41*k1_z + a42*k2_z + a43*k3_z, \
-														   coriol_vector[0], centri_vector[0]);
+														   coriol_vector[0], centri_vector[0], \
+                               rad_vector[0], pr_vector[0]);
 
     k4_x = h* (V[3] + a41*k1_xdot + a42*k2_xdot + a43*k3_xdot);
 
-    k4_ydot = h* acceleration( V[1] + a41*k1_y + a42*k2_y + a43*k3_y, \
+    k4_ydot = h* acceleration( V[1] - star_pos[1] + a41*k1_y + a42*k2_y + a43*k3_y, \
+                               V[1] - planet_pos[1] + a41*k1_y + a42*k2_y + a43*k3_y, \
                                V[0] + a41*k1_x + a42*k2_x + a43*k3_x, \
                                V[1] + a41*k1_y + a41*k2_y + a43*k3_y, \
                                V[2] + a41*k1_z + a42*k2_z + a43*k3_z, \
-														   coriol_vector[1], centri_vector[1]);
+														   coriol_vector[1], centri_vector[1], \
+                               rad_vector[1], pr_vector[1] );
 
     k4_y = h* (V[4] + a41*k1_ydot + a42*k2_ydot + a43*k3_ydot);
 
-    k4_zdot = h* acceleration( V[2] + a41*k1_z + a42*k2_z + a43*k3_z, \
+    k4_zdot = h* acceleration( V[2] - star_pos[2] + a41*k1_z + a42*k2_z + a43*k3_z, \
+                               V[2] - planet_pos[2] + a41*k1_z + a42*k2_z + a43*k3_z, \
                                V[0] + a41*k1_x + a42*k2_x + a43*k3_x, \
                                V[1] + a41*k1_y + a41*k2_y + a43*k3_y, \
                                V[2] + a41*k1_z + a42*k2_z + a43*k3_z, \
-														   coriol_vector[2], centri_vector[2]);
+														   coriol_vector[2], centri_vector[2], \
+                               rad_vector[2], pr_vector[2]);
 
     k4_z = h* (V[5] + a41*k1_zdot + a42*k2_zdot + a43*k3_zdot);
 
@@ -386,27 +423,47 @@ void k_values(double h, vector <double> V, bool order5){
 						 V[4] + a51*k1_ydot + a52*k2_ydot + a53*k3_ydot + a54*k4_ydot, \
 						 V[5] + a51*k1_zdot + a52*k2_zdot + a53*k3_zdot + a54*k4_zdot);
 
+    rad_pressure(V[0] + a51*k1_x + a52*k2_x + a53*k3_x + a54* k4_x, \
+		         V[1] + a51*k1_y + a52*k2_y + a53*k3_y + a54* k4_y,\
+		         V[2] + a51*k1_z + a52*k2_z + a53*k3_z + a54* k4_z, \
+						 V[3] + a51*k1_xdot + a52*k2_xdot + a53*k3_xdot + a54*k4_xdot, \
+						 V[4] + a51*k1_ydot + a52*k2_ydot + a53*k3_ydot + a54*k4_ydot, \
+						 V[5] + a51*k1_zdot + a52*k2_zdot + a53*k3_zdot + a54*k4_zdot);
+
+    pr_drag(V[0] + a51*k1_x + a52*k2_x + a53*k3_x + a54* k4_x, \
+		         V[1] + a51*k1_y + a52*k2_y + a53*k3_y + a54* k4_y,\
+		         V[2] + a51*k1_z + a52*k2_z + a53*k3_z + a54* k4_z, \
+						 V[3] + a51*k1_xdot + a52*k2_xdot + a53*k3_xdot + a54*k4_xdot, \
+						 V[4] + a51*k1_ydot + a52*k2_ydot + a53*k3_ydot + a54*k4_ydot, \
+						 V[5] + a51*k1_zdot + a52*k2_zdot + a53*k3_zdot + a54*k4_zdot);
+
     k5_xdot = h* acceleration( V[0] - star_pos[0] + a51*k1_x + a52*k2_x + a53*k3_x + a54* k4_x, \
+                               V[0] - planet_pos[0] + a51*k1_x + a52*k2_x + a53*k3_x + a54* k4_x, \
                                V[0] + a51*k1_x + a52*k2_x + a53*k3_x + a54* k4_x, \
                                V[1] + a51*k1_y + a52*k2_y + a53*k3_y + a54* k4_y,\
                                V[2] + a51*k1_z + a52*k2_z + a53*k3_z + a54* k4_z, \
-														   coriol_vector[0], centri_vector[0]);
+														   coriol_vector[0], centri_vector[0], \
+                               rad_vector[0], pr_vector[0]);
 
     k5_x = h* (V[3] + a51*k1_xdot + a52*k2_xdot + a53*k3_xdot + a54*k4_xdot);
 
-    k5_ydot = h* acceleration( V[1] + a51*k1_y + a52*k2_y + a53*k3_y + a54* k4_y, \
+    k5_ydot = h* acceleration( V[1] - star_pos[1] + a51*k1_y + a52*k2_y + a53*k3_y + a54* k4_y, \
+                               V[1] - planet_pos[1] + a51*k1_y + a52*k2_y + a53*k3_y + a54* k4_y, \
                                V[0] + a51*k1_x + a52*k2_x + a53*k3_x + a54* k4_x, \
                                V[1] + a51*k1_y + a52*k2_y + a53*k3_y + a54* k4_y,\
                                V[2] + a51*k1_z + a52*k2_z + a53*k3_z + a54* k4_z, \
-														   coriol_vector[1], centri_vector[1]);
+														   coriol_vector[1], centri_vector[1], \
+                               rad_vector[1], pr_vector[1]);
 
     k5_y = h* (V[4] + a51*k1_ydot + a52*k2_ydot + a53*k3_ydot + a54*k4_ydot);
 
-    k5_zdot = h* acceleration( V[2] + a51*k1_z + a52*k2_z + a53*k3_z + a54* k4_z, \
+    k5_zdot = h* acceleration( V[2] - star_pos[2] + a51*k1_z + a52*k2_z + a53*k3_z + a54* k4_z, \
+                               V[2] - planet_pos[2] + a51*k1_z + a52*k2_z + a53*k3_z + a54* k4_z, \
                                V[0] + a51*k1_x + a52*k2_x + a53*k3_x + a54* k4_x, \
                                V[1] + a51*k1_y + a52*k2_y + a53*k3_y + a54* k4_y,\
                                V[2] + a51*k1_z + a52*k2_z + a53*k3_z + a54* k4_z, \
-														   coriol_vector[2], centri_vector[2]);
+														   coriol_vector[2], centri_vector[2], \
+                               rad_vector[2], pr_vector[2]);
 
     k5_z = h* (V[5] + a51*k1_zdot + a52*k2_zdot + a53*k3_zdot + a54*k4_zdot);
 
@@ -427,27 +484,50 @@ void k_values(double h, vector <double> V, bool order5){
 						 V[4] + a61*k1_ydot + a62*k2_ydot + a63*k3_ydot + a64*k4_ydot + a65*k5_ydot, \
 						 V[5] + a61*k1_zdot + a62*k2_zdot + a63*k3_zdot + a64*k4_zdot + a65*k5_zdot);
 
+
+    rad_pressure(V[0] + a61*k1_x + a62*k2_x + a63*k3_x + a64*k4_x + a65*k5_x, \
+		         V[1] + a61*k1_y + a62*k2_y + a63*k3_y + a64*k4_y + a65*k5_y, \
+		         V[2] + a61*k1_z + a62*k2_z + a63*k3_z + a64*k4_z + a65*k5_z, \
+						 V[3] + a61*k1_xdot + a62*k2_xdot + a63*k3_xdot + a64*k4_xdot + a65*k5_xdot, \
+						 V[4] + a61*k1_ydot + a62*k2_ydot + a63*k3_ydot + a64*k4_ydot + a65*k5_ydot, \
+						 V[5] + a61*k1_zdot + a62*k2_zdot + a63*k3_zdot + a64*k4_zdot + a65*k5_zdot);
+
+    pr_drag(V[0] + a61*k1_x + a62*k2_x + a63*k3_x + a64*k4_x + a65*k5_x, \
+		         V[1] + a61*k1_y + a62*k2_y + a63*k3_y + a64*k4_y + a65*k5_y, \
+		         V[2] + a61*k1_z + a62*k2_z + a63*k3_z + a64*k4_z + a65*k5_z, \
+						 V[3] + a61*k1_xdot + a62*k2_xdot + a63*k3_xdot + a64*k4_xdot + a65*k5_xdot, \
+						 V[4] + a61*k1_ydot + a62*k2_ydot + a63*k3_ydot + a64*k4_ydot + a65*k5_ydot, \
+						 V[5] + a61*k1_zdot + a62*k2_zdot + a63*k3_zdot + a64*k4_zdot + a65*k5_zdot);
+
+
+
     k6_xdot = h* acceleration( V[0] - star_pos[0] + a61*k1_x + a62*k2_x + a63*k3_x + a64*k4_x + a65*k5_x, \
+                               V[0] - planet_pos[0] + a61*k1_x + a62*k2_x + a63*k3_x + a64*k4_x + a65*k5_x, \
                                V[0] + a61*k1_x + a62*k2_x + a63*k3_x + a64*k4_x + a65*k5_x, \
                                V[1] + a61*k1_y + a62*k2_y + a63*k3_y + a64*k4_y + a65*k5_y, \
                                V[2] + a61*k1_z + a62*k2_z + a63*k3_z + a64*k4_z + a65*k5_z, \
-														   coriol_vector[0], centri_vector[0]);
+														   coriol_vector[0], centri_vector[0], \
+                               rad_vector[0], pr_vector[0]);
 
     k6_x = h* (V[3] + a61*k1_xdot + a62*k2_xdot + a63*k3_xdot + a64*k4_xdot + a65*k5_xdot);
 
-    k6_ydot = h* acceleration( V[1] + a61*k1_y + a62*k2_y + a63*k3_y + a64*k4_y + a65*k5_y, \
+    k6_ydot = h* acceleration( V[1] - star_pos[1] + a61*k1_y + a62*k2_y + a63*k3_y + a64*k4_y + a65*k5_y, \
+                               V[1] - planet_pos[1] + a61*k1_y + a62*k2_y + a63*k3_y + a64*k4_y + a65*k5_y, \
                                V[0] + a61*k1_x + a62*k2_x + a63*k3_x + a64*k4_x + a65*k5_x, \
                                V[1] + a61*k1_y + a62*k2_y + a63*k3_y + a64*k4_y + a65*k5_y, \
                                V[2] + a61*k1_z + a62*k2_z + a63*k3_z + a64*k4_z + a65*k5_z, \
-														   coriol_vector[1], centri_vector[1]);
+														   coriol_vector[1], centri_vector[1], \
+                               rad_vector[1], pr_vector[1]);
 
     k6_y = h* (V[4] + a61*k1_ydot + a62*k2_ydot + a63*k3_ydot + a64*k4_ydot + a65*k5_ydot);
 
-    k6_zdot = h* acceleration( V[2] + a61*k1_z + a62*k2_z + a63*k3_z + a64*k4_z + a65*k5_z, \
+    k6_zdot = h* acceleration( V[2] - star_pos[2] + a61*k1_z + a62*k2_z + a63*k3_z + a64*k4_z + a65*k5_z, \
+                               V[2] - planet_pos[2] + a61*k1_z + a62*k2_z + a63*k3_z + a64*k4_z + a65*k5_z, \
                                V[0] + a61*k1_x + a62*k2_x + a63*k3_x + a64*k4_x + a65*k5_x, \
                                V[1] + a61*k1_y + a62*k2_y + a63*k3_y + a64*k4_y + a65*k5_y, \
                                V[2] + a61*k1_z + a62*k2_z + a63*k3_z + a64*k4_z + a65*k5_z, \
-														   coriol_vector[2], centri_vector[2]);
+														   coriol_vector[2], centri_vector[2], \
+                               rad_vector[2], pr_vector[2]);
 
     k6_z = h* (V[5] + a61*k1_zdot + a62*k2_zdot + a63*k3_zdot + a64*k4_zdot + a65*k5_zdot);
 
@@ -468,27 +548,51 @@ void k_values(double h, vector <double> V, bool order5){
 							 V[4] + a71*k1_ydot + a73*k3_ydot + a74*k4_ydot + a75* k5_ydot + a76*k6_ydot, \
 							 V[5] + a71*k1_zdot + a73*k3_zdot + a74*k4_zdot + a75* k5_zdot + a76*k6_zdot);
 
-        k7_xdot = h* acceleration( V[0] - star_pos[0] + a71*k1_x + a73*k3_x + a74*k4_x + a75*k5_x + a76*k6_x, \
-                                   V[0] + a71*k1_x + a73*k3_x + a74*k4_x + a75*k5_x + a76*k6_x, \
-                                   V[1] + a71*k1_y + a73*k3_y + a74*k4_y + a75*k5_y + a76*k6_y, \
-                                   V[2] + a71*k1_z + a73*k3_z + a74*k4_z + a75*k5_z + a76*k6_z, \
-																   coriol_vector[0], centri_vector[0]);
+      rad_pressure(V[0] + a71*k1_x + a73*k3_x + a74*k4_x + a75*k5_x + a76*k6_x, \
+			         V[1] + a71*k1_y + a73*k3_y + a74*k4_y + a75*k5_y + a76*k6_y, \
+			         V[2] + a71*k1_z + a73*k3_z + a74*k4_z + a75*k5_z + a76*k6_z, \
+							 V[3] + a71*k1_xdot + a73*k3_xdot + a74*k4_xdot + a75* k5_xdot + a76*k6_xdot, \
+							 V[4] + a71*k1_ydot + a73*k3_ydot + a74*k4_ydot + a75* k5_ydot + a76*k6_ydot, \
+							 V[5] + a71*k1_zdot + a73*k3_zdot + a74*k4_zdot + a75* k5_zdot + a76*k6_zdot);
 
-        k7_x = h* (V[3] + a71*k1_xdot + a73*k3_xdot + a74*k4_xdot + a75* k5_xdot + a76*k6_xdot);
+      pr_drag(V[0] + a71*k1_x + a73*k3_x + a74*k4_x + a75*k5_x + a76*k6_x, \
+			         V[1] + a71*k1_y + a73*k3_y + a74*k4_y + a75*k5_y + a76*k6_y, \
+			         V[2] + a71*k1_z + a73*k3_z + a74*k4_z + a75*k5_z + a76*k6_z, \
+							 V[3] + a71*k1_xdot + a73*k3_xdot + a74*k4_xdot + a75* k5_xdot + a76*k6_xdot, \
+							 V[4] + a71*k1_ydot + a73*k3_ydot + a74*k4_ydot + a75* k5_ydot + a76*k6_ydot, \
+							 V[5] + a71*k1_zdot + a73*k3_zdot + a74*k4_zdot + a75* k5_zdot + a76*k6_zdot);
 
-        k7_ydot = h* acceleration( V[1] + a71*k1_y + a73*k3_y + a74*k4_y + a75*k5_y + a76*k6_y, \
-                                   V[0] + a71*k1_x + a73*k3_x + a74*k4_x + a75*k5_x + a76*k6_x, \
-                                   V[1] + a71*k1_y + a73*k3_y + a74*k4_y + a75*k5_y + a76*k6_y, \
-                                   V[2] + a71*k1_z + a73*k3_z + a74*k4_z + a75*k5_z + a76*k6_z, \
-																   coriol_vector[1], centri_vector[1]);
+
+
+
+
+      k7_xdot = h* acceleration( V[0] - star_pos[0] + a71*k1_x + a73*k3_x + a74*k4_x + a75*k5_x + a76*k6_x, \
+                                 V[0] - planet_pos[0] + a71*k1_x + a73*k3_x + a74*k4_x + a75*k5_x + a76*k6_x, \
+                                 V[0] + a71*k1_x + a73*k3_x + a74*k4_x + a75*k5_x + a76*k6_x, \
+                                 V[1] + a71*k1_y + a73*k3_y + a74*k4_y + a75*k5_y + a76*k6_y, \
+                                 V[2] + a71*k1_z + a73*k3_z + a74*k4_z + a75*k5_z + a76*k6_z, \
+																 coriol_vector[0], centri_vector[0], \
+                                 rad_vector[0], pr_vector[0]);
+
+      k7_x = h* (V[3] + a71*k1_xdot + a73*k3_xdot + a74*k4_xdot + a75* k5_xdot + a76*k6_xdot);
+
+      k7_ydot = h* acceleration( V[1] - star_pos[1] + a71*k1_y + a73*k3_y + a74*k4_y + a75*k5_y + a76*k6_y, \
+                                 V[1] - planet_pos[1] + a71*k1_y + a73*k3_y + a74*k4_y + a75*k5_y + a76*k6_y, \
+                                 V[0] + a71*k1_x + a73*k3_x + a74*k4_x + a75*k5_x + a76*k6_x, \
+                                 V[1] + a71*k1_y + a73*k3_y + a74*k4_y + a75*k5_y + a76*k6_y, \
+                                 V[2] + a71*k1_z + a73*k3_z + a74*k4_z + a75*k5_z + a76*k6_z, \
+																 coriol_vector[1], centri_vector[1], \
+                                 rad_vector[1], pr_vector[1]);
 
         k7_y = h* (V[4] + a71*k1_ydot + a73*k3_ydot + a74*k4_ydot + a75* k5_ydot + a76*k6_ydot);
 
-        k7_zdot = h* acceleration( V[2] + a71*k1_z + a73*k3_z + a74*k4_z + a75*k5_z + a76*k6_z, \
+        k7_zdot = h* acceleration( V[2] - star_pos[2] + a71*k1_z + a73*k3_z + a74*k4_z + a75*k5_z + a76*k6_z, \
+                                   V[2] - planet_pos[2] + a71*k1_z + a73*k3_z + a74*k4_z + a75*k5_z + a76*k6_z, \
                                    V[0] + a71*k1_x + a73*k3_x + a74*k4_x + a75*k5_x + a76*k6_x, \
                                    V[1] + a71*k1_y + a73*k3_y + a74*k4_y + a75*k5_y + a76*k6_y, \
                                    V[2] + a71*k1_z + a73*k3_z + a74*k4_z + a75*k5_z + a76*k6_z, \
-																   coriol_vector[2], centri_vector[2]);
+																   coriol_vector[2], centri_vector[2], \
+                                   rad_vector[2], pr_vector[2]);
 
 
         k7_z = h* (V[5] + a71*k1_zdot + a73*k3_zdot + a74*k4_zdot + a75* k5_zdot + a76*k6_zdot);
@@ -497,7 +601,7 @@ void k_values(double h, vector <double> V, bool order5){
 }
 
 double new_variables(double h, vector <double> V, bool order5){
-
+    //function to obtain next step values
     if (order5 == false) {
 
      k_values(h, V, false);
@@ -531,7 +635,7 @@ double new_variables(double h, vector <double> V, bool order5){
 
 
 double delta( double value1, double value2){
-
+    //evaluate error
     del = fabs(value1 - value2);
 
     if (del < (tol + fabs(value1)*tol) ) {
@@ -543,12 +647,11 @@ double delta( double value1, double value2){
 }
 
 double h_optimal(vector <double> deltas_list, double h){
-
-
+    //function to evaluate optimal h
     max_delta = *max_element(deltas_list.begin(), deltas_list.end()); //includes tolerance
 
     if (max_delta == -1.0){
-	    return h;
+	    return -1.0;
     } else {
 
 	    h_opt = S * h * pow(1/max_delta, 1.0/5.0);
@@ -634,7 +737,7 @@ vector <double> next_step(double h, vector <double> V) {
 
 
 void RK_solver(double h0, vector <double> V_0, double t_0){
-
+    double h_old;
     double t = t_0;
     ofstream file("data6.txt");
 
@@ -647,12 +750,21 @@ void RK_solver(double h0, vector <double> V_0, double t_0){
     //obtain delta values for the 6 variables
     delta_values = h_check(h0, V_0);
 
+    h_old = h0;
+
+
     //calculate new h
-    h_new = h_optimal(delta_values, h0);
+    h_new = h_optimal(delta_values, h_old);
 
-    next_step(h_new, V_0);
-
-    t = t + h_new;
+    if (h_new < 0.0){
+       next_step(h_old, V_0);
+       t = t + h_old;
+       h_new = 2.0*h_old;
+     } else {
+       next_step(h_new, V_0);
+       t = t + h_new;
+       h_new = h_new;
+     }
 
     double next_time = 1.0;
 
@@ -662,13 +774,20 @@ void RK_solver(double h0, vector <double> V_0, double t_0){
 
         //obtain delta values for the 6 variables
         delta_values = h_check(h_new, V_new);
-
+        h_old = h_new;
         //calculate new h
         h_new = h_optimal(delta_values, h_new);
 
-        next_step(h_new, V_new);
+        if (h_new < 0.0){
+           next_step(h_old, V_new);
+           t = t + h_old;
+           h_new = 2.0*h_old;
+         } else {
+           next_step(h_new, V_new);
+           t = t + h_new;
+           h_new = h_new;
+         }
 
-        t = t + h_new;
         if ( t > next_time) {
 
             file << t << ",";
@@ -695,7 +814,7 @@ int main() {
 
     a = semimajor(Period_days);
     G_dim = (G* pow(T, 2.0) * Mstar_kg) / pow(a, 3.0); //dimensionless gravitational constant
-    c_dim = (c* a) / T;
+    c_dim = (c*T)/a; //dimensionless speed of light
     h0 = 0.001;
 
     //Define initial position in dimensionless units
