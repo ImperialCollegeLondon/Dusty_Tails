@@ -169,8 +169,9 @@ vector <double> rad_pressure(double x, double y, double z, double vx, double vy,
 	k = opacity(1.0);
 	Lum = luminosity(0.7);
 
-	beta = beta_fn(k, Lum, 0.8);
+	//beta = beta_fn(k, Lum, 0.8);
 
+  beta = 0.0;
   constant = (beta*G_dim)/(pow(scalar(x-star_pos[0], y-star_pos[1], z-star_pos[2]), 3.0));
 
 
@@ -197,8 +198,11 @@ vector <double> pr_drag(double x, double y, double z, double vx, double vy, doub
 	pr_vector.clear();
 
 	vector <double> v_drag;
-	double constant;
+	double constant, beta;
 
+  //beta = beta_fn(k, Lum, 0.8);
+
+  beta = 0.0;
 	constant = (beta*G_dim)/(pow(scalar(x-star_pos[0], y-star_pos[1], z-star_pos[2]), 3.0)*c_dim);
 
 	v_drag = drag_vel(x,y,z,vx,vy,vz);
@@ -214,18 +218,21 @@ vector <double> pr_drag(double x, double y, double z, double vx, double vy, doub
 
 
 double acceleration( double pos_star, double pos_planet, double x, double y, double z, \
-                     double coriol, double centri, double radiation, double drag){
+                     double coriol, double centri, double radiation, double drag, \
+                     vector<double> star, vector <double> planet){
 
+  double Mplanet = (0.03 * Mearth) / (Mstar_kg);
   //function to solve final equation
-  vel_dot = ((-G_dim * pos_star ) / pow( scalar(x,y,z), 3.0 )) \
-          + ((-G_dim * (0.055*Mearth/Mstar_kg)* pos_planet ) / pow( scalar(x,y,z), 3.0 )) \
-					- centri - 2.0*coriol + radiation - drag;
+  vel_dot = ((-G_dim * 1.0 * pos_star ) / pow( scalar(x - star[0] ,y - star[1],z - star[2]), 3.0 )) \
+          + ((-G_dim * (Mplanet)* pos_planet ) / pow( scalar(x - planet[0],y - planet[1],z - planet[2]), 3.0 )) \
+					- centri - 2.0*coriol;
 
   return vel_dot;
 }
 
 
-void k_values(double h, vector <double> V, bool order5){
+void k_values(double h, vector <double> V, bool order5, vector <double> star, \
+              vector <double> planet){
     //function to obtain several k values of RK-DP method
 
     centrifugal(V[0], V[1], V[2], V[3], V[4], V[5]);
@@ -235,22 +242,24 @@ void k_values(double h, vector <double> V, bool order5){
 
     //k1 values
     k1_xdot = h* acceleration( V[0] - star_pos[0], V[0] - planet_pos[0],  \
-			                         V[0], V[1], V[2], \
+			                         V[0] - star_pos[0],
+                              V[1], V[2], \
 															 coriol_vector[0], centri_vector[0], \
-															 rad_vector[0], pr_vector[0]);
+															 rad_vector[0], pr_vector[0],
+                               star, planet);
 
 		k1_x = h* V[3];
 
     k1_ydot = h* acceleration( V[1] - star_pos[1], V[1] - planet_pos[1],   \
 			                         V[0], V[1], V[2], \
 															 coriol_vector[1], centri_vector[1], \
-															 rad_vector[1], pr_vector[1]);
+															 rad_vector[1], pr_vector[1], star, planet);
     k1_y = h* V[4];
 
     k1_zdot = h* acceleration( V[2] - star_pos[2], V[2] - planet_pos[2], \
 			                         V[0], V[1], V[2], \
 			                         coriol_vector[2], centri_vector[2], \
-															 rad_vector[2], pr_vector[2]);
+															 rad_vector[2], pr_vector[2], star, planet);
 
     k1_z = h* V[5];
 
@@ -273,7 +282,7 @@ void k_values(double h, vector <double> V, bool order5){
 			                        V[0] - planet_pos[0] + a21*k1_x, \
 			                        V[0] + a21*k1_x, V[1] + a21*k1_y, V[2] + a21*k1_z, \
 			                        coriol_vector[0], centri_vector[0], \
-														  rad_vector[0], pr_vector[0]);
+														  rad_vector[0], pr_vector[0], star, planet);
 
     k2_x = h* (V[3] + a21*k1_xdot);
 
@@ -281,7 +290,7 @@ void k_values(double h, vector <double> V, bool order5){
                               V[1] - planet_pos[1] + a21*k1_y, \
 															V[0] + a21*k1_x, V[1] + a21*k1_y, V[2] + a21*k1_z, \
 															coriol_vector[1], centri_vector[1], \
-														  rad_vector[1], pr_vector[1]);
+														  rad_vector[1], pr_vector[1], star, planet);
 
     k2_y = h* (V[4] + a21*k1_ydot);
 
@@ -289,7 +298,7 @@ void k_values(double h, vector <double> V, bool order5){
 			                        V[2] - planet_pos[2] + a21*k1_z, \
 			                        V[0] + a21*k1_x, V[1] + a21*k1_y,V[2] + a21*k1_z, \
 															coriol_vector[2], centri_vector[2], \
-														  rad_vector[2], pr_vector[2]);
+														  rad_vector[2], pr_vector[2], star, planet);
 
     k2_z = h* (V[5] + a21*k1_zdot);
 
@@ -318,7 +327,7 @@ void k_values(double h, vector <double> V, bool order5){
                                V[1] + a31*k1_y + a32*k2_y, \
                                V[2] + a31*k1_z + a32*k2_z, \
 														   coriol_vector[0], centri_vector[0], \
-                               rad_vector[0], pr_vector[0]);
+                               rad_vector[0], pr_vector[0], star, planet);
 
     k3_x = h*(V[3] + a31*k1_xdot + a32*k2_xdot);
 
@@ -328,7 +337,7 @@ void k_values(double h, vector <double> V, bool order5){
                                V[1] + a31*k1_y + a32*k2_y, \
                                V[2] + a31*k1_z + a32*k2_z, \
 														   coriol_vector[1], centri_vector[1], \
-                               rad_vector[1], pr_vector[1]);
+                               rad_vector[1], pr_vector[1], star, planet);
 
     k3_y = h*(V[4] + a31*k1_ydot + a32*k2_ydot);
 
@@ -338,7 +347,7 @@ void k_values(double h, vector <double> V, bool order5){
                                V[1] + a31*k1_y + a32*k2_y, \
                                V[2] + a31*k1_z + a32*k2_z, \
 														   coriol_vector[2], centri_vector[2], \
-                               rad_vector[2], pr_vector[2]);
+                               rad_vector[2], pr_vector[2], star, planet);
 
     k3_z = h*(V[5] + a31*k1_zdot + a32*k2_zdot);
 
@@ -383,7 +392,7 @@ void k_values(double h, vector <double> V, bool order5){
                                V[1] + a41*k1_y + a41*k2_y + a43*k3_y, \
                                V[2] + a41*k1_z + a42*k2_z + a43*k3_z, \
 														   coriol_vector[0], centri_vector[0], \
-                               rad_vector[0], pr_vector[0]);
+                               rad_vector[0], pr_vector[0], star, planet);
 
     k4_x = h* (V[3] + a41*k1_xdot + a42*k2_xdot + a43*k3_xdot);
 
@@ -393,7 +402,7 @@ void k_values(double h, vector <double> V, bool order5){
                                V[1] + a41*k1_y + a41*k2_y + a43*k3_y, \
                                V[2] + a41*k1_z + a42*k2_z + a43*k3_z, \
 														   coriol_vector[1], centri_vector[1], \
-                               rad_vector[1], pr_vector[1] );
+                               rad_vector[1], pr_vector[1], star, planet );
 
     k4_y = h* (V[4] + a41*k1_ydot + a42*k2_ydot + a43*k3_ydot);
 
@@ -403,7 +412,7 @@ void k_values(double h, vector <double> V, bool order5){
                                V[1] + a41*k1_y + a41*k2_y + a43*k3_y, \
                                V[2] + a41*k1_z + a42*k2_z + a43*k3_z, \
 														   coriol_vector[2], centri_vector[2], \
-                               rad_vector[2], pr_vector[2]);
+                               rad_vector[2], pr_vector[2], star, planet);
 
     k4_z = h* (V[5] + a41*k1_zdot + a42*k2_zdot + a43*k3_zdot);
 
@@ -443,7 +452,7 @@ void k_values(double h, vector <double> V, bool order5){
                                V[1] + a51*k1_y + a52*k2_y + a53*k3_y + a54* k4_y,\
                                V[2] + a51*k1_z + a52*k2_z + a53*k3_z + a54* k4_z, \
 														   coriol_vector[0], centri_vector[0], \
-                               rad_vector[0], pr_vector[0]);
+                               rad_vector[0], pr_vector[0], star, planet);
 
     k5_x = h* (V[3] + a51*k1_xdot + a52*k2_xdot + a53*k3_xdot + a54*k4_xdot);
 
@@ -453,7 +462,7 @@ void k_values(double h, vector <double> V, bool order5){
                                V[1] + a51*k1_y + a52*k2_y + a53*k3_y + a54* k4_y,\
                                V[2] + a51*k1_z + a52*k2_z + a53*k3_z + a54* k4_z, \
 														   coriol_vector[1], centri_vector[1], \
-                               rad_vector[1], pr_vector[1]);
+                               rad_vector[1], pr_vector[1], star, planet);
 
     k5_y = h* (V[4] + a51*k1_ydot + a52*k2_ydot + a53*k3_ydot + a54*k4_ydot);
 
@@ -463,7 +472,7 @@ void k_values(double h, vector <double> V, bool order5){
                                V[1] + a51*k1_y + a52*k2_y + a53*k3_y + a54* k4_y,\
                                V[2] + a51*k1_z + a52*k2_z + a53*k3_z + a54* k4_z, \
 														   coriol_vector[2], centri_vector[2], \
-                               rad_vector[2], pr_vector[2]);
+                               rad_vector[2], pr_vector[2], star, planet);
 
     k5_z = h* (V[5] + a51*k1_zdot + a52*k2_zdot + a53*k3_zdot + a54*k4_zdot);
 
@@ -507,7 +516,7 @@ void k_values(double h, vector <double> V, bool order5){
                                V[1] + a61*k1_y + a62*k2_y + a63*k3_y + a64*k4_y + a65*k5_y, \
                                V[2] + a61*k1_z + a62*k2_z + a63*k3_z + a64*k4_z + a65*k5_z, \
 														   coriol_vector[0], centri_vector[0], \
-                               rad_vector[0], pr_vector[0]);
+                               rad_vector[0], pr_vector[0], star, planet);
 
     k6_x = h* (V[3] + a61*k1_xdot + a62*k2_xdot + a63*k3_xdot + a64*k4_xdot + a65*k5_xdot);
 
@@ -517,7 +526,7 @@ void k_values(double h, vector <double> V, bool order5){
                                V[1] + a61*k1_y + a62*k2_y + a63*k3_y + a64*k4_y + a65*k5_y, \
                                V[2] + a61*k1_z + a62*k2_z + a63*k3_z + a64*k4_z + a65*k5_z, \
 														   coriol_vector[1], centri_vector[1], \
-                               rad_vector[1], pr_vector[1]);
+                               rad_vector[1], pr_vector[1], star, planet);
 
     k6_y = h* (V[4] + a61*k1_ydot + a62*k2_ydot + a63*k3_ydot + a64*k4_ydot + a65*k5_ydot);
 
@@ -527,7 +536,7 @@ void k_values(double h, vector <double> V, bool order5){
                                V[1] + a61*k1_y + a62*k2_y + a63*k3_y + a64*k4_y + a65*k5_y, \
                                V[2] + a61*k1_z + a62*k2_z + a63*k3_z + a64*k4_z + a65*k5_z, \
 														   coriol_vector[2], centri_vector[2], \
-                               rad_vector[2], pr_vector[2]);
+                               rad_vector[2], pr_vector[2], star, planet);
 
     k6_z = h* (V[5] + a61*k1_zdot + a62*k2_zdot + a63*k3_zdot + a64*k4_zdot + a65*k5_zdot);
 
@@ -572,7 +581,7 @@ void k_values(double h, vector <double> V, bool order5){
                                  V[1] + a71*k1_y + a73*k3_y + a74*k4_y + a75*k5_y + a76*k6_y, \
                                  V[2] + a71*k1_z + a73*k3_z + a74*k4_z + a75*k5_z + a76*k6_z, \
 																 coriol_vector[0], centri_vector[0], \
-                                 rad_vector[0], pr_vector[0]);
+                                 rad_vector[0], pr_vector[0], star, planet);
 
       k7_x = h* (V[3] + a71*k1_xdot + a73*k3_xdot + a74*k4_xdot + a75* k5_xdot + a76*k6_xdot);
 
@@ -582,7 +591,7 @@ void k_values(double h, vector <double> V, bool order5){
                                  V[1] + a71*k1_y + a73*k3_y + a74*k4_y + a75*k5_y + a76*k6_y, \
                                  V[2] + a71*k1_z + a73*k3_z + a74*k4_z + a75*k5_z + a76*k6_z, \
 																 coriol_vector[1], centri_vector[1], \
-                                 rad_vector[1], pr_vector[1]);
+                                 rad_vector[1], pr_vector[1], star, planet);
 
         k7_y = h* (V[4] + a71*k1_ydot + a73*k3_ydot + a74*k4_ydot + a75* k5_ydot + a76*k6_ydot);
 
@@ -592,7 +601,7 @@ void k_values(double h, vector <double> V, bool order5){
                                    V[1] + a71*k1_y + a73*k3_y + a74*k4_y + a75*k5_y + a76*k6_y, \
                                    V[2] + a71*k1_z + a73*k3_z + a74*k4_z + a75*k5_z + a76*k6_z, \
 																   coriol_vector[2], centri_vector[2], \
-                                   rad_vector[2], pr_vector[2]);
+                                   rad_vector[2], pr_vector[2], star, planet);
 
 
         k7_z = h* (V[5] + a71*k1_zdot + a73*k3_zdot + a74*k4_zdot + a75* k5_zdot + a76*k6_zdot);
@@ -600,11 +609,12 @@ void k_values(double h, vector <double> V, bool order5){
     }
 }
 
-double new_variables(double h, vector <double> V, bool order5){
+double new_variables(double h, vector <double> V, bool order5, \
+                      vector <double> star, vector <double> planet){
     //function to obtain next step values
     if (order5 == false) {
 
-     k_values(h, V, false);
+     k_values(h, V, false, star, planet);
 
      x_new = V[0] + b1*k1_x + b3* k3_x + b4* k4_x + b5* k5_x + b6* k6_x;
      y_new = V[1] + b1*k1_y + b3* k3_y + b4* k4_y + b5* k5_y + b6* k6_y;
@@ -616,7 +626,7 @@ double new_variables(double h, vector <double> V, bool order5){
 
     } else {
 
-        k_values(h, V, true);
+        k_values(h, V, true, star, planet);
 
         x_new = V[0] + bs1*k1_x + bs3*k3_x + bs4*k4_x + bs5*k5_x + bs6*k6_x + bs7*k7_x;
         y_new = V[1] + bs1*k1_y + bs3*k3_y + bs4*k4_y + bs5*k5_y + bs6*k6_y + bs7*k7_y;
@@ -661,12 +671,13 @@ double h_optimal(vector <double> deltas_list, double h){
 
 }
 
-vector <double> h_check(double h, vector <double> V){
+vector <double> h_check(double h, vector <double> V, vector <double> star, \
+                        vector <double> planet){
 
     deltas.clear();
 
     //4th order
-    new_variables(h, V, false);
+    new_variables(h, V, false, star, planet);
 
     x4 = x_new;
     y4 = y_new;
@@ -677,7 +688,7 @@ vector <double> h_check(double h, vector <double> V){
     zdot4 = zdot_new;
 
     //5th order
-    new_variables(h, V, true);
+    new_variables(h, V, true, star, planet);
 
     x5 = x_new;
     y5 = y_new;
@@ -717,12 +728,13 @@ vector <double> h_check(double h, vector <double> V){
 }
 
 
-vector <double> next_step(double h, vector <double> V) {
+vector <double> next_step(double h, vector <double> V, vector <double> star, \
+                          vector <double> planet) {
 
     //ensure vector is  clear
     V_new.clear();
 
-    new_variables(h, V, false);
+    new_variables(h, V, false, star, planet);
 
     V_new.push_back(x_new);
     V_new.push_back(y_new);
@@ -736,19 +748,21 @@ vector <double> next_step(double h, vector <double> V) {
 }
 
 
-void RK_solver(double h0, vector <double> V_0, double t_0){
+void RK_solver(double h0, vector <double> V_0, double t_0, vector <double> star, \
+               vector <double> planet){
+
     double h_old;
     double t = t_0;
-    ofstream file("data6.txt");
+    ofstream file("planet_data.txt");
 
     file << t << ",";
-    file << fabs((1.0 - scalar(V_0[0], V_0[1], V_0[2]))) << "\n";
-    //file << V_0[0] << ",";
-    //file << V_0[1] << ",";
-    //file << V_0[2] << "\n";
+    //file << fabs((1.0 - scalar(V_0[0], V_0[1], V_0[2]))) << "\n";
+    file << V_0[0] << ",";
+    file << V_0[1] << ",";
+    file << V_0[2] << "\n";
 
     //obtain delta values for the 6 variables
-    delta_values = h_check(h0, V_0);
+    delta_values = h_check(h0, V_0, star, planet);
 
     h_old = h0;
 
@@ -757,33 +771,33 @@ void RK_solver(double h0, vector <double> V_0, double t_0){
     h_new = h_optimal(delta_values, h_old);
 
     if (h_new < 0.0){
-       next_step(h_old, V_0);
+       next_step(h_old, V_0, star, planet);
        t = t + h_old;
        h_new = 2.0*h_old;
      } else {
-       next_step(h_new, V_0);
+       next_step(h_new, V_0, star, planet);
        t = t + h_new;
        h_new = h_new;
      }
 
-    double next_time = 1.0;
+    double next_time = 0.2;
 
-    double delta_time = 1.0;
+    double delta_time = 0.2;
 
-    while (next_time < 11.0){
+    while (next_time < 100.0){
 
         //obtain delta values for the 6 variables
-        delta_values = h_check(h_new, V_new);
+        delta_values = h_check(h_new, V_new, star, planet);
         h_old = h_new;
         //calculate new h
         h_new = h_optimal(delta_values, h_new);
 
         if (h_new < 0.0){
-           next_step(h_old, V_new);
+           next_step(h_old, V_new, star, planet);
            t = t + h_old;
            h_new = 2.0*h_old;
          } else {
-           next_step(h_new, V_new);
+           next_step(h_new, V_new, star, planet);
            t = t + h_new;
            h_new = h_new;
          }
@@ -791,10 +805,10 @@ void RK_solver(double h0, vector <double> V_0, double t_0){
         if ( t > next_time) {
 
             file << t << ",";
-            file << fabs((1.0 - scalar(V_new[0], V_new[1], V_new[2])))<< "\n";
-	          //file << V_new[0] << "," ;
-	          //file << V_new[1] << ",";
-	          //file << V_new[2] << "\n";
+            //file << fabs((1.0 - scalar(V_new[0], V_new[1], V_new[2])))<< ",";
+	          file << V_new[0] << "," ;
+	          file << V_new[1] << ",";
+	          file << V_new[2] << "\n";
 
 	          next_time = next_time + delta_time;
         }
@@ -815,15 +829,28 @@ int main() {
     a = semimajor(Period_days);
     G_dim = (G* pow(T, 2.0) * Mstar_kg) / pow(a, 3.0); //dimensionless gravitational constant
     c_dim = (c*T)/a; //dimensionless speed of light
-    h0 = 0.001;
+    h0 = 0.001; //initial time step
+
+    double m_planet;  //in terms of star's mass
+
+    m_planet = (0.03 * Mearth) / (Mstar_kg);
+
+    double r_h;
+
+    r_h = pow(m_planet/3.0, 1.0/3.0); //Hill radius
+
+
+    double init_vel;
+
+    init_vel = pow((G_dim*m_planet)/(0.5*r_h), 0.5);
 
     //Define initial position in dimensionless units
 
-		double star_x  = (-0.055 *Mearth) / (0.055*Mearth + 0.8*Msun);
+		double star_x  = -(m_planet) / (m_planet + 1.0);
 		double star_y = 0.0;
 		double star_z = 0.0;
 
-		double planet_x = 1 - star_x;
+		double planet_x = 1.0 -(m_planet / (m_planet + 1.0));
 		double planet_y = 0.0;
 		double planet_z = 0.0;
 
@@ -835,14 +862,14 @@ int main() {
 		planet_pos.push_back(planet_y);
 		planet_pos.push_back(planet_z);
 
-    double x0 = 1.0;
+    double x0 = planet_x + 0.5*r_h;
     double y0 = 0.0;
     double z0 = 0.0;
 
     //Define initial velocity in dimensionless units
 
     double xdot0 = 0.0;
-    double ydot0 = 0.0;
+    double ydot0 = init_vel;
     double zdot0 = 0.0;
 
     //initial variables vector
@@ -854,7 +881,7 @@ int main() {
     V0.push_back(ydot0);
     V0.push_back(zdot0);
 
-    RK_solver(h0, V0, 0.0);
+    RK_solver(h0, V0, 0.0, star_pos, planet_pos);
 
 
 }
