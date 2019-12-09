@@ -11,6 +11,7 @@ using namespace std;
 
 //some declaration of variables
 
+
 vector <double> V0; //initial variables vector
 vector <double> star_pos, planet_pos; //star and planet position in CoM frame
 vector <double> cp_vector, centri_vector, coriol_vector, vrad, rad_vector, s_unit, pr_vector;
@@ -753,13 +754,21 @@ void RK_solver(double h0, vector <double> V_0, double t_0, vector <double> star,
 
     double h_old;
     double t = t_0;
-    ofstream file("planet_data.txt");
+    double m_planet;
+    double r_h;
+
+
+    m_planet = (0.03 * Mearth) / (Mstar_kg); //planet mass in terms of star mass
+    r_h = pow(m_planet/3.0, 1.0/3.0); //Hill radius
+    ofstream file("planet_data10.txt");
+
+    double planetary_pos = 1.0 -(m_planet / (m_planet + 1.0));
 
     file << t << ",";
-    //file << fabs((1.0 - scalar(V_0[0], V_0[1], V_0[2]))) << "\n";
-    file << V_0[0] << ",";
-    file << V_0[1] << ",";
-    file << V_0[2] << "\n";
+    file << fabs((scalar(V_0[0], V_0[1], V_0[2]) - planetary_pos ) - 0.5*r_h )/ 0.5*r_h<< "\n";
+    //file << V_0[0] << ",";
+    //file << V_0[1] << ",";
+    //file << V_0[2] << "\n";
 
     //obtain delta values for the 6 variables
     delta_values = h_check(h0, V_0, star, planet);
@@ -780,11 +789,11 @@ void RK_solver(double h0, vector <double> V_0, double t_0, vector <double> star,
        h_new = h_new;
      }
 
-    double next_time = 0.2;
+    double next_time = 1.0;
 
-    double delta_time = 0.2;
+    double delta_time = 1.0;
 
-    while (next_time < 100.0){
+    while (next_time < 20.0){
 
         //obtain delta values for the 6 variables
         delta_values = h_check(h_new, V_new, star, planet);
@@ -805,10 +814,10 @@ void RK_solver(double h0, vector <double> V_0, double t_0, vector <double> star,
         if ( t > next_time) {
 
             file << t << ",";
-            //file << fabs((1.0 - scalar(V_new[0], V_new[1], V_new[2])))<< ",";
-	          file << V_new[0] << "," ;
-	          file << V_new[1] << ",";
-	          file << V_new[2] << "\n";
+            file << fabs((scalar(V_new[0], V_new[1], V_new[2]) - planetary_pos ) - 0.5*r_h )/ 0.5*r_h<< "\n";
+	          //file << V_new[0] << "," ;
+	          //file << V_new[1] << ",";
+	          //file << V_new[2] << "\n";
 
 	          next_time = next_time + delta_time;
         }
@@ -831,8 +840,7 @@ int main() {
     c_dim = (c*T)/a; //dimensionless speed of light
     h0 = 0.001; //initial time step
 
-    double m_planet;  //in terms of star's mass
-
+    double m_planet;
     m_planet = (0.03 * Mearth) / (Mstar_kg);
 
     double r_h;
@@ -842,7 +850,8 @@ int main() {
 
     double init_vel;
 
-    init_vel = pow((G_dim*m_planet)/(0.5*r_h), 0.5);
+    init_vel = pow((G_dim*m_planet)/(0.5*r_h), 0.5); //inertial frame
+
 
     //Define initial position in dimensionless units
 
@@ -869,7 +878,7 @@ int main() {
     //Define initial velocity in dimensionless units
 
     double xdot0 = 0.0;
-    double ydot0 = init_vel;
+    double ydot0 = init_vel - 2.0*PI*0.5*r_h;
     double zdot0 = 0.0;
 
     //initial variables vector
