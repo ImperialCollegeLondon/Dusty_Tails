@@ -68,8 +68,6 @@ double dot_product(vector <double> n,  vector <double> m){
 
 }
 
-
-
 double semimajor(double period) {
   //function to evaluate semi-major axis value, period in days, a in AU
    semi = pow(7.496e-6 * Mstar_sun * pow(Period_days, 2.0), (1.0/3.0)); //in AU
@@ -132,11 +130,17 @@ vector <double> centrifugal(double x, double y, double z, double vx, double vy, 
   //function to calculate centrifugal force
   vector <double> omxr, finalx;
 
+  double omega;
+  double m_planet;
+  m_planet = (0.03 * Mearth) / (Mstar_kg);
+
+  omega = pow((G_dim *(m_planet + 1.0)), 0.5);
+
 	centri_vector.clear();
 
-	omxr = cross_product(0.0, 0.0, 2.0*PI, x, y, z);
+	omxr = cross_product(0.0, 0.0, omega, x, y, z);
 
-  finalx = cross_product(0.0, 0.0, 2.0*PI, omxr[0], omxr[1], omxr[2]);
+  finalx = cross_product(0.0, 0.0, omega, omxr[0], omxr[1], omxr[2]);
 
 	centri_vector.push_back(finalx[0]);
 	centri_vector.push_back(finalx[1]);
@@ -150,8 +154,14 @@ vector <double> coriolis(double x, double y, double z, double vx, double vy, dou
   //function to calculate coriolis force
   vector <double> omxv,  rvxr, finalx;
 
+  double omega;
+  double m_planet;
+  m_planet = (0.03 * Mearth) / (Mstar_kg);
+
+  omega = pow((G_dim *(m_planet + 1.0)), 0.5);
+
 	coriol_vector.clear();
-  omxv = cross_product(0.0, 0.0, 2.0*PI, vx, vy, vz);
+  omxv = cross_product(0.0, 0.0, omega, vx, vy, vz);
 
 	coriol_vector.push_back(omxv[0]);
 	coriol_vector.push_back(omxv[1]);
@@ -243,8 +253,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> star, \
 
     //k1 values
     k1_xdot = h* acceleration( V[0] - star_pos[0], V[0] - planet_pos[0],  \
-			                         V[0] - star_pos[0],
-                              V[1], V[2], \
+			                         V[0],V[1], V[2], \
 															 coriol_vector[0], centri_vector[0], \
 															 rad_vector[0], pr_vector[0],
                                star, planet);
@@ -649,10 +658,10 @@ double delta( double value1, double value2){
     //evaluate error
     del = fabs(value1 - value2);
 
-    if (del < (tol + fabs(value1)*tol) ) {
+    if (del < (tol + max(fabs(value1), fabs(value2))*tol)) {
 	    return -1.0;
     } else {
-	return del / (tol + fabs(value1)*tol);
+	    return del / (tol + max(fabs(value1), fabs(value2))*tol);
     }
 
 }
@@ -697,7 +706,6 @@ vector <double> h_check(double h, vector <double> V, vector <double> star, \
     xdot5 = xdot_new;
     ydot5 = ydot_new;
     zdot5 = zdot_new;
-
 
     //error on xdot
     xdot_err = delta(xdot4, xdot5);
@@ -760,15 +768,14 @@ void RK_solver(double h0, vector <double> V_0, double t_0, vector <double> star,
 
     m_planet = (0.03 * Mearth) / (Mstar_kg); //planet mass in terms of star mass
     r_h = pow(m_planet/3.0, 1.0/3.0); //Hill radius
-    ofstream file("planet_data10.txt");
+    ofstream file("planet_data7.txt");
 
-    double planetary_pos = 1.0 -(m_planet / (m_planet + 1.0));
-
+    double planetary_pos = 1.0 / (m_planet + 1.0);
     file << t << ",";
-    file << fabs((scalar(V_0[0], V_0[1], V_0[2]) - planetary_pos ) - 0.5*r_h )/ 0.5*r_h<< "\n";
-    //file << V_0[0] << ",";
-    //file << V_0[1] << ",";
-    //file << V_0[2] << "\n";
+    //file << fabs((0.8*r_h - scalar(V_0[0] - planetary_pos, V_0[1] , V_0[2]))) / (0.8*r_h)<< "\n";
+    file << V_0[0] << ",";
+    file << V_0[1] << ",";
+    file << V_0[2] << "\n";
 
     //obtain delta values for the 6 variables
     delta_values = h_check(h0, V_0, star, planet);
@@ -782,18 +789,18 @@ void RK_solver(double h0, vector <double> V_0, double t_0, vector <double> star,
     if (h_new < 0.0){
        next_step(h_old, V_0, star, planet);
        t = t + h_old;
-       h_new = 2.0*h_old;
+       h_new = h_old;
      } else {
        next_step(h_new, V_0, star, planet);
        t = t + h_new;
        h_new = h_new;
      }
 
-    double next_time = 1.0;
+    double next_time = 0.1;
 
-    double delta_time = 1.0;
+    double delta_time = 0.1;
 
-    while (next_time < 20.0){
+    while (next_time < 11.1){
 
         //obtain delta values for the 6 variables
         delta_values = h_check(h_new, V_new, star, planet);
@@ -804,20 +811,23 @@ void RK_solver(double h0, vector <double> V_0, double t_0, vector <double> star,
         if (h_new < 0.0){
            next_step(h_old, V_new, star, planet);
            t = t + h_old;
-           h_new = 2.0*h_old;
+           h_new = 2.*h_old;
+           cout << "old h twice " << 2.0*h_old << endl;
+
          } else {
            next_step(h_new, V_new, star, planet);
            t = t + h_new;
            h_new = h_new;
+           cout << "new h " << h_new << endl;
          }
 
         if ( t > next_time) {
 
             file << t << ",";
-            file << fabs((scalar(V_new[0], V_new[1], V_new[2]) - planetary_pos ) - 0.5*r_h )/ 0.5*r_h<< "\n";
-	          //file << V_new[0] << "," ;
-	          //file << V_new[1] << ",";
-	          //file << V_new[2] << "\n";
+            //file << fabs(0.8*r_h - (scalar(V_new[0] - planetary_pos, V_new[1] , V_new[2])))  / (0.8*r_h) << "\n";
+	          file << V_new[0] << "," ;
+	          file << V_new[1] << ",";
+	          file << V_new[2] << "\n";
 
 	          next_time = next_time + delta_time;
         }
@@ -828,7 +838,6 @@ void RK_solver(double h0, vector <double> V_0, double t_0, vector <double> star,
 
 double scalar(double x, double y, double z){
         s = pow( pow(x, 2.) + pow(y, 2.) + pow(z, 2.), 0.5 );
-
         return s;
 }
 
@@ -847,19 +856,22 @@ int main() {
 
     r_h = pow(m_planet/3.0, 1.0/3.0); //Hill radius
 
+    double omega;
+
+    omega = pow((G_dim *(m_planet + 1.0)), 0.5);
 
     double init_vel;
 
-    init_vel = pow((G_dim*m_planet)/(0.5*r_h), 0.5); //inertial frame
+    init_vel = pow((G_dim*(m_planet)/(0.8*r_h)), 0.5); //inertial frame
 
 
     //Define initial position in dimensionless units
 
-		double star_x  = -(m_planet) / (m_planet + 1.0);
+		double star_x  = -((m_planet) / (m_planet + 1.0));
 		double star_y = 0.0;
 		double star_z = 0.0;
 
-		double planet_x = 1.0 -(m_planet / (m_planet + 1.0));
+		double planet_x = 1.0 / (m_planet + 1.0);
 		double planet_y = 0.0;
 		double planet_z = 0.0;
 
@@ -871,14 +883,14 @@ int main() {
 		planet_pos.push_back(planet_y);
 		planet_pos.push_back(planet_z);
 
-    double x0 = planet_x + 0.5*r_h;
+    double x0 = planet_x + 0.8*r_h;
     double y0 = 0.0;
     double z0 = 0.0;
 
     //Define initial velocity in dimensionless units
 
     double xdot0 = 0.0;
-    double ydot0 = init_vel - 2.0*PI*0.5*r_h;
+    double ydot0 = init_vel;
     double zdot0 = 0.0;
 
     //initial variables vector
