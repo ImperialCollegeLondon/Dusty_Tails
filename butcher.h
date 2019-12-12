@@ -16,7 +16,7 @@ const double a54 = -212.0/729.0;
 
 const double a61 = 9017.0/3168.0;
 const double a62 = -355.0/33.0;
-const double a63 = -46732.0/5247.0;
+const double a63 = 46732.0/5247.0;
 const double a64 = 49.0/176.0;
 const double a65 = -5103.0/18656.0;
 
@@ -26,7 +26,7 @@ const double a74 = 125.0/192.0;
 const double a75 = -2187.0/6784.0;
 const double a76 = 11.0/84.0;
 
-const double b1 = 35.0/284.0;
+const double b1 = 35.0/384.0;
 const double b3 = 500.0/1113.0;
 const double b4 = 125.0/192.0;
 const double b5 = -2187.0/6784.0;
