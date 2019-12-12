@@ -5,18 +5,15 @@
 #include <algorithm>
 #include "constants.h"
 #include "butcher.h"
-//#include "RK_variables.h""
 #include "functions.h"
 
 using namespace std;
+//g++ RK_init.cpp solver.cpp microphysics.cpp maths.cpp errors.cpp kvalues.cpp forces.cpp to compile
+
 
 //some declaration of variables
 
-
 vector <double> V0; //initial variables vector
-vector <double> star_pos, planet_pos; //star and planet position in CoM frame
-vector <double> cp_vector, centri_vector, coriol_vector, vrad, rad_vector, s_unit, pr_vector;
-vector <double> x_positions, y_positions, z_positions;
 
 int main() {
 
@@ -25,22 +22,6 @@ int main() {
     init_vel = pow((G_dim*(m_planet)/(0.1*r_h)), 0.5); //inertial frame
 
     //Define initial position in dimensionless units
-
-		double star_x  = -((m_planet) / (m_planet + 1.0));
-		double star_y = 0.0;
-		double star_z = 0.0;
-
-		double planet_x = 1.0 / (m_planet + 1.0);
-		double planet_y = 0.0;
-		double planet_z = 0.0;
-
-		star_pos.push_back(star_x);
-		star_pos.push_back(star_y);
-		star_pos.push_back(star_z);
-
-		planet_pos.push_back(planet_x);
-		planet_pos.push_back(planet_y);
-		planet_pos.push_back(planet_z);
 
     double x0 = planet_x + 0.1*r_h;
     double y0 = 0.0;
@@ -61,7 +42,7 @@ int main() {
     V0.push_back(ydot0);
     V0.push_back(zdot0);
 
-    RK_solver(h0, V0, 0.0, star_pos, planet_pos);
+    RK_solver(h0, V0, 0.0);
 
 
 }

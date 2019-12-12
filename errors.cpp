@@ -40,9 +40,9 @@ double h_optimal(vector <double> deltas_list, double h){
 
 }
 
-vector <double> h_check(double h, vector <double> V, vector <double> star, \
-                        vector <double> planet){
+vector <double> h_check(double h, vector <double> V){
     vector <double> deltas;
+    vector <double> order4, order5;
 
     double x4, y4, z4, xdot4, ydot4, zdot4;
     double x5, y5, z5, xdot5, ydot5, zdot5;
@@ -53,25 +53,26 @@ vector <double> h_check(double h, vector <double> V, vector <double> star, \
     deltas.clear();
 
     //4th order
-    new_variables(h, V, false, star, planet);
+    order4 = new_variables(h, V, false);
 
-    x4 = x_new;
-    y4 = y_new;
-    z4 = z_new;
+    x4 = order4[0];
+    y4 = order4[1];
+    z4 = order4[2];
 
-    xdot4 = xdot_new;
-    ydot4 = ydot_new;
-    zdot4 = zdot_new;
+    xdot4 = order4[3];
+    ydot4 = order4[4];
+    zdot4 = order4[5];
 
     //5th order
-    new_variables(h, V, true, star, planet);
+    order5 = new_variables(h, V, true);
 
-    x5 = x_new;
-    y5 = y_new;
-    z5 = z_new;
-    xdot5 = xdot_new;
-    ydot5 = ydot_new;
-    zdot5 = zdot_new;
+    x5 = order5[0];
+    y5 = order5[1];
+    z5 = order5[2];
+
+    xdot5 = order5[3];
+    ydot5 = order5[4];
+    zdot5 = order5[5];
 
     //error on xdot
     xdot_err = delta(xdot4, xdot5);

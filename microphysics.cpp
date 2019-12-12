@@ -5,7 +5,6 @@
 #include <algorithm>
 #include "constants.h"
 #include "butcher.h"
-//#include "RK_variables.h"
 #include "functions.h"
 
 using namespace std;
@@ -56,13 +55,15 @@ vector <double> drag_vel(double x, double y, double z, double vx, double vy, dou
 	 return vrad;
 }
 
-vector <double> s_vector(double x, double y, double z){
+vector <double> sunit_vector(double x, double y, double z){
   vector <double> s_unit;
+
+
   //function to obtain unit vector of radiation field
   s_unit.clear();
-	s_unit.push_back((x - star_pos[0]) /scalar(x,y,z));
-	s_unit.push_back((y - star_pos[1]) /scalar(x,y,z));
-	s_unit.push_back((z - star_pos[2]) /scalar(x,y,z));
+	s_unit.push_back((x - star_x) /scalar(x - star_x,y,z));
+	s_unit.push_back((y) /scalar(x - star_x,y,z));
+	s_unit.push_back((z) /scalar(x - star_x,y,z));
 
 	return s_unit;
 }

@@ -1,5 +1,6 @@
 //Header file with constants
-
+#include <iostream>
+#include <cmath>
 
 #define PI 3.14159
 
@@ -11,15 +12,30 @@
 #define Mearth 5.972e+24
 #define c 2.9979245e+8
 
-
 const double Mstar_kg = 0.8*Msun; //mass of star in kg
 const double Mstar_sun = 0.8; //mass of star in terms of mass of the sun
-const double Period_days = 0.8; //period of dust grain in days
-const double T = 0.8*24.0*60.0*60.0; //period of dust grain in seconds
+const double Period_days = 0.8; //period of planet in days
+const double T = 0.8*24.0*60.0*60.0; //period of planet in seconds
+const double Rstar = 0.8;
+
+
+const double a = pow(7.496e-6 * 0.8 * pow(0.8, 2.0), (1.0/3.0)) * AU_to_m;
+const double m_planet = (Mearth/Mstar_kg);
+const double G_dim = (G* pow(T, 2.0) * Mstar_kg) / pow(a, 3.0); //dimensionless gravitational constant
+const double c_dim = c * (T / a);
+const double r_h = pow(m_planet/3.0, 1.0/3.0);
+
+const double star_x  = -((m_planet) / (m_planet + 1.0));
+
+const double planet_x = 1.0 / (m_planet + 1.0);
+
+const double h0 = 0.001; //initial time step
+
+const double Q_factor = 1.0;
 
 const double Temp = 4400.0; //stars temperature
 const double S = 0.9; //safety factor
-const double tol = 1e-12; //error tolerance
+const double tol = 1e-6; //error tolerance
 
 const double beta = 0.0; //ratio of radiation pressure to gravity
 
