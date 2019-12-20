@@ -9,34 +9,29 @@
 
 using namespace std;
 
-vector <double> g,DR;
-double largest_element;
+//grid cell widths
+vector <double> g,DR,x;
+double mu = 1.;
+double sd = Rmax/6.;
 
-//cell width
-vector <double> find_DR(double NR){
-  double mu=1.;
-  double sd=mu/3.;
-  for(i=0.; i<=NR; i++){
-    a=i/10.;
-    gauss_new = (1./(sd*sqrt(2*M_PI))*exp(-pow(a-mu,2.)/(2.*pow(sd,2.))));
+vector <double> make_gauss(double NR){
+  for(double i=0.; i<=(6.*sd); i+=(1./(NR/2.))){
+    x.push_back(i);
+    gauss_new = exp(-pow(i-mu,2.)/(2.*pow(sd,2.)));
     g.push_back(gauss_new);
-    //cout << gauss_new << endl;
+    //cout << i << " " << gauss_new << endl; // prints the gaussian vector elements
   }
+  return g;
+  return x;
+}
 
-  double largest_element = g[0];
-  for(int i = 1; i < g.size(); i++){
-    if(g[i] > largest_element){
-         largest_element = g[i];
-    }
-  }
-
-  for(i=0.; i<=NR; i++){
-    a=i/10.;
-    gauss_new = 0.1*((largest_element+0.1)-g[i]);
+vector <double> find_DR(double A,double B, vector<double> g){
+  for(double i=0.; i<g.size(); i++){
+    //cout << g[i] << endl; // prints the gaussian vector elements
+    gauss_new = A*(1.-g[i])+B;
     DR.push_back(gauss_new);
-    cout << gauss_new << endl;
+    //cout << i << " " << gauss_new << endl; // prints the inverse gaussian vector elements
   }
-
   return DR;
 }
 
@@ -51,26 +46,31 @@ int ie(double NR){
 }
 
 //building the grid
-void build_grid(double NR)
+void build_grid(double NR, vector<double> DR)
 {
   for (i=is(NR)+1; i<=ie(NR); i++){ // defines the cell edges
-    Ra_new = Ra[i-1]+DR[i];
+    cout << DR[i] << endl;
+    Ra_new = Ra[i-1]+DR[i-1];
     Ra.push_back(Ra_new);
+    //cout << Ra[i] << endl;
   }
 
   for (i=is(NR); i<=ie(NR)-1; i++){ // defines the cell centers
     Rb_new = Ra[i]+DR[i]/2.;
     Rb.push_back(Rb_new);
+    //cout << Rb[i] << endl;
   }
 
   for (i=is(NR);i<=ie(NR)-1;i++){ // defines the width of a cell
     dRa_new = Ra[i+1]-Ra[i];
     dRa.push_back(dRa_new);
+    //cout << i << " " << dRa[i] << endl;
   }
 
   for (i=is(NR)+1;i<=ie(NR)-1;i++){ // defines the width between two cell centers
     dRb_new = Rb[i]-Rb[i-1];
     dRb.push_back(dRb_new);
+    //cout << dRb[i] << endl;
   }
 }
 
@@ -109,6 +109,66 @@ void calculate_optical_depth(double NR)
 }
 
 //file creators
+void file_creator_gaussian(vector<double> g, vector <double> x) {//textfile of gaussian vs Rb
+  ofstream myfile ("gaussian_grid.txt");
+  if (myfile.is_open()) {
+    for (i=0.; i<g.size(); i++) {
+      char string[15];
+
+      myfile << x[i] << ",";
+      myfile << g[i] << "\n";
+    }
+    myfile.close();
+  }
+  else cout << "Unable to open file";
+
+}
+
+void file_creator_inv(vector<double> DR, vector <double> x) {//textfile of non uniform grid DR vs Rb
+  ofstream myfile ("inverse_gaussian_grid.txt");
+  if (myfile.is_open()) {
+    for (i=0.; i<DR.size(); i++) {
+      char string[15];
+
+      myfile << x[i] << ",";
+      myfile << DR[i] << "\n";
+    }
+    myfile.close();
+  }
+  else cout << "Unable to open file";
+
+}
+
+void file_creator_DR(vector<double> DR, vector <double> Ra) {//textfile of density vs Rb
+  ofstream myfile ("DR.txt");
+  if (myfile.is_open()) {
+    for (i=0.; i<DR.size(); i++) {
+      char string[15];
+
+      myfile << Ra[i] << ",";
+      myfile << DR[i] << "\n";
+    }
+    myfile.close();
+  }
+  else cout << "Unable to open file";
+
+}
+
+void file_creator_xRa(vector<double> x, vector <double> Ra) {//textfile of density vs Rb
+  ofstream myfile ("xRa.txt");
+  if (myfile.is_open()) {
+    for (i=0.; i<x.size(); i++) {
+      char string[15];
+
+      myfile << x[i] << ",";
+      myfile << Ra[i] << "\n";
+    }
+    myfile.close();
+  }
+  else cout << "Unable to open file";
+
+}
+
 void file_creator_t(vector<double> t, vector <double> Ra, double NR) {//textfile of optical depth vs Rb
   stringstream title;
   title << "/Users/annawilson/Documents/GitHub/Dusty_Tails/Text_files/optical_depth_NR=" << NR;
