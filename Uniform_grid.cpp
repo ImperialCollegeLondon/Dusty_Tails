@@ -52,11 +52,11 @@ void build_grid(double NR)
 void density_fill(double NR)
 {
   mean = 1.0; //mean is(NR) at a, which is(NR) 1 in dimensionless units
-  sd = 0.2*mean; //arbitrary
+  stde = 0.2*mean; //arbitrary
 
   // Constructing density array
   for(i=is(NR); i<=ie(NR)-1; i++){
-    gauss_new = (density*pow(a,3.)/Mstar_kg)*exp(-pow((Rb[i])-mean,2.)/(2.*pow(sd,2.)));
+    gauss_new = (density*pow(a,3.)/Mstar_kg)*exp(-pow((Rb[i])-mean,2.)/(2.*pow(stde,2.)));
     gauss.push_back(gauss_new);
     d.push_back(gauss_new);
   }
