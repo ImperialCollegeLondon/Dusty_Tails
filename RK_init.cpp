@@ -8,8 +8,6 @@
 #include "functions.h"
 
 using namespace std;
-//g++ RK_init.cpp solver.cpp microphysics.cpp maths.cpp errors.cpp kvalues.cpp forces.cpp to compile
-
 
 //some declaration of variables
 
@@ -23,15 +21,15 @@ int main() {
 
     //Define initial position in dimensionless units
 
-    double x0 = planet_x + 0.1*r_h;
+    double x0 = planet_x + 0.1*r_h; //
     double y0 = 0.0;
     double z0 = 0.0;
 
     //Define initial velocity in dimensionless units
 
     double xdot0 = 0.0;
-    double ydot0 = 0.0;
-    double zdot0 = 0.0;
+    double ydot0 = init_vel/ (pow(2.0, 0.5));
+    double zdot0 = init_vel/ (pow(2.0, 0.5));
 
     //initial variables vector
 
