@@ -5,8 +5,7 @@
 #include <algorithm>
 #include "constants.h"
 #include "butcher.h"
-
-//#include "functions.h"
+#include "particle.h"
 #include "functions.h"
 
 using namespace std;

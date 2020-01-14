@@ -6,6 +6,7 @@
 #include "constants.h"
 #include "butcher.h"
 #include "functions.h"
+#include "particle.h"
 
 using namespace std;
 
@@ -24,8 +25,9 @@ void k_values(double h, vector <double> V, bool order5){
 
     new_centrifugal = centrifugal(V[0], V[1], V[2], V[3], V[4], V[5]);
     new_coriolis = coriolis(V[0], V[1], V[2], V[3], V[4], V[5]);
-		new_rad_press = rad_pressure(V[0], V[1], V[2], V[3], V[4], V[5]);
-		new_pr_drag = pr_drag(V[0], V[1], V[2], V[3], V[4], V[5]);
+	  new_rad_press = rad_pressure(V[0], V[1], V[2], V[3], V[4], V[5]);
+	  new_pr_drag = pr_drag(V[0], V[1], V[2], V[3], V[4], V[5]);
+
 
     //k1 values
     k1_xdot = h* acceleration( V[0] - star_x, V[0] - planet_x,  \
