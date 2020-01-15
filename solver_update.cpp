@@ -18,11 +18,11 @@ double acceleration( double pos_star, double pos_planet, double x, double y, dou
 
   double grav_star, grav_planet;
 
-  grav_star = (-G_dim * pos_star ) / pow( scalar(x - star_x , y ,z), 3.0 );
+  grav_star = (-G_dim * pos_star ) / pow( scalar(x - star_x, y ,z), 3.0 );
 
-  grav_planet = (-G_dim * m_planet* pos_planet ) / pow( scalar(x - planet_x,y ,z), 3.0 );
+  grav_planet = (-G_dim * m_planet* pos_planet ) / pow( scalar(x - planet_x + r_planet_dim,y ,z), 3.0 );
 
-  vel_dot = grav_star - centri - 2.0*coriol + grav_planet + radiation - drag;
+  vel_dot = grav_star - centri - 2.0*coriol - drag + radiation + grav_planet;
 
   return vel_dot;
 }
@@ -116,7 +116,7 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
 
     while (t < del_t) {
 
-
+        //cout << t << endl;
         //obtain delta values for the 6 variables
         delta_values = h_check(h_new, new_vector);
         h_old = h_new;
@@ -130,7 +130,7 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
              new_vector = next_step(h_old, new_vector);
              h_new = 2.*h_old;
            } else {
-             new_vector = next_step(del_t - h_old, new_vector);
+             new_vector = next_step(del_t - (t-h_old), new_vector);
              return new_vector;
            }
 
@@ -140,7 +140,7 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
              new_vector = next_step(h_new, new_vector);
              h_new = h_new;
            } else {
-              new_vector = next_step(del_t - h_new, new_vector);
+              new_vector = next_step(del_t - (t-h_new), new_vector);
               return new_vector;
 
            }

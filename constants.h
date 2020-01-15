@@ -19,9 +19,11 @@ const double Period_days = 0.8; //period of planet in days
 const double T = 0.8*24.0*60.0*60.0; //period of planet in seconds
 const double Rstar = 0.8;
 
+
 const double a = pow((G*Mstar_kg* pow(T, 2.0))/ (4.0*pow(PI, 2.0)), 1.0/3.0);
 const double m_planet = (0.1*Mearth)/Mstar_kg;
 const double r_planet = 0.5*Rearth;
+const double r_planet_dim = r_planet/a;
 const double G_dim = (G* pow(T, 2.0) * Mstar_kg) / pow(a, 3.0); //dimensionless gravitational constant
 const double c_dim = c * (T / a);
 const double r_h = pow(m_planet/3.0, 1.0/3.0);
@@ -39,7 +41,7 @@ const double Q_factor = 1.0;
 
 const double Temp = 4000.0; //stars temperature
 const double S = 0.9; //safety factor
-const double tol = 1e-7; //error tolerance
+const double tol = 1e-8; //error tolerance
 
 const double tau = 0.1; //optical depth
 

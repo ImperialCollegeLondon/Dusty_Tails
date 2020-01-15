@@ -17,7 +17,6 @@ vector <double> centrifugal(double x, double y, double z, double vx, double vy, 
 	centri_vector.clear();
 
   ang_vel = omega(m_planet, 1.0);
-
 	omxr = cross_product(0.0, 0.0, ang_vel, x, y, z);
 
   finalx = cross_product(0.0, 0.0, ang_vel, omxr[0], omxr[1], omxr[2]);
