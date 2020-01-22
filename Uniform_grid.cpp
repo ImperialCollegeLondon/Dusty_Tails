@@ -59,6 +59,7 @@ void density_fill(double NR)
     gauss_new = (density*pow(a,3.)/Mstar_kg)*exp(-pow((Rb[i])-mean,2.)/(2.*pow(stde,2.)));
     gauss.push_back(gauss_new);
     d.push_back(gauss_new);
+    //cout << gauss_new << endl;
   }
 }
 
@@ -79,13 +80,14 @@ void calculate_optical_depth(double NR)
   for(i=is(NR)+1; i<=ie(NR)-1; i++){
     t_new = t[i-1]+(k[i]*d[i]*dRa[i]);
     t.push_back(t_new);
+    //cout << t_new << endl;
   }
 }
 
 //file creators
 void file_creator_t(vector<double> t, vector <double> Ra, double NR) {//textfile of optical depth vs Rb
   stringstream title;
-  title << "/Users/annawilson/Documents/GitHub/Dusty_Tails/Text_files/optical_depth_NR=" << NR;
+  title << "/Users/annawilson/Documents/GitHub/Dusty_Tails/Text_files/optical_depth_NRu=" << NR;
   ofstream myfile (title.str()+".txt");
   if (myfile.is_open()) {
     for (i=0.; i<t.size(); i++) {
@@ -102,7 +104,7 @@ void file_creator_t(vector<double> t, vector <double> Ra, double NR) {//textfile
 
 void file_creator_gauss(vector<double> gauss, vector <double> Ra, double NR) {//textfile of density vs Rb
   stringstream title;
-  title << "/Users/annawilson/Documents/GitHub/Dusty_Tails/Text_files/gaussian_NR=" << NR;
+  title << "/Users/annawilson/Documents/GitHub/Dusty_Tails/Text_files/gaussian_NRu=" << NR;
   ofstream myfile (title.str()+".txt");
   if (myfile.is_open()) {
     for (i=0.; i<gauss.size(); i++) {
