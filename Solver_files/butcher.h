@@ -1,4 +1,6 @@
 //Header file with values of Butcher table for Dormand-Prince method defined
+#include <iostream>
+#include <vector>
 
 const double a21 = 1.0/5.0;
 

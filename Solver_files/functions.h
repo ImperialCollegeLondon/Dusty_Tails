@@ -3,6 +3,7 @@
 #include <vector>
 using namespace std;
 
+
 ///k values declared
 extern double k1_x, k2_x, k3_x, k4_x, k5_x, k6_x, k7_x;
 extern double k1_y, k2_y, k3_y, k4_y, k5_y, k6_y, k7_y;
@@ -66,4 +67,5 @@ vector <double> new_variables(double h, vector <double> V, bool order5);
 
 vector <double> next_step(double h, vector <double> V);
 
-void RK_solver(double h0, vector <double> V_0, double t_0);
+vector <double> RK_solver(vector <double> V_0, double t_0, double del_t, \
+  double h_p);

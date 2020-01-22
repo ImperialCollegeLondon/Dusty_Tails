@@ -20,7 +20,7 @@ double acceleration( double pos_star, double pos_planet, double x, double y, dou
 
   grav_planet = (-G_dim * m_planet* pos_planet ) / pow( scalar(x - planet_x,y ,z), 3.0 );
 
-  vel_dot = grav_star + grav_planet - centri - 2.0*coriol;
+  vel_dot = grav_star - centri - 2.0*coriol + grav_planet + radiation - drag;
 
   return vel_dot;
 }
@@ -90,10 +90,11 @@ void RK_solver(double h0, vector <double> V_0, double t_0){
 
     vector <double> new_vector, delta_values;
 
-    ofstream file("planet_data7.txt");
+    ofstream file("planet_z_data.txt");
+
 
     file << t << ",";
-    //file << fabs((0.1*r_h - scalar(V_0[0] - planetary_pos, V_0[1] , V_0[2]))) / (0.1*r_h)<< "\n";
+    file << scalar(V_0[0], V_0[1], V_0[2])<< ",";
     file << V_0[0] << ",";
     file << V_0[1] << ",";
     file << V_0[2] << "\n";
@@ -116,11 +117,11 @@ void RK_solver(double h0, vector <double> V_0, double t_0){
        h_new = h_new;
      }
 
-    double next_time = 0.1;
+    double next_time = 0.002;
 
-    double delta_time = 0.1;
+    double delta_time = 0.002;
 
-    while (next_time < 5.1){
+    while (next_time < 0.1){
 
         //obtain delta values for the 6 variables
         delta_values = h_check(h_new, new_vector);
@@ -133,24 +134,22 @@ void RK_solver(double h0, vector <double> V_0, double t_0){
            new_vector = next_step(h_old, new_vector);
            t = t + h_old;
            h_new = 2.*h_old;
-           //cout << "old h twice " << 2.0*h_old << endl;
 
          } else {
            new_vector = next_step(h_new, new_vector);
            t = t + h_new;
            h_new = h_new;
-           //cout << "new h " << h_new << endl;
          }
 
         if ( t > next_time) {
 
             file << t << ",";
-            //file << fabs(0.1*r_h - (scalar(V_new[0]- planetary_pos, V_new[1] , V_new[2])))  / (0.1*r_h) << "\n";
-	          file << new_vector[0] << "," ;
-	          file << new_vector[1] << ",";
-	          file << new_vector[2] << "\n";
+            file << scalar(new_vector[0], new_vector[1], new_vector[2]) << ",";
+	        file << new_vector[0] << "," ;
+	        file << new_vector[1] << ",";
+	        file << new_vector[2] << "\n";
 
-	          next_time = next_time + delta_time;
+	        next_time = next_time + delta_time;
         }
 
      }

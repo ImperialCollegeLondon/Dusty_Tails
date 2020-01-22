@@ -7,6 +7,7 @@
 #include "butcher.h"
 //#include "RK_variables.h"
 #include "functions.h"
+#include "particle.h"
 
 using namespace std;
 

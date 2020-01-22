@@ -5,8 +5,7 @@
 #include <algorithm>
 #include "constants.h"
 #include "butcher.h"
-
-//#include "functions.h"
+#include "particle.h"
 #include "functions.h"
 
 using namespace std;
@@ -18,7 +17,6 @@ vector <double> centrifugal(double x, double y, double z, double vx, double vy, 
 	centri_vector.clear();
 
   ang_vel = omega(m_planet, 1.0);
-
 	omxr = cross_product(0.0, 0.0, ang_vel, x, y, z);
 
   finalx = cross_product(0.0, 0.0, ang_vel, omxr[0], omxr[1], omxr[2]);
@@ -59,9 +57,9 @@ vector <double> rad_pressure(double x, double y, double z, double vx, double vy,
 	k = opacity(Q_factor);
 	Lum = luminosity(Rstar);
 
-	//beta = beta_fn(k, Lum, 0.8);
+	beta = beta_fn(k, Lum, 0.8);
 
-  beta = 0.0;
+
   constant = (beta*G_dim)/(pow(scalar(x- star_x, y, z), 3.0));
 
 
@@ -87,14 +85,16 @@ vector <double> pr_drag(double x, double y, double z, double vx, double vy, doub
   //function to evaluate poynting roberston drag
 
 	vector <double> v_drag, pr_vector;
-  pr_vector.clear();
-	double constant, beta;
+    pr_vector.clear();
+	double constant, beta, k, Lum;
+
+    k = opacity(Q_factor);
+	Lum = luminosity(Rstar);
 
 
-  //beta = beta_fn(k, Lum, 0.8);
+    beta = beta_fn(k, Lum, 0.8);
 
-  beta = 0.0;
-	constant = (beta*G_dim)/(pow(scalar(x-star_x, y, z), 3.0)*c_dim);
+    constant = (beta*G_dim)/(pow(scalar(x-star_x, y, z), 3.0)*c_dim);
 
 	v_drag = drag_vel(x,y,z,vx,vy,vz);
 
