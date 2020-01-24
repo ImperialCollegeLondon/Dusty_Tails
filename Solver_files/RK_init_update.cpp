@@ -39,16 +39,18 @@ int main() {
   initial_vel.push_back(vel_1);
   initial_vel.push_back(vel_2);
 
-  long int no_particles = 1;
+  long int no_particles = 5;
   double t_common = 0.1; //arbitrary for now
   double big_step = 0.1;
-  double end_t = 30.0;
+  double end_t = 10.0;
   double total_t = 0.0;
+
+  long int current_particles = 0;
 
 
   ofstream file("data1.txt");
 
-  for ( unsigned int i = 0; i < no_particles; i++){
+  for ( unsigned long int i = current_particles; i < no_particles; i++){
       Particle grain;
       grain.id = i;
       grain.position = initial_pos[i];
@@ -60,10 +62,12 @@ int main() {
 
       particles.push_back(grain);
       file << total_t << ",";
-      //file << grain.id << ",";
+      file << grain.id << ",";
       file << grain.position[0] << ",";
       file << grain.position[1] << ",";
       file << grain.position[2] << "\n";
+
+      current_particles = current_particles + 1;
     }
 
 
@@ -79,19 +83,18 @@ int main() {
       p.position = {updated_vector[0],updated_vector[1], updated_vector[2]};
       p.velocity = {updated_vector[3],updated_vector[4], updated_vector[5]};
       file << total_t + big_step << ",";
-      //file << p.id << ",";
+      file << p.id << ",";
       file << p.position[0] << ",";
       file << p.position[1] << ",";
       file << p.position[2] << "\n";
-      //file << p.velocity[0] << ",";
-      //file << p.velocity[1] << ",";
-      //file << p.velocity[2] << "\n";
 
     }
 
 
     total_t = total_t + big_step;
     t_common = t_common + big_step;
+
+    if (total_t
 
   }
 
