@@ -5,7 +5,7 @@ LIBS           = -lm
 
 HEADERS = constants.h functions.h butcher.h particle.h
 
-OBJ = solver_update.o RK_init_update.o maths.o forces.o errors.o microphysics.o kvalues.o
+OBJ = solver_update.o RK_init_update.o maths.o forces.o errors.o microphysics.o kvalues.o add_rm.cpp
 
 dynamics: $(OBJ)
 	$(C_COMPILER) $(OBJ) $(LIBS) -o $(OUTPUT)

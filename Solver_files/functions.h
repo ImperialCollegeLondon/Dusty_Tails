@@ -1,6 +1,7 @@
 //Functions declared here
 #include <iostream>
 #include <vector>
+
 using namespace std;
 
 
@@ -12,6 +13,8 @@ extern double k1_z, k2_z, k3_z, k4_z, k5_z, k6_z, k7_z;
 extern double k1_xdot, k2_xdot, k3_xdot, k4_xdot, k5_xdot, k6_xdot, k7_xdot;
 extern double k1_ydot, k2_ydot, k3_ydot, k4_ydot, k5_ydot, k6_ydot, k7_ydot;
 extern double k1_zdot, k2_zdot, k3_zdot, k4_zdot, k5_zdot, k6_zdot, k7_zdot;
+
+double fRand(double fMin, double fMax);
 
 //forces file
 vector <double> centrifugal(double x, double y, double z, \

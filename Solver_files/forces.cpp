@@ -8,6 +8,7 @@
 #include "particle.h"
 #include "functions.h"
 
+
 using namespace std;
 
 vector <double> centrifugal(double x, double y, double z, double vx, double vy, double vz){
