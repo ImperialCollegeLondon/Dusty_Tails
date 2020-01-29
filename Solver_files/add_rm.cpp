@@ -12,7 +12,7 @@
 using namespace std;
 
 
-ofstream file("output.txt", std::ios_base::out | std::ios_base::app);
+ofstream file("output5.txt", std::ios_base::out | std::ios_base::app);
 
 vector <Particle> add_particles(vector <Particle> particles, long int current,
                    long int total, double time){
@@ -23,7 +23,7 @@ vector <Particle> add_particles(vector <Particle> particles, long int current,
         //escape velocity m/s
 
         for ( unsigned long int i = current; i < total; i++){
-                 cout << i << endl;
+
                  Particle grain;
                  grain.id = i+1;
                  double theta = fRand(0.0, PI);
@@ -52,7 +52,7 @@ vector <Particle> add_particles(vector <Particle> particles, long int current,
                  file << grain.position[2] << "\n";
                }
 
-              cout << "end add" << endl;
+
               return particles;
 
 
@@ -76,11 +76,14 @@ void solve_particles(double total_t, double end_t, vector <Particle> particles, 
       p.position = {updated_vector[0],updated_vector[1], updated_vector[2]};
       p.velocity = {updated_vector[3],updated_vector[4], updated_vector[5]};
 
+      p.h_updated = updated_vector[6];
+
       file << total_t + big_step << ",";
       file << p.id << ",";
       file << p.position[0] << ",";
       file << p.position[1] << ",";
       file << p.position[2] << "\n";
+
 
     }
 
@@ -92,7 +95,7 @@ void solve_particles(double total_t, double end_t, vector <Particle> particles, 
       particles = add_particles(particles, current_particles, total_particles, total_t);
       plot_time = plot_time + 0.5;
     }
-    
+
     total_t = total_t + big_step;
     t_common = t_common + big_step;
 

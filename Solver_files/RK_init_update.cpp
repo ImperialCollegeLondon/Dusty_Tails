@@ -13,9 +13,9 @@ using namespace std;
 vector <Particle> particles;
 
 int main() {
-  long int total_particles = 20;
-  double t_common = 0.1; //arbitrary for now
-  double big_step = 0.1;
+  long int total_particles = 10;
+  double t_common = 0.05; //arbitrary for now
+  double big_step = 0.05;
   double end_t = 2.0;
   double total_t = 0.0;
 

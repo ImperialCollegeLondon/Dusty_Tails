@@ -23,7 +23,7 @@ const double Rstar = 0.8;
 const double a = pow((G*Mstar_kg* pow(T, 2.0))/ (4.0*pow(PI, 2.0)), 1.0/3.0);
 const double m_planet = (0.1*Mearth)/Mstar_kg;
 const double r_planet = 0.5*Rearth;
-const double r_start = Rearth/a;
+const double r_start = (3.*r_planet)/a;
 const double r_planet_dim = r_planet/a;
 const double G_dim = (G* pow(T, 2.0) * Mstar_kg) / pow(a, 3.0); //dimensionless gravitational constant
 const double c_dim = c * (T / a);
@@ -54,4 +54,4 @@ const double tau = 0.1; //optical depth
 #define c_cgs 2.99792458e+10 //speed of light
 #define rho_d 4.0 //density of dust particle
 #define Msun_cgs 1.9885e+33 // solar mass
-#define size 0.1e-4 //dust particle size
+#define size 10.0e-4 //dust particle size
