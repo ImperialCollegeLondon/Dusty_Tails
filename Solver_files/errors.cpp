@@ -9,6 +9,7 @@
 #include "functions.h"
 #include "particle.h"
 
+
 using namespace std;
 
 double delta( double value1, double value2){

@@ -15,7 +15,7 @@ double A = 77365.;
 double B = 39.3;
 
 const double kb = 1.381e-16;
-const double amu = 1.661e-24; //in kg
+const double amu = 1.661e-24;
 
 double rho = 4.0;
 
@@ -29,7 +29,7 @@ vector <double> arange( double start, double stop, double step) {
 
 double timescale(double T){
     double J;
-    J = (- alpha/rho)* exp((-A/T) + B) * pow((mu * amu)/(2.0*PI*kb*T), 0.5);
+    J = -(alpha/rho)* exp((-A/T) + B) * pow((mu * amu)/(2.0*PI*kb*T), 0.5);
     return size/J;
 }
 
@@ -37,17 +37,17 @@ int main(){
 
     vector <double> temperatures;
     vector <double> times;
-    temperatures = arange( 2500.0, 4500.0, 5.);
+    temperatures = arange( 1200.0, 8000.0, 5.);
 
     ofstream file("sublimation_data.txt");
     vector <double>::iterator it;
 
     for (it = temperatures.begin(); it != temperatures.end(); it++){
         double t_now;
-        t_now = timescale(*it);
-        times.push_back(t_now);
+        t_now = timescale(*it)/T;
+        times.push_back(fabs(t_now));
         file << *it << ",";
-        file << t_now << "\n";
+        file << fabs(t_now) << "\n";
 
     }
 

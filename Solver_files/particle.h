@@ -4,6 +4,9 @@
 
 using namespace std;
 
+
+
+
 class Particle {
    public:
     int id; //unique id of the particle
@@ -16,3 +19,15 @@ class Particle {
     double p_tau; //optical depth
 
 };
+
+
+
+
+vector <Particle> add_particles(vector <Particle> particles, long int current_particles,
+                   long int total_particles, double total_t);
+
+
+
+void solve_particles(double total_t, double end_t, vector <Particle> particles, \
+                     long int total_particles, double t_common, double big_step, \
+                     long int current_particles);

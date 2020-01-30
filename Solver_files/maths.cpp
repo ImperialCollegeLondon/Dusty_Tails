@@ -8,6 +8,7 @@
 #include "particle.h"
 #include "functions.h"
 
+
 using namespace std;
 
 vector <double> to_vector(double x, double y, double z){
@@ -54,4 +55,10 @@ double dot_product(vector <double> n,  vector <double> m){
 
 		 return dp;
 
+}
+
+double fRand(double fMin, double fMax)
+{
+    double f = (double)rand() / (double)RAND_MAX;
+    return fMin + f * (fMax - fMin);
 }
