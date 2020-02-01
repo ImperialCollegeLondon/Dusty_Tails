@@ -6,8 +6,6 @@
 #include "constants.h"
 #include "butcher.h"
 #include "functions.h"
-#include "particle.h"
-
 
 using namespace std;
 

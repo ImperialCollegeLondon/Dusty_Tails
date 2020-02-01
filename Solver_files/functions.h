@@ -1,9 +1,7 @@
 //Functions declared here
 #include <iostream>
 #include <vector>
-
 using namespace std;
-
 
 ///k values declared
 extern double k1_x, k2_x, k3_x, k4_x, k5_x, k6_x, k7_x;
@@ -13,8 +11,6 @@ extern double k1_z, k2_z, k3_z, k4_z, k5_z, k6_z, k7_z;
 extern double k1_xdot, k2_xdot, k3_xdot, k4_xdot, k5_xdot, k6_xdot, k7_xdot;
 extern double k1_ydot, k2_ydot, k3_ydot, k4_ydot, k5_ydot, k6_ydot, k7_ydot;
 extern double k1_zdot, k2_zdot, k3_zdot, k4_zdot, k5_zdot, k6_zdot, k7_zdot;
-
-double fRand(double fMin, double fMax);
 
 //forces file
 vector <double> centrifugal(double x, double y, double z, \
@@ -70,5 +66,4 @@ vector <double> new_variables(double h, vector <double> V, bool order5);
 
 vector <double> next_step(double h, vector <double> V);
 
-vector <double> RK_solver(vector <double> V_0, double t_0, double del_t, \
-  double h_p);
+void RK_solver(double h0, vector <double> V_0, double t_0);

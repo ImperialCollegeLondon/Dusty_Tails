@@ -5,9 +5,8 @@
 #include <algorithm>
 #include "constants.h"
 #include "butcher.h"
-#include "particle.h"
+//#include "RK_variables.h"
 #include "functions.h"
-
 
 using namespace std;
 
@@ -55,10 +54,4 @@ double dot_product(vector <double> n,  vector <double> m){
 
 		 return dp;
 
-}
-
-double fRand(double fMin, double fMax)
-{
-    double f = (double)rand() / (double)RAND_MAX;
-    return fMin + f * (fMax - fMin);
 }
