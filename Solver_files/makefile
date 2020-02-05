@@ -1,11 +1,11 @@
 C_COMPILER     = g++
-C_FLAGS        = -O3 -pg
+C_FLAGS        = -pg
 OUTPUT         = ../dynamics.exe
 LIBS           = -lm
 
 HEADERS = constants.h functions.h butcher.h particle.h
 
-OBJ = solver_update.o RK_init_update.o maths.o forces.o errors.o microphysics.o kvalues.o add_rm.cpp
+OBJ = solver_update.o RK_init_update.o maths.o forces.o errors.o microphysics.o kvalues.o add_rm.o
 
 dynamics: $(OBJ)
 	$(C_COMPILER) $(OBJ) $(LIBS) -pg -o $(OUTPUT)

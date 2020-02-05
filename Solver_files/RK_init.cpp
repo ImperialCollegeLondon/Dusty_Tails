@@ -6,6 +6,7 @@
 #include "constants.h"
 #include "butcher.h"
 #include "functions.h"
+#include "add_rm.cpp"
 
 using namespace std;
 

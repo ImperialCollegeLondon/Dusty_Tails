@@ -17,6 +17,7 @@ class Particle {
     double h_updated; //current optimal time step for particle
     //int grid;
     double p_tau; //optical depth
+    double p_temp; //particle temperature
 
 };
 
@@ -31,3 +32,5 @@ vector <Particle> add_particles(vector <Particle> particles, long int current_pa
 void solve_particles(double total_t, double end_t, vector <Particle> particles, \
                      long int total_particles, double t_common, double big_step, \
                      long int current_particles);
+
+vector <Particle> rm_particles(vector <Particle> particles);

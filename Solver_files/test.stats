@@ -1,0 +1,1243 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  us/call  us/call  name    
+ 22.56      1.67     1.67 195481728     0.01     0.01  cross_product(double, double, double, double, double, double)
+ 14.91      2.77     1.10 48870432     0.02     0.05  rad_pressure(std::vector<double, std::allocator<double> >)
+ 13.69      3.78     1.01 48870432     0.02     0.14  acceleration(int, double, double, std::vector<double, std::allocator<double> >)
+  9.35      4.47     0.69 146611296     0.00     0.01  sunit_vector(std::vector<double, std::allocator<double> >)
+  7.18      5.00     0.53 635416616     0.00     0.00  scalar(double, double, double)
+  6.64      5.49     0.49  2572128     0.19     2.77  k_values(double, std::vector<double, std::allocator<double> >, bool)
+  5.76      5.91     0.43 48870432     0.01     0.03  pr_drag(std::vector<double, std::allocator<double> >)
+  4.34      6.23     0.32 48870432     0.01     0.02  drag_vel(std::vector<double, std::allocator<double> >)
+  4.00      6.53     0.30 48870432     0.01     0.02  centrifugal(std::vector<double, std::allocator<double> >)
+  2.85      6.74     0.21 146611296     0.00     0.00  dot_product(std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> >)
+  1.69      6.86     0.13 48870432     0.00     0.01  coriolis(std::vector<double, std::allocator<double> >)
+  1.36      6.96     0.10 97740864     0.00     0.00  beta_fn(double, double, double)
+  1.15      7.05     0.09      100   850.10   850.10  std::vector<Particle, std::allocator<Particle> >::vector(std::vector<Particle, std::allocator<Particle> > const&)
+  1.08      7.13     0.08  2572128     0.03     2.80  new_variables(double, std::vector<double, std::allocator<double> >, bool)
+  1.02      7.20     0.08 97740864     0.00     0.00  omega(double, double)
+  0.88      7.27     0.07 97841864     0.00     0.00  luminosity(double)
+  0.34      7.29     0.03 97740864     0.00     0.00  opacity(double)
+  0.27      7.31     0.02   857376     0.02     0.02  h_optimal(std::vector<double, std::allocator<double> >, double)
+  0.27      7.33     0.02   100000     0.20    72.71  RK_solver(std::vector<double, std::allocator<double> >, double, double, double)
+  0.20      7.35     0.02   857376     0.02     5.62  h_check(double, std::vector<double, std::allocator<double> >)
+  0.14      7.36     0.01   404000     0.02     0.02  std::initializer_list<double>::begin() const
+  0.14      7.37     0.01   100000     0.10     0.10  std::_Vector_base<double, std::allocator<double> >::get_allocator() const
+  0.14      7.38     0.01   100000     0.10     0.10  void std::vector<double, std::allocator<double> >::_M_realloc_insert<double const&>(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, double const&)
+  0.07      7.38     0.01     2000     2.50     2.50  fRand(double, double)
+  0.00      7.38     0.00  1818414     0.00     0.00  std::remove_reference<double*&>::type&& std::move<double*&>(double*&)
+  0.00      7.38     0.00  1603000     0.00     0.00  std::vector<double, std::allocator<double> >::operator[](unsigned long)
+  0.00      7.38     0.00   606138     0.00     0.00  std::enable_if<std::__and_<std::__not_<std::__is_tuple_like<double*> >, std::is_move_constructible<double*>, std::is_move_assignable<double*> >::value, void>::type std::swap<double*>(double*&, double*&)
+  0.00      7.38     0.00   508046     0.00     0.00  std::_Vector_base<double, std::allocator<double> >::_M_get_Tp_allocator()
+  0.00      7.38     0.00   404046     0.00     0.00  std::vector<double, std::allocator<double> >::~vector()
+  0.00      7.38     0.00   404000     0.00     0.00  double const* std::__miter_base<double const*>(double const*)
+  0.00      7.38     0.00   404000     0.00     0.00  double const* std::__niter_base<double const*>(double const*)
+  0.00      7.38     0.00   302000     0.00     0.00  void std::_Destroy_aux<true>::__destroy<double*>(double*, double*)
+  0.00      7.38     0.00   302000     0.00     0.00  void std::_Destroy<double*>(double*, double*)
+  0.00      7.38     0.00   302000     0.00     0.00  void std::_Destroy<double*, double>(double*, double*, std::allocator<double>&)
+  0.00      7.38     0.00   300000     0.00     0.00  std::vector<double, std::allocator<double> >::_M_erase_at_end(double*)
+  0.00      7.38     0.00   206046     0.00     0.00  __gnu_cxx::new_allocator<double>::new_allocator(__gnu_cxx::new_allocator<double> const&)
+  0.00      7.38     0.00   206046     0.00     0.00  std::allocator<double>::allocator(std::allocator<double> const&)
+  0.00      7.38     0.00   204000     0.00     0.00  double* std::__copy_move<false, true, std::random_access_iterator_tag>::__copy_m<double>(double const*, double const*, double*)
+  0.00      7.38     0.00   204000     0.00     0.00  double* std::__niter_base<double*>(double*)
+  0.00      7.38     0.00   204000     0.00     0.00  double* std::__copy_move_a<false, double const*, double*>(double const*, double const*, double*)
+  0.00      7.38     0.00   202046     0.00     0.00  std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_M_swap_data(std::_Vector_base<double, std::allocator<double> >::_Vector_impl&)
+  0.00      7.38     0.00   202000     0.00     0.00  __gnu_cxx::new_allocator<double>::new_allocator()
+  0.00      7.38     0.00   202000     0.00     0.00  __gnu_cxx::new_allocator<double>::~new_allocator()
+  0.00      7.38     0.00   202000     0.00     0.02  std::initializer_list<double>::end() const
+  0.00      7.38     0.00   202000     0.00     0.00  std::initializer_list<double>::size() const
+  0.00      7.38     0.00   202000     0.00     0.00  std::vector<double, std::allocator<double> >::size() const
+  0.00      7.38     0.00   202000     0.00     0.00  std::vector<double, std::allocator<double> >::capacity() const
+  0.00      7.38     0.00   202000     0.00     0.00  std::allocator<double>::allocator()
+  0.00      7.38     0.00   202000     0.00     0.00  std::allocator<double>::~allocator()
+  0.00      7.38     0.00   202000     0.00     0.00  void std::vector<double, std::allocator<double> >::_M_assign_aux<double const*>(double const*, double const*, std::forward_iterator_tag)
+  0.00      7.38     0.00   202000     0.00     0.05  std::vector<double, std::allocator<double> >::operator=(std::initializer_list<double>)
+  0.00      7.38     0.00   202000     0.00     0.00  std::iterator_traits<double const*>::difference_type std::__distance<double const*>(double const*, double const*, std::random_access_iterator_tag)
+  0.00      7.38     0.00   202000     0.00     0.00  double* std::__copy_move_a2<false, double const*, double*>(double const*, double const*, double*)
+  0.00      7.38     0.00   202000     0.00     0.00  std::iterator_traits<double const*>::iterator_category std::__iterator_category<double const*>(double const* const&)
+  0.00      7.38     0.00   202000     0.00     0.00  double* std::copy<double const*, double*>(double const*, double const*, double*)
+  0.00      7.38     0.00   202000     0.00     0.00  std::iterator_traits<double const*>::difference_type std::distance<double const*>(double const*, double const*)
+  0.00      7.38     0.00   200244     0.00     0.00  __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::base() const
+  0.00      7.38     0.00   104092     0.00     0.00  std::remove_reference<std::allocator<double>&>::type&& std::move<std::allocator<double>&>(std::allocator<double>&)
+  0.00      7.38     0.00   102046     0.00     0.00  std::remove_reference<std::vector<double, std::allocator<double> >&>::type&& std::move<std::vector<double, std::allocator<double> >&>(std::vector<double, std::allocator<double> >&)
+  0.00      7.38     0.00   102000     0.00     0.00  std::_Vector_base<double, std::allocator<double> >::_M_get_Tp_allocator() const
+  0.00      7.38     0.00   102000     0.00     0.00  std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_Vector_impl(std::allocator<double> const&)
+  0.00      7.38     0.00   102000     0.00     0.00  std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_Vector_impl()
+  0.00      7.38     0.00   102000     0.00     0.00  std::_Vector_base<double, std::allocator<double> >::_Vector_base()
+  0.00      7.38     0.00   102000     0.00     0.00  std::vector<double, std::allocator<double> >::vector()
+  0.00      7.38     0.00   101145     0.00     0.00  std::vector<Particle, std::allocator<Particle> >::size() const
+  0.00      7.38     0.00   101000     0.00     0.00  temp_threshold(double, double, double, double, double)
+  0.00      7.38     0.00   101000     0.00     0.00  std::vector<Particle, std::allocator<Particle> >::operator[](unsigned long)
+  0.00      7.38     0.00   100100     0.00     0.00  bool __gnu_cxx::operator!=<Particle*, std::vector<Particle, std::allocator<Particle> > >(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > > const&, __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > > const&)
+  0.00      7.38     0.00   100000     0.00     0.00  __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::operator++()
+  0.00      7.38     0.00   100000     0.00     0.00  __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::operator*() const
+  0.00      7.38     0.00   100000     0.00     0.00  std::_Vector_base<double, std::allocator<double> >::_Vector_base(std::allocator<double> const&)
+  0.00      7.38     0.00   100000     0.00     0.10  std::vector<double, std::allocator<double> >::_M_move_assign(std::vector<double, std::allocator<double> >&&, std::integral_constant<bool, true>)
+  0.00      7.38     0.00   100000     0.00     0.00  std::vector<double, std::allocator<double> >::clear()
+  0.00      7.38     0.00   100000     0.00     0.00  std::vector<double, std::allocator<double> >::vector(std::allocator<double> const&)
+  0.00      7.38     0.00   100000     0.00     0.00  std::vector<double, std::allocator<double> >::vector(std::initializer_list<double>, std::allocator<double> const&)
+  0.00      7.38     0.00   100000     0.00     0.10  std::vector<double, std::allocator<double> >::operator=(std::vector<double, std::allocator<double> >&&)
+  0.00      7.38     0.00   100000     0.00     0.00  void std::__alloc_on_move<std::allocator<double> >(std::allocator<double>&, std::allocator<double>&)
+  0.00      7.38     0.00   100000     0.00     0.00  void std::__do_alloc_on_move<std::allocator<double> >(std::allocator<double>&, std::allocator<double>&, std::integral_constant<bool, true>)
+  0.00      7.38     0.00     4000     0.00     0.00  __gnu_cxx::new_allocator<double>::allocate(unsigned long, void const*)
+  0.00      7.38     0.00     4000     0.00     0.00  __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >::__normal_iterator(double const* const&)
+  0.00      7.38     0.00     4000     0.00     0.00  __gnu_cxx::new_allocator<double>::max_size() const
+  0.00      7.38     0.00     4000     0.00     0.00  __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >::base() const
+  0.00      7.38     0.00     4000     0.00     0.00  std::_Vector_base<double, std::allocator<double> >::_M_allocate(unsigned long)
+  0.00      7.38     0.00     4000     0.00     0.00  std::allocator_traits<std::allocator<double> >::allocate(std::allocator<double>&, unsigned long)
+  0.00      7.38     0.00     4000     0.00     0.00  __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > > std::__miter_base<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >)
+  0.00      7.38     0.00     4000     0.00     0.00  double const* std::__niter_base<double const*, std::vector<double, std::allocator<double> > >(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >)
+  0.00      7.38     0.00     2718     0.00     0.00  std::remove_reference<Particle*&>::type&& std::move<Particle*&>(Particle*&)
+  0.00      7.38     0.00     2090     0.00     0.00  std::move_iterator<Particle*>::base() const
+  0.00      7.38     0.00     2046     0.00     0.00  std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_Vector_impl(std::allocator<double>&&)
+  0.00      7.38     0.00     2046     0.00     0.00  std::_Vector_base<double, std::allocator<double> >::_Vector_base(std::_Vector_base<double, std::allocator<double> >&&)
+  0.00      7.38     0.00     2046     0.00     0.00  std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> >&&)
+  0.00      7.38     0.00     2046     0.00     0.00  Particle* std::__addressof<Particle>(Particle&)
+  0.00      7.38     0.00     2023     0.00     0.00  Particle::~Particle()
+  0.00      7.38     0.00     2023     0.00     0.00  operator new(unsigned long, void*)
+  0.00      7.38     0.00     2011     0.00     0.00  Particle const& std::forward<Particle const&>(std::remove_reference<Particle const&>::type&)
+  0.00      7.38     0.00     2000     0.00     0.00  __gnu_cxx::__alloc_traits<std::allocator<double> >::_S_select_on_copy(std::allocator<double> const&)
+  0.00      7.38     0.00     2000     0.00     0.00  std::vector<double, std::allocator<double> >::end() const
+  0.00      7.38     0.00     2000     0.00     0.00  std::vector<double, std::allocator<double> >::begin() const
+  0.00      7.38     0.00     2000     0.00     0.00  std::_Vector_base<double, std::allocator<double> >::_M_deallocate(double*, unsigned long)
+  0.00      7.38     0.00     2000     0.00     0.00  std::_Vector_base<double, std::allocator<double> >::_M_create_storage(unsigned long)
+  0.00      7.38     0.00     2000     0.00     0.00  std::_Vector_base<double, std::allocator<double> >::_Vector_base(unsigned long, std::allocator<double> const&)
+  0.00      7.38     0.00     2000     0.00     0.00  std::allocator_traits<std::allocator<double> >::select_on_container_copy_construction(std::allocator<double> const&)
+  0.00      7.38     0.00     2000     0.00     0.00  double* std::__uninitialized_copy<true>::__uninit_copy<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*)
+  0.00      7.38     0.00     2000     0.00     0.00  double* std::__uninitialized_copy<true>::__uninit_copy<double const*, double*>(double const*, double const*, double*)
+  0.00      7.38     0.00     2000     0.00     0.00  double* std::vector<double, std::allocator<double> >::_M_allocate_and_copy<double const*>(unsigned long, double const*, double const*)
+  0.00      7.38     0.00     2000     0.00     0.00  std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> > const&)
+  0.00      7.38     0.00     2000     0.00     0.00  double* std::__copy_move_a2<false, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*)
+  0.00      7.38     0.00     2000     0.00     0.00  double* std::uninitialized_copy<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*)
+  0.00      7.38     0.00     2000     0.00     0.00  double* std::uninitialized_copy<double const*, double*>(double const*, double const*, double*)
+  0.00      7.38     0.00     2000     0.00     0.00  double* std::__uninitialized_copy_a<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*, double>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*, std::allocator<double>&)
+  0.00      7.38     0.00     2000     0.00     0.00  double* std::__uninitialized_copy_a<double const*, double*, double>(double const*, double const*, double*, std::allocator<double>&)
+  0.00      7.38     0.00     2000     0.00     0.00  double* std::copy<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*)
+  0.00      7.38     0.00     1045     0.00     0.00  bool std::operator==<Particle*>(std::move_iterator<Particle*> const&, std::move_iterator<Particle*> const&)
+  0.00      7.38     0.00     1045     0.00     0.00  bool std::operator!=<Particle*>(std::move_iterator<Particle*> const&, std::move_iterator<Particle*> const&)
+  0.00      7.38     0.00     1023     0.00     0.00  Particle::Particle(Particle&&)
+  0.00      7.38     0.00     1023     0.00     0.00  std::move_iterator<Particle*>::operator*() const
+  0.00      7.38     0.00     1023     0.00     0.00  std::move_iterator<Particle*>::operator++()
+  0.00      7.38     0.00     1023     0.00     0.00  void std::_Construct<Particle, Particle>(Particle*, Particle&&)
+  0.00      7.38     0.00     1023     0.00     0.00  Particle&& std::forward<Particle>(std::remove_reference<Particle>::type&)
+  0.00      7.38     0.00     1023     0.00     0.00  void std::_Destroy<Particle>(Particle*)
+  0.00      7.38     0.00     1000     0.00     0.00  Particle::Particle(Particle const&)
+  0.00      7.38     0.00     1000     0.00     0.00  Particle::Particle()
+  0.00      7.38     0.00     1000     0.00     0.00  void __gnu_cxx::new_allocator<Particle>::construct<Particle, Particle const&>(Particle*, Particle const&)
+  0.00      7.38     0.00     1000     0.00     0.00  void std::allocator_traits<std::allocator<Particle> >::construct<Particle, Particle const&>(std::allocator<Particle>&, Particle*, Particle const&)
+  0.00      7.38     0.00     1000     0.00     0.00  std::vector<Particle, std::allocator<Particle> >::push_back(Particle const&)
+  0.00      7.38     0.00      906     0.00     0.00  std::enable_if<std::__and_<std::__not_<std::__is_tuple_like<Particle*> >, std::is_move_constructible<Particle*>, std::is_move_assignable<Particle*> >::value, void>::type std::swap<Particle*>(Particle*&, Particle*&)
+  0.00      7.38     0.00      335     0.00     0.00  std::_Vector_base<Particle, std::allocator<Particle> >::_M_get_Tp_allocator()
+  0.00      7.38     0.00      304     0.00     0.00  std::remove_reference<std::allocator<Particle>&>::type&& std::move<std::allocator<Particle>&>(std::allocator<Particle>&)
+  0.00      7.38     0.00      302     0.00     0.00  __gnu_cxx::new_allocator<Particle>::new_allocator(__gnu_cxx::new_allocator<Particle> const&)
+  0.00      7.38     0.00      302     0.00     0.00  std::allocator<Particle>::allocator(std::allocator<Particle> const&)
+  0.00      7.38     0.00      302     0.00     0.00  std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl::_M_swap_data(std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl&)
+  0.00      7.38     0.00      300     0.00     0.00  std::vector<Particle, std::allocator<Particle> >::~vector()
+  0.00      7.38     0.00      222     0.00     0.00  __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::__normal_iterator(Particle* const&)
+  0.00      7.38     0.00      202     0.00     0.00  std::remove_reference<std::vector<Particle, std::allocator<Particle> >&>::type&& std::move<std::vector<Particle, std::allocator<Particle> >&>(std::vector<Particle, std::allocator<Particle> >&)
+  0.00      7.38     0.00      122     0.00     0.00  std::_Vector_base<Particle, std::allocator<Particle> >::_M_get_Tp_allocator() const
+  0.00      7.38     0.00      111     0.00     0.00  std::vector<Particle, std::allocator<Particle> >::end()
+  0.00      7.38     0.00      111     0.00     0.00  std::vector<Particle, std::allocator<Particle> >::begin()
+  0.00      7.38     0.00      102     0.00     0.00  std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl::_Vector_impl(std::allocator<Particle>&&)
+  0.00      7.38     0.00      102     0.00     0.00  std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_base(std::_Vector_base<Particle, std::allocator<Particle> >&&)
+  0.00      7.38     0.00      102     0.00     0.00  std::vector<Particle, std::allocator<Particle> >::vector(std::vector<Particle, std::allocator<Particle> >&&)
+  0.00      7.38     0.00      100     0.00     0.00  rm_particles(std::vector<Particle, std::allocator<Particle> >)
+  0.00      7.38     0.00      100     0.00     0.00  __gnu_cxx::new_allocator<Particle>::~new_allocator()
+  0.00      7.38     0.00      100     0.00     0.00  std::_Vector_base<Particle, std::allocator<Particle> >::get_allocator() const
+  0.00      7.38     0.00      100     0.00     0.00  std::allocator<Particle>::~allocator()
+  0.00      7.38     0.00      100     0.00     0.00  std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl::_Vector_impl(std::allocator<Particle> const&)
+  0.00      7.38     0.00      100     0.00     0.00  std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_base(std::allocator<Particle> const&)
+  0.00      7.38     0.00      100     0.00     0.00  std::vector<Particle, std::allocator<Particle> >::_M_move_assign(std::vector<Particle, std::allocator<Particle> >&&, std::integral_constant<bool, true>)
+  0.00      7.38     0.00      100     0.00     0.00  std::vector<Particle, std::allocator<Particle> >::vector(std::allocator<Particle> const&)
+  0.00      7.38     0.00      100     0.00     0.00  std::vector<Particle, std::allocator<Particle> >::operator=(std::vector<Particle, std::allocator<Particle> >&&)
+  0.00      7.38     0.00      100     0.00     0.00  void std::__alloc_on_move<std::allocator<Particle> >(std::allocator<Particle>&, std::allocator<Particle>&)
+  0.00      7.38     0.00      100     0.00     0.00  void std::__do_alloc_on_move<std::allocator<Particle> >(std::allocator<Particle>&, std::allocator<Particle>&, std::integral_constant<bool, true>)
+  0.00      7.38     0.00       44     0.00     0.00  std::move_iterator<Particle*>::move_iterator(Particle*)
+  0.00      7.38     0.00       44     0.00     0.00  std::move_iterator<Particle*> std::__make_move_if_noexcept_iterator<Particle, std::move_iterator<Particle*> >(Particle*)
+  0.00      7.38     0.00       33     0.00     0.00  __gnu_cxx::new_allocator<Particle>::max_size() const
+  0.00      7.38     0.00       22     0.00     0.00  std::vector<Particle, std::allocator<Particle> >::max_size() const
+  0.00      7.38     0.00       22     0.00     0.00  std::allocator_traits<std::allocator<Particle> >::max_size(std::allocator<Particle> const&)
+  0.00      7.38     0.00       22     0.00     0.00  Particle* std::__uninitialized_copy<false>::__uninit_copy<std::move_iterator<Particle*>, Particle*>(std::move_iterator<Particle*>, std::move_iterator<Particle*>, Particle*)
+  0.00      7.38     0.00       22     0.00     0.00  Particle* std::uninitialized_copy<std::move_iterator<Particle*>, Particle*>(std::move_iterator<Particle*>, std::move_iterator<Particle*>, Particle*)
+  0.00      7.38     0.00       22     0.00     0.00  Particle* std::__uninitialized_copy_a<std::move_iterator<Particle*>, Particle*, Particle>(std::move_iterator<Particle*>, std::move_iterator<Particle*>, Particle*, std::allocator<Particle>&)
+  0.00      7.38     0.00       22     0.00     0.00  Particle* std::__uninitialized_move_if_noexcept_a<Particle*, Particle*, std::allocator<Particle> >(Particle*, Particle*, Particle*, std::allocator<Particle>&)
+  0.00      7.38     0.00       11     0.00     0.00  __gnu_cxx::new_allocator<Particle>::allocate(unsigned long, void const*)
+  0.00      7.38     0.00       11     0.00     0.00  __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::difference_type __gnu_cxx::operator-<Particle*, std::vector<Particle, std::allocator<Particle> > >(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > > const&, __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > > const&)
+  0.00      7.38     0.00       11     0.00     0.00  std::vector<Particle, std::allocator<Particle> >::_M_check_len(unsigned long, char const*) const
+  0.00      7.38     0.00       11     0.00     0.00  void std::_Destroy_aux<false>::__destroy<Particle*>(Particle*, Particle*)
+  0.00      7.38     0.00       11     0.00     0.00  std::_Vector_base<Particle, std::allocator<Particle> >::_M_allocate(unsigned long)
+  0.00      7.38     0.00       11     0.00     0.00  std::_Vector_base<Particle, std::allocator<Particle> >::_M_deallocate(Particle*, unsigned long)
+  0.00      7.38     0.00       11     0.00     0.00  std::allocator_traits<std::allocator<Particle> >::allocate(std::allocator<Particle>&, unsigned long)
+  0.00      7.38     0.00       11     0.00     0.00  void std::vector<Particle, std::allocator<Particle> >::_M_realloc_insert<Particle const&>(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >, Particle const&)
+  0.00      7.38     0.00       11     0.00     0.00  unsigned long const& std::max<unsigned long>(unsigned long const&, unsigned long const&)
+  0.00      7.38     0.00       11     0.00     0.00  void std::_Destroy<Particle*>(Particle*, Particle*)
+  0.00      7.38     0.00       11     0.00     0.00  void std::_Destroy<Particle*, Particle>(Particle*, Particle*, std::allocator<Particle>&)
+  0.00      7.38     0.00       10     0.00     0.00  __gnu_cxx::new_allocator<Particle>::deallocate(Particle*, unsigned long)
+  0.00      7.38     0.00       10     0.00     0.00  std::allocator_traits<std::allocator<Particle> >::deallocate(std::allocator<Particle>&, Particle*, unsigned long)
+  0.00      7.38     0.00        1     0.00     0.00  _GLOBAL__sub_I__Z11centrifugalSt6vectorIdSaIdEE
+  0.00      7.38     0.00        1     0.00     0.00  _GLOBAL__sub_I__Z13add_particlesSt6vectorI8ParticleSaIS0_EElld
+  0.00      7.38     0.00        1     0.00     0.00  _GLOBAL__sub_I__Z5deltadd
+  0.00      7.38     0.00        1     0.00     0.00  _GLOBAL__sub_I__Z5omegadd
+  0.00      7.38     0.00        1     0.00     0.00  _GLOBAL__sub_I__Z6scalarddd
+  0.00      7.38     0.00        1     0.00     0.00  _GLOBAL__sub_I_k1
+  0.00      7.38     0.00        1     0.00     0.00  _GLOBAL__sub_I_particles
+  0.00      7.38     0.00        1     0.00     0.00  _GLOBAL__sub_I_star_x
+  0.00      7.38     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 2 byte(s) for 0.14% of 7.38 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     99.9    0.00    7.38                 solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+                0.02    7.25  100000/100000      RK_solver(std::vector<double, std::allocator<double> >, double, double, double) [2]
+                0.09    0.00     100/100         std::vector<Particle, std::allocator<Particle> >::vector(std::vector<Particle, std::allocator<Particle> > const&) [17]
+                0.00    0.01  100000/100000      std::vector<double, std::allocator<double> >::operator=(std::vector<double, std::allocator<double> >&&) [27]
+                0.00    0.01  200000/202000      std::vector<double, std::allocator<double> >::operator=(std::initializer_list<double>) [23]
+                0.00    0.00  100000/101000      temp_threshold(double, double, double, double, double) [31]
+                0.00    0.00  100000/97841864     luminosity(double) [19]
+                0.00    0.00 1600000/1603000     std::vector<double, std::allocator<double> >::operator[](unsigned long) [40]
+                0.00    0.00  300000/404046      std::vector<double, std::allocator<double> >::~vector() [43]
+                0.00    0.00  100100/100100      bool __gnu_cxx::operator!=<Particle*, std::vector<Particle, std::allocator<Particle> > >(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > > const&, __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > > const&) [79]
+                0.00    0.00  100000/100000      __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::operator*() const [81]
+                0.00    0.00  100000/102000      std::vector<double, std::allocator<double> >::vector() [76]
+                0.00    0.00  100000/100000      std::vector<double, std::allocator<double> >::clear() [83]
+                0.00    0.00  100000/202000      std::allocator<double>::allocator() [61]
+                0.00    0.00  100000/100000      std::vector<double, std::allocator<double> >::vector(std::initializer_list<double>, std::allocator<double> const&) [85]
+                0.00    0.00  100000/202000      std::allocator<double>::~allocator() [62]
+                0.00    0.00  100000/100000      __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::operator++() [80]
+                0.00    0.00     200/300         std::vector<Particle, std::allocator<Particle> >::~vector() [141]
+                0.00    0.00     100/111         std::vector<Particle, std::allocator<Particle> >::begin() [146]
+                0.00    0.00     100/111         std::vector<Particle, std::allocator<Particle> >::end() [145]
+                0.00    0.00     100/100         rm_particles(std::vector<Particle, std::allocator<Particle> >) [150]
+                0.00    0.00     100/100         std::vector<Particle, std::allocator<Particle> >::operator=(std::vector<Particle, std::allocator<Particle> >&&) [158]
+-----------------------------------------------
+                0.02    7.25  100000/100000      solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+[2]     98.5    0.02    7.25  100000         RK_solver(std::vector<double, std::allocator<double> >, double, double, double) [2]
+                0.02    4.80  857376/857376      h_check(double, std::vector<double, std::allocator<double> >) [6]
+                0.03    2.38  857376/2572128     new_variables(double, std::vector<double, std::allocator<double> >, bool) [3]
+                0.02    0.00  857376/857376      h_optimal(std::vector<double, std::allocator<double> >, double) [21]
+                0.01    0.00  100000/100000      void std::vector<double, std::allocator<double> >::_M_realloc_insert<double const&>(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, double const&) [26]
+-----------------------------------------------
+                0.03    2.38  857376/2572128     RK_solver(std::vector<double, std::allocator<double> >, double, double, double) [2]
+                0.05    4.75 1714752/2572128     h_check(double, std::vector<double, std::allocator<double> >) [6]
+[3]     97.6    0.08    7.13 2572128         new_variables(double, std::vector<double, std::allocator<double> >, bool) [3]
+                0.49    6.64 2572128/2572128     k_values(double, std::vector<double, std::allocator<double> >, bool) [4]
+-----------------------------------------------
+                0.49    6.64 2572128/2572128     new_variables(double, std::vector<double, std::allocator<double> >, bool) [3]
+[4]     96.5    0.49    6.64 2572128         k_values(double, std::vector<double, std::allocator<double> >, bool) [4]
+                1.01    5.63 48870432/48870432     acceleration(int, double, double, std::vector<double, std::allocator<double> >) [5]
+-----------------------------------------------
+                1.01    5.63 48870432/48870432     k_values(double, std::vector<double, std::allocator<double> >, bool) [4]
+[5]     89.9    1.01    5.63 48870432         acceleration(int, double, double, std::vector<double, std::allocator<double> >) [5]
+                1.10    1.40 48870432/48870432     rad_pressure(std::vector<double, std::allocator<double> >) [7]
+                0.43    0.87 48870432/48870432     pr_drag(std::vector<double, std::allocator<double> >) [9]
+                0.30    0.87 48870432/48870432     centrifugal(std::vector<double, std::allocator<double> >) [10]
+                0.13    0.45 48870432/48870432     coriolis(std::vector<double, std::allocator<double> >) [13]
+                0.08    0.00 97740864/635416616     scalar(double, double, double) [14]
+-----------------------------------------------
+                0.02    4.80  857376/857376      RK_solver(std::vector<double, std::allocator<double> >, double, double, double) [2]
+[6]     65.3    0.02    4.80  857376         h_check(double, std::vector<double, std::allocator<double> >) [6]
+                0.05    4.75 1714752/2572128     new_variables(double, std::vector<double, std::allocator<double> >, bool) [3]
+-----------------------------------------------
+                1.10    1.40 48870432/48870432     acceleration(int, double, double, std::vector<double, std::allocator<double> >) [5]
+[7]     33.9    1.10    1.40 48870432         rad_pressure(std::vector<double, std::allocator<double> >) [7]
+                0.69    0.37 146611296/146611296     sunit_vector(std::vector<double, std::allocator<double> >) [11]
+                0.21    0.00 146611296/146611296     dot_product(std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> >) [15]
+                0.05    0.00 48870432/97740864     beta_fn(double, double, double) [16]
+                0.04    0.00 48870432/635416616     scalar(double, double, double) [14]
+                0.03    0.00 48870432/97841864     luminosity(double) [19]
+                0.01    0.00 48870432/97740864     opacity(double) [20]
+-----------------------------------------------
+                0.42    0.00 48870432/195481728     coriolis(std::vector<double, std::allocator<double> >) [13]
+                0.42    0.00 48870432/195481728     drag_vel(std::vector<double, std::allocator<double> >) [12]
+                0.83    0.00 97740864/195481728     centrifugal(std::vector<double, std::allocator<double> >) [10]
+[8]     22.6    1.67    0.00 195481728         cross_product(double, double, double, double, double, double) [8]
+-----------------------------------------------
+                0.43    0.87 48870432/48870432     acceleration(int, double, double, std::vector<double, std::allocator<double> >) [5]
+[9]     17.6    0.43    0.87 48870432         pr_drag(std::vector<double, std::allocator<double> >) [9]
+                0.32    0.42 48870432/48870432     drag_vel(std::vector<double, std::allocator<double> >) [12]
+                0.05    0.00 48870432/97740864     beta_fn(double, double, double) [16]
+                0.04    0.00 48870432/635416616     scalar(double, double, double) [14]
+                0.03    0.00 48870432/97841864     luminosity(double) [19]
+                0.01    0.00 48870432/97740864     opacity(double) [20]
+-----------------------------------------------
+                0.30    0.87 48870432/48870432     acceleration(int, double, double, std::vector<double, std::allocator<double> >) [5]
+[10]    15.8    0.30    0.87 48870432         centrifugal(std::vector<double, std::allocator<double> >) [10]
+                0.83    0.00 97740864/195481728     cross_product(double, double, double, double, double, double) [8]
+                0.04    0.00 48870432/97740864     omega(double, double) [18]
+-----------------------------------------------
+                0.69    0.37 146611296/146611296     rad_pressure(std::vector<double, std::allocator<double> >) [7]
+[11]    14.3    0.69    0.37 146611296         sunit_vector(std::vector<double, std::allocator<double> >) [11]
+                0.37    0.00 439833888/635416616     scalar(double, double, double) [14]
+-----------------------------------------------
+                0.32    0.42 48870432/48870432     pr_drag(std::vector<double, std::allocator<double> >) [9]
+[12]    10.0    0.32    0.42 48870432         drag_vel(std::vector<double, std::allocator<double> >) [12]
+                0.42    0.00 48870432/195481728     cross_product(double, double, double, double, double, double) [8]
+-----------------------------------------------
+                0.13    0.45 48870432/48870432     acceleration(int, double, double, std::vector<double, std::allocator<double> >) [5]
+[13]     7.8    0.13    0.45 48870432         coriolis(std::vector<double, std::allocator<double> >) [13]
+                0.42    0.00 48870432/195481728     cross_product(double, double, double, double, double, double) [8]
+                0.04    0.00 48870432/97740864     omega(double, double) [18]
+-----------------------------------------------
+                0.00    0.00  101000/635416616     temp_threshold(double, double, double, double, double) [31]
+                0.04    0.00 48870432/635416616     rad_pressure(std::vector<double, std::allocator<double> >) [7]
+                0.04    0.00 48870432/635416616     pr_drag(std::vector<double, std::allocator<double> >) [9]
+                0.08    0.00 97740864/635416616     acceleration(int, double, double, std::vector<double, std::allocator<double> >) [5]
+                0.37    0.00 439833888/635416616     sunit_vector(std::vector<double, std::allocator<double> >) [11]
+[14]     7.2    0.53    0.00 635416616         scalar(double, double, double) [14]
+-----------------------------------------------
+                0.21    0.00 146611296/146611296     rad_pressure(std::vector<double, std::allocator<double> >) [7]
+[15]     2.8    0.21    0.00 146611296         dot_product(std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> >) [15]
+-----------------------------------------------
+                0.05    0.00 48870432/97740864     rad_pressure(std::vector<double, std::allocator<double> >) [7]
+                0.05    0.00 48870432/97740864     pr_drag(std::vector<double, std::allocator<double> >) [9]
+[16]     1.4    0.10    0.00 97740864         beta_fn(double, double, double) [16]
+-----------------------------------------------
+                0.09    0.00     100/100         solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+[17]     1.2    0.09    0.00     100         std::vector<Particle, std::allocator<Particle> >::vector(std::vector<Particle, std::allocator<Particle> > const&) [17]
+-----------------------------------------------
+                0.04    0.00 48870432/97740864     centrifugal(std::vector<double, std::allocator<double> >) [10]
+                0.04    0.00 48870432/97740864     coriolis(std::vector<double, std::allocator<double> >) [13]
+[18]     1.0    0.08    0.00 97740864         omega(double, double) [18]
+-----------------------------------------------
+                0.00    0.00    1000/97841864     add_particles(std::vector<Particle, std::allocator<Particle> >, long, long, double) [28]
+                0.00    0.00  100000/97841864     solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+                0.03    0.00 48870432/97841864     rad_pressure(std::vector<double, std::allocator<double> >) [7]
+                0.03    0.00 48870432/97841864     pr_drag(std::vector<double, std::allocator<double> >) [9]
+[19]     0.9    0.07    0.00 97841864         luminosity(double) [19]
+-----------------------------------------------
+                0.01    0.00 48870432/97740864     rad_pressure(std::vector<double, std::allocator<double> >) [7]
+                0.01    0.00 48870432/97740864     pr_drag(std::vector<double, std::allocator<double> >) [9]
+[20]     0.3    0.03    0.00 97740864         opacity(double) [20]
+-----------------------------------------------
+                0.02    0.00  857376/857376      RK_solver(std::vector<double, std::allocator<double> >, double, double, double) [2]
+[21]     0.3    0.02    0.00  857376         h_optimal(std::vector<double, std::allocator<double> >, double) [21]
+-----------------------------------------------
+                0.01    0.00  202000/404000      std::initializer_list<double>::end() const [29]
+                0.01    0.00  202000/404000      std::vector<double, std::allocator<double> >::operator=(std::initializer_list<double>) [23]
+[22]     0.1    0.01    0.00  404000         std::initializer_list<double>::begin() const [22]
+-----------------------------------------------
+                0.00    0.00    2000/202000      add_particles(std::vector<Particle, std::allocator<Particle> >, long, long, double) [28]
+                0.00    0.01  200000/202000      solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+[23]     0.1    0.00    0.01  202000         std::vector<double, std::allocator<double> >::operator=(std::initializer_list<double>) [23]
+                0.00    0.01  202000/202000      std::initializer_list<double>::end() const [29]
+                0.01    0.00  202000/404000      std::initializer_list<double>::begin() const [22]
+                0.00    0.00  202000/202000      void std::vector<double, std::allocator<double> >::_M_assign_aux<double const*>(double const*, double const*, std::forward_iterator_tag) [63]
+-----------------------------------------------
+                0.01    0.00  100000/100000      std::vector<double, std::allocator<double> >::_M_move_assign(std::vector<double, std::allocator<double> >&&, std::integral_constant<bool, true>) [25]
+[24]     0.1    0.01    0.00  100000         std::_Vector_base<double, std::allocator<double> >::get_allocator() const [24]
+                0.00    0.00  100000/102000      std::_Vector_base<double, std::allocator<double> >::_M_get_Tp_allocator() const [72]
+                0.00    0.00  100000/206046      std::allocator<double>::allocator(std::allocator<double> const&) [51]
+-----------------------------------------------
+                0.00    0.01  100000/100000      std::vector<double, std::allocator<double> >::operator=(std::vector<double, std::allocator<double> >&&) [27]
+[25]     0.1    0.00    0.01  100000         std::vector<double, std::allocator<double> >::_M_move_assign(std::vector<double, std::allocator<double> >&&, std::integral_constant<bool, true>) [25]
+                0.01    0.00  100000/100000      std::_Vector_base<double, std::allocator<double> >::get_allocator() const [24]
+                0.00    0.00  200000/202046      std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_M_swap_data(std::_Vector_base<double, std::allocator<double> >::_Vector_impl&) [55]
+                0.00    0.00  200000/508046      std::_Vector_base<double, std::allocator<double> >::_M_get_Tp_allocator() [42]
+                0.00    0.00  100000/100000      std::vector<double, std::allocator<double> >::vector(std::allocator<double> const&) [84]
+                0.00    0.00  100000/202000      std::allocator<double>::~allocator() [62]
+                0.00    0.00  100000/404046      std::vector<double, std::allocator<double> >::~vector() [43]
+                0.00    0.00  100000/100000      void std::__alloc_on_move<std::allocator<double> >(std::allocator<double>&, std::allocator<double>&) [86]
+-----------------------------------------------
+                0.01    0.00  100000/100000      RK_solver(std::vector<double, std::allocator<double> >, double, double, double) [2]
+[26]     0.1    0.01    0.00  100000         void std::vector<double, std::allocator<double> >::_M_realloc_insert<double const&>(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, double const&) [26]
+-----------------------------------------------
+                0.00    0.01  100000/100000      solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+[27]     0.1    0.00    0.01  100000         std::vector<double, std::allocator<double> >::operator=(std::vector<double, std::allocator<double> >&&) [27]
+                0.00    0.01  100000/100000      std::vector<double, std::allocator<double> >::_M_move_assign(std::vector<double, std::allocator<double> >&&, std::integral_constant<bool, true>) [25]
+                0.00    0.00  100000/102046      std::remove_reference<std::vector<double, std::allocator<double> >&>::type&& std::move<std::vector<double, std::allocator<double> >&>(std::vector<double, std::allocator<double> >&) [71]
+-----------------------------------------------
+                                                 <spontaneous>
+[28]     0.1    0.00    0.01                 add_particles(std::vector<Particle, std::allocator<Particle> >, long, long, double) [28]
+                0.01    0.00    2000/2000        fRand(double, double) [30]
+                0.00    0.00    2000/202000      std::vector<double, std::allocator<double> >::operator=(std::initializer_list<double>) [23]
+                0.00    0.00    1000/101000      temp_threshold(double, double, double, double, double) [31]
+                0.00    0.00    1000/97841864     luminosity(double) [19]
+                0.00    0.00    3000/1603000     std::vector<double, std::allocator<double> >::operator[](unsigned long) [40]
+                0.00    0.00    1000/1000        Particle::Particle() [131]
+                0.00    0.00    1000/1000        std::vector<Particle, std::allocator<Particle> >::push_back(Particle const&) [134]
+                0.00    0.00    1000/2023        Particle::~Particle() [102]
+                0.00    0.00       1/102         std::vector<Particle, std::allocator<Particle> >::vector(std::vector<Particle, std::allocator<Particle> >&&) [149]
+-----------------------------------------------
+                0.00    0.01  202000/202000      std::vector<double, std::allocator<double> >::operator=(std::initializer_list<double>) [23]
+[29]     0.1    0.00    0.01  202000         std::initializer_list<double>::end() const [29]
+                0.01    0.00  202000/404000      std::initializer_list<double>::begin() const [22]
+                0.00    0.00  202000/202000      std::initializer_list<double>::size() const [58]
+-----------------------------------------------
+                0.01    0.00    2000/2000        add_particles(std::vector<Particle, std::allocator<Particle> >, long, long, double) [28]
+[30]     0.1    0.01    0.00    2000         fRand(double, double) [30]
+-----------------------------------------------
+                0.00    0.00    1000/101000      add_particles(std::vector<Particle, std::allocator<Particle> >, long, long, double) [28]
+                0.00    0.00  100000/101000      solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+[31]     0.0    0.00    0.00  101000         temp_threshold(double, double, double, double, double) [31]
+                0.00    0.00  101000/635416616     scalar(double, double, double) [14]
+-----------------------------------------------
+                0.00    0.00 1818414/1818414     std::enable_if<std::__and_<std::__not_<std::__is_tuple_like<double*> >, std::is_move_constructible<double*>, std::is_move_assignable<double*> >::value, void>::type std::swap<double*>(double*&, double*&) [41]
+[39]     0.0    0.00    0.00 1818414         std::remove_reference<double*&>::type&& std::move<double*&>(double*&) [39]
+-----------------------------------------------
+                0.00    0.00    3000/1603000     add_particles(std::vector<Particle, std::allocator<Particle> >, long, long, double) [28]
+                0.00    0.00 1600000/1603000     solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+[40]     0.0    0.00    0.00 1603000         std::vector<double, std::allocator<double> >::operator[](unsigned long) [40]
+-----------------------------------------------
+                0.00    0.00  606138/606138      std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_M_swap_data(std::_Vector_base<double, std::allocator<double> >::_Vector_impl&) [55]
+[41]     0.0    0.00    0.00  606138         std::enable_if<std::__and_<std::__not_<std::__is_tuple_like<double*> >, std::is_move_constructible<double*>, std::is_move_assignable<double*> >::value, void>::type std::swap<double*>(double*&, double*&) [41]
+                0.00    0.00 1818414/1818414     std::remove_reference<double*&>::type&& std::move<double*&>(double*&) [39]
+-----------------------------------------------
+                0.00    0.00    2000/508046      void std::vector<double, std::allocator<double> >::_M_assign_aux<double const*>(double const*, double const*, std::forward_iterator_tag) [63]
+                0.00    0.00    2000/508046      double* std::vector<double, std::allocator<double> >::_M_allocate_and_copy<double const*>(unsigned long, double const*, double const*) [114]
+                0.00    0.00    2000/508046      std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> > const&) [115]
+                0.00    0.00    2046/508046      std::_Vector_base<double, std::allocator<double> >::_Vector_base(std::_Vector_base<double, std::allocator<double> >&&) [99]
+                0.00    0.00  200000/508046      std::vector<double, std::allocator<double> >::_M_move_assign(std::vector<double, std::allocator<double> >&&, std::integral_constant<bool, true>) [25]
+                0.00    0.00  300000/508046      std::vector<double, std::allocator<double> >::_M_erase_at_end(double*) [49]
+[42]     0.0    0.00    0.00  508046         std::_Vector_base<double, std::allocator<double> >::_M_get_Tp_allocator() [42]
+-----------------------------------------------
+                0.00    0.00    4046/404046      Particle::~Particle() [102]
+                0.00    0.00  100000/404046      std::vector<double, std::allocator<double> >::_M_move_assign(std::vector<double, std::allocator<double> >&&, std::integral_constant<bool, true>) [25]
+                0.00    0.00  300000/404046      solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+[43]     0.0    0.00    0.00  404046         std::vector<double, std::allocator<double> >::~vector() [43]
+-----------------------------------------------
+                0.00    0.00  404000/404000      double* std::copy<double const*, double*>(double const*, double const*, double*) [67]
+[44]     0.0    0.00    0.00  404000         double const* std::__miter_base<double const*>(double const*) [44]
+-----------------------------------------------
+                0.00    0.00  404000/404000      double* std::__copy_move_a2<false, double const*, double*>(double const*, double const*, double*) [65]
+[45]     0.0    0.00    0.00  404000         double const* std::__niter_base<double const*>(double const*) [45]
+-----------------------------------------------
+                0.00    0.00  302000/302000      void std::_Destroy<double*>(double*, double*) [47]
+[46]     0.0    0.00    0.00  302000         void std::_Destroy_aux<true>::__destroy<double*>(double*, double*) [46]
+-----------------------------------------------
+                0.00    0.00  302000/302000      void std::_Destroy<double*, double>(double*, double*, std::allocator<double>&) [48]
+[47]     0.0    0.00    0.00  302000         void std::_Destroy<double*>(double*, double*) [47]
+                0.00    0.00  302000/302000      void std::_Destroy_aux<true>::__destroy<double*>(double*, double*) [46]
+-----------------------------------------------
+                0.00    0.00    2000/302000      void std::vector<double, std::allocator<double> >::_M_assign_aux<double const*>(double const*, double const*, std::forward_iterator_tag) [63]
+                0.00    0.00  300000/302000      std::vector<double, std::allocator<double> >::_M_erase_at_end(double*) [49]
+[48]     0.0    0.00    0.00  302000         void std::_Destroy<double*, double>(double*, double*, std::allocator<double>&) [48]
+                0.00    0.00  302000/302000      void std::_Destroy<double*>(double*, double*) [47]
+-----------------------------------------------
+                0.00    0.00  100000/300000      std::vector<double, std::allocator<double> >::clear() [83]
+                0.00    0.00  200000/300000      void std::vector<double, std::allocator<double> >::_M_assign_aux<double const*>(double const*, double const*, std::forward_iterator_tag) [63]
+[49]     0.0    0.00    0.00  300000         std::vector<double, std::allocator<double> >::_M_erase_at_end(double*) [49]
+                0.00    0.00  300000/508046      std::_Vector_base<double, std::allocator<double> >::_M_get_Tp_allocator() [42]
+                0.00    0.00  300000/302000      void std::_Destroy<double*, double>(double*, double*, std::allocator<double>&) [48]
+-----------------------------------------------
+                0.00    0.00  206046/206046      std::allocator<double>::allocator(std::allocator<double> const&) [51]
+[50]     0.0    0.00    0.00  206046         __gnu_cxx::new_allocator<double>::new_allocator(__gnu_cxx::new_allocator<double> const&) [50]
+-----------------------------------------------
+                0.00    0.00    2000/206046      std::allocator_traits<std::allocator<double> >::select_on_container_copy_construction(std::allocator<double> const&) [111]
+                0.00    0.00    2046/206046      std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_Vector_impl(std::allocator<double>&&) [98]
+                0.00    0.00  100000/206046      std::_Vector_base<double, std::allocator<double> >::get_allocator() const [24]
+                0.00    0.00  102000/206046      std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_Vector_impl(std::allocator<double> const&) [73]
+[51]     0.0    0.00    0.00  206046         std::allocator<double>::allocator(std::allocator<double> const&) [51]
+                0.00    0.00  206046/206046      __gnu_cxx::new_allocator<double>::new_allocator(__gnu_cxx::new_allocator<double> const&) [50]
+-----------------------------------------------
+                0.00    0.00  204000/204000      double* std::__copy_move_a<false, double const*, double*>(double const*, double const*, double*) [54]
+[52]     0.0    0.00    0.00  204000         double* std::__copy_move<false, true, std::random_access_iterator_tag>::__copy_m<double>(double const*, double const*, double*) [52]
+-----------------------------------------------
+                0.00    0.00    2000/204000      double* std::__copy_move_a2<false, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*) [116]
+                0.00    0.00  202000/204000      double* std::__copy_move_a2<false, double const*, double*>(double const*, double const*, double*) [65]
+[53]     0.0    0.00    0.00  204000         double* std::__niter_base<double*>(double*) [53]
+-----------------------------------------------
+                0.00    0.00    2000/204000      double* std::__copy_move_a2<false, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*) [116]
+                0.00    0.00  202000/204000      double* std::__copy_move_a2<false, double const*, double*>(double const*, double const*, double*) [65]
+[54]     0.0    0.00    0.00  204000         double* std::__copy_move_a<false, double const*, double*>(double const*, double const*, double*) [54]
+                0.00    0.00  204000/204000      double* std::__copy_move<false, true, std::random_access_iterator_tag>::__copy_m<double>(double const*, double const*, double*) [52]
+-----------------------------------------------
+                0.00    0.00    2046/202046      std::_Vector_base<double, std::allocator<double> >::_Vector_base(std::_Vector_base<double, std::allocator<double> >&&) [99]
+                0.00    0.00  200000/202046      std::vector<double, std::allocator<double> >::_M_move_assign(std::vector<double, std::allocator<double> >&&, std::integral_constant<bool, true>) [25]
+[55]     0.0    0.00    0.00  202046         std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_M_swap_data(std::_Vector_base<double, std::allocator<double> >::_Vector_impl&) [55]
+                0.00    0.00  606138/606138      std::enable_if<std::__and_<std::__not_<std::__is_tuple_like<double*> >, std::is_move_constructible<double*>, std::is_move_assignable<double*> >::value, void>::type std::swap<double*>(double*&, double*&) [41]
+-----------------------------------------------
+                0.00    0.00  202000/202000      std::allocator<double>::allocator() [61]
+[56]     0.0    0.00    0.00  202000         __gnu_cxx::new_allocator<double>::new_allocator() [56]
+-----------------------------------------------
+                0.00    0.00  202000/202000      std::allocator<double>::~allocator() [62]
+[57]     0.0    0.00    0.00  202000         __gnu_cxx::new_allocator<double>::~new_allocator() [57]
+-----------------------------------------------
+                0.00    0.00  202000/202000      std::initializer_list<double>::end() const [29]
+[58]     0.0    0.00    0.00  202000         std::initializer_list<double>::size() const [58]
+-----------------------------------------------
+                0.00    0.00    2000/202000      std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> > const&) [115]
+                0.00    0.00  200000/202000      void std::vector<double, std::allocator<double> >::_M_assign_aux<double const*>(double const*, double const*, std::forward_iterator_tag) [63]
+[59]     0.0    0.00    0.00  202000         std::vector<double, std::allocator<double> >::size() const [59]
+-----------------------------------------------
+                0.00    0.00  202000/202000      void std::vector<double, std::allocator<double> >::_M_assign_aux<double const*>(double const*, double const*, std::forward_iterator_tag) [63]
+[60]     0.0    0.00    0.00  202000         std::vector<double, std::allocator<double> >::capacity() const [60]
+-----------------------------------------------
+                0.00    0.00  100000/202000      solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+                0.00    0.00  102000/202000      std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_Vector_impl() [74]
+[61]     0.0    0.00    0.00  202000         std::allocator<double>::allocator() [61]
+                0.00    0.00  202000/202000      __gnu_cxx::new_allocator<double>::new_allocator() [56]
+-----------------------------------------------
+                0.00    0.00    2000/202000      std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> > const&) [115]
+                0.00    0.00  100000/202000      solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+                0.00    0.00  100000/202000      std::vector<double, std::allocator<double> >::_M_move_assign(std::vector<double, std::allocator<double> >&&, std::integral_constant<bool, true>) [25]
+[62]     0.0    0.00    0.00  202000         std::allocator<double>::~allocator() [62]
+                0.00    0.00  202000/202000      __gnu_cxx::new_allocator<double>::~new_allocator() [57]
+-----------------------------------------------
+                0.00    0.00  202000/202000      std::vector<double, std::allocator<double> >::operator=(std::initializer_list<double>) [23]
+[63]     0.0    0.00    0.00  202000         void std::vector<double, std::allocator<double> >::_M_assign_aux<double const*>(double const*, double const*, std::forward_iterator_tag) [63]
+                0.00    0.00  202000/202000      std::iterator_traits<double const*>::difference_type std::distance<double const*>(double const*, double const*) [68]
+                0.00    0.00  202000/202000      std::vector<double, std::allocator<double> >::capacity() const [60]
+                0.00    0.00  200000/202000      std::vector<double, std::allocator<double> >::size() const [59]
+                0.00    0.00  200000/202000      double* std::copy<double const*, double*>(double const*, double const*, double*) [67]
+                0.00    0.00  200000/300000      std::vector<double, std::allocator<double> >::_M_erase_at_end(double*) [49]
+                0.00    0.00    2000/2000        double* std::vector<double, std::allocator<double> >::_M_allocate_and_copy<double const*>(unsigned long, double const*, double const*) [114]
+                0.00    0.00    2000/508046      std::_Vector_base<double, std::allocator<double> >::_M_get_Tp_allocator() [42]
+                0.00    0.00    2000/302000      void std::_Destroy<double*, double>(double*, double*, std::allocator<double>&) [48]
+                0.00    0.00    2000/2000        std::_Vector_base<double, std::allocator<double> >::_M_deallocate(double*, unsigned long) [108]
+-----------------------------------------------
+                0.00    0.00  202000/202000      std::iterator_traits<double const*>::difference_type std::distance<double const*>(double const*, double const*) [68]
+[64]     0.0    0.00    0.00  202000         std::iterator_traits<double const*>::difference_type std::__distance<double const*>(double const*, double const*, std::random_access_iterator_tag) [64]
+-----------------------------------------------
+                0.00    0.00  202000/202000      double* std::copy<double const*, double*>(double const*, double const*, double*) [67]
+[65]     0.0    0.00    0.00  202000         double* std::__copy_move_a2<false, double const*, double*>(double const*, double const*, double*) [65]
+                0.00    0.00  404000/404000      double const* std::__niter_base<double const*>(double const*) [45]
+                0.00    0.00  202000/204000      double* std::__niter_base<double*>(double*) [53]
+                0.00    0.00  202000/204000      double* std::__copy_move_a<false, double const*, double*>(double const*, double const*, double*) [54]
+-----------------------------------------------
+                0.00    0.00  202000/202000      std::iterator_traits<double const*>::difference_type std::distance<double const*>(double const*, double const*) [68]
+[66]     0.0    0.00    0.00  202000         std::iterator_traits<double const*>::iterator_category std::__iterator_category<double const*>(double const* const&) [66]
+-----------------------------------------------
+                0.00    0.00    2000/202000      double* std::__uninitialized_copy<true>::__uninit_copy<double const*, double*>(double const*, double const*, double*) [113]
+                0.00    0.00  200000/202000      void std::vector<double, std::allocator<double> >::_M_assign_aux<double const*>(double const*, double const*, std::forward_iterator_tag) [63]
+[67]     0.0    0.00    0.00  202000         double* std::copy<double const*, double*>(double const*, double const*, double*) [67]
+                0.00    0.00  404000/404000      double const* std::__miter_base<double const*>(double const*) [44]
+                0.00    0.00  202000/202000      double* std::__copy_move_a2<false, double const*, double*>(double const*, double const*, double*) [65]
+-----------------------------------------------
+                0.00    0.00  202000/202000      void std::vector<double, std::allocator<double> >::_M_assign_aux<double const*>(double const*, double const*, std::forward_iterator_tag) [63]
+[68]     0.0    0.00    0.00  202000         std::iterator_traits<double const*>::difference_type std::distance<double const*>(double const*, double const*) [68]
+                0.00    0.00  202000/202000      std::iterator_traits<double const*>::iterator_category std::__iterator_category<double const*>(double const* const&) [66]
+                0.00    0.00  202000/202000      std::iterator_traits<double const*>::difference_type std::__distance<double const*>(double const*, double const*, std::random_access_iterator_tag) [64]
+-----------------------------------------------
+                0.00    0.00      22/200244      void std::vector<Particle, std::allocator<Particle> >::_M_realloc_insert<Particle const&>(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >, Particle const&) [177]
+                0.00    0.00      22/200244      __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::difference_type __gnu_cxx::operator-<Particle*, std::vector<Particle, std::allocator<Particle> > >(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > > const&, __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > > const&) [171]
+                0.00    0.00  200200/200244      bool __gnu_cxx::operator!=<Particle*, std::vector<Particle, std::allocator<Particle> > >(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > > const&, __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > > const&) [79]
+[69]     0.0    0.00    0.00  200244         __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::base() const [69]
+-----------------------------------------------
+                0.00    0.00    2046/104092      std::_Vector_base<double, std::allocator<double> >::_Vector_base(std::_Vector_base<double, std::allocator<double> >&&) [99]
+                0.00    0.00    2046/104092      std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_Vector_impl(std::allocator<double>&&) [98]
+                0.00    0.00  100000/104092      void std::__do_alloc_on_move<std::allocator<double> >(std::allocator<double>&, std::allocator<double>&, std::integral_constant<bool, true>) [87]
+[70]     0.0    0.00    0.00  104092         std::remove_reference<std::allocator<double>&>::type&& std::move<std::allocator<double>&>(std::allocator<double>&) [70]
+-----------------------------------------------
+                0.00    0.00    2046/102046      std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> >&&) [100]
+                0.00    0.00  100000/102046      std::vector<double, std::allocator<double> >::operator=(std::vector<double, std::allocator<double> >&&) [27]
+[71]     0.0    0.00    0.00  102046         std::remove_reference<std::vector<double, std::allocator<double> >&>::type&& std::move<std::vector<double, std::allocator<double> >&>(std::vector<double, std::allocator<double> >&) [71]
+-----------------------------------------------
+                0.00    0.00    2000/102000      std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> > const&) [115]
+                0.00    0.00  100000/102000      std::_Vector_base<double, std::allocator<double> >::get_allocator() const [24]
+[72]     0.0    0.00    0.00  102000         std::_Vector_base<double, std::allocator<double> >::_M_get_Tp_allocator() const [72]
+-----------------------------------------------
+                0.00    0.00    2000/102000      std::_Vector_base<double, std::allocator<double> >::_Vector_base(unsigned long, std::allocator<double> const&) [110]
+                0.00    0.00  100000/102000      std::_Vector_base<double, std::allocator<double> >::_Vector_base(std::allocator<double> const&) [82]
+[73]     0.0    0.00    0.00  102000         std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_Vector_impl(std::allocator<double> const&) [73]
+                0.00    0.00  102000/206046      std::allocator<double>::allocator(std::allocator<double> const&) [51]
+-----------------------------------------------
+                0.00    0.00  102000/102000      std::_Vector_base<double, std::allocator<double> >::_Vector_base() [75]
+[74]     0.0    0.00    0.00  102000         std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_Vector_impl() [74]
+                0.00    0.00  102000/202000      std::allocator<double>::allocator() [61]
+-----------------------------------------------
+                0.00    0.00  102000/102000      std::vector<double, std::allocator<double> >::vector() [76]
+[75]     0.0    0.00    0.00  102000         std::_Vector_base<double, std::allocator<double> >::_Vector_base() [75]
+                0.00    0.00  102000/102000      std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_Vector_impl() [74]
+-----------------------------------------------
+                0.00    0.00    2000/102000      Particle::Particle() [131]
+                0.00    0.00  100000/102000      solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+[76]     0.0    0.00    0.00  102000         std::vector<double, std::allocator<double> >::vector() [76]
+                0.00    0.00  102000/102000      std::_Vector_base<double, std::allocator<double> >::_Vector_base() [75]
+-----------------------------------------------
+                0.00    0.00      44/101145      std::vector<Particle, std::allocator<Particle> >::_M_check_len(unsigned long, char const*) const [172]
+                0.00    0.00  101101/101145      rm_particles(std::vector<Particle, std::allocator<Particle> >) [150]
+[77]     0.0    0.00    0.00  101145         std::vector<Particle, std::allocator<Particle> >::size() const [77]
+-----------------------------------------------
+                0.00    0.00  101000/101000      rm_particles(std::vector<Particle, std::allocator<Particle> >) [150]
+[78]     0.0    0.00    0.00  101000         std::vector<Particle, std::allocator<Particle> >::operator[](unsigned long) [78]
+-----------------------------------------------
+                0.00    0.00  100100/100100      solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+[79]     0.0    0.00    0.00  100100         bool __gnu_cxx::operator!=<Particle*, std::vector<Particle, std::allocator<Particle> > >(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > > const&, __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > > const&) [79]
+                0.00    0.00  200200/200244      __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::base() const [69]
+-----------------------------------------------
+                0.00    0.00  100000/100000      solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+[80]     0.0    0.00    0.00  100000         __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::operator++() [80]
+-----------------------------------------------
+                0.00    0.00  100000/100000      solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+[81]     0.0    0.00    0.00  100000         __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::operator*() const [81]
+-----------------------------------------------
+                0.00    0.00  100000/100000      std::vector<double, std::allocator<double> >::vector(std::allocator<double> const&) [84]
+[82]     0.0    0.00    0.00  100000         std::_Vector_base<double, std::allocator<double> >::_Vector_base(std::allocator<double> const&) [82]
+                0.00    0.00  100000/102000      std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_Vector_impl(std::allocator<double> const&) [73]
+-----------------------------------------------
+                0.00    0.00  100000/100000      solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+[83]     0.0    0.00    0.00  100000         std::vector<double, std::allocator<double> >::clear() [83]
+                0.00    0.00  100000/300000      std::vector<double, std::allocator<double> >::_M_erase_at_end(double*) [49]
+-----------------------------------------------
+                0.00    0.00  100000/100000      std::vector<double, std::allocator<double> >::_M_move_assign(std::vector<double, std::allocator<double> >&&, std::integral_constant<bool, true>) [25]
+[84]     0.0    0.00    0.00  100000         std::vector<double, std::allocator<double> >::vector(std::allocator<double> const&) [84]
+                0.00    0.00  100000/100000      std::_Vector_base<double, std::allocator<double> >::_Vector_base(std::allocator<double> const&) [82]
+-----------------------------------------------
+                0.00    0.00  100000/100000      solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+[85]     0.0    0.00    0.00  100000         std::vector<double, std::allocator<double> >::vector(std::initializer_list<double>, std::allocator<double> const&) [85]
+-----------------------------------------------
+                0.00    0.00  100000/100000      std::vector<double, std::allocator<double> >::_M_move_assign(std::vector<double, std::allocator<double> >&&, std::integral_constant<bool, true>) [25]
+[86]     0.0    0.00    0.00  100000         void std::__alloc_on_move<std::allocator<double> >(std::allocator<double>&, std::allocator<double>&) [86]
+                0.00    0.00  100000/100000      void std::__do_alloc_on_move<std::allocator<double> >(std::allocator<double>&, std::allocator<double>&, std::integral_constant<bool, true>) [87]
+-----------------------------------------------
+                0.00    0.00  100000/100000      void std::__alloc_on_move<std::allocator<double> >(std::allocator<double>&, std::allocator<double>&) [86]
+[87]     0.0    0.00    0.00  100000         void std::__do_alloc_on_move<std::allocator<double> >(std::allocator<double>&, std::allocator<double>&, std::integral_constant<bool, true>) [87]
+                0.00    0.00  100000/104092      std::remove_reference<std::allocator<double>&>::type&& std::move<std::allocator<double>&>(std::allocator<double>&) [70]
+-----------------------------------------------
+                0.00    0.00    4000/4000        std::allocator_traits<std::allocator<double> >::allocate(std::allocator<double>&, unsigned long) [93]
+[88]     0.0    0.00    0.00    4000         __gnu_cxx::new_allocator<double>::allocate(unsigned long, void const*) [88]
+                0.00    0.00    4000/4000        __gnu_cxx::new_allocator<double>::max_size() const [90]
+-----------------------------------------------
+                0.00    0.00    2000/4000        std::vector<double, std::allocator<double> >::begin() const [107]
+                0.00    0.00    2000/4000        std::vector<double, std::allocator<double> >::end() const [106]
+[89]     0.0    0.00    0.00    4000         __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >::__normal_iterator(double const* const&) [89]
+-----------------------------------------------
+                0.00    0.00    4000/4000        __gnu_cxx::new_allocator<double>::allocate(unsigned long, void const*) [88]
+[90]     0.0    0.00    0.00    4000         __gnu_cxx::new_allocator<double>::max_size() const [90]
+-----------------------------------------------
+                0.00    0.00    4000/4000        double const* std::__niter_base<double const*, std::vector<double, std::allocator<double> > >(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >) [95]
+[91]     0.0    0.00    0.00    4000         __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >::base() const [91]
+-----------------------------------------------
+                0.00    0.00    2000/4000        double* std::vector<double, std::allocator<double> >::_M_allocate_and_copy<double const*>(unsigned long, double const*, double const*) [114]
+                0.00    0.00    2000/4000        std::_Vector_base<double, std::allocator<double> >::_M_create_storage(unsigned long) [109]
+[92]     0.0    0.00    0.00    4000         std::_Vector_base<double, std::allocator<double> >::_M_allocate(unsigned long) [92]
+                0.00    0.00    4000/4000        std::allocator_traits<std::allocator<double> >::allocate(std::allocator<double>&, unsigned long) [93]
+-----------------------------------------------
+                0.00    0.00    4000/4000        std::_Vector_base<double, std::allocator<double> >::_M_allocate(unsigned long) [92]
+[93]     0.0    0.00    0.00    4000         std::allocator_traits<std::allocator<double> >::allocate(std::allocator<double>&, unsigned long) [93]
+                0.00    0.00    4000/4000        __gnu_cxx::new_allocator<double>::allocate(unsigned long, void const*) [88]
+-----------------------------------------------
+                0.00    0.00    4000/4000        double* std::copy<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*) [121]
+[94]     0.0    0.00    0.00    4000         __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > > std::__miter_base<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >) [94]
+-----------------------------------------------
+                0.00    0.00    4000/4000        double* std::__copy_move_a2<false, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*) [116]
+[95]     0.0    0.00    0.00    4000         double const* std::__niter_base<double const*, std::vector<double, std::allocator<double> > >(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >) [95]
+                0.00    0.00    4000/4000        __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >::base() const [91]
+-----------------------------------------------
+                0.00    0.00    2718/2718        std::enable_if<std::__and_<std::__not_<std::__is_tuple_like<Particle*> >, std::is_move_constructible<Particle*>, std::is_move_assignable<Particle*> >::value, void>::type std::swap<Particle*>(Particle*&, Particle*&) [135]
+[96]     0.0    0.00    0.00    2718         std::remove_reference<Particle*&>::type&& std::move<Particle*&>(Particle*&) [96]
+-----------------------------------------------
+                0.00    0.00    2090/2090        bool std::operator==<Particle*>(std::move_iterator<Particle*> const&, std::move_iterator<Particle*> const&) [122]
+[97]     0.0    0.00    0.00    2090         std::move_iterator<Particle*>::base() const [97]
+-----------------------------------------------
+                0.00    0.00    2046/2046        std::_Vector_base<double, std::allocator<double> >::_Vector_base(std::_Vector_base<double, std::allocator<double> >&&) [99]
+[98]     0.0    0.00    0.00    2046         std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_Vector_impl(std::allocator<double>&&) [98]
+                0.00    0.00    2046/104092      std::remove_reference<std::allocator<double>&>::type&& std::move<std::allocator<double>&>(std::allocator<double>&) [70]
+                0.00    0.00    2046/206046      std::allocator<double>::allocator(std::allocator<double> const&) [51]
+-----------------------------------------------
+                0.00    0.00    2046/2046        std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> >&&) [100]
+[99]     0.0    0.00    0.00    2046         std::_Vector_base<double, std::allocator<double> >::_Vector_base(std::_Vector_base<double, std::allocator<double> >&&) [99]
+                0.00    0.00    2046/508046      std::_Vector_base<double, std::allocator<double> >::_M_get_Tp_allocator() [42]
+                0.00    0.00    2046/2046        std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_Vector_impl(std::allocator<double>&&) [98]
+                0.00    0.00    2046/104092      std::remove_reference<std::allocator<double>&>::type&& std::move<std::allocator<double>&>(std::allocator<double>&) [70]
+                0.00    0.00    2046/202046      std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_M_swap_data(std::_Vector_base<double, std::allocator<double> >::_Vector_impl&) [55]
+-----------------------------------------------
+                0.00    0.00    2046/2046        Particle::Particle(Particle&&) [124]
+[100]    0.0    0.00    0.00    2046         std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> >&&) [100]
+                0.00    0.00    2046/102046      std::remove_reference<std::vector<double, std::allocator<double> >&>::type&& std::move<std::vector<double, std::allocator<double> >&>(std::vector<double, std::allocator<double> >&) [71]
+                0.00    0.00    2046/2046        std::_Vector_base<double, std::allocator<double> >::_Vector_base(std::_Vector_base<double, std::allocator<double> >&&) [99]
+-----------------------------------------------
+                0.00    0.00    1023/2046        void std::_Destroy_aux<false>::__destroy<Particle*>(Particle*, Particle*) [173]
+                0.00    0.00    1023/2046        Particle* std::__uninitialized_copy<false>::__uninit_copy<std::move_iterator<Particle*>, Particle*>(std::move_iterator<Particle*>, std::move_iterator<Particle*>, Particle*) [166]
+[101]    0.0    0.00    0.00    2046         Particle* std::__addressof<Particle>(Particle&) [101]
+-----------------------------------------------
+                0.00    0.00    1000/2023        add_particles(std::vector<Particle, std::allocator<Particle> >, long, long, double) [28]
+                0.00    0.00    1023/2023        void std::_Destroy<Particle>(Particle*) [129]
+[102]    0.0    0.00    0.00    2023         Particle::~Particle() [102]
+                0.00    0.00    4046/404046      std::vector<double, std::allocator<double> >::~vector() [43]
+-----------------------------------------------
+                0.00    0.00    1000/2023        void __gnu_cxx::new_allocator<Particle>::construct<Particle, Particle const&>(Particle*, Particle const&) [132]
+                0.00    0.00    1023/2023        void std::_Construct<Particle, Particle>(Particle*, Particle&&) [127]
+[103]    0.0    0.00    0.00    2023         operator new(unsigned long, void*) [103]
+-----------------------------------------------
+                0.00    0.00      11/2011        void std::vector<Particle, std::allocator<Particle> >::_M_realloc_insert<Particle const&>(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >, Particle const&) [177]
+                0.00    0.00    1000/2011        void std::allocator_traits<std::allocator<Particle> >::construct<Particle, Particle const&>(std::allocator<Particle>&, Particle*, Particle const&) [133]
+                0.00    0.00    1000/2011        void __gnu_cxx::new_allocator<Particle>::construct<Particle, Particle const&>(Particle*, Particle const&) [132]
+[104]    0.0    0.00    0.00    2011         Particle const& std::forward<Particle const&>(std::remove_reference<Particle const&>::type&) [104]
+-----------------------------------------------
+                0.00    0.00    2000/2000        std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> > const&) [115]
+[105]    0.0    0.00    0.00    2000         __gnu_cxx::__alloc_traits<std::allocator<double> >::_S_select_on_copy(std::allocator<double> const&) [105]
+                0.00    0.00    2000/2000        std::allocator_traits<std::allocator<double> >::select_on_container_copy_construction(std::allocator<double> const&) [111]
+-----------------------------------------------
+                0.00    0.00    2000/2000        std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> > const&) [115]
+[106]    0.0    0.00    0.00    2000         std::vector<double, std::allocator<double> >::end() const [106]
+                0.00    0.00    2000/4000        __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >::__normal_iterator(double const* const&) [89]
+-----------------------------------------------
+                0.00    0.00    2000/2000        std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> > const&) [115]
+[107]    0.0    0.00    0.00    2000         std::vector<double, std::allocator<double> >::begin() const [107]
+                0.00    0.00    2000/4000        __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >::__normal_iterator(double const* const&) [89]
+-----------------------------------------------
+                0.00    0.00    2000/2000        void std::vector<double, std::allocator<double> >::_M_assign_aux<double const*>(double const*, double const*, std::forward_iterator_tag) [63]
+[108]    0.0    0.00    0.00    2000         std::_Vector_base<double, std::allocator<double> >::_M_deallocate(double*, unsigned long) [108]
+-----------------------------------------------
+                0.00    0.00    2000/2000        std::_Vector_base<double, std::allocator<double> >::_Vector_base(unsigned long, std::allocator<double> const&) [110]
+[109]    0.0    0.00    0.00    2000         std::_Vector_base<double, std::allocator<double> >::_M_create_storage(unsigned long) [109]
+                0.00    0.00    2000/4000        std::_Vector_base<double, std::allocator<double> >::_M_allocate(unsigned long) [92]
+-----------------------------------------------
+                0.00    0.00    2000/2000        std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> > const&) [115]
+[110]    0.0    0.00    0.00    2000         std::_Vector_base<double, std::allocator<double> >::_Vector_base(unsigned long, std::allocator<double> const&) [110]
+                0.00    0.00    2000/102000      std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_Vector_impl(std::allocator<double> const&) [73]
+                0.00    0.00    2000/2000        std::_Vector_base<double, std::allocator<double> >::_M_create_storage(unsigned long) [109]
+-----------------------------------------------
+                0.00    0.00    2000/2000        __gnu_cxx::__alloc_traits<std::allocator<double> >::_S_select_on_copy(std::allocator<double> const&) [105]
+[111]    0.0    0.00    0.00    2000         std::allocator_traits<std::allocator<double> >::select_on_container_copy_construction(std::allocator<double> const&) [111]
+                0.00    0.00    2000/206046      std::allocator<double>::allocator(std::allocator<double> const&) [51]
+-----------------------------------------------
+                0.00    0.00    2000/2000        double* std::uninitialized_copy<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*) [117]
+[112]    0.0    0.00    0.00    2000         double* std::__uninitialized_copy<true>::__uninit_copy<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*) [112]
+                0.00    0.00    2000/2000        double* std::copy<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*) [121]
+-----------------------------------------------
+                0.00    0.00    2000/2000        double* std::uninitialized_copy<double const*, double*>(double const*, double const*, double*) [118]
+[113]    0.0    0.00    0.00    2000         double* std::__uninitialized_copy<true>::__uninit_copy<double const*, double*>(double const*, double const*, double*) [113]
+                0.00    0.00    2000/202000      double* std::copy<double const*, double*>(double const*, double const*, double*) [67]
+-----------------------------------------------
+                0.00    0.00    2000/2000        void std::vector<double, std::allocator<double> >::_M_assign_aux<double const*>(double const*, double const*, std::forward_iterator_tag) [63]
+[114]    0.0    0.00    0.00    2000         double* std::vector<double, std::allocator<double> >::_M_allocate_and_copy<double const*>(unsigned long, double const*, double const*) [114]
+                0.00    0.00    2000/4000        std::_Vector_base<double, std::allocator<double> >::_M_allocate(unsigned long) [92]
+                0.00    0.00    2000/508046      std::_Vector_base<double, std::allocator<double> >::_M_get_Tp_allocator() [42]
+                0.00    0.00    2000/2000        double* std::__uninitialized_copy_a<double const*, double*, double>(double const*, double const*, double*, std::allocator<double>&) [120]
+-----------------------------------------------
+                0.00    0.00    2000/2000        Particle::Particle(Particle const&) [130]
+[115]    0.0    0.00    0.00    2000         std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> > const&) [115]
+                0.00    0.00    2000/102000      std::_Vector_base<double, std::allocator<double> >::_M_get_Tp_allocator() const [72]
+                0.00    0.00    2000/2000        __gnu_cxx::__alloc_traits<std::allocator<double> >::_S_select_on_copy(std::allocator<double> const&) [105]
+                0.00    0.00    2000/202000      std::vector<double, std::allocator<double> >::size() const [59]
+                0.00    0.00    2000/2000        std::_Vector_base<double, std::allocator<double> >::_Vector_base(unsigned long, std::allocator<double> const&) [110]
+                0.00    0.00    2000/202000      std::allocator<double>::~allocator() [62]
+                0.00    0.00    2000/508046      std::_Vector_base<double, std::allocator<double> >::_M_get_Tp_allocator() [42]
+                0.00    0.00    2000/2000        std::vector<double, std::allocator<double> >::end() const [106]
+                0.00    0.00    2000/2000        std::vector<double, std::allocator<double> >::begin() const [107]
+                0.00    0.00    2000/2000        double* std::__uninitialized_copy_a<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*, double>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*, std::allocator<double>&) [119]
+-----------------------------------------------
+                0.00    0.00    2000/2000        double* std::copy<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*) [121]
+[116]    0.0    0.00    0.00    2000         double* std::__copy_move_a2<false, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*) [116]
+                0.00    0.00    4000/4000        double const* std::__niter_base<double const*, std::vector<double, std::allocator<double> > >(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >) [95]
+                0.00    0.00    2000/204000      double* std::__niter_base<double*>(double*) [53]
+                0.00    0.00    2000/204000      double* std::__copy_move_a<false, double const*, double*>(double const*, double const*, double*) [54]
+-----------------------------------------------
+                0.00    0.00    2000/2000        double* std::__uninitialized_copy_a<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*, double>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*, std::allocator<double>&) [119]
+[117]    0.0    0.00    0.00    2000         double* std::uninitialized_copy<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*) [117]
+                0.00    0.00    2000/2000        double* std::__uninitialized_copy<true>::__uninit_copy<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*) [112]
+-----------------------------------------------
+                0.00    0.00    2000/2000        double* std::__uninitialized_copy_a<double const*, double*, double>(double const*, double const*, double*, std::allocator<double>&) [120]
+[118]    0.0    0.00    0.00    2000         double* std::uninitialized_copy<double const*, double*>(double const*, double const*, double*) [118]
+                0.00    0.00    2000/2000        double* std::__uninitialized_copy<true>::__uninit_copy<double const*, double*>(double const*, double const*, double*) [113]
+-----------------------------------------------
+                0.00    0.00    2000/2000        std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> > const&) [115]
+[119]    0.0    0.00    0.00    2000         double* std::__uninitialized_copy_a<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*, double>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*, std::allocator<double>&) [119]
+                0.00    0.00    2000/2000        double* std::uninitialized_copy<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*) [117]
+-----------------------------------------------
+                0.00    0.00    2000/2000        double* std::vector<double, std::allocator<double> >::_M_allocate_and_copy<double const*>(unsigned long, double const*, double const*) [114]
+[120]    0.0    0.00    0.00    2000         double* std::__uninitialized_copy_a<double const*, double*, double>(double const*, double const*, double*, std::allocator<double>&) [120]
+                0.00    0.00    2000/2000        double* std::uninitialized_copy<double const*, double*>(double const*, double const*, double*) [118]
+-----------------------------------------------
+                0.00    0.00    2000/2000        double* std::__uninitialized_copy<true>::__uninit_copy<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*) [112]
+[121]    0.0    0.00    0.00    2000         double* std::copy<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*) [121]
+                0.00    0.00    4000/4000        __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > > std::__miter_base<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >) [94]
+                0.00    0.00    2000/2000        double* std::__copy_move_a2<false, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*) [116]
+-----------------------------------------------
+                0.00    0.00    1045/1045        bool std::operator!=<Particle*>(std::move_iterator<Particle*> const&, std::move_iterator<Particle*> const&) [123]
+[122]    0.0    0.00    0.00    1045         bool std::operator==<Particle*>(std::move_iterator<Particle*> const&, std::move_iterator<Particle*> const&) [122]
+                0.00    0.00    2090/2090        std::move_iterator<Particle*>::base() const [97]
+-----------------------------------------------
+                0.00    0.00    1045/1045        Particle* std::__uninitialized_copy<false>::__uninit_copy<std::move_iterator<Particle*>, Particle*>(std::move_iterator<Particle*>, std::move_iterator<Particle*>, Particle*) [166]
+[123]    0.0    0.00    0.00    1045         bool std::operator!=<Particle*>(std::move_iterator<Particle*> const&, std::move_iterator<Particle*> const&) [123]
+                0.00    0.00    1045/1045        bool std::operator==<Particle*>(std::move_iterator<Particle*> const&, std::move_iterator<Particle*> const&) [122]
+-----------------------------------------------
+                0.00    0.00    1023/1023        void std::_Construct<Particle, Particle>(Particle*, Particle&&) [127]
+[124]    0.0    0.00    0.00    1023         Particle::Particle(Particle&&) [124]
+                0.00    0.00    2046/2046        std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> >&&) [100]
+-----------------------------------------------
+                0.00    0.00    1023/1023        Particle* std::__uninitialized_copy<false>::__uninit_copy<std::move_iterator<Particle*>, Particle*>(std::move_iterator<Particle*>, std::move_iterator<Particle*>, Particle*) [166]
+[125]    0.0    0.00    0.00    1023         std::move_iterator<Particle*>::operator*() const [125]
+-----------------------------------------------
+                0.00    0.00    1023/1023        Particle* std::__uninitialized_copy<false>::__uninit_copy<std::move_iterator<Particle*>, Particle*>(std::move_iterator<Particle*>, std::move_iterator<Particle*>, Particle*) [166]
+[126]    0.0    0.00    0.00    1023         std::move_iterator<Particle*>::operator++() [126]
+-----------------------------------------------
+                0.00    0.00    1023/1023        Particle* std::__uninitialized_copy<false>::__uninit_copy<std::move_iterator<Particle*>, Particle*>(std::move_iterator<Particle*>, std::move_iterator<Particle*>, Particle*) [166]
+[127]    0.0    0.00    0.00    1023         void std::_Construct<Particle, Particle>(Particle*, Particle&&) [127]
+                0.00    0.00    1023/1023        Particle&& std::forward<Particle>(std::remove_reference<Particle>::type&) [128]
+                0.00    0.00    1023/2023        operator new(unsigned long, void*) [103]
+                0.00    0.00    1023/1023        Particle::Particle(Particle&&) [124]
+-----------------------------------------------
+                0.00    0.00    1023/1023        void std::_Construct<Particle, Particle>(Particle*, Particle&&) [127]
+[128]    0.0    0.00    0.00    1023         Particle&& std::forward<Particle>(std::remove_reference<Particle>::type&) [128]
+-----------------------------------------------
+                0.00    0.00    1023/1023        void std::_Destroy_aux<false>::__destroy<Particle*>(Particle*, Particle*) [173]
+[129]    0.0    0.00    0.00    1023         void std::_Destroy<Particle>(Particle*) [129]
+                0.00    0.00    1023/2023        Particle::~Particle() [102]
+-----------------------------------------------
+                0.00    0.00    1000/1000        void __gnu_cxx::new_allocator<Particle>::construct<Particle, Particle const&>(Particle*, Particle const&) [132]
+[130]    0.0    0.00    0.00    1000         Particle::Particle(Particle const&) [130]
+                0.00    0.00    2000/2000        std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> > const&) [115]
+-----------------------------------------------
+                0.00    0.00    1000/1000        add_particles(std::vector<Particle, std::allocator<Particle> >, long, long, double) [28]
+[131]    0.0    0.00    0.00    1000         Particle::Particle() [131]
+                0.00    0.00    2000/102000      std::vector<double, std::allocator<double> >::vector() [76]
+-----------------------------------------------
+                0.00    0.00    1000/1000        void std::allocator_traits<std::allocator<Particle> >::construct<Particle, Particle const&>(std::allocator<Particle>&, Particle*, Particle const&) [133]
+[132]    0.0    0.00    0.00    1000         void __gnu_cxx::new_allocator<Particle>::construct<Particle, Particle const&>(Particle*, Particle const&) [132]
+                0.00    0.00    1000/2011        Particle const& std::forward<Particle const&>(std::remove_reference<Particle const&>::type&) [104]
+                0.00    0.00    1000/2023        operator new(unsigned long, void*) [103]
+                0.00    0.00    1000/1000        Particle::Particle(Particle const&) [130]
+-----------------------------------------------
+                0.00    0.00      11/1000        void std::vector<Particle, std::allocator<Particle> >::_M_realloc_insert<Particle const&>(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >, Particle const&) [177]
+                0.00    0.00     989/1000        std::vector<Particle, std::allocator<Particle> >::push_back(Particle const&) [134]
+[133]    0.0    0.00    0.00    1000         void std::allocator_traits<std::allocator<Particle> >::construct<Particle, Particle const&>(std::allocator<Particle>&, Particle*, Particle const&) [133]
+                0.00    0.00    1000/2011        Particle const& std::forward<Particle const&>(std::remove_reference<Particle const&>::type&) [104]
+                0.00    0.00    1000/1000        void __gnu_cxx::new_allocator<Particle>::construct<Particle, Particle const&>(Particle*, Particle const&) [132]
+-----------------------------------------------
+                0.00    0.00    1000/1000        add_particles(std::vector<Particle, std::allocator<Particle> >, long, long, double) [28]
+[134]    0.0    0.00    0.00    1000         std::vector<Particle, std::allocator<Particle> >::push_back(Particle const&) [134]
+                0.00    0.00     989/1000        void std::allocator_traits<std::allocator<Particle> >::construct<Particle, Particle const&>(std::allocator<Particle>&, Particle*, Particle const&) [133]
+                0.00    0.00      11/111         std::vector<Particle, std::allocator<Particle> >::end() [145]
+                0.00    0.00      11/11          void std::vector<Particle, std::allocator<Particle> >::_M_realloc_insert<Particle const&>(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >, Particle const&) [177]
+-----------------------------------------------
+                0.00    0.00     906/906         std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl::_M_swap_data(std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl&) [140]
+[135]    0.0    0.00    0.00     906         std::enable_if<std::__and_<std::__not_<std::__is_tuple_like<Particle*> >, std::is_move_constructible<Particle*>, std::is_move_assignable<Particle*> >::value, void>::type std::swap<Particle*>(Particle*&, Particle*&) [135]
+                0.00    0.00    2718/2718        std::remove_reference<Particle*&>::type&& std::move<Particle*&>(Particle*&) [96]
+-----------------------------------------------
+                0.00    0.00      33/335         void std::vector<Particle, std::allocator<Particle> >::_M_realloc_insert<Particle const&>(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >, Particle const&) [177]
+                0.00    0.00     102/335         std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_base(std::_Vector_base<Particle, std::allocator<Particle> >&&) [148]
+                0.00    0.00     200/335         std::vector<Particle, std::allocator<Particle> >::_M_move_assign(std::vector<Particle, std::allocator<Particle> >&&, std::integral_constant<bool, true>) [156]
+[136]    0.0    0.00    0.00     335         std::_Vector_base<Particle, std::allocator<Particle> >::_M_get_Tp_allocator() [136]
+-----------------------------------------------
+                0.00    0.00     100/304         void std::__do_alloc_on_move<std::allocator<Particle> >(std::allocator<Particle>&, std::allocator<Particle>&, std::integral_constant<bool, true>) [160]
+                0.00    0.00     102/304         std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_base(std::_Vector_base<Particle, std::allocator<Particle> >&&) [148]
+                0.00    0.00     102/304         std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl::_Vector_impl(std::allocator<Particle>&&) [147]
+[137]    0.0    0.00    0.00     304         std::remove_reference<std::allocator<Particle>&>::type&& std::move<std::allocator<Particle>&>(std::allocator<Particle>&) [137]
+-----------------------------------------------
+                0.00    0.00     302/302         std::allocator<Particle>::allocator(std::allocator<Particle> const&) [139]
+[138]    0.0    0.00    0.00     302         __gnu_cxx::new_allocator<Particle>::new_allocator(__gnu_cxx::new_allocator<Particle> const&) [138]
+-----------------------------------------------
+                0.00    0.00     100/302         std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl::_Vector_impl(std::allocator<Particle> const&) [154]
+                0.00    0.00     100/302         std::_Vector_base<Particle, std::allocator<Particle> >::get_allocator() const [152]
+                0.00    0.00     102/302         std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl::_Vector_impl(std::allocator<Particle>&&) [147]
+[139]    0.0    0.00    0.00     302         std::allocator<Particle>::allocator(std::allocator<Particle> const&) [139]
+                0.00    0.00     302/302         __gnu_cxx::new_allocator<Particle>::new_allocator(__gnu_cxx::new_allocator<Particle> const&) [138]
+-----------------------------------------------
+                0.00    0.00     102/302         std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_base(std::_Vector_base<Particle, std::allocator<Particle> >&&) [148]
+                0.00    0.00     200/302         std::vector<Particle, std::allocator<Particle> >::_M_move_assign(std::vector<Particle, std::allocator<Particle> >&&, std::integral_constant<bool, true>) [156]
+[140]    0.0    0.00    0.00     302         std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl::_M_swap_data(std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl&) [140]
+                0.00    0.00     906/906         std::enable_if<std::__and_<std::__not_<std::__is_tuple_like<Particle*> >, std::is_move_constructible<Particle*>, std::is_move_assignable<Particle*> >::value, void>::type std::swap<Particle*>(Particle*&, Particle*&) [135]
+-----------------------------------------------
+                0.00    0.00     100/300         std::vector<Particle, std::allocator<Particle> >::_M_move_assign(std::vector<Particle, std::allocator<Particle> >&&, std::integral_constant<bool, true>) [156]
+                0.00    0.00     200/300         solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+[141]    0.0    0.00    0.00     300         std::vector<Particle, std::allocator<Particle> >::~vector() [141]
+-----------------------------------------------
+                0.00    0.00     111/222         std::vector<Particle, std::allocator<Particle> >::begin() [146]
+                0.00    0.00     111/222         std::vector<Particle, std::allocator<Particle> >::end() [145]
+[142]    0.0    0.00    0.00     222         __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::__normal_iterator(Particle* const&) [142]
+-----------------------------------------------
+                0.00    0.00     100/202         std::vector<Particle, std::allocator<Particle> >::operator=(std::vector<Particle, std::allocator<Particle> >&&) [158]
+                0.00    0.00     102/202         std::vector<Particle, std::allocator<Particle> >::vector(std::vector<Particle, std::allocator<Particle> >&&) [149]
+[143]    0.0    0.00    0.00     202         std::remove_reference<std::vector<Particle, std::allocator<Particle> >&>::type&& std::move<std::vector<Particle, std::allocator<Particle> >&>(std::vector<Particle, std::allocator<Particle> >&) [143]
+-----------------------------------------------
+                0.00    0.00      22/122         std::vector<Particle, std::allocator<Particle> >::max_size() const [164]
+                0.00    0.00     100/122         std::_Vector_base<Particle, std::allocator<Particle> >::get_allocator() const [152]
+[144]    0.0    0.00    0.00     122         std::_Vector_base<Particle, std::allocator<Particle> >::_M_get_Tp_allocator() const [144]
+-----------------------------------------------
+                0.00    0.00      11/111         std::vector<Particle, std::allocator<Particle> >::push_back(Particle const&) [134]
+                0.00    0.00     100/111         solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+[145]    0.0    0.00    0.00     111         std::vector<Particle, std::allocator<Particle> >::end() [145]
+                0.00    0.00     111/222         __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::__normal_iterator(Particle* const&) [142]
+-----------------------------------------------
+                0.00    0.00      11/111         void std::vector<Particle, std::allocator<Particle> >::_M_realloc_insert<Particle const&>(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >, Particle const&) [177]
+                0.00    0.00     100/111         solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+[146]    0.0    0.00    0.00     111         std::vector<Particle, std::allocator<Particle> >::begin() [146]
+                0.00    0.00     111/222         __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::__normal_iterator(Particle* const&) [142]
+-----------------------------------------------
+                0.00    0.00     102/102         std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_base(std::_Vector_base<Particle, std::allocator<Particle> >&&) [148]
+[147]    0.0    0.00    0.00     102         std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl::_Vector_impl(std::allocator<Particle>&&) [147]
+                0.00    0.00     102/304         std::remove_reference<std::allocator<Particle>&>::type&& std::move<std::allocator<Particle>&>(std::allocator<Particle>&) [137]
+                0.00    0.00     102/302         std::allocator<Particle>::allocator(std::allocator<Particle> const&) [139]
+-----------------------------------------------
+                0.00    0.00     102/102         std::vector<Particle, std::allocator<Particle> >::vector(std::vector<Particle, std::allocator<Particle> >&&) [149]
+[148]    0.0    0.00    0.00     102         std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_base(std::_Vector_base<Particle, std::allocator<Particle> >&&) [148]
+                0.00    0.00     102/304         std::remove_reference<std::allocator<Particle>&>::type&& std::move<std::allocator<Particle>&>(std::allocator<Particle>&) [137]
+                0.00    0.00     102/335         std::_Vector_base<Particle, std::allocator<Particle> >::_M_get_Tp_allocator() [136]
+                0.00    0.00     102/102         std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl::_Vector_impl(std::allocator<Particle>&&) [147]
+                0.00    0.00     102/302         std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl::_M_swap_data(std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl&) [140]
+-----------------------------------------------
+                0.00    0.00       1/102         add_particles(std::vector<Particle, std::allocator<Particle> >, long, long, double) [28]
+                0.00    0.00     101/102         rm_particles(std::vector<Particle, std::allocator<Particle> >) [150]
+[149]    0.0    0.00    0.00     102         std::vector<Particle, std::allocator<Particle> >::vector(std::vector<Particle, std::allocator<Particle> >&&) [149]
+                0.00    0.00     102/202         std::remove_reference<std::vector<Particle, std::allocator<Particle> >&>::type&& std::move<std::vector<Particle, std::allocator<Particle> >&>(std::vector<Particle, std::allocator<Particle> >&) [143]
+                0.00    0.00     102/102         std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_base(std::_Vector_base<Particle, std::allocator<Particle> >&&) [148]
+-----------------------------------------------
+                0.00    0.00     100/100         solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+[150]    0.0    0.00    0.00     100         rm_particles(std::vector<Particle, std::allocator<Particle> >) [150]
+                0.00    0.00  101101/101145      std::vector<Particle, std::allocator<Particle> >::size() const [77]
+                0.00    0.00  101000/101000      std::vector<Particle, std::allocator<Particle> >::operator[](unsigned long) [78]
+                0.00    0.00     101/102         std::vector<Particle, std::allocator<Particle> >::vector(std::vector<Particle, std::allocator<Particle> >&&) [149]
+-----------------------------------------------
+                0.00    0.00     100/100         std::allocator<Particle>::~allocator() [153]
+[151]    0.0    0.00    0.00     100         __gnu_cxx::new_allocator<Particle>::~new_allocator() [151]
+-----------------------------------------------
+                0.00    0.00     100/100         std::vector<Particle, std::allocator<Particle> >::_M_move_assign(std::vector<Particle, std::allocator<Particle> >&&, std::integral_constant<bool, true>) [156]
+[152]    0.0    0.00    0.00     100         std::_Vector_base<Particle, std::allocator<Particle> >::get_allocator() const [152]
+                0.00    0.00     100/122         std::_Vector_base<Particle, std::allocator<Particle> >::_M_get_Tp_allocator() const [144]
+                0.00    0.00     100/302         std::allocator<Particle>::allocator(std::allocator<Particle> const&) [139]
+-----------------------------------------------
+                0.00    0.00     100/100         std::vector<Particle, std::allocator<Particle> >::_M_move_assign(std::vector<Particle, std::allocator<Particle> >&&, std::integral_constant<bool, true>) [156]
+[153]    0.0    0.00    0.00     100         std::allocator<Particle>::~allocator() [153]
+                0.00    0.00     100/100         __gnu_cxx::new_allocator<Particle>::~new_allocator() [151]
+-----------------------------------------------
+                0.00    0.00     100/100         std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_base(std::allocator<Particle> const&) [155]
+[154]    0.0    0.00    0.00     100         std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl::_Vector_impl(std::allocator<Particle> const&) [154]
+                0.00    0.00     100/302         std::allocator<Particle>::allocator(std::allocator<Particle> const&) [139]
+-----------------------------------------------
+                0.00    0.00     100/100         std::vector<Particle, std::allocator<Particle> >::vector(std::allocator<Particle> const&) [157]
+[155]    0.0    0.00    0.00     100         std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_base(std::allocator<Particle> const&) [155]
+                0.00    0.00     100/100         std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl::_Vector_impl(std::allocator<Particle> const&) [154]
+-----------------------------------------------
+                0.00    0.00     100/100         std::vector<Particle, std::allocator<Particle> >::operator=(std::vector<Particle, std::allocator<Particle> >&&) [158]
+[156]    0.0    0.00    0.00     100         std::vector<Particle, std::allocator<Particle> >::_M_move_assign(std::vector<Particle, std::allocator<Particle> >&&, std::integral_constant<bool, true>) [156]
+                0.00    0.00     200/302         std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl::_M_swap_data(std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl&) [140]
+                0.00    0.00     200/335         std::_Vector_base<Particle, std::allocator<Particle> >::_M_get_Tp_allocator() [136]
+                0.00    0.00     100/100         std::_Vector_base<Particle, std::allocator<Particle> >::get_allocator() const [152]
+                0.00    0.00     100/100         std::allocator<Particle>::~allocator() [153]
+                0.00    0.00     100/100         std::vector<Particle, std::allocator<Particle> >::vector(std::allocator<Particle> const&) [157]
+                0.00    0.00     100/100         void std::__alloc_on_move<std::allocator<Particle> >(std::allocator<Particle>&, std::allocator<Particle>&) [159]
+                0.00    0.00     100/300         std::vector<Particle, std::allocator<Particle> >::~vector() [141]
+-----------------------------------------------
+                0.00    0.00     100/100         std::vector<Particle, std::allocator<Particle> >::_M_move_assign(std::vector<Particle, std::allocator<Particle> >&&, std::integral_constant<bool, true>) [156]
+[157]    0.0    0.00    0.00     100         std::vector<Particle, std::allocator<Particle> >::vector(std::allocator<Particle> const&) [157]
+                0.00    0.00     100/100         std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_base(std::allocator<Particle> const&) [155]
+-----------------------------------------------
+                0.00    0.00     100/100         solve_particles(double, double, std::vector<Particle, std::allocator<Particle> >, long, double, double, long) [1]
+[158]    0.0    0.00    0.00     100         std::vector<Particle, std::allocator<Particle> >::operator=(std::vector<Particle, std::allocator<Particle> >&&) [158]
+                0.00    0.00     100/202         std::remove_reference<std::vector<Particle, std::allocator<Particle> >&>::type&& std::move<std::vector<Particle, std::allocator<Particle> >&>(std::vector<Particle, std::allocator<Particle> >&) [143]
+                0.00    0.00     100/100         std::vector<Particle, std::allocator<Particle> >::_M_move_assign(std::vector<Particle, std::allocator<Particle> >&&, std::integral_constant<bool, true>) [156]
+-----------------------------------------------
+                0.00    0.00     100/100         std::vector<Particle, std::allocator<Particle> >::_M_move_assign(std::vector<Particle, std::allocator<Particle> >&&, std::integral_constant<bool, true>) [156]
+[159]    0.0    0.00    0.00     100         void std::__alloc_on_move<std::allocator<Particle> >(std::allocator<Particle>&, std::allocator<Particle>&) [159]
+                0.00    0.00     100/100         void std::__do_alloc_on_move<std::allocator<Particle> >(std::allocator<Particle>&, std::allocator<Particle>&, std::integral_constant<bool, true>) [160]
+-----------------------------------------------
+                0.00    0.00     100/100         void std::__alloc_on_move<std::allocator<Particle> >(std::allocator<Particle>&, std::allocator<Particle>&) [159]
+[160]    0.0    0.00    0.00     100         void std::__do_alloc_on_move<std::allocator<Particle> >(std::allocator<Particle>&, std::allocator<Particle>&, std::integral_constant<bool, true>) [160]
+                0.00    0.00     100/304         std::remove_reference<std::allocator<Particle>&>::type&& std::move<std::allocator<Particle>&>(std::allocator<Particle>&) [137]
+-----------------------------------------------
+                0.00    0.00      44/44          std::move_iterator<Particle*> std::__make_move_if_noexcept_iterator<Particle, std::move_iterator<Particle*> >(Particle*) [162]
+[161]    0.0    0.00    0.00      44         std::move_iterator<Particle*>::move_iterator(Particle*) [161]
+-----------------------------------------------
+                0.00    0.00      44/44          Particle* std::__uninitialized_move_if_noexcept_a<Particle*, Particle*, std::allocator<Particle> >(Particle*, Particle*, Particle*, std::allocator<Particle>&) [169]
+[162]    0.0    0.00    0.00      44         std::move_iterator<Particle*> std::__make_move_if_noexcept_iterator<Particle, std::move_iterator<Particle*> >(Particle*) [162]
+                0.00    0.00      44/44          std::move_iterator<Particle*>::move_iterator(Particle*) [161]
+-----------------------------------------------
+                0.00    0.00      11/33          __gnu_cxx::new_allocator<Particle>::allocate(unsigned long, void const*) [170]
+                0.00    0.00      22/33          std::allocator_traits<std::allocator<Particle> >::max_size(std::allocator<Particle> const&) [165]
+[163]    0.0    0.00    0.00      33         __gnu_cxx::new_allocator<Particle>::max_size() const [163]
+-----------------------------------------------
+                0.00    0.00      22/22          std::vector<Particle, std::allocator<Particle> >::_M_check_len(unsigned long, char const*) const [172]
+[164]    0.0    0.00    0.00      22         std::vector<Particle, std::allocator<Particle> >::max_size() const [164]
+                0.00    0.00      22/122         std::_Vector_base<Particle, std::allocator<Particle> >::_M_get_Tp_allocator() const [144]
+                0.00    0.00      22/22          std::allocator_traits<std::allocator<Particle> >::max_size(std::allocator<Particle> const&) [165]
+-----------------------------------------------
+                0.00    0.00      22/22          std::vector<Particle, std::allocator<Particle> >::max_size() const [164]
+[165]    0.0    0.00    0.00      22         std::allocator_traits<std::allocator<Particle> >::max_size(std::allocator<Particle> const&) [165]
+                0.00    0.00      22/33          __gnu_cxx::new_allocator<Particle>::max_size() const [163]
+-----------------------------------------------
+                0.00    0.00      22/22          Particle* std::uninitialized_copy<std::move_iterator<Particle*>, Particle*>(std::move_iterator<Particle*>, std::move_iterator<Particle*>, Particle*) [167]
+[166]    0.0    0.00    0.00      22         Particle* std::__uninitialized_copy<false>::__uninit_copy<std::move_iterator<Particle*>, Particle*>(std::move_iterator<Particle*>, std::move_iterator<Particle*>, Particle*) [166]
+                0.00    0.00    1045/1045        bool std::operator!=<Particle*>(std::move_iterator<Particle*> const&, std::move_iterator<Particle*> const&) [123]
+                0.00    0.00    1023/1023        std::move_iterator<Particle*>::operator*() const [125]
+                0.00    0.00    1023/2046        Particle* std::__addressof<Particle>(Particle&) [101]
+                0.00    0.00    1023/1023        std::move_iterator<Particle*>::operator++() [126]
+                0.00    0.00    1023/1023        void std::_Construct<Particle, Particle>(Particle*, Particle&&) [127]
+-----------------------------------------------
+                0.00    0.00      22/22          Particle* std::__uninitialized_copy_a<std::move_iterator<Particle*>, Particle*, Particle>(std::move_iterator<Particle*>, std::move_iterator<Particle*>, Particle*, std::allocator<Particle>&) [168]
+[167]    0.0    0.00    0.00      22         Particle* std::uninitialized_copy<std::move_iterator<Particle*>, Particle*>(std::move_iterator<Particle*>, std::move_iterator<Particle*>, Particle*) [167]
+                0.00    0.00      22/22          Particle* std::__uninitialized_copy<false>::__uninit_copy<std::move_iterator<Particle*>, Particle*>(std::move_iterator<Particle*>, std::move_iterator<Particle*>, Particle*) [166]
+-----------------------------------------------
+                0.00    0.00      22/22          Particle* std::__uninitialized_move_if_noexcept_a<Particle*, Particle*, std::allocator<Particle> >(Particle*, Particle*, Particle*, std::allocator<Particle>&) [169]
+[168]    0.0    0.00    0.00      22         Particle* std::__uninitialized_copy_a<std::move_iterator<Particle*>, Particle*, Particle>(std::move_iterator<Particle*>, std::move_iterator<Particle*>, Particle*, std::allocator<Particle>&) [168]
+                0.00    0.00      22/22          Particle* std::uninitialized_copy<std::move_iterator<Particle*>, Particle*>(std::move_iterator<Particle*>, std::move_iterator<Particle*>, Particle*) [167]
+-----------------------------------------------
+                0.00    0.00      22/22          void std::vector<Particle, std::allocator<Particle> >::_M_realloc_insert<Particle const&>(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >, Particle const&) [177]
+[169]    0.0    0.00    0.00      22         Particle* std::__uninitialized_move_if_noexcept_a<Particle*, Particle*, std::allocator<Particle> >(Particle*, Particle*, Particle*, std::allocator<Particle>&) [169]
+                0.00    0.00      44/44          std::move_iterator<Particle*> std::__make_move_if_noexcept_iterator<Particle, std::move_iterator<Particle*> >(Particle*) [162]
+                0.00    0.00      22/22          Particle* std::__uninitialized_copy_a<std::move_iterator<Particle*>, Particle*, Particle>(std::move_iterator<Particle*>, std::move_iterator<Particle*>, Particle*, std::allocator<Particle>&) [168]
+-----------------------------------------------
+                0.00    0.00      11/11          std::allocator_traits<std::allocator<Particle> >::allocate(std::allocator<Particle>&, unsigned long) [176]
+[170]    0.0    0.00    0.00      11         __gnu_cxx::new_allocator<Particle>::allocate(unsigned long, void const*) [170]
+                0.00    0.00      11/33          __gnu_cxx::new_allocator<Particle>::max_size() const [163]
+-----------------------------------------------
+                0.00    0.00      11/11          void std::vector<Particle, std::allocator<Particle> >::_M_realloc_insert<Particle const&>(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >, Particle const&) [177]
+[171]    0.0    0.00    0.00      11         __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::difference_type __gnu_cxx::operator-<Particle*, std::vector<Particle, std::allocator<Particle> > >(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > > const&, __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > > const&) [171]
+                0.00    0.00      22/200244      __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::base() const [69]
+-----------------------------------------------
+                0.00    0.00      11/11          void std::vector<Particle, std::allocator<Particle> >::_M_realloc_insert<Particle const&>(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >, Particle const&) [177]
+[172]    0.0    0.00    0.00      11         std::vector<Particle, std::allocator<Particle> >::_M_check_len(unsigned long, char const*) const [172]
+                0.00    0.00      44/101145      std::vector<Particle, std::allocator<Particle> >::size() const [77]
+                0.00    0.00      22/22          std::vector<Particle, std::allocator<Particle> >::max_size() const [164]
+                0.00    0.00      11/11          unsigned long const& std::max<unsigned long>(unsigned long const&, unsigned long const&) [178]
+-----------------------------------------------
+                0.00    0.00      11/11          void std::_Destroy<Particle*>(Particle*, Particle*) [179]
+[173]    0.0    0.00    0.00      11         void std::_Destroy_aux<false>::__destroy<Particle*>(Particle*, Particle*) [173]
+                0.00    0.00    1023/2046        Particle* std::__addressof<Particle>(Particle&) [101]
+                0.00    0.00    1023/1023        void std::_Destroy<Particle>(Particle*) [129]
+-----------------------------------------------
+                0.00    0.00      11/11          void std::vector<Particle, std::allocator<Particle> >::_M_realloc_insert<Particle const&>(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >, Particle const&) [177]
+[174]    0.0    0.00    0.00      11         std::_Vector_base<Particle, std::allocator<Particle> >::_M_allocate(unsigned long) [174]
+                0.00    0.00      11/11          std::allocator_traits<std::allocator<Particle> >::allocate(std::allocator<Particle>&, unsigned long) [176]
+-----------------------------------------------
+                0.00    0.00      11/11          void std::vector<Particle, std::allocator<Particle> >::_M_realloc_insert<Particle const&>(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >, Particle const&) [177]
+[175]    0.0    0.00    0.00      11         std::_Vector_base<Particle, std::allocator<Particle> >::_M_deallocate(Particle*, unsigned long) [175]
+                0.00    0.00      10/10          std::allocator_traits<std::allocator<Particle> >::deallocate(std::allocator<Particle>&, Particle*, unsigned long) [182]
+-----------------------------------------------
+                0.00    0.00      11/11          std::_Vector_base<Particle, std::allocator<Particle> >::_M_allocate(unsigned long) [174]
+[176]    0.0    0.00    0.00      11         std::allocator_traits<std::allocator<Particle> >::allocate(std::allocator<Particle>&, unsigned long) [176]
+                0.00    0.00      11/11          __gnu_cxx::new_allocator<Particle>::allocate(unsigned long, void const*) [170]
+-----------------------------------------------
+                0.00    0.00      11/11          std::vector<Particle, std::allocator<Particle> >::push_back(Particle const&) [134]
+[177]    0.0    0.00    0.00      11         void std::vector<Particle, std::allocator<Particle> >::_M_realloc_insert<Particle const&>(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >, Particle const&) [177]
+                0.00    0.00      33/335         std::_Vector_base<Particle, std::allocator<Particle> >::_M_get_Tp_allocator() [136]
+                0.00    0.00      22/200244      __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::base() const [69]
+                0.00    0.00      22/22          Particle* std::__uninitialized_move_if_noexcept_a<Particle*, Particle*, std::allocator<Particle> >(Particle*, Particle*, Particle*, std::allocator<Particle>&) [169]
+                0.00    0.00      11/11          std::vector<Particle, std::allocator<Particle> >::_M_check_len(unsigned long, char const*) const [172]
+                0.00    0.00      11/111         std::vector<Particle, std::allocator<Particle> >::begin() [146]
+                0.00    0.00      11/11          __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::difference_type __gnu_cxx::operator-<Particle*, std::vector<Particle, std::allocator<Particle> > >(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > > const&, __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > > const&) [171]
+                0.00    0.00      11/11          std::_Vector_base<Particle, std::allocator<Particle> >::_M_allocate(unsigned long) [174]
+                0.00    0.00      11/2011        Particle const& std::forward<Particle const&>(std::remove_reference<Particle const&>::type&) [104]
+                0.00    0.00      11/1000        void std::allocator_traits<std::allocator<Particle> >::construct<Particle, Particle const&>(std::allocator<Particle>&, Particle*, Particle const&) [133]
+                0.00    0.00      11/11          void std::_Destroy<Particle*, Particle>(Particle*, Particle*, std::allocator<Particle>&) [180]
+                0.00    0.00      11/11          std::_Vector_base<Particle, std::allocator<Particle> >::_M_deallocate(Particle*, unsigned long) [175]
+-----------------------------------------------
+                0.00    0.00      11/11          std::vector<Particle, std::allocator<Particle> >::_M_check_len(unsigned long, char const*) const [172]
+[178]    0.0    0.00    0.00      11         unsigned long const& std::max<unsigned long>(unsigned long const&, unsigned long const&) [178]
+-----------------------------------------------
+                0.00    0.00      11/11          void std::_Destroy<Particle*, Particle>(Particle*, Particle*, std::allocator<Particle>&) [180]
+[179]    0.0    0.00    0.00      11         void std::_Destroy<Particle*>(Particle*, Particle*) [179]
+                0.00    0.00      11/11          void std::_Destroy_aux<false>::__destroy<Particle*>(Particle*, Particle*) [173]
+-----------------------------------------------
+                0.00    0.00      11/11          void std::vector<Particle, std::allocator<Particle> >::_M_realloc_insert<Particle const&>(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >, Particle const&) [177]
+[180]    0.0    0.00    0.00      11         void std::_Destroy<Particle*, Particle>(Particle*, Particle*, std::allocator<Particle>&) [180]
+                0.00    0.00      11/11          void std::_Destroy<Particle*>(Particle*, Particle*) [179]
+-----------------------------------------------
+                0.00    0.00      10/10          std::allocator_traits<std::allocator<Particle> >::deallocate(std::allocator<Particle>&, Particle*, unsigned long) [182]
+[181]    0.0    0.00    0.00      10         __gnu_cxx::new_allocator<Particle>::deallocate(Particle*, unsigned long) [181]
+-----------------------------------------------
+                0.00    0.00      10/10          std::_Vector_base<Particle, std::allocator<Particle> >::_M_deallocate(Particle*, unsigned long) [175]
+[182]    0.0    0.00    0.00      10         std::allocator_traits<std::allocator<Particle> >::deallocate(std::allocator<Particle>&, Particle*, unsigned long) [182]
+                0.00    0.00      10/10          __gnu_cxx::new_allocator<Particle>::deallocate(Particle*, unsigned long) [181]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [241]
+[183]    0.0    0.00    0.00       1         _GLOBAL__sub_I__Z11centrifugalSt6vectorIdSaIdEE [183]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [241]
+[184]    0.0    0.00    0.00       1         _GLOBAL__sub_I__Z13add_particlesSt6vectorI8ParticleSaIS0_EElld [184]
+                0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [191]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [241]
+[185]    0.0    0.00    0.00       1         _GLOBAL__sub_I__Z5deltadd [185]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [241]
+[186]    0.0    0.00    0.00       1         _GLOBAL__sub_I__Z5omegadd [186]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [241]
+[187]    0.0    0.00    0.00       1         _GLOBAL__sub_I__Z6scalarddd [187]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [241]
+[188]    0.0    0.00    0.00       1         _GLOBAL__sub_I_k1 [188]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [241]
+[189]    0.0    0.00    0.00       1         _GLOBAL__sub_I_particles [189]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [241]
+[190]    0.0    0.00    0.00       1         _GLOBAL__sub_I_star_x [190]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I__Z13add_particlesSt6vectorI8ParticleSaIS0_EElld [184]
+[191]    0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [191]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+ [183] _GLOBAL__sub_I__Z11centrifugalSt6vectorIdSaIdEE [29] std::initializer_list<double>::end() const [25] std::vector<double, std::allocator<double> >::_M_move_assign(std::vector<double, std::allocator<double> >&&, std::integral_constant<bool, true>)
+ [184] _GLOBAL__sub_I__Z13add_particlesSt6vectorI8ParticleSaIS0_EElld [58] std::initializer_list<double>::size() const [49] std::vector<double, std::allocator<double> >::_M_erase_at_end(double*)
+ [185] _GLOBAL__sub_I__Z5deltadd [22] std::initializer_list<double>::begin() const [26] void std::vector<double, std::allocator<double> >::_M_realloc_insert<double const&>(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, double const&)
+ [186] _GLOBAL__sub_I__Z5omegadd [172] std::vector<Particle, std::allocator<Particle> >::_M_check_len(unsigned long, char const*) const [114] double* std::vector<double, std::allocator<double> >::_M_allocate_and_copy<double const*>(unsigned long, double const*, double const*)
+ [187] _GLOBAL__sub_I__Z6scalarddd [77] std::vector<Particle, std::allocator<Particle> >::size() const [83] std::vector<double, std::allocator<double> >::clear()
+ [188] _GLOBAL__sub_I_k1     [164] std::vector<Particle, std::allocator<Particle> >::max_size() const [76] std::vector<double, std::allocator<double> >::vector()
+ [189] _GLOBAL__sub_I_particles [106] std::vector<double, std::allocator<double> >::end() const [100] std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> >&&)
+ [190] _GLOBAL__sub_I_star_x  [59] std::vector<double, std::allocator<double> >::size() const [84] std::vector<double, std::allocator<double> >::vector(std::allocator<double> const&)
+  [19] luminosity(double)    [107] std::vector<double, std::allocator<double> >::begin() const [115] std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> > const&)
+  [10] centrifugal(std::vector<double, std::allocator<double> >) [60] std::vector<double, std::allocator<double> >::capacity() const [85] std::vector<double, std::allocator<double> >::vector(std::initializer_list<double>, std::allocator<double> const&)
+  [15] dot_product(std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> >) [139] std::allocator<Particle>::allocator(std::allocator<Particle> const&) [43] std::vector<double, std::allocator<double> >::~vector()
+   [5] acceleration(int, double, double, std::vector<double, std::allocator<double> >) [153] std::allocator<Particle>::~allocator() [27] std::vector<double, std::allocator<double> >::operator=(std::vector<double, std::allocator<double> >&&)
+   [7] rad_pressure(std::vector<double, std::allocator<double> >) [51] std::allocator<double>::allocator(std::allocator<double> const&) [23] std::vector<double, std::allocator<double> >::operator=(std::initializer_list<double>)
+ [150] rm_particles(std::vector<Particle, std::allocator<Particle> >) [61] std::allocator<double>::allocator() [40] std::vector<double, std::allocator<double> >::operator[](unsigned long)
+  [11] sunit_vector(std::vector<double, std::allocator<double> >) [62] std::allocator<double>::~allocator() [127] void std::_Construct<Particle, Particle>(Particle*, Particle&&)
+   [8] cross_product(double, double, double, double, double, double) [52] double* std::__copy_move<false, true, std::random_access_iterator_tag>::__copy_m<double>(double const*, double const*, double*) [64] std::iterator_traits<double const*>::difference_type std::__distance<double const*>(double const*, double const*, std::random_access_iterator_tag)
+   [3] new_variables(double, std::vector<double, std::allocator<double> >, bool) [173] void std::_Destroy_aux<false>::__destroy<Particle*>(Particle*, Particle*) [101] Particle* std::__addressof<Particle>(Particle&)
+  [31] temp_threshold(double, double, double, double, double) [46] void std::_Destroy_aux<true>::__destroy<double*>(double*, double*) [94] __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > > std::__miter_base<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >)
+ [191] __static_initialization_and_destruction_0(int, int) [174] std::_Vector_base<Particle, std::allocator<Particle> >::_M_allocate(unsigned long) [44] double const* std::__miter_base<double const*>(double const*)
+  [30] fRand(double, double) [140] std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl::_M_swap_data(std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl&) [45] double const* std::__niter_base<double const*>(double const*)
+  [18] omega(double, double) [147] std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl::_Vector_impl(std::allocator<Particle>&&) [95] double const* std::__niter_base<double const*, std::vector<double, std::allocator<double> > >(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >)
+  [14] scalar(double, double, double) [154] std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_impl::_Vector_impl(std::allocator<Particle> const&) [53] double* std::__niter_base<double*>(double*)
+  [16] beta_fn(double, double, double) [175] std::_Vector_base<Particle, std::allocator<Particle> >::_M_deallocate(Particle*, unsigned long) [54] double* std::__copy_move_a<false, double const*, double*>(double const*, double const*, double*)
+   [6] h_check(double, std::vector<double, std::allocator<double> >) [136] std::_Vector_base<Particle, std::allocator<Particle> >::_M_get_Tp_allocator() [116] double* std::__copy_move_a2<false, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*)
+  [20] opacity(double)       [155] std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_base(std::allocator<Particle> const&) [65] double* std::__copy_move_a2<false, double const*, double*>(double const*, double const*, double*)
+   [9] pr_drag(std::vector<double, std::allocator<double> >) [148] std::_Vector_base<Particle, std::allocator<Particle> >::_Vector_base(std::_Vector_base<Particle, std::allocator<Particle> >&&) [159] void std::__alloc_on_move<std::allocator<Particle> >(std::allocator<Particle>&, std::allocator<Particle>&)
+  [13] coriolis(std::vector<double, std::allocator<double> >) [92] std::_Vector_base<double, std::allocator<double> >::_M_allocate(unsigned long) [86] void std::__alloc_on_move<std::allocator<double> >(std::allocator<double>&, std::allocator<double>&)
+  [12] drag_vel(std::vector<double, std::allocator<double> >) [55] std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_M_swap_data(std::_Vector_base<double, std::allocator<double> >::_Vector_impl&) [160] void std::__do_alloc_on_move<std::allocator<Particle> >(std::allocator<Particle>&, std::allocator<Particle>&, std::integral_constant<bool, true>)
+   [4] k_values(double, std::vector<double, std::allocator<double> >, bool) [98] std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_Vector_impl(std::allocator<double>&&) [87] void std::__do_alloc_on_move<std::allocator<double> >(std::allocator<double>&, std::allocator<double>&, std::integral_constant<bool, true>)
+   [2] RK_solver(std::vector<double, std::allocator<double> >, double, double, double) [73] std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_Vector_impl(std::allocator<double> const&) [117] double* std::uninitialized_copy<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*)
+  [21] h_optimal(std::vector<double, std::allocator<double> >, double) [74] std::_Vector_base<double, std::allocator<double> >::_Vector_impl::_Vector_impl() [118] double* std::uninitialized_copy<double const*, double*>(double const*, double const*, double*)
+ [124] Particle::Particle(Particle&&) [108] std::_Vector_base<double, std::allocator<double> >::_M_deallocate(double*, unsigned long) [167] Particle* std::uninitialized_copy<std::move_iterator<Particle*>, Particle*>(std::move_iterator<Particle*>, std::move_iterator<Particle*>, Particle*)
+ [130] Particle::Particle(Particle const&) [109] std::_Vector_base<double, std::allocator<double> >::_M_create_storage(unsigned long) [66] std::iterator_traits<double const*>::iterator_category std::__iterator_category<double const*>(double const* const&)
+ [131] Particle::Particle()   [42] std::_Vector_base<double, std::allocator<double> >::_M_get_Tp_allocator() [119] double* std::__uninitialized_copy_a<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*, double>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*, std::allocator<double>&)
+ [102] Particle::~Particle() [110] std::_Vector_base<double, std::allocator<double> >::_Vector_base(unsigned long, std::allocator<double> const&) [120] double* std::__uninitialized_copy_a<double const*, double*, double>(double const*, double const*, double*, std::allocator<double>&)
+ [181] __gnu_cxx::new_allocator<Particle>::deallocate(Particle*, unsigned long) [75] std::_Vector_base<double, std::allocator<double> >::_Vector_base() [168] Particle* std::__uninitialized_copy_a<std::move_iterator<Particle*>, Particle*, Particle>(std::move_iterator<Particle*>, std::move_iterator<Particle*>, Particle*, std::allocator<Particle>&)
+ [170] __gnu_cxx::new_allocator<Particle>::allocate(unsigned long, void const*) [99] std::_Vector_base<double, std::allocator<double> >::_Vector_base(std::_Vector_base<double, std::allocator<double> >&&) [162] std::move_iterator<Particle*> std::__make_move_if_noexcept_iterator<Particle, std::move_iterator<Particle*> >(Particle*)
+ [132] void __gnu_cxx::new_allocator<Particle>::construct<Particle, Particle const&>(Particle*, Particle const&) [82] std::_Vector_base<double, std::allocator<double> >::_Vector_base(std::allocator<double> const&) [169] Particle* std::__uninitialized_move_if_noexcept_a<Particle*, Particle*, std::allocator<Particle> >(Particle*, Particle*, Particle*, std::allocator<Particle>&)
+ [138] __gnu_cxx::new_allocator<Particle>::new_allocator(__gnu_cxx::new_allocator<Particle> const&) [161] std::move_iterator<Particle*>::move_iterator(Particle*) [178] unsigned long const& std::max<unsigned long>(unsigned long const&, unsigned long const&)
+ [151] __gnu_cxx::new_allocator<Particle>::~new_allocator() [126] std::move_iterator<Particle*>::operator++() [121] double* std::copy<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*)
+  [88] __gnu_cxx::new_allocator<double>::allocate(unsigned long, void const*) [182] std::allocator_traits<std::allocator<Particle> >::deallocate(std::allocator<Particle>&, Particle*, unsigned long) [67] double* std::copy<double const*, double*>(double const*, double const*, double*)
+  [50] __gnu_cxx::new_allocator<double>::new_allocator(__gnu_cxx::new_allocator<double> const&) [176] std::allocator_traits<std::allocator<Particle> >::allocate(std::allocator<Particle>&, unsigned long) [96] std::remove_reference<Particle*&>::type&& std::move<Particle*&>(Particle*&)
+  [56] __gnu_cxx::new_allocator<double>::new_allocator() [165] std::allocator_traits<std::allocator<Particle> >::max_size(std::allocator<Particle> const&) [39] std::remove_reference<double*&>::type&& std::move<double*&>(double*&)
+  [57] __gnu_cxx::new_allocator<double>::~new_allocator() [133] void std::allocator_traits<std::allocator<Particle> >::construct<Particle, Particle const&>(std::allocator<Particle>&, Particle*, Particle const&) [137] std::remove_reference<std::allocator<Particle>&>::type&& std::move<std::allocator<Particle>&>(std::allocator<Particle>&)
+ [105] __gnu_cxx::__alloc_traits<std::allocator<double> >::_S_select_on_copy(std::allocator<double> const&) [111] std::allocator_traits<std::allocator<double> >::select_on_container_copy_construction(std::allocator<double> const&) [70] std::remove_reference<std::allocator<double>&>::type&& std::move<std::allocator<double>&>(std::allocator<double>&)
+ [142] __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::__normal_iterator(Particle* const&) [93] std::allocator_traits<std::allocator<double> >::allocate(std::allocator<double>&, unsigned long) [143] std::remove_reference<std::vector<Particle, std::allocator<Particle> >&>::type&& std::move<std::vector<Particle, std::allocator<Particle> >&>(std::vector<Particle, std::allocator<Particle> >&)
+  [80] __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::operator++() [166] Particle* std::__uninitialized_copy<false>::__uninit_copy<std::move_iterator<Particle*>, Particle*>(std::move_iterator<Particle*>, std::move_iterator<Particle*>, Particle*) [71] std::remove_reference<std::vector<double, std::allocator<double> >&>::type&& std::move<std::vector<double, std::allocator<double> >&>(std::vector<double, std::allocator<double> >&)
+  [89] __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >::__normal_iterator(double const* const&) [112] double* std::__uninitialized_copy<true>::__uninit_copy<__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*>(__gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >, double*) [135] std::enable_if<std::__and_<std::__not_<std::__is_tuple_like<Particle*> >, std::is_move_constructible<Particle*>, std::is_move_assignable<Particle*> >::value, void>::type std::swap<Particle*>(Particle*&, Particle*&)
+ [171] __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::difference_type __gnu_cxx::operator-<Particle*, std::vector<Particle, std::allocator<Particle> > >(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > > const&, __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > > const&) [113] double* std::__uninitialized_copy<true>::__uninit_copy<double const*, double*>(double const*, double const*, double*) [41] std::enable_if<std::__and_<std::__not_<std::__is_tuple_like<double*> >, std::is_move_constructible<double*>, std::is_move_assignable<double*> >::value, void>::type std::swap<double*>(double*&, double*&)
+  [79] bool __gnu_cxx::operator!=<Particle*, std::vector<Particle, std::allocator<Particle> > >(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > > const&, __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > > const&) [156] std::vector<Particle, std::allocator<Particle> >::_M_move_assign(std::vector<Particle, std::allocator<Particle> >&&, std::integral_constant<bool, true>) [128] Particle&& std::forward<Particle>(std::remove_reference<Particle>::type&)
+ [163] __gnu_cxx::new_allocator<Particle>::max_size() const [177] void std::vector<Particle, std::allocator<Particle> >::_M_realloc_insert<Particle const&>(__gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >, Particle const&) [104] Particle const& std::forward<Particle const&>(std::remove_reference<Particle const&>::type&)
+  [90] __gnu_cxx::new_allocator<double>::max_size() const [145] std::vector<Particle, std::allocator<Particle> >::end() [129] void std::_Destroy<Particle>(Particle*)
+  [69] __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::base() const [146] std::vector<Particle, std::allocator<Particle> >::begin() [179] void std::_Destroy<Particle*>(Particle*, Particle*)
+  [81] __gnu_cxx::__normal_iterator<Particle*, std::vector<Particle, std::allocator<Particle> > >::operator*() const [134] std::vector<Particle, std::allocator<Particle> >::push_back(Particle const&) [180] void std::_Destroy<Particle*, Particle>(Particle*, Particle*, std::allocator<Particle>&)
+  [91] __gnu_cxx::__normal_iterator<double const*, std::vector<double, std::allocator<double> > >::base() const [149] std::vector<Particle, std::allocator<Particle> >::vector(std::vector<Particle, std::allocator<Particle> >&&) [47] void std::_Destroy<double*>(double*, double*)
+ [152] std::_Vector_base<Particle, std::allocator<Particle> >::get_allocator() const [157] std::vector<Particle, std::allocator<Particle> >::vector(std::allocator<Particle> const&) [48] void std::_Destroy<double*, double>(double*, double*, std::allocator<double>&)
+ [144] std::_Vector_base<Particle, std::allocator<Particle> >::_M_get_Tp_allocator() const [17] std::vector<Particle, std::allocator<Particle> >::vector(std::vector<Particle, std::allocator<Particle> > const&) [68] std::iterator_traits<double const*>::difference_type std::distance<double const*>(double const*, double const*)
+  [24] std::_Vector_base<double, std::allocator<double> >::get_allocator() const [141] std::vector<Particle, std::allocator<Particle> >::~vector() [122] bool std::operator==<Particle*>(std::move_iterator<Particle*> const&, std::move_iterator<Particle*> const&)
+  [72] std::_Vector_base<double, std::allocator<double> >::_M_get_Tp_allocator() const [158] std::vector<Particle, std::allocator<Particle> >::operator=(std::vector<Particle, std::allocator<Particle> >&&) [123] bool std::operator!=<Particle*>(std::move_iterator<Particle*> const&, std::move_iterator<Particle*> const&)
+  [97] std::move_iterator<Particle*>::base() const [78] std::vector<Particle, std::allocator<Particle> >::operator[](unsigned long) [103] operator new(unsigned long, void*)
+ [125] std::move_iterator<Particle*>::operator*() const [63] void std::vector<double, std::allocator<double> >::_M_assign_aux<double const*>(double const*, double const*, std::forward_iterator_tag)

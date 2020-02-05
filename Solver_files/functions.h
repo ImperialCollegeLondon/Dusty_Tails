@@ -1,34 +1,29 @@
 //Functions declared here
 #include <iostream>
 #include <vector>
+
 using namespace std;
 
 ///k values declared
-extern double k1_x, k2_x, k3_x, k4_x, k5_x, k6_x, k7_x;
-extern double k1_y, k2_y, k3_y, k4_y, k5_y, k6_y, k7_y;
-extern double k1_z, k2_z, k3_z, k4_z, k5_z, k6_z, k7_z;
 
-extern double k1_xdot, k2_xdot, k3_xdot, k4_xdot, k5_xdot, k6_xdot, k7_xdot;
-extern double k1_ydot, k2_ydot, k3_ydot, k4_ydot, k5_ydot, k6_ydot, k7_ydot;
-extern double k1_zdot, k2_zdot, k3_zdot, k4_zdot, k5_zdot, k6_zdot, k7_zdot;
+extern vector <double> k1, k2, k3, k4, k5, k6, k7;
+extern vector <double> k1d, k2d, k3d, k4d, k5d, k6d, k7d;
+
+
+
+double fRand(double fMin, double fMax);
 
 //forces file
-vector <double> centrifugal(double x, double y, double z, \
-                            double vx, double vy, double vz);
+vector <double> centrifugal(vector <double> V);
 
-vector <double> coriolis(double x, double y, double z, \
-                         double vx, double vy, double vz);
+vector <double> coriolis(vector <double> V);
 
-vector <double> rad_pressure(double x, double y, double z, \
-                             double vx, double vy, double vz);
+vector <double> rad_pressure(vector <double> V);
 
-vector <double> pr_drag(double x, double y, double z, \
-                        double vx, double vy, double vz);
+vector <double> pr_drag(vector <double> V);
 
 
 //maths file
-
-vector <double> to_vector(double x, double y, double z);
 
 double scalar(double x, double y, double z);
 
@@ -43,13 +38,18 @@ double beta_fn(double k, double L_star, double M_star);
 double opacity(double Q_fn);
 double luminosity(double R_star);
 double radial_vel(vector <double> vel, vector <double> s_vector);
+double temp_threshold(double qfactor, double lum, double x, double y, double z);
 
-vector <double> drag_vel(double x, double y, double z, double vx, double vy, double vz);
-vector <double> sunit_vector(double x, double y, double z);
+vector <double> drag_vel(vector <double> V);
+vector <double> sunit_vector(vector <double> V);
 
 //kvalues file
 
-void k_values(double h, vector <double> V, bool order5);
+void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
+    vector <double> &k2, vector <double> &k3, vector <double> &k4, vector <double> &k5, \
+    vector <double> &k6, vector <double> &k7, vector <double> &k1d, \
+        vector <double> &k2d, vector <double> &k3d, vector <double> &k4d, vector <double> &k5d, \
+        vector <double> &k6d, vector <double> &k7d);
 
 //errors
 
@@ -59,11 +59,9 @@ vector <double> h_check(double h, vector <double> V);
 
 //solver
 
-double acceleration( double pos_star, double pos_planet, double x, double y, double z, \
-                     double centri, double coriol, double radiation, double drag);
+double acceleration( int i, double pos_star, double pos_planet, vector <double> V);
 
 vector <double> new_variables(double h, vector <double> V, bool order5);
 
-vector <double> next_step(double h, vector <double> V);
-
-void RK_solver(double h0, vector <double> V_0, double t_0);
+vector <double> RK_solver(vector <double> V_0, double t_0, double del_t, \
+  double h_p);

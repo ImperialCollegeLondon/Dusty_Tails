@@ -13,10 +13,11 @@ using namespace std;
 vector <Particle> particles;
 
 int main() {
-  long int total_particles = 10;
-  double t_common = 0.05; //arbitrary for now
-  double big_step = 0.05;
-  double end_t = 1.0;
+
+  long int total_particles = 1;
+  double t_common = 0.1; //arbitrary for now
+  double big_step = 0.1;
+  double end_t =1.0;
   double total_t = 0.0;
 
 
