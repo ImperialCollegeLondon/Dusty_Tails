@@ -18,14 +18,15 @@ s=10e-4
 
 dt = []
 for i in T:
-    J = (-alpha/density)*np.exp(-(A/i)+B)*np.sqrt((mu*Mu)/(2*np.pi*kB))
-    new = s/J
+    J = (alpha/density)*np.exp(-(A/i)+B)*np.sqrt((mu*Mu)/(2*np.pi*kB))
+    new = np.log10(s/(J*0.8*24*3600))
     dt.append(new)
 
 
 
-
 plt.plot(T,dt)
-plt.xlim(1000,5000)
-plt.ylim(-7e8,1e8)
+plt.plot(T,np.array(dt)-np.ones(len(dt)))
+plt.plot(T,np.array(dt)+np.ones(len(dt)))
+plt.ylim(-1,1)
+plt.xlim(1600,1800)
 plt.show()
