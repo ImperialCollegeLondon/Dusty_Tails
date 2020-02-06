@@ -1,10 +1,12 @@
 // Defining Variables
 
+#define _USE_MATH_DEFINE
+
 #include <vector>
 #include <cmath>
 
 using namespace std;
-int i;
+int i,j,k;
 
 //constants
 #define G 6.67408e-11
@@ -37,10 +39,10 @@ double Rmin=rmin/a;
 double Rmax=rmax/a;
 
 double Tmin = 0.;
-double Tmax = math.pi;
+double Tmax = M_PI;
 
 double Pmin = 0.;
-double Pmax = (math.pi)/2.;
+double Pmax = (M_PI)/2.;
 
 //grid coordinates (using vectors as arrays) - R, theta, phi
 vector <double> Ra; // a-mesh defines edges of grid cells
@@ -53,48 +55,45 @@ vector <double> Ta;
 vector <double> Tb;
 vector <double> dTa;
 vector <double> dTb;
-double Ta_new, Ta_new, dTa_new, dTb_new;
+double Ta_new, Tb_new, dTa_new, dTb_new;
 
 vector <double> Pa;
 vector <double> Pb;
 vector <double> dPa;
 vector <double> dPb;
-double Pa_new, Pb_new, dPa_new, dPbs_new;
+double Pa_new, Pb_new, dPa_new, dPb_new;
 
 //gaussian grid
 //R grid
 vector <double> g_R,DR,x_R,inv_R;
 double A_R, B_R, C_R; //scale factor of gaussian - sets max DR
-double B_R; //addition factor of gaussian - sets min DR
 double mu_R, sd_R;
 double suminv_R, inv_new_R, sumDR, nr, g_new_R;
 
 //Theta grid
 vector <double> g_T,DT,x_T,inv_T;
 double A_T, B_T, C_T; //scale factor of gaussian - sets max DR
-double B_T; //addition factor of gaussian - sets min DR
 double mu_T, sd_T;
 double suminv_T, inv_new_T, sumDT, nt, g_new_T;
 
 //Phi grid
 vector <double> g_P,DP,x_P,inv_P;
 double A_P, B_P, C_P; //scale factor of gaussian - sets max DR
-double B_P; //addition factor of gaussian - sets min DR
 double mu_P, sd_P;
 double suminv_P, inv_new_P, sumDP, np, g_new_P;
 
 //density variables
 double density = 1.83e-12; //kg/m3 (av density)
-vector <double> d; //dimensionless density
+vector <double> d_R, d_T, d_P; //dimensionless density
 double mean;
 double stde;
-vector <double> gauss;
-double gauss_new;
+vector <double> gauss_R, gauss_T, gauss_P;
+double gauss_new_R, gauss_new_T, gauss_new_P;
 double density_bulk = 3000.; //kg/m3 (bulk density)
 
 //opacity variables
-vector <double> k; //dimensionless opacity
-double k_new; //used to fill opacity
+vector <double> k_R, k_T, k_P; //dimensionless opacity
+double k_new_R, k_new_T, k_new_P; //used to fill opacity
 
 //optical depth variables
 vector <double> t; //optical depth (dimensionless anyway)
