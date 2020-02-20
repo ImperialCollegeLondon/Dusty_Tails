@@ -1,15 +1,27 @@
-#include "Non_uniform_grid_3D_pointers.cpp"
+#include "file_creators.cpp"
 
 
 int main() {
   semimajor(Period_days);
   //cout << "Semi-major axis = " << a << endl;
+
   //cout << "start" << endl;
   //setting constants
-  NR=50;
-  NP=50;
-  NT=50;
+  NR=200;
+  NP=200;
+  NT=200;
   //nr=(NR-1.)/2.;
+
+  rmin = 0.;
+  rmax = 2.*a;
+  Rmin = rmin/a;
+  Rmax = rmax/a;
+
+  Pmin = 0.;
+  Pmax = 2*M_PI;
+
+  Tmin = 0.;
+  Tmax = M_PI;
 
   R_B=0.9; //A and B are in terms of a
   P_B=0.9;
@@ -33,90 +45,90 @@ int main() {
   //clearing vectors
   //cout << "delete start" << endl;
   delete[] Ta;
-  Ta = new double[51];
+  Ta = new double[NT+1];
   delete[] Tb;
-  Tb = new double[51];
+  Tb = new double[NT+1];
   delete[] dTa;
-  dTa = new double[51];
+  dTa = new double[NT+1];
   delete[] dTb;
-  dTb = new double[51];
+  dTb = new double[NT+1];
   delete[] Pa;
-  Pa = new double[51];
+  Pa = new double[NP+1];
   delete[] Pb;
-  Pb = new double[51];
+  Pb = new double[NP+1];
   delete[] dPa;
-  dPa = new double[51];
+  dPa = new double[NP+1];
   delete[] dPb;
-  dPb = new double[51];
+  dPb = new double[NP+1];
   delete[] Ra;
-  Ra = new double[51];
+  Ra = new double[NR+1];
   delete[] Rb;
-  Rb = new double[51];
+  Rb = new double[NR+1];
   delete[] dRa;
-  dRa = new double[51];
+  dRa = new double[NR+1];
   delete[] dRb;
-  dRb = new double[51];
+  dRb = new double[NR+1];
 
   delete[] d;
-  d = new double**[51];
-  for(int i =0; i<51; i++){
-    d[i] = new double*[51];
-    for(int j =0; j<51; j++){
-      d[i][j] = new double[51];
-      for(int k = 0; k<51; k++){
+  d = new double**[NT+1];
+  for(int i = 0; i<(NT+1); i++){
+    d[i] = new double*[NP+1];
+    for(int j = 0; j<(NP+1); j++){
+      d[i][j] = new double[NR+1];
+      for(int k = 0; k<(NR+1); k++){
         d[i][j][k] = 0.;
       }
     }
   }
 
   delete[] kappa;
-  kappa = new double**[51];
-  for(int i =0; i<51; i++){
-    kappa[i] = new double*[51];
-    for(int j =0; j<51; j++){
-      kappa[i][j] = new double[51];
-      for(int k = 0; k<51; k++){
+  kappa = new double**[NT+1];
+  for(int i =0; i<(NT+1); i++){
+    kappa[i] = new double*[NP+1];
+    for(int j =0; j<(NP+1); j++){
+      kappa[i][j] = new double[NR+1];
+      for(int k = 0; k<(NR+1); k++){
         kappa[i][j][k] = 0.;
       }
     }
   }
 
   delete[] t;
-  t = new double**[51];
-  for(int i =0; i<51; i++){
-    t[i] = new double*[51];
-    for(int j =0; j<51; j++){
-      t[i][j] = new double[51];
-      for(int k = 0; k<51; k++){
+  t = new double**[NT+1];
+  for(int i =0; i<(NT+1); i++){
+    t[i] = new double*[NP+1];
+    for(int j =0; j<(NP+1); j++){
+      t[i][j] = new double[NR+1];
+      for(int k = 0; k<(NR+1); k++){
         t[i][j][k] = 0.;
       }
     }
   }
 
   delete[] T_g;
-  T_g = new double[51];
+  T_g = new double[NT+1];
   delete[] P_g;
-  P_g = new double[51];
+  P_g = new double[NP+1];
   delete[] R_g;
-  R_g = new double[51];
+  R_g = new double[NR+1];
   delete[] DT;
-  DT = new double[51];
+  DT = new double[NT+1];
   delete[] DP;
-  DP = new double[51];
+  DP = new double[NP+1];
   delete[] DR;
-  DR = new double[51];
+  DR = new double[NR+1];
   delete[] T_x;
-  T_x = new double[51];
+  T_x = new double[NT+1];
   delete[] P_x;
-  P_x = new double[51];
+  P_x = new double[NP+1];
   delete[] R_x;
-  R_x = new double[51];
+  R_x = new double[NR+1];
   delete[] T_inv;
-  T_inv = new double[51];
+  T_inv = new double[NT+1];
   delete[] P_inv;
-  P_inv = new double[51];
+  P_inv = new double[NP+1];
   delete[] R_inv;
-  R_inv = new double[51];
+  R_inv = new double[NR+1];
 
   //cout << "delete end" << endl;
 
@@ -150,7 +162,7 @@ int main() {
   calculate_optical_depth(NT, NP, NR, kappa, d);
 
   //file creators
-  file_creator_t(t);
+  file_creator_t(NT,NP,NR,t);
   // //file_creator_gauss(gauss,Rb,NR);
   // file_creator_DR(DR,Ra);
   //file_creator_xRa(x,Ra);

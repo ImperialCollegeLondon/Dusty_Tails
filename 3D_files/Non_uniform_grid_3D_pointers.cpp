@@ -179,13 +179,13 @@ void density_fill(int NT, int NP, int NR, float mean, float stde)
     for(j=js(NP); j<=je(NP); j++){
       for(k=ks(NR); k<=ke(NR); k++){
         d_new_T = exp(-pow((Tb[i])-mean,2.)/(2.*pow(stde,2.)));
-        double* T_d = new double[51];
+        double* T_d = new double[NT+1];
         T_d[i] = d_new_T;
         d_new_P = exp(-pow((Pb[j])-mean,2.)/(2.*pow(stde,2.)));
-        double* P_d = new double[51];
+        double* P_d = new double[NP+1];
         P_d[j] = d_new_P;
         d_new_R = exp(-pow((Rb[k])-mean,2.)/(2.*pow(stde,2.)));
-        double* R_d = new double[51];
+        double* R_d = new double[NR+1];
         R_d[k] = d_new_R;
         d[i][j][k] = (density*pow(a,3.)/Mstar_kg)*T_d[i]*P_d[j]*R_d[k];
       }
@@ -214,126 +214,9 @@ void calculate_optical_depth(int NT, int NP, int NR, double*** kappa, double*** 
     for(j=js(NP); j<=je(NP); j++){
       for(k=ks(NR); k<=ke(NR); k++){
         t[i][j][k]=t[i][j][k-1]+(kappa[i][j][k]*d[i][j][k]*dRa[k]);
-        cout << t[i][j][k] << endl;
+        //cout << t[i][j][k] << endl;
       }
     }
   }
   //cout << "done calculate optical depth" << endl;
 }
-
-//file creators
-// void file_creator_gaussian(vector<double> g, vector <double> x) {//textfile of gaussian vs Rb
-//   ofstream myfile ("gaussian_grid.txt");
-//   if (myfile.is_open()) {
-//     for (i=0.; i<g.size(); i++) {
-//       char string[15];
-//
-//       myfile << x[i] << ",";
-//       myfile << g[i] << "\n";
-//     }
-//     myfile.close();
-//   }
-//   else cout << "Unable to open file";
-//
-// }
-//
-// void file_creator_inv(vector<double> DR, vector <double> x) {//textfile of non uniform grid DR vs Rb
-//   ofstream myfile ("inverse_gaussian_grid.txt");
-//   if (myfile.is_open()) {
-//     for (i=0.; i<DR.size(); i++) {
-//       char string[15];
-//
-//       myfile << x[i] << ",";
-//       myfile << DR[i] << "\n";
-//     }
-//     myfile.close();
-//   }
-//   else cout << "Unable to open file";
-//
-// }
-//
-// void file_creator_DR(vector<double> DR, vector <double> Ra) {//textfile of density vs Rb
-//   ofstream myfile ("DR.txt");
-//   if (myfile.is_open()) {
-//     for (i=0.; i<DR.size(); i++) {
-//       char string[15];
-//
-//       myfile << Ra[i] << ",";
-//       myfile << DR[i] << "\n";
-//     }
-//     myfile.close();
-//   }
-//   else cout << "Unable to open file";
-//
-// }
-
-// void file_creator_xRa(vector<double> x, vector <double> Ra) {//textfile of density vs Rb
-//   ofstream myfile ("xRa.txt");
-//   if (myfile.is_open()) {
-//     for (i=0.; i<x.size(); i++) {
-//       char string[15];
-//
-//       myfile << x[i] << ",";
-//       myfile << Ra[i] << "\n";
-//     }
-//     myfile.close();
-//   }
-//   else cout << "Unable to open file";
-//
-// }
-
-void file_creator_t(double*** t) {//textfile of optical depth vs Rb
-  stringstream title;
-  title << "/Users/annawilson/Documents/GitHub/Dusty_Tails/Text_files/optical_depth_NR=" << NR;
-  ofstream myfile (title.str()+".txt");
-  if (myfile.is_open()) {
-    for (i=0.; i<51; i++) { //looping over THETA coordinates
-      char string[15];
-      // myfile << Ra[i] << ",";
-      for ( int j=0; j<51; j++){ //looping over PHI coordinates
-        for (int k=0; k<51; k++){ //looping over R coordinates
-          myfile << t[i][j][k] << endl; //d[theta][phi][R]
-        }
-      }
-    }
-    myfile.close();
-  }
-  else cout << "Unable to open file";
-
-}
-
-void file_creator_d(double*** d, double* Ta, double* Pa, double* Ra, int NT, int NP, int NR) {//textfile of density vs Rb
-  stringstream title;
-  title << "/Users/annawilson/Documents/GitHub/Dusty_Tails/Text_files/density_NR=" << NR;
-  ofstream myfile (title.str()+".txt");
-  if (myfile.is_open()) {
-    for (i=0.; i<51; i++) { //looping over THETA coordinates
-      char string[15];
-      // myfile << Ra[i] << ",";
-      for ( int j=0; j<51; j++){ //looping over PHI coordinates
-        for (int k=0; k<51; k++){ //looping over R coordinates
-          myfile << d[i][j][k] << endl; //d[theta][phi][R]
-        }
-      }
-    }
-    myfile.close();
-  }
-  else cout << "Unable to open file";
-}
-
-/*void file_creator_gauss(vector<double> gauss, vector <double> Ra, int NR) {//textfile of density vs Rb
-  stringstream title;
-  title << "/Users/annawilson/Documents/GitHub/Dusty_Tails/Text_files/gaussian_NR=" << NR;
-  ofstream myfile (title.str()+".txt");
-  if (myfile.is_open()) {
-    for (i=0.; i<gauss.size(); i++) {
-      char string[15];
-
-      myfile << Ra[i] << ",";
-      myfile << gauss[i] << "\n";
-    }
-    myfile.close();
-  }
-  else cout << "Unable to open file";
-
-}*/

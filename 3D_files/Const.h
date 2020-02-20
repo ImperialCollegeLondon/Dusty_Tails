@@ -35,16 +35,16 @@ int NT;
 //int itot = NR + 1; //number of a-mesh indices
 
 //grid boundaries
-double rmin = 0.;
-double rmax = 2.*a;
-double Rmin=rmin/a;
-double Rmax=rmax/a;
+double rmin;
+double rmax;
+double Rmin;
+double Rmax;
 
-double Pmin = 0.;
-double Pmax = 2*M_PI;
+double Pmin;
+double Pmax;
 
-double Tmin = 0.;
-double Tmax = M_PI;
+double Tmin;
+double Tmax;
 
 //grid coordinates (using vectors as arrays) - R, theta, phi
 double* Ra; // a-mesh defines edges of grid cells
