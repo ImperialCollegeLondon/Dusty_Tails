@@ -158,7 +158,7 @@ for i in factor_two(100):
     error.append(float(err))
     logerror.append(math.log(float(err)))
 
-"""#creating NR vs error textfile uniform grid
+#creating NR vs error textfile uniform grid
 datu = np.array([NRu, erroru])
 datu = datu.T
 np.savetxt("/Users/annawilson/Documents/GitHub/Dusty_Tails/Text_files/NR_erroru.txt", datu, fmt="%.0f,%.10f", delimiter = ',')
@@ -213,4 +213,4 @@ plt.scatter(logNRu,logerroru,c='b',marker='o')
 plt.xlabel("log(NR)")
 plt.ylabel("log(error)")
 plt.title("\n".join(wrap("A log plot of the comparison of error between results from uniform (blue) and gaussian (red) grid")))
-plt.savefig("error_log_comparison.png")"""
+plt.savefig("error_log_comparison.png")
