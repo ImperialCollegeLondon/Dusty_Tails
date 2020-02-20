@@ -51,9 +51,7 @@ int ie(double NR){
   return int(NR);
 }
 
-//building the grid
-void build_grid_R(double NR, vector<double> DR)
-{
+void build_grid_R(double NR, vector<double> DR){
   for (i=is(NR)+1; i<=ie(NR); i++){ // defines the cell edges
     Ra_new = Ra[i-1]+DR[i-1];
     Ra.push_back(Ra_new);
@@ -75,12 +73,14 @@ void build_grid_R(double NR, vector<double> DR)
   }
 }
 
+
+
 //THETA GRID
 vector <double> make_gauss_T(double nt){
   for(double i=0.; i<=(C_T*sd_T); i+=(1./nt)){
     x_T.push_back(i);
     g_new_T = exp(-pow(i-mu_T,2.)/(2.*pow(sd_T,2.)));
-    g_new_T.push_back(g_new_T);
+    g_T.push_back(g_new_T);
   }
   return g_T;
   return x_T;
@@ -115,9 +115,7 @@ int je(double NT){
   return int(NT);
 }
 
-//building the grid
-void build_grid_T(double NT, vector<double> DT)
-{
+void build_grid_T(double NT, vector<double> DT){
   for (i=js(NT)+1; i<=je(NT); i++){ // defines the cell edges
     Ta_new = Ta[i-1]+DT[i-1];
     Ta.push_back(Ta_new);
@@ -139,12 +137,14 @@ void build_grid_T(double NT, vector<double> DT)
   }
 }
 
+
+
 //PHI GRID
 vector <double> make_gauss_P(double np){
   for(double i=0.; i<=(C_P*sd_T); i+=(1./np)){
     x_P.push_back(i);
     g_new_P = exp(-pow(i-mu_P,2.)/(2.*pow(sd_P,2.)));
-    g_new_P.push_back(g_new_P);
+    g_P.push_back(g_new_P);
   }
   return g_P;
   return x_P;
@@ -165,7 +165,7 @@ vector <double> find_inv_P(double B_P,vector<double> g_P){
 vector <double> find_DP(double A_P, vector<double> inv_P){
   for(double i=0.; i<inv_P.size(); i++){
     g_new_P = A_P*inv_P[i];
-    DT.push_back(g_new_P);
+    DP.push_back(g_new_P);
   }
   sumDT = accumulate(DP.begin(),DP.end(),0.);
   return DP;
@@ -179,9 +179,7 @@ int ke(double NP){
   return int(NP);
 }
 
-//building the grid
-void build_grid_P(double NP, vector<double> DP)
-{
+void build_grid_P(double NP, vector<double> DP){
   for (i=ks(NP)+1; i<=ke(NP); i++){ // defines the cell edges
     Pa_new = Pa[i-1]+DP[i-1];
     Pa.push_back(Pa_new);
@@ -203,31 +201,63 @@ void build_grid_P(double NP, vector<double> DP)
   }
 }
 
+
+
+vector < vector < vector <double> > > d(NR, vector < vector <double> > (NT, vector<double>(NP)));
+
 //fill density array
-void density_fill(double NR)
+/*void density_fill(double NR, double NT, double NP)
 {
   mean = 1.0; //mean is(NR) at a, which is(NR) 1 in dimensionless units
-  sd = 0.2*mean; //arbitrary
+  stde = 0.2*mean;*/ //arbitrary
 
-  // Constructing density array
-  for(i=is(NR); i<=ie(NR)-1; i++){
-    gauss_new = (density*pow(a,3.)/Mstar_kg)*exp(-pow((Rb[i])-mean,2.)/(2.*pow(sd,2.)));
-    gauss.push_back(gauss_new);
-    d.push_back(gauss_new);
-    //cout << gauss_new << endl;
+// Constructing density array
+vector < vector < vector < double > > > density_fill_new(double NR, double NT, double NP){
+
+  mean = 1.0; //mean is(NR) at a, which is(NR) 1 in dimensionless units
+  stde = 0.2*mean;
+  for(i=is(NR);i<=ie(NR)-1;i++){
+    gauss_new_R = (density*pow(a,3.)/Mstar_kg)*exp(-pow((Rb[i])-mean,2.)/(2.*pow(stde,2.)));
+    gauss_R.push_back(gauss_new_R);
+    cout << "BEEE" << endl;
+    for(j=js(NT);j<=je(NT)-1;j++){
+      gauss_new_T = (density*pow(a,3.)/Mstar_kg)*exp(-pow((Tb[j])-mean,2.)/(2.*pow(stde,2.)));
+      gauss_T.push_back(gauss_new_T);
+
+      for(k=ks(NP);k<=ke(NP)-1;k++){
+        gauss_new_P = (density*pow(a,3.)/Mstar_kg)*exp(-pow((Pb[k])-mean,2.)/(2.*pow(stde,2.)));
+        gauss_P.push_back(gauss_new_P);
+        // cout << "BAAA2" << endl;
+
+        vector < vector <double> > i_vector = d.at(i);
+        vector<double> j_vector = i_vector.at(j);
+        j_vector[k] = gauss_R[i]*gauss_T[j]*gauss_P[k];
+        // d[i][j][k] = gauss_R[i]*gauss_T[j]*gauss_P[k];
+      }
+    }
   }
-  //cout << "done density fill" << endl;
+  return d;
 }
 
 //fill opacity array
-void opacity_fill(double NR)
+/*void opacity_fill(double NR)
 {
   //constructing opacity array
   for(i=is(NR); i<=ie(NR)-1; i++){
-    k_new = (3./4.)*(1./density_bulk)*(1./1.e-6)*(Mstar_kg/pow(a,2.));
-    k.push_back(k_new);
+    k_new_R = (3./4.)*(1./density_bulk)*(1./1.e-6)*(Mstar_kg/pow(a,2.));
+    k_R.push_back(k_new_R);
   }
-  //cout << "done opacity fill" << endl;
+
+  for(i=js(NT); i<=je(NT)-1; i++){
+    k_new_T = (3./4.)*(1./density_bulk)*(1./1.e-6)*(Mstar_kg/pow(a,2.));
+    k_T.push_back(k_new_T);
+  }
+
+  for(i=ks(NP); i<=ke(NP)-1; i++){
+    k_new_P = (3./4.)*(1./density_bulk)*(1./1.e-6)*(Mstar_kg/pow(a,2.));
+    k_P.push_back(k_new_P);
+  }
+
 }
 
 //calculate optical depth and fill array
@@ -335,3 +365,4 @@ void file_creator_gauss(vector<double> gauss, vector <double> Ra, double NR) {//
   else cout << "Unable to open file";
 
 }
+*/
