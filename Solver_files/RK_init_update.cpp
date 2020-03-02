@@ -7,6 +7,8 @@
 #include "butcher.h"
 #include "functions.h"
 #include "particle.h"
+#include <stdlib.h>
+#include <time.h>
 
 using namespace std;
 
@@ -14,13 +16,13 @@ vector <Particle> particles;
 
 int main() {
 
-  long int total_particles = 1;
-  double t_common = 0.1; //arbitrary for now
-  double big_step = 0.1;
-  double end_t =1.0;
+  long int total_particles = 50;
+  double t_common = 0.01; //arbitrary for now
+  double big_step = 0.01;
+  double end_t = 2.0;
   double total_t = 0.0;
 
-
+  //srand(2);
 
   long int current_particles = 0;
 

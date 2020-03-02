@@ -7,11 +7,16 @@
 #include "butcher.h"
 #include "functions.h"
 #include "particle.h"
-
+#include <random>
+#include <chrono>
 
 using namespace std;
 
-ofstream ofile("output3.bin", ios::out | ios::binary);
+unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+mt19937 generator (seed);
+uniform_real_distribution<double> uniform01(0.0, 1.0);
+
+ofstream ofile("output_test.bin", ios::out | ios::binary);
 
 vector <Particle> add_particles(vector <Particle> particles, long int current,
                    long int total, double time){
@@ -25,20 +30,19 @@ vector <Particle> add_particles(vector <Particle> particles, long int current,
 
                  Particle grain;
                  grain.id = i+1;
-                 double theta = fRand(0.0, PI);
+                 double theta = PI * uniform01(generator);
 
-                 double phi = fRand(0.0, 2.0*PI);
+                 double phi = acos(1- 2.0* uniform01(generator));
 
-                 /*
+
                  grain.position = {r_start*sin(theta)*cos(phi) + planet_x, \
                                    r_start*sin(theta)*sin(phi), \
-                                   r_start*r_planet_dim*cos(theta)};
+                                   r_start*cos(theta)};
 
                  grain.velocity = {v_esc*sin(theta)*cos(phi), \
                                    v_esc*sin(theta)*sin(phi), \
-                                   v_esc*cos(theta)}; */
-                 grain.position = {planet_x, 0.0, 0.0};
-                 grain.velocity = {v_esc, 0.0, 0.0};
+                                   v_esc*cos(theta)};
+
                  grain.p_size = dsize;
                  grain.p_tau = tau;
                  grain.p_density = rho_d;
@@ -67,24 +71,24 @@ vector <Particle> add_particles(vector <Particle> particles, long int current,
 }
 
 vector <Particle> rm_particles(vector <Particle> particles){
-  for (unsigned long i = 0; i < particles.size(); i++){
-    if (particles[i].p_temp > 2700.0) {
+  for (unsigned long int i = 0; i < particles.size(); i++){
+    if (particles[i].p_temp > 2100.0) {
       particles.erase(particles.begin() + i);
       i--;
     }
-  for (unsigned long i = 0; i < particles.size(); i++){
-    if (fabs(particles[i].position[0]) > 3.0) {
-        particles.erase(particles.begin() + i);
-        i--;
-    }
   }
-  for (unsigned long i = 0; i < particles.size(); i++){
-    if (fabs(particles[i].position[1]) > 3.0) {
-        particles.erase(particles.begin() + i);
-        i--;
-    }
-   }
+  return particles;
+}
 
+vector <Particle> rm_particles2(vector <Particle> particles){
+  for (unsigned long int i = 0; i < particles.size(); i++){
+    double pscalar;
+    pscalar = scalar(particles[i].position[0], particles[i].position[1], \
+                     particles[i].position[2]);
+    if (pscalar > 2.0){
+      particles.erase(particles.begin() + i);
+      i--;
+    }
   }
   return particles;
 }
@@ -94,7 +98,7 @@ void solve_particles(double total_t, double end_t, vector <Particle> particles, 
 
                     long int current_particles){
 
-  double plot_time = 0.5;
+  double plot_time = 0.01;
 
   while (total_t < end_t) {
 
@@ -118,25 +122,26 @@ void solve_particles(double total_t, double end_t, vector <Particle> particles, 
       ofile.write((char*) &time_now, sizeof(double));
       ofile.write((char*) &p.id, sizeof(long int));
       ofile.write((char*) &p.position[0], sizeof(double));
-      cout << "x " << p.position[0] << endl;
+      //cout << "x " << p.position[0] << endl;
       ofile.write((char*) &p.position[1], sizeof(double));
-      cout << "y " << p.position[1] << endl;
+      //cout << "y " << p.position[1] << endl;
       ofile.write((char*) &p.position[2], sizeof(double));
-      cout << "z " << p.position[2] << endl;
+      //cout << "z " << p.position[2] << endl;
       ofile.write((char*) &p.p_temp, sizeof(double));
 
 
 
     }
 
-    //particles = rm_particles(particles);
-    /*
+    particles = rm_particles(particles);
+    particles = rm_particles2(particles);
+
     if (total_t > plot_time) {
       current_particles = total_particles;
-      total_particles = total_particles + 500;
+      total_particles = total_particles + 50;
       particles = add_particles(particles, current_particles, total_particles, total_t);
-      plot_time = plot_time + 0.5;
-  } */
+      plot_time = plot_time + 0.01;
+  }
 
 
     total_t = total_t + big_step;

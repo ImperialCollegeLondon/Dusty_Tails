@@ -34,3 +34,4 @@ void solve_particles(double total_t, double end_t, vector <Particle> particles, 
                      long int current_particles);
 
 vector <Particle> rm_particles(vector <Particle> particles);
+vector <Particle> rm_particles2(vector <Particle> particles);

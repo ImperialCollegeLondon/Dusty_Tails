@@ -72,7 +72,7 @@ vector <double> sunit_vector(vector <double> V){
 double temp_threshold(double qfactor, double lum, double x, double y, double z){
   double Tdust, dl;
   dl = scalar((x-star_pos[0]), y, z)*a*pow(10., 2.0);
-  Tdust = pow((qfactor * lum)/(16.0*PI*pow(dl, 2.0)*sigma), 1./4.);
+  Tdust = pow((lum*0.2898)/(16.0*PI*pow(dl, 2.0)*sigma*dsize), 1./5.);
 
   return Tdust;
 }

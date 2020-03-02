@@ -102,7 +102,7 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
     if (h_new < 0.0){
        new_vector = next_step(h_old, V_0);
        t = t + h_old;
-       h_new = h_old;
+       h_new = 2.0*h_old;
 
      } else {
        new_vector = next_step(h_new, V_0);
@@ -125,7 +125,7 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
            t = t + h_old;
            if (t < del_t) {
              new_vector = next_step(h_old, new_vector);
-             h_new = h_old;
+             h_new = 2.0*h_old;
            } else {
              new_vector = next_step(del_t - (t-h_old), new_vector);
              new_vector.push_back(h_old);

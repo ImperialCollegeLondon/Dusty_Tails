@@ -18,7 +18,7 @@ using namespace std;
 
 const double Mstar_kg = 0.67*Msun; //mass of star in kg
 const double Mstar_sun = 0.67; //mass of star in terms of mass of the sun
-const double Period_days = 0.65; //period of planet in days
+const double Period_days = 15.68/24.0; //period of planet in days
 const double T = 15.68*60.0*60.0; //period of planet in seconds
 const double Rstar = 0.67;
 
@@ -44,7 +44,7 @@ extern vector <double> planet_pos;
 
 const double Q_factor = 1.0;
 
-const double Temp = 4600.0; //stars temperature
+const double Temp = 4550.0; //stars temperature
 const double S = 0.9; //safety factor
 const double tol = 1e-8; //error tolerance
 
@@ -56,6 +56,6 @@ const double tau = 0.1; //optical depth
 #define Rsun_cgs 6.96e+10 //solar radius
 #define G_cgs 6.67259e-8 //gravitational constant
 #define c_cgs 2.99792458e+10 //speed of light
-#define rho_d 3.0 //density of dust particle
+#define rho_d 4.0 //density of dust particle
 #define Msun_cgs 1.9885e+33 // solar mass
-#define dsize 0.09e-4 //dust particle size
+const double dsize = 0.5e-4; //dust particle size

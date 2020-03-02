@@ -1,5 +1,5 @@
 C_COMPILER     = g++
-C_FLAGS        = -pg
+C_FLAGS        = -O3 -mavx -pg
 OUTPUT         = ../dynamics.exe
 LIBS           = -lm
 
