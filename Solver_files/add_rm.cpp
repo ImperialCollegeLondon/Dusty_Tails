@@ -30,9 +30,9 @@ vector <Particle> add_particles(vector <Particle> particles, long int current,
 
                  Particle grain;
                  grain.id = i+1;
-                 double theta = PI * uniform01(generator);
+                 double phi = 2.0*PI * uniform01(generator);
 
-                 double phi = acos(1- 2.0* uniform01(generator));
+                 double theta = acos(1- 2.0* uniform01(generator));
 
 
                  grain.position = {r_start*sin(theta)*cos(phi) + planet_x, \
@@ -94,7 +94,7 @@ void solve_particles(double total_t, double end_t, vector <Particle> particles, 
 
                     long int current_particles){
 
-  double plot_time = 0.05;
+  double plot_time = 0.01;
 
   while (total_t < end_t) {
 
@@ -130,7 +130,7 @@ void solve_particles(double total_t, double end_t, vector <Particle> particles, 
       current_particles = total_particles;
       total_particles = total_particles + 100;
       particles = add_particles(particles, current_particles, total_particles, total_t);
-      plot_time = plot_time + 0.05;
+      plot_time = plot_time + 0.01;
   }
 
 
