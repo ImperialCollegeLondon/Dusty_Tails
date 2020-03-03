@@ -24,10 +24,19 @@ double beta_fn(double k, double L_star, double M_star){
 
 }
 
-double opacity(double Q_fn){
+double opacity(double s, double x, double y, double z){
     //function to calculate opacity in cgs units
     //might need to add density and size as parameters later
-    return (3.0/4.0)* (Q_fn/ (rho_d * dsize)) ;
+    return (3.0/4.0)* (qfactor(s, x, y, z)/ (rho_d * s)) ;
+}
+
+double qfactor(double s, double x, double y, double z){
+  //cgs units
+  return (s*temp_dust(luminosity(Rstar),s, x, y, z)) / wien;
+}
+
+double clausius_clap(double s, double x, double y, double z){
+  return exp((-A/temp_dust(luminosity(Rstar), s, x, y, z)) + B);
 }
 
 double luminosity(double R_star){
@@ -69,10 +78,10 @@ vector <double> sunit_vector(vector <double> V){
 	return s_unit;
 }
 
-double temp_threshold(double qfactor, double lum, double x, double y, double z){
+double temp_dust(double lum, double s, double x, double y, double z){
   double Tdust, dl;
   dl = scalar((x-star_pos[0]), y, z)*a*pow(10., 2.0);
-  Tdust = pow((lum*0.2898)/(16.0*PI*pow(dl, 2.0)*sigma*dsize), 1./5.);
+  Tdust = pow((lum*wien)/(16.0*PI*pow(dl, 2.0)*sigma*s), 1./5.);
 
   return Tdust;
 }

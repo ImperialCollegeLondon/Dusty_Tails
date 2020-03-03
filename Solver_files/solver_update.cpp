@@ -30,15 +30,23 @@ double acceleration( int i, double pos_star, double pos_planet, vector <double> 
   coriol = coriolis(V)[i];
   centri = centrifugal(V)[i];
   radiation = rad_pressure(V)[i];
-  //cout << "radiation " << radiation << "in " << i << endl;
   drag = pr_drag(V)[i];
-
-  //cout << "grav " << grav_star << endl;
-  //cout << "centri " << centri << endl;
 
   vel_dot = grav_star - centri - 2.0*coriol  + radiation - drag + grav_planet;
 
   return vel_dot;
+}
+
+double sublimation(double s, double x, double y, double z){
+  double ds1, ds2, ds;
+
+  ds1 = ((-alpha*clausius_clap(s, x, y, z))/rho_d);
+  ds2 = pow((mu*amu)/(2.0*PI*kb*temp_dust(luminosity(Rstar), s, x, y, z)), 0.5);
+
+  ds = ds1 * ds2;
+
+  return ds;
+
 }
 
 vector <double> new_variables(double h, vector <double> V, bool order5){
@@ -46,6 +54,7 @@ vector <double> new_variables(double h, vector <double> V, bool order5){
     vector <double> new_pos(3), new_vel(3), new_vars(6);
     vector <double> V0 = {V[0], V[1], V[2]};
     vector <double> V0dot = {V[3], V[4], V[5]};
+    double s_new;
 
     new_vars.clear();
 
@@ -57,6 +66,9 @@ vector <double> new_variables(double h, vector <double> V, bool order5){
          new_pos[i] = V0[i] + b1*k1[i] + b3*k3[i] + b4*k4[i] + b5*k5[i] + b6*k6[i];
          new_vel[i] = V0dot[i] + b1*k1d[i] + b3*k3d[i] + b4*k4d[i] + b5*k5d[i] + b6*k6d[i];
         }
+
+        s_new = V[6] + b1*ks1 + b3*ks3 + b4*ks4 + b5*ks5 + b6*ks6;
+
     } else {
         k_values(h, V, true, k1, k2 , k3, k4, k5 , k6, k7, k1d, k2d, k3d, k4d, k5d, k6d, k7d);
 
@@ -64,8 +76,9 @@ vector <double> new_variables(double h, vector <double> V, bool order5){
             new_pos[i] = V0[i] + bs1*k1[i] + bs3*k3[i] + bs4*k4[i] + bs5*k5[i] + bs6*k6[i] + bs7*k7[i];
             new_vel[i] = V0dot[i] + bs1*k1d[i] + bs3*k3d[i] + bs4*k4d[i] + bs5*k5d[i] + bs6*k6d[i] + bs7*k7d[i];
         }
+        s_new = V[6] + bs1*ks1 + bs3*ks3 + bs4*ks4 + bs5*ks5 + bs6*ks6 + bs7*ks7;
     }
-    new_vars = {new_pos[0], new_pos[1], new_pos[2], new_vel[0], new_vel[1], new_vel[2]};
+    new_vars = {new_pos[0], new_pos[1], new_pos[2], new_vel[0], new_vel[1], new_vel[2], s_new};
     return new_vars;
 }
 
@@ -88,6 +101,7 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
 
 
     vector <double> new_vector, delta_values;
+    new_vector.clear();
 
     //obtain delta values for the 6 variables
     delta_values = h_check(h_p, V_0);
@@ -96,8 +110,6 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
 
     //calculate new h
     h_new = h_optimal(delta_values, h_old);
-
-    //cout << "h_new " << h_new << endl;
 
     if (h_new < 0.0){
        new_vector = next_step(h_old, V_0);

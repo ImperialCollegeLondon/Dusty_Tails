@@ -43,14 +43,10 @@ vector <Particle> add_particles(vector <Particle> particles, long int current,
                                    v_esc*sin(theta)*sin(phi), \
                                    v_esc*cos(theta)};
 
-                 grain.p_size = dsize;
+                 grain.p_size = 0.4e-4;
                  grain.p_tau = tau;
                  grain.p_density = rho_d;
                  grain.h_updated = 0.001;
-
-                 grain.p_temp = temp_threshold(1.0, luminosity(Rstar),\
-                                 grain.position[0], grain.position[1],
-                                 grain.position[2]);
 
                  particles.push_back(grain);
 
@@ -60,7 +56,7 @@ vector <Particle> add_particles(vector <Particle> particles, long int current,
                  ofile.write((char*) &grain.position[0], sizeof(double));
                  ofile.write((char*) &grain.position[1], sizeof(double));
                  ofile.write((char*) &grain.position[2], sizeof(double));
-                 ofile.write((char*) &grain.p_temp, sizeof(double));
+                 ofile.write((char*) &grain.p_size, sizeof(double));
 
                }
 
@@ -72,7 +68,7 @@ vector <Particle> add_particles(vector <Particle> particles, long int current,
 
 vector <Particle> rm_particles(vector <Particle> particles){
   for (unsigned long int i = 0; i < particles.size(); i++){
-    if (particles[i].p_temp > 2100.0) {
+    if (particles[i].p_size < 2.0e-5) {
       particles.erase(particles.begin() + i);
       i--;
     }
@@ -98,7 +94,7 @@ void solve_particles(double total_t, double end_t, vector <Particle> particles, 
 
                     long int current_particles){
 
-  double plot_time = 0.01;
+  double plot_time = 0.05;
 
   while (total_t < end_t) {
 
@@ -106,30 +102,24 @@ void solve_particles(double total_t, double end_t, vector <Particle> particles, 
       vector <double> updated_vector;
       updated_vector.clear();
       updated_vector = RK_solver({p.position[0], p.position[1], p.position[2], \
-      p.velocity[0], p.velocity[1], p.velocity[2]}, total_t, t_common, p.h_updated);
+      p.velocity[0], p.velocity[1], p.velocity[2], p.p_size}, total_t, t_common, p.h_updated);
 
       p.position = {updated_vector[0],updated_vector[1], updated_vector[2]};
       p.velocity = {updated_vector[3],updated_vector[4], updated_vector[5]};
-
-      p.h_updated = updated_vector[6];
-
-      p.p_temp = temp_threshold(1.0, luminosity(Rstar),\
-                      p.position[0], p.position[1],
-                      p.position[2]);
+      p.p_size = updated_vector[6];
+      if (p.id == 1) {
+        cout << p.p_size << endl;
+      }
+      p.h_updated = updated_vector[7];
 
       double time_now = total_t + big_step;
 
       ofile.write((char*) &time_now, sizeof(double));
       ofile.write((char*) &p.id, sizeof(long int));
       ofile.write((char*) &p.position[0], sizeof(double));
-      //cout << "x " << p.position[0] << endl;
       ofile.write((char*) &p.position[1], sizeof(double));
-      //cout << "y " << p.position[1] << endl;
       ofile.write((char*) &p.position[2], sizeof(double));
-      //cout << "z " << p.position[2] << endl;
-      ofile.write((char*) &p.p_temp, sizeof(double));
-
-
+      ofile.write((char*) &p.p_size, sizeof(double));
 
     }
 
@@ -138,9 +128,9 @@ void solve_particles(double total_t, double end_t, vector <Particle> particles, 
 
     if (total_t > plot_time) {
       current_particles = total_particles;
-      total_particles = total_particles + 50;
+      total_particles = total_particles + 100;
       particles = add_particles(particles, current_particles, total_particles, total_t);
-      plot_time = plot_time + 0.01;
+      plot_time = plot_time + 0.05;
   }
 
 

@@ -50,7 +50,7 @@ vector <double> h_check(double h, vector <double> V){
     //5th order
     order5 = new_variables(h, V, true);
 
-    for (unsigned int i = 0; i< 6; i++){
+    for (unsigned int i = 0; i < 6; i++){
         deltas[i] = delta(order4[i], order5[i]);
     }
     return deltas;

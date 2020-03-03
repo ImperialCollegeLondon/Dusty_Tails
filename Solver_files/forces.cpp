@@ -41,7 +41,8 @@ vector <double> rad_pressure(vector <double> V){
   //function to calculate radiation pressure force, accounting for red shift
   double beta, k, Lum, rad_x, rad_y, rad_z, constant;
   vector <double> rad_vector(3);
-  k = opacity(Q_factor);
+
+  k = opacity(V[6], V[0], V[1], V[2]);
   Lum = luminosity(Rstar);
   beta = beta_fn(k, Lum, Mstar_sun);
 
@@ -63,18 +64,18 @@ vector <double> pr_drag(vector <double> V){
 
 	double constant, beta, k, Lum;
 
-    k = opacity(Q_factor);
-	Lum = luminosity(Rstar);
+    k = opacity(V[6], V[0], V[1], V[2]);
+	  Lum = luminosity(Rstar);
     beta = beta_fn(k, Lum, Mstar_sun);
 
     constant = (beta*G_dim)/(pow(scalar(V[0]-star_pos[0], V[1], V[2]), 3.0)*c_dim);
 
-	v_drag = drag_vel(V);
+	  v_drag = drag_vel(V);
 
-    for (unsigned int i=0; i <3; i++) {
+    for (unsigned int i=0; i < 3; i++) {
         pr_vector[i] = constant*v_drag[i];
     }
-	return pr_vector;
+	  return pr_vector;
 
 
 }

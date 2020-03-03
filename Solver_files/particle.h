@@ -17,7 +17,7 @@ class Particle {
     double h_updated; //current optimal time step for particle
     //int grid;
     double p_tau; //optical depth
-    double p_temp; //particle temperature
+    
 
 };
 
