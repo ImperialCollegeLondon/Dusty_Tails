@@ -96,14 +96,36 @@ double T_suminv, sumDT;
 //density variables
 double density = 1.83e-12; //kg/m3 (av density)
 double density_bulk = 3000.; //kg/m3 (bulk density)
+double T_mean;
+double T_stde;
+double P_mean;
+double P_stde;
+double R_mean;
+double R_stde;
+
 double mean;
 double stde;
+
 //initializing density array
 double*** d;
 double d_new_R, d_new_P, d_new_T;
+double*** total_mass;
+double TMASS;
+double tmass;
 
 //opacity variables
 double*** kappa; //dimensionless opacity
 
 //optical depth variables
-double*** t; //optical depth (dimensionless anyway)
+double*** t_num; //optical depth (dimensionless anyway)
+double*** t_ana;
+double*** t;
+
+//counter thing
+double* T_vec;
+double* P_vec;
+double* R_vec;
+double*** den;
+double mass; //mass of particles
+int noparticles;
+int nop;

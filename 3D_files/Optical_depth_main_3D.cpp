@@ -7,9 +7,9 @@ int main() {
 
   //cout << "start" << endl;
   //setting constants
-  NR=200;
-  NP=200;
-  NT=200;
+  NR=20;
+  NP=20;
+  NT=20;
   //nr=(NR-1.)/2.;
 
   rmin = 0.;
@@ -31,16 +31,24 @@ int main() {
   P_C=6.;
   T_C=6.;
 
-  R_mu=1.;
-  R_sd=Rmax/R_C;
-  P_mu=1.;
+  R_mu=(Rmax-Rmin)/2.;
+  R_sd=R_mu/R_C;
+  P_mu=(Pmax-Pmin)/2.;
   P_sd=Pmax/P_C;
-  T_mu=1.;
+  T_mu=(Tmax-Tmin)/2.;
   T_sd=Tmax/T_C;
 
   //for density
-  mean = 1.; //in dimensionless units - this should be at a.
-  stde = 0.2*mean; //arbitrary
+  T_mean = (Tmax-Tmin)/2.0; //in dimensionless units - this should be at a.
+  T_stde = T_mean*0.35; //arbitrary
+  P_mean = (Pmax-Pmin)/2.0; //in dimensionless units - this should be at a.
+  P_stde = P_mean*0.35; //arbitrary
+  R_mean = (Rmax-Rmin)/2.0; //in dimensionless units - this should be at a.
+  R_stde = R_mean*0.35; //arbitrary
+
+  //for counter thing
+  noparticles = 1000000;
+  mass = 1.;
 
   //clearing vectors
   //cout << "delete start" << endl;
@@ -105,6 +113,18 @@ int main() {
     }
   }
 
+  delete[] total_mass;
+  total_mass = new double**[NT+1];
+  for(int i = 0; i<(NT+1); i++){
+    total_mass[i] = new double*[NP+1];
+    for(int j = 0; j<(NP+1); j++){
+      total_mass[i][j] = new double[NR+1];
+      for(int k = 0; k<(NR+1); k++){
+        total_mass[i][j][k] = 0.;
+      }
+    }
+  }
+
   delete[] T_g;
   T_g = new double[NT+1];
   delete[] P_g;
@@ -130,43 +150,68 @@ int main() {
   delete[] R_inv;
   R_inv = new double[NR+1];
 
+  delete[] T_vec;
+  T_vec = new double[noparticles];
+  delete[] P_vec;
+  P_vec = new double[noparticles];
+  delete[] R_vec;
+  R_vec = new double[noparticles];
+
+  delete[] den;
+  den = new double**[NT+1];
+  for(int i=0; i<(NT+1); i++){
+    den[i] = new double*[NP+1];
+    for(int j=0; j<(NP+1); j++){
+      den[i][j] = new double[NR+1];
+      for(int k = 0; k<(NR+1); k++){
+        den[i][j][k] = 0.;
+      }
+    }
+  }
+
   //cout << "delete end" << endl;
 
   //adding initial conditions
-  //cout << "BEE" << endl;
   Ta[0] = 0.;
   dTb[0] = 1.;
   Pa[0] = 0.; //segmentation fault here ??
   dPb[0] = 1.;
   Ra[0] = 0.;
-  dRb[0] = 1.;
+  //dRb[0] = 1.;
   //t[0] = 0.;
 
   //running code
   //cout << "starting" << endl;
-  //cout << sd << endl;
   make_gauss(NT, NP, NR);
-  //cout << "BAAA" << endl;
-  //cout << "done one" << endl;
+  cout << "im working" << endl;
   find_inv(NT, NP, NR,T_B, P_B, R_B, T_g, P_g, R_g);
-  //cout << "BAA1" << endl;
-  find_DR(NT, NP, NR, T_A=(2./T_suminv), P_A=(2./P_suminv), R_A=(2./R_suminv), T_inv, P_inv, R_inv);
-  //cout << "BAA2" << endl;
+  cout << "still working" << endl;
+  find_DR(NT, NP, NR, T_A=((Tmax-Tmin)/T_suminv), P_A=((Pmax-Pmin)/P_suminv), R_A=((Rmax-Rmin)/R_suminv), T_inv, P_inv, R_inv);
+  cout << "found that DR" << endl;
   // file_creator_gaussian(g,x);
   // file_creator_DR(DR,x);
   build_grid(NT, NP, NR, DT, DP, DR);
-  //cout << "BAA3" << endl;
-  density_fill(NT, NP, NR,mean,stde);
-  //cout << "BAA4" << endl;
+  cout << "built ya grid" << endl;
+  density_fill(NT, NP, NR,T_mean, P_mean, R_mean, T_stde, P_stde, R_stde);
+  cout << "filllliiiinggggggggg density" << endl;
   opacity_fill(NT, NP, NR);
-  calculate_optical_depth(NT, NP, NR, kappa, d);
+  cout << "okay filled opacity" << endl;
+  calculate_optical_depth(NT,NP,NR,kappa,d);
+  cout << "CALCULATED OPTICAL DEPTH YAS" << endl;
 
   //file creators
   file_creator_t(NT,NP,NR,t);
+  cout << "created file t" << endl;
+  file_creator_phi(Pa);
+  cout << "created file phi" << endl;
+  file_creator_theta(Ta);
+  cout << "created file theta" << endl;
   // //file_creator_gauss(gauss,Rb,NR);
   // file_creator_DR(DR,Ra);
   //file_creator_xRa(x,Ra);
   file_creator_d(d,Ta,Pa,Ra,NT,NP,NR);
+  //file_creator_den(den,Ta,Pa,Ra,NT,NP,NR);
+  cout << "done" << endl;
   //cout << "BAA5" << endl;
 
   return 0;
