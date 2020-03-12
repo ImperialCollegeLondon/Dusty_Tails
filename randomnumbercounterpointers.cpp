@@ -1,4 +1,4 @@
-#include "CAV.h"
+#include "3D_files/Const.h"
 #include <cstdlib>
 #include <iostream>
 #include <cmath>
@@ -16,7 +16,10 @@
 
 using namespace std;
 
-double NR = 50.;
+double* vec;
+double* den;
+
+int NR = 50;
 double Rmax = 10.0;
 double Rmin = 0.0;
 
@@ -38,32 +41,40 @@ void build_grid(double NR)
 {
   for (i=is(NR)+1; i<=ie(NR); i++){ // defines the cell edges
     Ra_new = Ra[i-1]+DR(NR);
-    Ra.push_back(Ra_new);
+    Ra[i] = Ra_new;
   }
 
   for (i=is(NR); i<=ie(NR)-1; i++){ // defines the cell centers
     Rb_new = Ra[i]+DR(NR)/2.;
-    Rb.push_back(Rb_new);
+    Rb[i] = Rb_new;
   }
 
   for (i=is(NR);i<=ie(NR)-1;i++){ // defines the width of a cell
     dRa_new = Ra[i+1]-Ra[i];
-    dRa.push_back(dRa_new);
+    dRa[i] = dRa_new;
   }
 
   for (i=is(NR)+1;i<=ie(NR)-1;i++){ // defines the width between two cell centers
     dRb_new = Rb[i]-Rb[i-1];
-    dRb.push_back(dRb_new);
+    dRb[i] = dRb_new;
   }
 }
 
 int main(){
-  Ra.clear();
-  Rb.clear();
-  dRa.clear();
-  dRb.clear();
-  Ra.push_back(0.);
-  dRb.push_back(1.);
+  cout << "BAA" << endl;
+  delete[] Ra;
+  Ra = new double[NR+1];
+  delete[] Rb;
+  Rb = new double[NR+1];
+  delete[] dRa;
+  dRa = new double[NR+1];
+  delete[] dRb;
+  dRb = new double[NR+1];
+
+
+  Ra[0] = 0.;
+  dRb[0] = 1.;
+
 
   DR(NR);
   build_grid(NR);
@@ -72,7 +83,7 @@ int main(){
   const int stde = int(mean*0.35);
 
   double mass = 1.; //mass of particles
-  double noparticles = 100000.;
+  int noparticles = 100000;
 
   // construct a trivial random generator engine from a time-based seed:
   //unsigned seedR = std::chrono::system_clock::now().time_since_epoch().count();
@@ -80,32 +91,31 @@ int main(){
   default_random_engine generatorR (seedR);
   normal_distribution<double> distributionR (mean,stde);
 
+
   //double arr[] = {5.5,4.5,5.5,5.5,6.5,5.5,8.5,2.5,5.5,4.5};
   //vector<double> vec(arr, arr + sizeof(arr) / sizeof(arr[0]) );
-  vector<double> vec; //contains positions
-  vector <double> den; //contains density of cells
 
-  for (int i=0; i<noparticles; ++i){
-    vec.push_back(distributionR(generatorR));
+  delete[] vec;
+  vec = new double[noparticles];
+  delete[] den;
+  den = new double[NR+1];
+
+
+  for (int i=0; i<noparticles; i++){
+    double vec_new = distributionR(generatorR);
+    vec[i] = vec_new;
     //cout << vec[i] << endl;
-  }
-
-  for(int i=0; i<noparticles; i++){
-    //cout << vec[i] << endl;
-  }
-
-  for(int j=0; j<=NR; j++){
-    //cout << Ra[j] << endl;
   }
 
   for(int j=0;j<=NR;j++){
-    den.push_back(0);//sets initial density to 0 in each grid cell
+    double den_new = 0.;
+    den[j] = den_new; //setting initial density to 0 in grid
   }
 
   for(int i=0; i<noparticles; i++){//iterating through particles
     for(int j=0; j<=NR; j++){//iterating through grid cells
       if((Ra[j]<=vec[i]) && (vec[i]<Ra[j+1])){
-        den.at(j) = (den[j]+1);
+        den[j] = (den[j]+1);
       }
       else{}
     }
