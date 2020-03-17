@@ -9,9 +9,9 @@ from textwrap import wrap
 plt.ioff()
 
 def counting(n):
-    while n < 10000:
+    while n < 100000:
         yield n
-        n += 1000
+        n += 10000
 
 def average(x): #finds the average of a list
     return sum(x)/len(x)
@@ -23,7 +23,7 @@ NR=100
 NP=100
 NT=100
 
-for x in counting(1000):
+for x in counting(10000):
     nop.append(x)
 
     opticaldepth_ana = open('/Users/annawilson/Documents/GitHub/Dusty_Tails/Text_files/opticaldepth_ana_nop=%s.txt' % x,'r')

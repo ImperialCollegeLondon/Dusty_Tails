@@ -5,7 +5,7 @@ using namespace std;
 //file creators
 
 void file_creator_phi(double* Pa) {//textfile of gaussian vs Rb
-  ofstream myfile ("/Users/annawilson/Documents/GitHub/Dusty_Tails/Text_files/phi.txt");
+  ofstream myfile ("Text_files/phi.txt");
   if (myfile.is_open()) {
     for (i=0.; i<=NP; i++) {
       char string[15];
@@ -18,7 +18,7 @@ void file_creator_phi(double* Pa) {//textfile of gaussian vs Rb
 }
 
 void file_creator_theta(double* Ta) {//textfile of gaussian vs Rb
-  ofstream myfile ("/Users/annawilson/Documents/GitHub/Dusty_Tails/Text_files/theta.txt");
+  ofstream myfile ("Text_files/theta.txt");
   if (myfile.is_open()) {
     for (i=0.; i<=NT; i++) {
       char string[15];
@@ -97,7 +97,7 @@ void file_creator_theta(double* Ta) {//textfile of gaussian vs Rb
 
 void file_creator_t_ana(int NT, int NP, int NR, double*** t_ana) {//textfile of optical depth vs Rb
   stringstream title;
-  title << "/Users/annawilson/Documents/GitHub/Dusty_Tails/Text_files/opticaldepth_ana_nop=" << noparticles ;
+  title << "Text_files/opticaldepth_ana_nop=" << noparticles ;
   ofstream myfile (title.str()+".txt");
   if (myfile.is_open()) {
     for (i=is(NT); i<=ie(NT); i++) { //looping over THETA coordinates
@@ -117,7 +117,7 @@ void file_creator_t_ana(int NT, int NP, int NR, double*** t_ana) {//textfile of 
 
 void file_creator_t_num(int NT, int NP, int NR, double*** t_num) {//textfile of optical depth vs Rb
   stringstream title;
-  title << "/Users/annawilson/Documents/GitHub/Dusty_Tails/Text_files/opticaldepth_num_nop=" << noparticles;
+  title << "Text_files/opticaldepth_num_nop=" << noparticles;
   ofstream myfile (title.str()+".txt");
   if (myfile.is_open()) {
     for (i=is(NT); i<=ie(NT); i++) { //looping over THETA coordinates
@@ -157,7 +157,7 @@ void file_creator_t_num(int NT, int NP, int NR, double*** t_num) {//textfile of 
 
 void file_creator_d(double*** d, int NT, int NP, int NR) {//textfile of density vs Rb
   stringstream title;
-  title << "/Users/annawilson/Documents/GitHub/Dusty_Tails/Text_files/density_ana_nop=" << noparticles;
+  title << "Text_files/density_ana_nop=" << noparticles;
   ofstream myfile (title.str()+".txt");
   if (myfile.is_open()) {
     for (i=is(NT); i<=ie(NT); i++) { //looping over THETA coordinates
@@ -176,7 +176,7 @@ void file_creator_d(double*** d, int NT, int NP, int NR) {//textfile of density 
 
 void file_creator_den(double*** den, int NT, int NP, int NR) {//textfile of density vs Rb
   stringstream title;
-  title << "/Users/annawilson/Documents/GitHub/Dusty_Tails/Text_files/density_num_nop=" << noparticles;
+  title << "Text_files/density_num_nop=" << noparticles;
   ofstream myfile (title.str()+".txt");
   if (myfile.is_open()) {
     for (i=is(NT); i<=ie(NT); i++) { //looping over THETA coordinates
@@ -195,7 +195,7 @@ void file_creator_den(double*** den, int NT, int NP, int NR) {//textfile of dens
 
 void file_creator_T_vec(double* T_vec, int NT, int NP, int NR) {//textfile of density vs Rb
   stringstream title;
-  title << "/Users/annawilson/Documents/GitHub/Dusty_Tails/Text_files/T_vec_nop=" << noparticles;
+  title << "Text_files/T_vec_nop=" << noparticles;
   ofstream myfile (title.str()+".txt");
   if (myfile.is_open()) {
     for (int x=0; x<noparticles; x++) {
@@ -209,7 +209,7 @@ void file_creator_T_vec(double* T_vec, int NT, int NP, int NR) {//textfile of de
 
 void file_creator_P_vec(double* P_vec, int NT, int NP, int NR) {
   stringstream title;
-  title << "/Users/annawilson/Documents/GitHub/Dusty_Tails/Text_files/P_vec_nop=" << noparticles;
+  title << "Text_files/P_vec_nop=" << noparticles;
   ofstream myfile (title.str()+".txt");
   if (myfile.is_open()) {
     for (int x=0; x<noparticles; x++) {
@@ -223,7 +223,7 @@ void file_creator_P_vec(double* P_vec, int NT, int NP, int NR) {
 
 void file_creator_R_vec(double* R_vec, int NT, int NP, int NR) {
   stringstream title;
-  title << "/Users/annawilson/Documents/GitHub/Dusty_Tails/Text_files/R_vec_nop=" << noparticles;
+  title << "Text_files/R_vec_nop=" << noparticles;
   ofstream myfile (title.str()+".txt");
   if (myfile.is_open()) {
     for (int x=0; x<noparticles; x++) {
