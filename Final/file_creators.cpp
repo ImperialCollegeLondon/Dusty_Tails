@@ -155,82 +155,82 @@ void file_creator_t_num(int NT, int NP, int NR, double*** t_num) {//textfile of 
 //
 // }
 
-void file_creator_d(double*** d, int NT, int NP, int NR) {//textfile of density vs Rb
-  stringstream title;
-  title << "Text_files/density_ana_nop=" << noparticles;
-  ofstream myfile (title.str()+".txt");
-  if (myfile.is_open()) {
-    for (i=is(NT); i<=ie(NT); i++) { //looping over THETA coordinates
-      char string[15];
-      // myfile << Ra[i] << ",";
-      for (j=js(NP); j<=je(NP); j++){ //looping over PHI coordinates
-        for (k=ks(NR); k<=ke(NR); k++){ //looping over R coordinates
-          myfile << d[i][j][k] << endl; //d[theta][phi][R]
-        }
-      }
-    }
-    myfile.close();
-  }
-  else cout << "Unable to open file";
-}
-
-void file_creator_den(double*** den, int NT, int NP, int NR) {//textfile of density vs Rb
-  stringstream title;
-  title << "Text_files/density_num_nop=" << noparticles;
-  ofstream myfile (title.str()+".txt");
-  if (myfile.is_open()) {
-    for (i=is(NT); i<=ie(NT); i++) { //looping over THETA coordinates
-      char string[15];
-      // myfile << Ra[i] << ",";
-      for (j=js(NP); j<=je(NP); j++){ //looping over PHI coordinates
-        for (k=ks(NR); k<=ke(NR); k++){ //looping over R coordinates
-          myfile << den[i][j][k] << endl; //d[theta][phi][R]
-        }
-      }
-    }
-    myfile.close();
-  }
-  else cout << "Unable to open file";
-}
-
-void file_creator_T_vec(double* T_vec, int NT, int NP, int NR) {//textfile of density vs Rb
-  stringstream title;
-  title << "Text_files/T_vec_nop=" << noparticles;
-  ofstream myfile (title.str()+".txt");
-  if (myfile.is_open()) {
-    for (int x=0; x<noparticles; x++) {
-      char string[15];
-      myfile << T_vec[x] << endl;
-    }
-    myfile.close();
-  }
-  else cout << "Unable to open file";
-}
-
-void file_creator_P_vec(double* P_vec, int NT, int NP, int NR) {
-  stringstream title;
-  title << "Text_files/P_vec_nop=" << noparticles;
-  ofstream myfile (title.str()+".txt");
-  if (myfile.is_open()) {
-    for (int x=0; x<noparticles; x++) {
-      char string[15];
-      myfile << P_vec[x] << endl;
-    }
-    myfile.close();
-  }
-  else cout << "Unable to open file";
-}
-
-void file_creator_R_vec(double* R_vec, int NT, int NP, int NR) {
-  stringstream title;
-  title << "Text_files/R_vec_nop=" << noparticles;
-  ofstream myfile (title.str()+".txt");
-  if (myfile.is_open()) {
-    for (int x=0; x<noparticles; x++) {
-      char string[15];
-      myfile << R_vec[x] << endl;
-    }
-    myfile.close();
-  }
-  else cout << "Unable to open file";
-}
+// void file_creator_d(double*** d, int NT, int NP, int NR) {//textfile of density vs Rb
+//   stringstream title;
+//   title << "Text_files/density_ana_nop=" << noparticles;
+//   ofstream myfile (title.str()+".txt");
+//   if (myfile.is_open()) {
+//     for (i=is(NT); i<=ie(NT); i++) { //looping over THETA coordinates
+//       char string[15];
+//       // myfile << Ra[i] << ",";
+//       for (j=js(NP); j<=je(NP); j++){ //looping over PHI coordinates
+//         for (k=ks(NR); k<=ke(NR); k++){ //looping over R coordinates
+//           myfile << d[i][j][k] << endl; //d[theta][phi][R]
+//         }
+//       }
+//     }
+//     myfile.close();
+//   }
+//   else cout << "Unable to open file";
+// }
+//
+// void file_creator_den(double*** den, int NT, int NP, int NR) {//textfile of density vs Rb
+//   stringstream title;
+//   title << "Text_files/density_num_nop=" << noparticles;
+//   ofstream myfile (title.str()+".txt");
+//   if (myfile.is_open()) {
+//     for (i=is(NT); i<=ie(NT); i++) { //looping over THETA coordinates
+//       char string[15];
+//       // myfile << Ra[i] << ",";
+//       for (j=js(NP); j<=je(NP); j++){ //looping over PHI coordinates
+//         for (k=ks(NR); k<=ke(NR); k++){ //looping over R coordinates
+//           myfile << den[i][j][k] << endl; //d[theta][phi][R]
+//         }
+//       }
+//     }
+//     myfile.close();
+//   }
+//   else cout << "Unable to open file";
+// }
+//
+// void file_creator_T_vec(double* T_vec, int NT, int NP, int NR) {//textfile of density vs Rb
+//   stringstream title;
+//   title << "Text_files/T_vec_nop=" << noparticles;
+//   ofstream myfile (title.str()+".txt");
+//   if (myfile.is_open()) {
+//     for (int x=0; x<noparticles; x++) {
+//       char string[15];
+//       myfile << T_vec[x] << endl;
+//     }
+//     myfile.close();
+//   }
+//   else cout << "Unable to open file";
+// }
+//
+// void file_creator_P_vec(double* P_vec, int NT, int NP, int NR) {
+//   stringstream title;
+//   title << "Text_files/P_vec_nop=" << noparticles;
+//   ofstream myfile (title.str()+".txt");
+//   if (myfile.is_open()) {
+//     for (int x=0; x<noparticles; x++) {
+//       char string[15];
+//       myfile << P_vec[x] << endl;
+//     }
+//     myfile.close();
+//   }
+//   else cout << "Unable to open file";
+// }
+//
+// void file_creator_R_vec(double* R_vec, int NT, int NP, int NR) {
+//   stringstream title;
+//   title << "Text_files/R_vec_nop=" << noparticles;
+//   ofstream myfile (title.str()+".txt");
+//   if (myfile.is_open()) {
+//     for (int x=0; x<noparticles; x++) {
+//       char string[15];
+//       myfile << R_vec[x] << endl;
+//     }
+//     myfile.close();
+//   }
+//   else cout << "Unable to open file";
+// }

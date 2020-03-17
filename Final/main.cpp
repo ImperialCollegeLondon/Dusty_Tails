@@ -207,48 +207,50 @@ int main() {
     //t[0] = 0.;
 
     //running code
-    //cout << "starting" << endl;
+    cout << "starting" << endl;
     make_gauss(NT, NP, NR);
-    //cout << "im working" << endl;
+    cout << "im working" << endl;
     find_inv(NT, NP, NR,T_B, P_B, R_B, T_g, P_g, R_g);
-    //cout << "still working" << endl;
+    cout << "still working" << endl;
     find_DR(NT, NP, NR, T_A=((Tmax-Tmin)/T_suminv), P_A=((Pmax-Pmin)/P_suminv), R_A=((Rmax-Rmin)/R_suminv), T_inv, P_inv, R_inv);
-    //cout << "found that DR" << endl;
+    cout << "found that DR" << endl;
     // file_creator_gaussian(g,x);
     // file_creator_DR(DR,x);
     build_grid(NT, NP, NR, DT, DP, DR);
-    //cout << "built ya grid" << endl;
+    cout << "built ya grid" << endl;
     d_fill(NT, NP, NR,T_mean, P_mean, R_mean, T_stde, P_stde, R_stde);
+    cout << "dfill" << endl;
     calculate_mass(NT,NP,NR,d);
+    cout << "calculated mass" << endl;
     density_fill(NT, NP, NR,T_mean, P_mean, R_mean, T_stde, P_stde, R_stde);
-    //cout << "filllliiiinggggggggg density" << endl;
+    cout << "filllliiiinggggggggg density" << endl;
     opacity_fill(NT, NP, NR);
-    //cout << "okay filled opacity" << endl;
+    cout << "okay filled opacity" << endl;
     calculate_optical_depth_ana(NT,NP,NR,kappa,d);
-    //cout << "CALCULATED OPTICAL DEPTH YAS" << endl;
+    cout << "CALCULATED OPTICAL DEPTH YAS" << endl;
     calculate_optical_depth_num(NT,NP,NR,kappa,den);
-    //cout << "CALCULATED OPTICAL DEPTH AGAIN YAS" << endl;
+    cout << "CALCULATED OPTICAL DEPTH AGAIN YAS" << endl;
 
     //file creators
     file_creator_t_ana(NT,NP,NR,t_ana);
     file_creator_t_num(NT,NP,NR,t_num);
-    //cout << "created file t" << endl;
+    cout << "created file t" << endl;
     file_creator_phi(Pa);
-    //cout << "created file phi" << endl;
+    cout << "created file phi" << endl;
     file_creator_theta(Ta);
-    //cout << "created file theta" << endl;
-    file_creator_d(d,NT,NP,NR);
-    file_creator_den(den,NT,NP,NR);
-    file_creator_T_vec(T_vec,NT,NP,NR);
-    file_creator_P_vec(P_vec,NT,NP,NR);
-    file_creator_R_vec(R_vec,NT,NP,NR);
+    cout << "created file theta" << endl;
+    // file_creator_d(d,NT,NP,NR);
+    // file_creator_den(den,NT,NP,NR);
+    // file_creator_T_vec(T_vec,NT,NP,NR);
+    // file_creator_P_vec(P_vec,NT,NP,NR);
+    // file_creator_R_vec(R_vec,NT,NP,NR);
     // //file_creator_gauss(gauss,Rb,NR);
     // file_creator_DR(DR,Ra);
     //file_creator_xRa(x,Ra);
     //file_creator_d(d,Ta,Pa,Ra,NT,NP,NR);
     //file_creator_den(den,Ta,Pa,Ra,NT,NP,NR);
     // file_creator_total_mass(NT,NP,NR,total_mass);
-    //cout << "done" << endl;
+    cout << "done" << endl;
     //cout << "BAA5" << endl;
     cout << noparticles << endl;
   }
