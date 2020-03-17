@@ -208,7 +208,7 @@ double calculate_mass(int NT, int NP, int NR, double*** d){
       }
     }
   }
-  cout << "TMASS = " << TMASS << endl;
+  //cout << "TMASS = " << TMASS << endl;
   return TMASS;
 }
 
@@ -243,21 +243,19 @@ void density_fill(int NT, int NP, int NR, double T_mean, double P_mean, double R
     //cout << R_vec[x] << endl;
   }
 
-  int p[20] = {0};
-  int t[20] = {0};
-  int r[20] = {0};
   tmass = 0.;
+  //int r[100] = {0};
 
   for(int x=0; x<=noparticles; x++){//iterating through particles
-    for(int i=is(NT)+1; i<ie(NT); i++){
+    for(int i=is(NT); i<=ie(NT); i++){
       if((Ta[i]<=T_vec[x]) && (T_vec[x]<Ta[i+1])){
-        t[i] += 1.;
-        for(int j=js(NP)+1; j<je(NP); j++){
+        // t[i] += 1.;
+        for(int j=js(NP); j<=je(NP); j++){
           if((Pa[j]<=P_vec[x]) && (P_vec[x]<Pa[j+1])){
-            p[j] += 1.;
-            for(int k=ks(NR)+1; k<ke(NR); k++){
+            // p[j] += 1.;
+            for(int k=ks(NR); k<=ke(NR); k++){
               if((Ra[k]<=R_vec[x]) && (R_vec[x]<Ra[k+1])){
-                r[k] += 1.;
+                //r[k] += 1.;
                 double den_new = den[i][j][k]+((TMASS/(Mstar_kg*noparticles))/(((pow(Ra[k+1],3.)-pow(Ra[k],3.))/3.)*(-cos(Ta[i+1])+cos(Ta[i]))*(dPa[j])));
                 den[i][j][k] = den_new;
                 tmass += (TMASS/noparticles);
@@ -268,9 +266,9 @@ void density_fill(int NT, int NP, int NR, double T_mean, double P_mean, double R
       }
     }
   }
-  cout << "tmass = " << tmass << endl;
+  //cout << "tmass = " << tmass << endl;
 
-  for(int i=0; i<20; i++){
+  for(int i=0; i<NR; i++){
     //cout << r[i] << endl;
   }
 }

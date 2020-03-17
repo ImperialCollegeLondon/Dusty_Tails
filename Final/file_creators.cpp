@@ -179,11 +179,11 @@ void file_creator_den(double*** den, int NT, int NP, int NR) {//textfile of dens
   title << "/Users/annawilson/Documents/GitHub/Dusty_Tails/Text_files/density_num_nop=" << noparticles;
   ofstream myfile (title.str()+".txt");
   if (myfile.is_open()) {
-    for (i=is(NT); i<ie(NT); i++) { //looping over THETA coordinates
+    for (i=is(NT); i<=ie(NT); i++) { //looping over THETA coordinates
       char string[15];
       // myfile << Ra[i] << ",";
-      for (j=js(NP); j<je(NP); j++){ //looping over PHI coordinates
-        for (k=ks(NR); k<ke(NR); k++){ //looping over R coordinates
+      for (j=js(NP); j<=je(NP); j++){ //looping over PHI coordinates
+        for (k=ks(NR); k<=ke(NR); k++){ //looping over R coordinates
           myfile << den[i][j][k] << endl; //d[theta][phi][R]
         }
       }

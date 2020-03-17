@@ -9,9 +9,9 @@ int main() {
 
     //cout << "start" << endl;
     //setting constants
-    NR=20;
-    NP=20;
-    NT=20;
+    NR=100;
+    NP=100;
+    NT=100;
     //nr=(NR-1.)/2.;
 
     rmin = 0.;
@@ -25,34 +25,35 @@ int main() {
     Tmin = 0.;
     Tmax = M_PI;
 
-    R_B=0.9; //A and B are in terms of a
-    P_B=0.9;
-    T_B=0.9;
+    R_B=0.2; //A and B are in terms of a
+    P_B=0.2;
+    T_B=0.2;
 
-    R_C=6.; //sd of gaussian grid = 2/C
-    P_C=6.;
-    T_C=6.;
+    // R_C=3.; //sd of gaussian grid = 2/C
+    // P_C=3.;
+    // T_C=3.;
 
     R_mu=(Rmax-Rmin)/2.;
-    R_sd=R_mu/R_C;
+    R_sd=R_mu*0.1;
     P_mu=(Pmax-Pmin)/2.;
-    P_sd=Pmax/P_C;
+    P_sd=Pmax*0.1;
     T_mu=(Tmax-Tmin)/2.;
-    T_sd=Tmax/T_C;
+    T_sd=Tmax*0.1;
 
     //for density
     T_mean = (Tmax-Tmin)/2.0; //in dimensionless units - this should be at a.
-    T_stde = T_mean*0.35; //arbitrary
+    T_stde = T_mean*0.1; //arbitrary
     P_mean = (Pmax-Pmin)/2.0; //in dimensionless units - this should be at a.
-    P_stde = P_mean*0.35; //arbitrary
+    P_stde = P_mean*0.1; //arbitrary
     R_mean = (Rmax-Rmin)/2.0; //in dimensionless units - this should be at a.
-    R_stde = R_mean*0.35; //arbitrary
+    R_stde = R_mean*0.1; //arbitrary
 
     //for counter thing
     mass = 1.;
 
     //clearing vectors
     //cout << "delete start" << endl;
+
     delete[] Ta;
     Ta = new double[NT+1];
     delete[] Tb;
@@ -210,7 +211,7 @@ int main() {
     make_gauss(NT, NP, NR);
     //cout << "im working" << endl;
     find_inv(NT, NP, NR,T_B, P_B, R_B, T_g, P_g, R_g);
-  //  cout << "still working" << endl;
+    //cout << "still working" << endl;
     find_DR(NT, NP, NR, T_A=((Tmax-Tmin)/T_suminv), P_A=((Pmax-Pmin)/P_suminv), R_A=((Rmax-Rmin)/R_suminv), T_inv, P_inv, R_inv);
     //cout << "found that DR" << endl;
     // file_creator_gaussian(g,x);
@@ -249,6 +250,7 @@ int main() {
     // file_creator_total_mass(NT,NP,NR,total_mass);
     //cout << "done" << endl;
     //cout << "BAA5" << endl;
+    cout << noparticles << endl;
   }
 
   return 0;
