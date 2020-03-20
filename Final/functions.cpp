@@ -6,7 +6,13 @@
 #include <stdio.h>
 #include <fstream>
 #include <sstream>
-#include<numeric>
+#include <numeric>
+#include <iomanip>
+#include <string>
+#include <map>
+#include <random>
+#include <array>
+#include <chrono>
 
 using namespace std;
 
@@ -171,11 +177,8 @@ void build_grid(int NT, int NP, int NR, double* DT, double* DP, double* DR){
   }
 }
 
-//fill density array
-void density_fill(int NT, int NP, int NR, double T_mean, double P_mean, double R_mean, double T_stde, double P_stde, double R_stde)
+void d_fill(int NT, int NP, int NR, double T_mean, double P_mean, double R_mean, double T_stde, double P_stde, double R_stde)
 {
-  //mean is(NR) at a, which is(NR) 1 in dimensionless units
-
   for(i=is(NT); i<=ie(NT); i++){
     for(j=js(NP); j<=je(NP); j++){
       for(k=ks(NR); k<=ke(NR); k++){
@@ -194,12 +197,88 @@ void density_fill(int NT, int NP, int NR, double T_mean, double P_mean, double R
   }
 }
 
-//fill opacity array
-void opacity_fill(int NT, int NP, int NR)
-{
+double calculate_mass(int NT, int NP, int NR, double*** d){
+  TMASS = 0.;
   for(i=is(NT); i<=ie(NT); i++){
     for(j=js(NP); j<=je(NP); j++){
       for(k=ks(NR); k<=ke(NR); k++){
+        total_mass[i][j][k]=(d[i][j][k]*(((pow(Ra[k+1],3.)-pow(Ra[k],3.))/3.)*(-cos(Ta[i+1])+cos(Ta[i]))*(dPa[j])));
+        double mass_new = total_mass[i][j][k]*(Mstar_kg);
+        TMASS += mass_new;
+      }
+    }
+  }
+  //cout << "TMASS = " << TMASS << endl;
+  return TMASS;
+}
+
+void density_fill(int NT, int NP, int NR, double T_mean, double P_mean, double R_mean, double T_stde, double P_stde, double R_stde)
+{
+  unsigned seedT = 1;
+  unsigned seedP = 2;
+  unsigned seedR = 3;
+
+  default_random_engine generatorT(seedT);
+  normal_distribution<double> distributionT(T_mean,T_stde);
+
+  default_random_engine generatorP(seedP);
+  normal_distribution<double> distributionP(P_mean,P_stde);
+
+  default_random_engine generatorR(seedR);
+  normal_distribution<double> distributionR(R_mean, R_stde);
+
+  for (int x=0; x<noparticles; x++){ //pointer which holds the particle positions in R
+    double vec_new = distributionT(generatorT);
+    T_vec[x] = vec_new;
+    //cout << T_vec[x] << endl;
+  }
+  for (int x=0; x<noparticles; x++){ //pointer which holds the particle positions in R
+    double vec_new = distributionP(generatorP);
+    P_vec[x] = vec_new;
+    //cout << P_vec[x] << endl;
+  }
+  for (int x=0; x<noparticles; x++){ //pointer which holds the particle positions in R
+    double vec_new = distributionR(generatorR);
+    R_vec[x] = vec_new;
+    //cout << R_vec[x] << endl;
+  }
+
+  tmass = 0.;
+  //int r[100] = {0};
+
+  for(int x=0; x<=noparticles; x++){//iterating through particles
+    for(int i=is(NT); i<=ie(NT); i++){
+      if((Ta[i]<=T_vec[x]) && (T_vec[x]<Ta[i+1])){
+        // t[i] += 1.;
+        for(int j=js(NP); j<=je(NP); j++){
+          if((Pa[j]<=P_vec[x]) && (P_vec[x]<Pa[j+1])){
+            // p[j] += 1.;
+            for(int k=ks(NR); k<=ke(NR); k++){
+              if((Ra[k]<=R_vec[x]) && (R_vec[x]<Ra[k+1])){
+                //r[k] += 1.;
+                double den_new = den[i][j][k]+((TMASS/(Mstar_kg*noparticles))/(((pow(Ra[k+1],3.)-pow(Ra[k],3.))/3.)*(-cos(Ta[i+1])+cos(Ta[i]))*(dPa[j])));
+                den[i][j][k] = den_new;
+                tmass += (TMASS/noparticles);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  //cout << "tmass = " << tmass << endl;
+
+  for(int i=0; i<NR; i++){
+    //cout << r[i] << endl;
+  }
+}
+
+
+//fill opacity array
+void opacity_fill(int NT, int NP, int NR){
+  for(i=is(NT)+1; i<=ie(NT); i++){
+    for(j=js(NP)+1; j<=je(NP); j++){
+      for(k=ks(NR)+1; k<=ke(NR); k++){
         kappa[i][j][k] = (3./4.)*(1./density_bulk)*(1./1.e-6)*(Mstar_kg/pow(a,2.));
       }
     }
@@ -208,16 +287,22 @@ void opacity_fill(int NT, int NP, int NR)
 }
 
 //calculate optical depth and fill array
-void calculate_optical_depth(int NT, int NP, int NR, double*** kappa, double*** d)
-{
-  //constructing optical depth array
-  for(i=is(NT); i<=ie(NT); i++){
-    for(j=js(NP); j<=je(NP); j++){
-      for(k=ks(NR); k<=ke(NR); k++){
-        t[i][j][k]=t[i][j][k-1]+(kappa[i][j][k]*d[i][j][k]*dRa[k]);
-        //cout << t[i][j][k] << endl;
+void calculate_optical_depth_ana(int NT, int NP, int NR, double*** kappa, double*** d){
+  for(i=is(NT)+1; i<=ie(NT); i++){
+    for(j=js(NP)+1; j<=je(NP); j++){
+      for(k=ks(NR)+1; k<=ke(NR); k++){
+        t_ana[i][j][k]=t_ana[i][j][k-1]+(kappa[i][j][k]*d[i][j][k]*dRa[k]);
       }
     }
   }
-  //cout << "done calculate optical depth" << endl;
+}
+
+void calculate_optical_depth_num(int NT, int NP, int NR, double*** kappa, double*** den){
+  for(i=is(NT)+1; i<=ie(NT); i++){
+    for(j=js(NP)+1; j<=je(NP); j++){
+      for(k=ks(NR)+1; k<=ke(NR); k++){
+        t_num[i][j][k]=t_num[i][j][k-1]+(kappa[i][j][k]*den[i][j][k]*dRa[k]);
+      }
+    }
+  }
 }

@@ -29,14 +29,14 @@ double semimajor(double period) { //function to evaluate semi-major axis value, 
 double a = semimajor(Period_days);
 
 //asign starting indicies
-double NR, NT, NP; //number of grid cells
+//double NR, NT, NP; //number of grid cells
 //int itot = NR + 1; //number of a-mesh indices
 
 //grid boundaries
-double rmin = 0.;
-double rmax = 2.*a;
-double Rmin=rmin/a;
-double Rmax=rmax/a;
+//double rmin = 0.;
+//double rmax = 2.*a;
+//double Rmin=rmin/a;
+//double Rmax=rmax/a;
 
 double Tmin = 0.;
 double Tmax = M_PI;
@@ -65,7 +65,8 @@ double Pa_new, Pb_new, dPa_new, dPb_new;
 
 //gaussian grid
 //R grid
-vector <double> g_R,DR,x_R,inv_R;
+//vector <double> DR;
+vector <double> g_R,x_R,inv_R;
 double A_R, B_R, C_R; //scale factor of gaussian - sets max DR
 double mu_R, sd_R;
 double suminv_R, inv_new_R, sumDR, nr, g_new_R;
