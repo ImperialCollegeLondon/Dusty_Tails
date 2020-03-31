@@ -100,9 +100,6 @@ void solve_particles(double total_t, double end_t, vector <Particle> particles, 
   while (total_t < end_t) {
 
     for( Particle& p : particles) {
-      cout << "x " << p.position[0] << endl;
-
-      //cout << "first " << p.position[0] << endl;
       vector <double> updated_vector;
       updated_vector.clear();
       updated_vector = RK_solver({p.position[0], p.position[1], p.position[2], \
@@ -113,8 +110,7 @@ void solve_particles(double total_t, double end_t, vector <Particle> particles, 
       p.p_size = updated_vector[6];
       p.p_mass = dust_mass(p.p_size);
       p.h_updated = updated_vector[7];
-
-      //cout << "second" << p.position[0] << endl;
+      
       double time_now = total_t + big_step;
 
       ofile.write((char*) &time_now, sizeof(double));
