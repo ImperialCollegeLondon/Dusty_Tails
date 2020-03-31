@@ -16,7 +16,7 @@ unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 mt19937 generator (seed);
 uniform_real_distribution<double> uniform01(0.0, 1.0);
 
-ofstream ofile("output_test.bin", ios::out | ios::binary);
+ofstream ofile("output_debug.bin", ios::out | ios::binary);
 
 vector <Particle> add_particles(vector <Particle> particles, long int current,
                    long int total, double time){
@@ -43,10 +43,11 @@ vector <Particle> add_particles(vector <Particle> particles, long int current,
                                    v_esc*sin(theta)*sin(phi), \
                                    v_esc*cos(theta)};
 
-                 grain.p_size = 0.4e-4;
+                 grain.p_size = 0.35e-4;
                  grain.p_tau = tau;
                  grain.p_density = rho_d;
                  grain.h_updated = 0.001;
+                 grain.p_mass = dust_mass(grain.p_size);
 
                  particles.push_back(grain);
 
@@ -57,6 +58,7 @@ vector <Particle> add_particles(vector <Particle> particles, long int current,
                  ofile.write((char*) &grain.position[1], sizeof(double));
                  ofile.write((char*) &grain.position[2], sizeof(double));
                  ofile.write((char*) &grain.p_size, sizeof(double));
+                 ofile.write((char*) &grain.p_mass, sizeof(double));
 
                }
 
@@ -68,7 +70,7 @@ vector <Particle> add_particles(vector <Particle> particles, long int current,
 
 vector <Particle> rm_particles(vector <Particle> particles){
   for (unsigned long int i = 0; i < particles.size(); i++){
-    if (particles[i].p_size < 2.0e-5) {
+    if (isnan(particles[i].p_size)) {
       particles.erase(particles.begin() + i);
       i--;
     }
@@ -91,7 +93,6 @@ vector <Particle> rm_particles2(vector <Particle> particles){
 
 void solve_particles(double total_t, double end_t, vector <Particle> particles, \
                      long int total_particles, double t_common, double big_step, \
-
                     long int current_particles){
 
   double plot_time = 0.01;
@@ -99,6 +100,9 @@ void solve_particles(double total_t, double end_t, vector <Particle> particles, 
   while (total_t < end_t) {
 
     for( Particle& p : particles) {
+      cout << "x " << p.position[0] << endl;
+
+      //cout << "first " << p.position[0] << endl;
       vector <double> updated_vector;
       updated_vector.clear();
       updated_vector = RK_solver({p.position[0], p.position[1], p.position[2], \
@@ -107,11 +111,10 @@ void solve_particles(double total_t, double end_t, vector <Particle> particles, 
       p.position = {updated_vector[0],updated_vector[1], updated_vector[2]};
       p.velocity = {updated_vector[3],updated_vector[4], updated_vector[5]};
       p.p_size = updated_vector[6];
-      if (p.id == 1) {
-        cout << p.p_size << endl;
-      }
+      p.p_mass = dust_mass(p.p_size);
       p.h_updated = updated_vector[7];
 
+      //cout << "second" << p.position[0] << endl;
       double time_now = total_t + big_step;
 
       ofile.write((char*) &time_now, sizeof(double));
@@ -120,6 +123,7 @@ void solve_particles(double total_t, double end_t, vector <Particle> particles, 
       ofile.write((char*) &p.position[1], sizeof(double));
       ofile.write((char*) &p.position[2], sizeof(double));
       ofile.write((char*) &p.p_size, sizeof(double));
+      ofile.write((char*) &p.p_mass, sizeof(double));
 
     }
 
