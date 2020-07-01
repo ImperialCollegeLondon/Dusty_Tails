@@ -44,7 +44,7 @@ extern vector <double> planet_pos;
 
 const double Temp = 4550.0; //stars temperature
 const double S = 0.9; //safety factor
-const double tol = 1e-8; //error tolerance
+const double tol = 1e-4; //error tolerance
 const double A = 77365.; //clausius claperyon relation
 const double B = 39.3; //clausius claperyon relation
 const double alpha = 0.1;

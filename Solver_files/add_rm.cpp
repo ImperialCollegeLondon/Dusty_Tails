@@ -14,9 +14,10 @@ using namespace std;
 
 unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 mt19937 generator (seed);
-uniform_real_distribution<double> uniform01(0.0, 1.0);
+uniform_real_distribution<double> uniform_phi(0.625, 0.875);
+uniform_real_distribution<double> uniform_theta(0.2, 0.8);
 
-ofstream ofile("output_035.bin", ios::out | ios::binary);
+ofstream ofile("test.bin", ios::out | ios::binary);
 
 vector <Particle> add_particles(vector <Particle> particles, long int current,
                    long int total, double time){
@@ -30,9 +31,9 @@ vector <Particle> add_particles(vector <Particle> particles, long int current,
 
                  Particle grain;
                  grain.id = i+1;
-                 double phi = 2.0*PI * uniform01(generator);
+                 double phi = 2.0*PI * uniform_phi(generator);
 
-                 double theta = acos(1- 2.0* uniform01(generator));
+                 double theta = acos(1- 2.0* uniform_theta(generator));
 
 
                  grain.position = {r_start*sin(theta)*cos(phi) + planet_x, \
@@ -43,23 +44,13 @@ vector <Particle> add_particles(vector <Particle> particles, long int current,
                                    v_esc*sin(theta)*sin(phi), \
                                    v_esc*cos(theta)};
 
-                 grain.p_size = 0.35e-4;
+                 grain.p_size = 0.40e-4;
                  grain.p_tau = tau;
                  grain.p_density = rho_d;
                  grain.h_updated = 0.001;
                  grain.p_mass = dust_mass(grain.p_size);
 
                  particles.push_back(grain);
-
-
-                 //ofile.write((char*) &time, sizeof(double));
-                 //ofile.write((char*) &grain.id, sizeof(long int));
-                 //ofile.write((char*) &grain.position[0], sizeof(double));
-                 //ofile.write((char*) &grain.position[1], sizeof(double));
-                 //ofile.write((char*) &grain.position[2], sizeof(double));
-                 //ofile.write((char*) &grain.p_size, sizeof(double));
-                 //ofile.write((char*) &grain.p_mass, sizeof(double));
-
 
                }
 
@@ -71,7 +62,7 @@ vector <Particle> add_particles(vector <Particle> particles, long int current,
 
 vector <Particle> rm_particles(vector <Particle> particles){
   for (unsigned long int i = 0; i < particles.size(); i++){
-    if (isnan(particles[i].p_size)) {
+    if (particles[i].p_size < 0.1e-4) {
       particles.erase(particles.begin() + i);
       i--;
     }
@@ -110,10 +101,7 @@ void solve_particles(double total_t, double end_t, vector <Particle> particles, 
         ofile.write((char*) &p.p_size, sizeof(double));
         ofile.write((char*) &p.p_mass, sizeof(double));
 
-        if (isnan(p.position[0])) {
-            cout << "id " << p.id << endl;
 
-        }
 
         vector <double> updated_vector;
         updated_vector.clear();
@@ -130,16 +118,15 @@ void solve_particles(double total_t, double end_t, vector <Particle> particles, 
 
         //double time_now = total_t + big_step;
 
-
-
     }
 
     particles = rm_particles(particles);
     particles = rm_particles2(particles);
 
+
     if (total_t > plot_time) {
       current_particles = total_particles;
-      total_particles = total_particles + 100;
+      total_particles = total_particles + 10;
       particles = add_particles(particles, current_particles, total_particles, total_t);
       plot_time = plot_time + 0.01;
   }

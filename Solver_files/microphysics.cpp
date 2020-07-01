@@ -85,3 +85,9 @@ double temp_dust(double lum, double s, double x, double y, double z){
 
   return Tdust;
 }
+
+double dust_mass(double s){
+    double md;
+    md = rho_d * (4.0/3.0) * PI * pow(s, 3.0);
+    return md;
+}

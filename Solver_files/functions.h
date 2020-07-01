@@ -42,6 +42,7 @@ double clausius_clap(double s, double x, double y, double z);
 double luminosity(double R_star);
 double radial_vel(vector <double> vel, vector <double> s_vector);
 double temp_dust( double lum, double s,  double x, double y, double z);
+double dust_mass( double s);
 
 vector <double> drag_vel(vector <double> V);
 vector <double> sunit_vector(vector <double> V);
