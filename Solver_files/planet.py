@@ -9,9 +9,9 @@ matplotlib.use('Agg')
 plt.ioff()
 
 dt = np.dtype([('time', np.float64), ('id', np.int64), ('x', np.float64), \
-('y', np.float64), ('z', np.float64), ('temp', np.float64)])
+('y', np.float64), ('z', np.float64), ('size', np.float64), ('mass', np.float64)])
 
-data = np.fromfile("output_test.bin", dt)
+data = np.fromfile("test.bin", dt)
 df = pd.DataFrame(data)
 #print(df['x'])
 #print(df['time'])
@@ -19,7 +19,7 @@ p_yprime = []
 p_xprime = []
 p_z = []
 
-t_0 = 0.2
+t_0 = 0.0
 
 theta = []
 
@@ -30,11 +30,12 @@ for t in df['time']:
 df['angles'] = theta
 
 for angle in df['angles']:
-    x_p = math.cos(angle)
+    x_p = math.cos(angle) * math.sin(1.38)
     y_p = math.sin(angle)
+    z_p = -math.cos(angle) * math.cos(1.38)
     p_yprime.append(y_p)
     p_xprime.append(x_p)
-    p_z.append(0.0)
+    p_z.append(z_p)
 
 df['x_planet'] = p_xprime
 df['y_planet'] = p_yprime
@@ -56,9 +57,25 @@ for i in range(df['x'].size):
 df['xprime'] = x_prime
 df['yprime'] = y_prime
 
+x_dprime = []
+z_dprime = []
+
+for i in range(df['xprime'].size):
+    incl = 1.38
+
+    xdp = df['xprime'][i]* math.sin(incl) + df['z'][i]*math.cos(incl)
+    zdp = -df['xprime'][i]* math.cos(incl) + df['z'][i]*math.sin(incl)
+    x_dprime.append(xdp)
+    z_dprime.append(zdp)
+
+df['x_double_prime'] = x_dprime
+df['z_double_prime'] = z_dprime
+
+
 i = 0
 
 for t in df['time'].unique():
+
      plot_df = df[df.time == t]
      fig = plt.figure()
      ax = fig.add_subplot(111)
@@ -69,42 +86,41 @@ for t in df['time'].unique():
      ax.get_xaxis().set_visible(False)
      ax.get_yaxis().set_visible(False)
 
-     t_hours = 15.68 * t
-     plt.title("time: %.2f hours" % t_hours)
+     t_hours = 15.6* t
+     #plt.title("time: %.2f hours" % t_hours)
 
      y_behind = []
      z_behind = []
      y_front = []
      z_front = []
 
-
-
      for index in plot_df.index:
-         if (plot_df['xprime'][index] < 0.0):
+         if (plot_df['x_double_prime'][index] < 0.0):
              y_behind.append(plot_df['yprime'][index])
-             z_behind.append(plot_df['z'][index])
+             z_behind.append(plot_df['z_double_prime'][index])
          else:
              y_front.append(plot_df['yprime'][index])
-             z_front.append(plot_df['z'][index])
+             z_front.append(plot_df['z_double_prime'][index])
+
 
 
 
      if plot_df['x_planet'][plot_df.index[0]] <  0.0:
 
-       dust1 = plt.scatter(y_behind, z_behind, s= 0.01, c='#008080', alpha=0.5)
-       planet = plt.scatter(plot_df['y_planet'], plot_df['z_planet'], s= 52.0 , c= '#C6492B')
+       dust1 = plt.scatter(y_behind, z_behind, s= 10.0, c='#008080', alpha=0.5)
+       #planet = plt.scatter(plot_df['y_planet'], plot_df['z_planet'], s=100.0 , c= '#C6492B')
        star = plt.scatter(0.0, 0.0, s=10000.0, c='#ffcc00')
-       dust2 = plt.scatter(y_front, z_front, s=0.01, c='#008080', alpha = 0.5)
+       dust2 = plt.scatter(y_front, z_front, s=10.0, c='#008080', alpha = 0.5)
 
 
        plt.savefig("fig{0:01}.png".format(i))
 
        plt.close()
      else:
-       dust1 = plt.scatter(y_behind, z_behind, s= 0.01, c='#008080', alpha=0.5)
+       dust1 = plt.scatter(y_behind, z_behind, s= 10.0, c='#008080', alpha=0.5)
        star = plt.scatter(0.0, 0.0, s=10000.0, c='#ffcc00')
-       planet = plt.scatter(plot_df['y_planet'], plot_df['z_planet'], s= 52.0 , c= '#C6492B')
-       dust2 = plt.scatter(y_front, z_front, s=0.01, c='#008080', alpha = 0.5)
+       #planet = plt.scatter(plot_df['y_planet'], plot_df['z_planet'], s= 20.0 , c= '#C6492B')
+       dust2 = plt.scatter(y_front, z_front, s=10.0, c='#008080', alpha = 0.5)
 
 
        plt.savefig("fig{0:01}.png".format(i))
