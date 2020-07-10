@@ -29,19 +29,23 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     vector <double> V0dot = {V[3], V[4], V[5]};
     //function to obtain several k values of RK-DP method
     //k1 values
+
     ks1 = h* sublimation(V[6], V[0], V[1], V[2]);
 
 
     for (unsigned int i = 0; i < 3; i++){
         k1d[i] = h* acceleration(i, V0[i]- star_pos[i], \
-                   V0[i] - planet_pos[i] + r_planet_dim,
-                   V);
+                   V0[i] - planet_pos[i] + r_planet_dim, V);
         k1[i] = h* V0dot[i];
+
 
         Vtemp[i] = V0[i] + a21*k1[i];
         Vtempdot[i] = V0dot[i] + a21*k1d[i];
+
     }
     s_temp = s0 + a21*ks1;
+
+
     //k2 values
     ks2 = h* sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2]);
     for (unsigned int i = 0; i < 3; i++){
@@ -53,8 +57,11 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 
         Vtemp[i] = V0[i] + a31*k1[i] + a32*k2[i];
         Vtempdot[i] = V0dot[i] + a31*k1d[i] + a32*k2d[i];
+
+
     }
     s_temp = s0 + a31*ks1 + a32*ks2;
+
 
     ks3 = h* sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2]);
     //k3 values
@@ -84,6 +91,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 
         Vtemp[i] = V0[i] + a51*k1[i] + a52*k2[i] + a53*k3[i] + a54*k4[i];
         Vtempdot[i]= V0dot[i] + a51*k1d[i] + a52*k2d[i] + a53*k3d[i] + a54*k4d[i];
+
     }
 
     s_temp = s0 + a51*ks1 + a52*ks2 + a53*ks3 + a54*ks4;
@@ -99,7 +107,8 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 
         Vtemp[i] = V0[i] + a61*k1[i] + a62*k2[i] + a63*k3[i] + a64*k4[i] + a65*k5[i];
         Vtempdot[i] = V0dot[i] + a61*k1d[i] + a62*k2d[i] + a63*k3d[i] + a64*k4d[i] + a65*k5d[i];
-        //cout << k5[i] << endl;
+
+
     }
 
     s_temp = s0 + a61*ks1 + a62*ks2 + a63*ks3 + a64*ks4 + a65*ks5;
@@ -118,6 +127,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     }
 
     s_temp = s0 + a71*ks1 + a73*ks3 + a74*ks4 + a75*ks5 + a76*ks6;
+
 
     if (order5 == true) {
       ks7 = h * sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2]);

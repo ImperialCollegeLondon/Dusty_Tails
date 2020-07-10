@@ -57,9 +57,12 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 
 //errors
 
-double delta( double value1, double value2);
-double h_optimal(vector <double> deltas_list, double h);
-vector <double> h_check(double h, vector <double> V);
+double error( double value1, double value2);
+double error_max(double h, vector <double> V);
+vector <double> new_step_size(double max_err, double h_old, int fail_status, vector <double> V);
+
+
+
 
 //solver
 

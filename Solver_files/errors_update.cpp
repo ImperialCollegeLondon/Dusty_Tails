@@ -14,7 +14,7 @@ double error( double value1, double value2){
     //evaluate error
     double err;
     err = fabs(value1 - value2);
-
+    //cout << "error " << err/tol << endl;
     return err / tol;
 }
 
@@ -36,8 +36,6 @@ double error_max(double h, vector <double> V){
     err_max = *max_element(errors.begin(), errors.end());
     max_index = max_element(errors.begin(),errors.end()) - errors.begin();
 
-    cout << "index " << max_index << endl;
-
     return err_max;
 
 }
@@ -48,22 +46,26 @@ vector <double> new_step_size(double max_err, double h_old, int fail_status, vec
   double new_max_err;
   vector <double> steps;
 
-  cout << "max error " << max_err << endl;
-  cout << "old h " << h_old << endl;
-  cout << "fail " << fail_status << endl;
+
+  //cout << "fail " << fail_status << endl;
 
   rho = 1.25 * pow((max_err / tol), 1.0/5.0);
 
-  cout << "rho " << rho << endl;
+
+
+  if (isnan(max_err)){
+    return {-1.0, -1.0};
+  }
 
   if (max_err <= tol){
     if (rho > 0.2){
-      //h_new = h_old / rho;
-      h_new = 0.001;
+      h_new = h_old / rho;
+      //h_new = 0.001;
       steps = {h_old, h_new};
       return steps;
     } else {
-      h_new = 0.001;
+      //h_new = 0.001;
+      h_new = 5.0 * h_old;
       steps = {h_old, h_new};
       return steps;
     }

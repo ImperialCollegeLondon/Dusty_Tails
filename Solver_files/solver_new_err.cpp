@@ -41,8 +41,8 @@ double sublimation(double s, double x, double y, double z){
   double ds1, ds2, ds;
 
   ds1 = ((-alpha*clausius_clap(s, x, y, z))/rho_d);
-  ds2 = pow((mu*amu)/(2.0*PI*kb*temp_dust(luminosity(Rstar), s, x, y, z)), 0.5);
 
+  ds2 = pow((mu*amu)/(2.0*PI*kb*temp_dust(luminosity(Rstar), s, x, y, z)), 0.5);
   ds = ds1 * ds2;
 
   return ds;
@@ -65,6 +65,7 @@ vector <double> new_variables(double h, vector <double> V, bool order5){
 
          new_pos[i] = V0[i] + b1*k1[i] + b3*k3[i] + b4*k4[i] + b5*k5[i] + b6*k6[i];
          new_vel[i] = V0dot[i] + b1*k1d[i] + b3*k3d[i] + b4*k4d[i] + b5*k5d[i] + b6*k6d[i];
+
         }
 
         s_new = V[6] + b1*ks1 + b3*ks3 + b4*ks4 + b5*ks5 + b6*ks6;
@@ -111,6 +112,12 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
     //first value is old step size, second value is step size to be used in the next iteration
     old_h = step_sizes[0];
     new_h = step_sizes[1];
+
+    if (new_h == -1.0){
+      t = del_t;
+      return {V_0[0], V_0[1], V_0[2], V_0[3], V_0[4], V_0[5], 0.01e-4, new_h};
+    }
+
     new_vector = next_step(old_h, V_0);
     t = t + old_h;
 
@@ -121,19 +128,19 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
 
     while (t < del_t) {
 
-        cout << "TIME" << t << endl;
         //obtain delta values for the 6 variables
 
         maximum_err = error_max(new_h, new_vector);
         step_sizes = new_step_size(maximum_err, new_h, 0, new_vector);
         old_h = step_sizes[0];
         new_h = step_sizes[1];
+        if (new_h == -1.0){
+          t = del_t;
+          return {new_vector[0], new_vector[1], new_vector[2], new_vector[3], new_vector[4], new_vector[5], 0.01e-4, new_h};
+        }
         t = t + old_h;
         if (t < del_t) {
              new_vector = next_step(old_h, new_vector);
-             for (auto i = new_vector.begin(); i != new_vector.end(); ++i){
-                   cout << *i << ' ' << endl;
-                 }
 
              if (new_vector[6] < 0.1e-4){
                t = del_t;

@@ -36,7 +36,12 @@ double qfactor(double s, double x, double y, double z){
 }
 
 double clausius_clap(double s, double x, double y, double z){
-  return exp((-A/temp_dust(luminosity(Rstar), s, x, y, z)) + B);
+  double cc;
+
+  cc = exp((-A/temp_dust(luminosity(Rstar), s, x, y, z)) + B);
+
+  return cc;
+
 }
 
 double luminosity(double R_star){
@@ -81,6 +86,7 @@ vector <double> sunit_vector(vector <double> V){
 double temp_dust(double lum, double s, double x, double y, double z){
   double Tdust, dl;
   dl = scalar((x-star_pos[0]), y, z)*a*pow(10., 2.0);
+
   Tdust = pow((lum*wien)/(16.0*PI*pow(dl, 2.0)*sigma*s), 1./5.);
 
   return Tdust;

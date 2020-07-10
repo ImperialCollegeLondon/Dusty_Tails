@@ -17,7 +17,7 @@ mt19937 generator (seed);
 uniform_real_distribution<double> uniform_phi(0.625, 0.875);
 uniform_real_distribution<double> uniform_theta(0.2, 0.8);
 
-ofstream ofile("test.bin", ios::out | ios::binary);
+ofstream ofile("test_1.bin", ios::out | ios::binary);
 
 vector <Particle> add_particles(vector <Particle> particles, long int current,
                    long int total, double time){
@@ -32,8 +32,10 @@ vector <Particle> add_particles(vector <Particle> particles, long int current,
                  Particle grain;
                  grain.id = i+1;
                  double phi = 2.0*PI * uniform_phi(generator);
+                 //double phi = 2.0*PI * 0.7;
 
                  double theta = acos(1- 2.0* uniform_theta(generator));
+                 //double theta = acos(1- 2.0* 0.55);
 
 
                  grain.position = {r_start*sin(theta)*cos(phi) + planet_x, \
@@ -53,7 +55,6 @@ vector <Particle> add_particles(vector <Particle> particles, long int current,
                  particles.push_back(grain);
 
                }
-
 
               return particles;
 
@@ -94,12 +95,19 @@ void solve_particles(double total_t, double end_t, vector <Particle> particles, 
     for( Particle& p : particles) {
 
         ofile.write((char*) &total_t, sizeof(double));
+        cout << "time " << total_t << endl;
         ofile.write((char*) &p.id, sizeof(long int));
+        cout << "ID " << p.id << endl;
         ofile.write((char*) &p.position[0], sizeof(double));
+        cout << "X " << p.position[0] << endl;
         ofile.write((char*) &p.position[1], sizeof(double));
+        cout << "Y " << p.position[1] << endl;
         ofile.write((char*) &p.position[2], sizeof(double));
+        cout << "Z " << p.position[2] << endl;
         ofile.write((char*) &p.p_size, sizeof(double));
+        cout << "size" << p.p_size << endl;
         ofile.write((char*) &p.p_mass, sizeof(double));
+        cout << "mass " << p.p_mass << endl;
 
 
 
@@ -113,21 +121,21 @@ void solve_particles(double total_t, double end_t, vector <Particle> particles, 
         p.p_mass = dust_mass(p.p_size);
         p.h_updated = updated_vector[7];
 
-
-
-
-        //double time_now = total_t + big_step;
-
     }
 
     particles = rm_particles(particles);
     particles = rm_particles2(particles);
 
+    if (particles.empty()){
+
+      total_t = 1.0;
+
+    }
 
     if (total_t > plot_time) {
       current_particles = total_particles;
-      total_particles = total_particles + 10;
-      particles = add_particles(particles, current_particles, total_particles, total_t);
+      //total_particles = total_particles + 10;
+      //particles = add_particles(particles, current_particles, total_particles, total_t);
       plot_time = plot_time + 0.01;
   }
 
