@@ -13,22 +13,22 @@ using namespace std;
 
 
 double scalar(double x, double y, double z){
-        double s;
+        double s =0.0;
         s = pow( pow(x, 2.) + pow(y, 2.) + pow(z, 2.), 0.5 );
         return s;
 }
 
 vector <double> cross_product(double m1, double m2, double m3, double n1, double n2, double n3){
   //function to calculate the cross product between two vectors
-  vector <double> cp_vector(3);
+  vector <double> cp_vector(3, 0.0);
 
-	double i_new, j_new, k_new;
+	double i_new =0.0, j_new=0.0, k_new=0.0;
 
 	i_new = m2*n3 - m3*n2;
 	j_new = m3*n1 - m1*n3;
 	k_new = m1*n2 - m2*n1;
 
-    cp_vector = {i_new, j_new, k_new};
+  cp_vector = {i_new, j_new, k_new};
 
 	return cp_vector;
 

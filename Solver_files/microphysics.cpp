@@ -18,7 +18,7 @@ double omega(double mplanet, double mstar){
 double beta_fn(double k, double L_star, double M_star){
   //mass of star in terms of mass of sun, and everything in cgs units
   //function to evaluate beta (radiation accel/ gravity accel)
-  double beta;
+  double beta =0.0;
 	beta = (k*L_star*exp(-tau)) / (4.0*PI*c_cgs*G_cgs*M_star*Msun_cgs);
 	return beta;
 
@@ -36,7 +36,7 @@ double qfactor(double s, double x, double y, double z){
 }
 
 double clausius_clap(double s, double x, double y, double z){
-  double cc;
+  double cc =0.0;
 
   cc = exp((-A/temp_dust(luminosity(Rstar), s, x, y, z)) + B);
 
