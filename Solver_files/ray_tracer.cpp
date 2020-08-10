@@ -18,7 +18,7 @@ double gauss(double var, double var_c, double std);
 
 void extinction_test(double r_a, double r_b, double theta_a, double theta_b, double phi_a, double phi_b, double function[100][100][100]);
 
-void optical_depth_test(double *extinction, double od[100]);
+void optical_depth_test(double *extinction, double od[100][100][100]);
 
 
 double r_a [101];
@@ -29,7 +29,7 @@ double phi_a [101];
 double phi_b [100];
 
 double extinction [100][100][100];
-double optical_depth [100];
+double optical_depth [100][100][100];
 
 
 double n_cells = 100.0;
@@ -88,13 +88,12 @@ void extinction_test(double *r_a, double *r_b, double *theta_a, double *theta_b,
           }
 }
 
-void optical_depth_test(double ext[100][100][100], double od[100]){
-    od[0] = 0.0;
-    for (unsigned int i = 1; i < 100; i++){
+void optical_depth_test(double ext[100][100][100], double od[100][100][100]){
+    for (unsigned int k = 1; k < 100; k++){
         for (unsigned int j = 1; j < 100; j++){
-            for (unsigned int  k = 1; k < 100; k++){
+            for (unsigned int  i = 1; i < 100; i++){
 
-                  od[i] = od[i-1] + ext[i-1][j][k] *dr;
+                  od[i][j][k] = od[i-1][j][k] + ext[i-1][j][k] *dr;
 
                 }
 
@@ -122,9 +121,9 @@ int main(){
                         for (unsigned int k = 0; k < 100; k++){
 
                             ofile.write((char*) &r_a[i], sizeof(double));
-                            ofile.write((char*) &theta_a[i], sizeof(double));
-                            ofile.write((char*) &phi_a[i], sizeof(double));
-                            ofile.write((char*) &optical_depth [i], sizeof(double));
+                            ofile.write((char*) &theta_a[j], sizeof(double));
+                            ofile.write((char*) &phi_a[k], sizeof(double));
+                            ofile.write((char*) &optical_depth [99][j][k], sizeof(double));
 
 
 
