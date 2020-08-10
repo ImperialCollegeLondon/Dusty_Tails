@@ -46,11 +46,7 @@ vector <double> new_step_size(double max_err, double h_old, int fail_status, vec
   double new_max_err;
   vector <double> steps;
 
-
-  //cout << "fail " << fail_status << endl;
-
   rho = 1.25 * pow((max_err / tol), 1.0/5.0);
-
 
 
   if (isnan(max_err)){
@@ -59,12 +55,13 @@ vector <double> new_step_size(double max_err, double h_old, int fail_status, vec
 
   if (max_err <= tol){
     if (rho > 0.2){
+      
       h_new = h_old / rho;
-      //h_new = 0.001;
+      
       steps = {h_old, h_new};
       return steps;
     } else {
-      //h_new = 0.001;
+      
       h_new = 5.0 * h_old;
       steps = {h_old, h_new};
       return steps;

@@ -24,6 +24,7 @@ def patch(radii, phis, area):
     for r in range(1, len(radii)):
         for a in range(1, len(phis)):
             area[r][a] = 0.5*(phis[a]-phis[a-1])*(radii[r]**2. - radii[r-1]**2.)
+
     return area
 
 @jit(nopython = True)
@@ -34,9 +35,9 @@ def where_grid(particles_stuff, radii, phis, area):
         if (radii[r-1] < particle[0] < radii[r]):
           for a in range(1, len(phis)):
             if (phis[a-1] < particle[1] < phis[a]):
-                s = (np.pi * (particle[2] / (1.93*10.**(11.)))**(2.) * (5.0*10.**(24.))) / area[r][a]
+                s = (np.pi * (particle[2] / (1.93*10.**(11.)))**(2.) * (8.0*10.**(24.))) / area[r][a]
 
-                optical_depths[r][a] = optical_depths[r][a] + s
+                optical_depths[r-1][a-1] = optical_depths[r-1][a-1] + s
     return optical_depths
 
 @jit(nopython = True)
@@ -45,7 +46,7 @@ def flux(area, optical_depths, radii, phis):
     for r in range(1, len(radii)):
         for a in range(1, len(phis)):
             #print(area[r][a])
-            f = f + ((area[r][a] * np.exp(-1.0*optical_depths[r][a])) / (np.pi * 0.2**(2.)))
+            f = f + ((area[r][a] * np.exp(-1.0*optical_depths[r][a])) / (np.pi * 0.20**(2.)))
 
     return f
 
@@ -53,14 +54,14 @@ def flux(area, optical_depths, radii, phis):
 dt = np.dtype([('time', np.float64), ('id', np.int64), ('x', np.float64), \
 ('y', np.float64), ('z', np.float64), ('size', np.float64), ('mass', np.float64)])
 
-data = np.fromfile("output_k222_035.bin", dt)
+data = np.fromfile("kic_k222_035.bin", dt)
 df = pd.DataFrame(data)
 
 p_yprime = []
 p_xprime = []
 p_z = []
 
-t_0 = 0.2
+t_0 = 0.0
 
 theta = []
 
@@ -72,11 +73,12 @@ for t in df['time']:
 df['angles'] = theta
 
 for angle in df['angles']:
-    x_p = math.cos(angle)
+    x_p = math.cos(angle) * math.sin(1.36)
     y_p = math.sin(angle)
+    z_p = -math.cos(angle) * math.cos(1.36)
     p_yprime.append(y_p)
     p_xprime.append(x_p)
-    p_z.append(0.0)
+    p_z.append(z_p)
 
 df['x_planet'] = p_xprime
 df['y_planet'] = p_yprime
@@ -112,8 +114,10 @@ t_flux = []
 
 total_flux = []
 
+i = 0
+
 for t in df['time'].unique():
-  if (t > 2.01) and (t < 2.3):
+  if (t > 2.75) and (t < 3.25):
 
     #print("this is running ")
     plot_df = df[df.time == t]
@@ -136,18 +140,40 @@ for t in df['time'].unique():
 
     particles = List()
 
-    particles = to_radius_angle(y_front,z_front,p_sizes)
-    depths = where_grid(particles, radii, phis, area_new)
+    if len(y_front) == 0:
+        t_flux.append(t)
+        total_flux.append(1.0)
+    else:
+        particles = to_radius_angle(y_front,z_front,p_sizes)
+        depths = where_grid(particles, radii, phis, area_new)
 
-    #print(depths)
-    total = flux(area, depths, radii, phis)
-    print(t, total)
-
-    t_flux.append(t)
-    total_flux.append(total)
+        total = flux(area, depths, radii, phis)
 
 
-#plt.close('all')
+        t_flux.append(t)
+        total_flux.append(total)
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    ax.set_ylim(0.990, 1.005)
+    ax.set_xlim(2.75, 3.25)
+
+    plt.plot(t_flux, total_flux)
+
+
+
+    plt.savefig("fig{0:01}.png".format(i))
+
+    plt.close()
+
+    i +=1
+
+
+
+
+plt.close('all')
+"""
 final_data = {'time': t_flux, 'normalised flux': total_flux}
 final_df = pd.DataFrame(final_data, columns = ['time', 'normalised flux'])
 
@@ -157,9 +183,10 @@ ax = fig.add_subplot(111)
 
 plt.plot(t_flux, total_flux)
 ax.set_ylim(0.990, 1.001)
-ax.set_xlim(2.0, 2.3)
+ax.set_xlim(2.75, 3.25)
 ax.autoscale()
 
 
-plt.savefig('lightcurve.png')
+plt.savefig('lightcurve3.png')
 plt.close()
+"""

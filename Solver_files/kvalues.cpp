@@ -22,7 +22,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 
     vector <double> Vtemp(3);
     vector <double> Vtempdot(3);
-    double s_temp;
+    double s_temp =0.0;
 
     double s0 = V[6];
     vector <double> V0 = {V[0], V[1], V[2]};

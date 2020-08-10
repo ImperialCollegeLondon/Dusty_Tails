@@ -51,7 +51,7 @@ double sublimation(double s, double x, double y, double z){
 
 vector <double> new_variables(double h, vector <double> V, bool order5){
     //function to obtain next step values
-    vector <double> new_pos(3), new_vel(3), new_vars(6);
+    vector <double> new_pos(3), new_vel(3), new_vars(7);
     vector <double> V0 = {V[0], V[1], V[2]};
     vector <double> V0dot = {V[3], V[4], V[5]};
     double s_new;
@@ -114,6 +114,7 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
     new_h = step_sizes[1];
 
     if (new_h == -1.0){
+      
       t = del_t;
       return {V_0[0], V_0[1], V_0[2], V_0[3], V_0[4], V_0[5], 0.01e-4, new_h};
     }
@@ -122,8 +123,16 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
     t = t + old_h;
 
     if (new_vector[6] < 0.1e-4){
+      
       t = del_t;
       return {new_vector[0], new_vector[1], new_vector[2], new_vector[3], new_vector[4], new_vector[5], 0.01e-4, new_h};
+    }
+
+
+    if (t > del_t){
+      new_vector = next_step(del_t - (t-old_h), new_vector);
+      new_vector.push_back(new_h);
+      return new_vector;
     }
 
     while (t < del_t) {
@@ -135,6 +144,7 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
         old_h = step_sizes[0];
         new_h = step_sizes[1];
         if (new_h == -1.0){
+         
           t = del_t;
           return {new_vector[0], new_vector[1], new_vector[2], new_vector[3], new_vector[4], new_vector[5], 0.01e-4, new_h};
         }
@@ -143,6 +153,7 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
              new_vector = next_step(old_h, new_vector);
 
              if (new_vector[6] < 0.1e-4){
+               
                t = del_t;
                return {new_vector[0], new_vector[1], new_vector[2], new_vector[3], new_vector[4], new_vector[5], 0.01e-4, new_h};
              }
@@ -150,8 +161,10 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
              new_vector = next_step(del_t - (t-old_h), new_vector);
 
              if (new_vector[6] < 0.1e-4){
+               
                return {new_vector[0], new_vector[1], new_vector[2], new_vector[3], new_vector[4], new_vector[5], 0.01e-4, new_h};
              } else {
+             
              new_vector.push_back(new_h);
              return new_vector;
            }
