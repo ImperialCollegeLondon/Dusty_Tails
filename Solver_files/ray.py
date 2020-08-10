@@ -27,7 +27,7 @@ dt = np.dtype([('radius', np.float64), ('theta', np.float64), ('phi', np.float64
 data = np.fromfile("ray_tracer_test.bin", dt)
 df = pd.DataFrame(data)
 
-print(df)
+#print(df)
 
 radii = List()
 thetas = List()
@@ -56,13 +56,13 @@ zs = List()
 xs, ys, zs = grid(radii, thetas, phis)
 
 
-print(len(ods))
+#print(len(ods))
 fig = plt.figure()
 ax = plt.axes(projection='3d')
-
-ax.scatter3D(ys, zs, ods)
-
-plt.savefig('gauss.png')
+#ax = fig.add_subplot(111)
+ax.scatter3D(df['theta'], df['phi'], ods)
+#plt.scatter(df['radius'], ods)
+plt.savefig('ods_3D.png')
 plt.close()
 
 """
