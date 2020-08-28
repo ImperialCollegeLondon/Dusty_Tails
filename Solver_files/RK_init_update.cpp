@@ -1,3 +1,5 @@
+//File that has the main function
+
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -12,26 +14,24 @@
 
 using namespace std;
 
-vector <Particle> particles;
+vector <Particle> particles; //initiate vector of "Particle" (Object defined in particle.h)
 
 int main() {
 
-  long int total_particles = 100;
-  double t_common = 0.01; //arbitrary for now
-  double big_step = 0.01;
-  double end_t = 5.0;
-  double total_t = 0.0;
+  long int total_particles = 100; //initial number of particles to start simulation with
+  double t_common = 0.01;
+  double big_step = 0.01; //big time step (in terms of planetary orbits)
+  double end_t = 0.5; // end time of simulation
+  double total_t = 0.0; // total time that has passed, so 0 in the beginning
 
-  //srand(2);
+  long int current_particles = 0; // number of current particles in simulation
 
-  long int current_particles = 0;
+  add_particles(particles, current_particles, total_particles, 0.0); // call function that adds particles to simulation (in add_rm.cpp file)
 
-  add_particles(particles, current_particles, total_particles, 0.0);
-
-  rm_particles(particles);
+  rm_particles(particles); //remove any particles that were generated too far from the planet
 
   solve_particles(total_t, end_t, particles, total_particles, t_common, big_step,
-                       current_particles);
+                       current_particles); //solver function (in add_rm.cpp file)
 
 
 }

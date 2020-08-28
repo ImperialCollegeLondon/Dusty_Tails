@@ -27,6 +27,7 @@ double beta_fn(double k, double L_star, double M_star){
 double opacity(double s, double x, double y, double z){
     //function to calculate opacity in cgs units
     //might need to add density and size as parameters later
+    //cout << "Opacity " << (3.0/4.0)* (qfactor(s, x, y, z)/ (rho_d * s)) << endl;
     return (3.0/4.0)* (qfactor(s, x, y, z)/ (rho_d * s)) ;
 }
 

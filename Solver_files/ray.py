@@ -22,9 +22,9 @@ def grid(r, t, p) :
     return x, y, z
 
 
-dt = np.dtype([('radius', np.float64), ('theta', np.float64), ('phi', np.float64), ('od', np.float64)])
+dt = np.dtype([('theta', np.float64), ('phi', np.float64),('ext', np.float64), ('od', np.float64)])
 
-data = np.fromfile("ray_tracer_test.bin", dt)
+data = np.fromfile("ray_tracer_test_300cells.bin", dt)
 df = pd.DataFrame(data)
 
 #print(df)
@@ -33,10 +33,9 @@ radii = List()
 thetas = List()
 phis = List()
 ods = List()
+ods_a = List()
+errors = List()
 
-
-for radius in df['radius'].unique():
-    radii.append(radius)
 
 for theta in df['theta'].unique():
     thetas.append(theta)
@@ -45,7 +44,16 @@ for phi in df['phi'].unique():
     phis.append(phi)
 
 for od in df['od']:
+    if od == 0.0:
+        ods.append(math.log10(1e-4))
+    else:
+        ods.append(math.log10(od))
+
+"""
+for od in df['od']:
     ods.append(od)
+print(len(ods))
+"""
 
 
 xs= List()
@@ -53,16 +61,30 @@ ys = List()
 zs = List()
 
 
-xs, ys, zs = grid(radii, thetas, phis)
+#xs, ys, zs = grid(radii, thetas, phis)
 
 
 #print(len(ods))
 fig = plt.figure()
-ax = plt.axes(projection='3d')
-#ax = fig.add_subplot(111)
-ax.scatter3D(df['theta'], df['phi'], ods)
-#plt.scatter(df['radius'], ods)
-plt.savefig('ods_3D.png')
+#ax = plt.axes(projection='3d')
+ax = fig.add_subplot(111)
+
+o_reshape = np.reshape(ods, (300,300), order = 'C')
+
+print(type(o_reshape))
+
+plt.contourf(phis, thetas, o_reshape, 30, cmap='GnBu')
+
+plt.colorbar()
+#ax.scatter3D(df['theta'], df['phi'], df['od'])
+#plt.scatter(df['radius'], ods, s= 0.01, c = "black")
+#plt.scatter(df['radius'], ods_a, s=0.01, c = "red")
+
+ax.set_xlabel("theta")
+ax.set_ylabel("phi")
+
+plt.savefig('od_test.png')
+
 plt.close()
 
 """
@@ -83,7 +105,7 @@ idx = z.argsort()
 x, y, z = x[idx], y[idx], z[idx]
 
 fig, ax = plt.subplots()
-ax.scatter(x, y, c=z, s=100, edgecolor='')
+ax.scatter(x, y, c=z, s=300, edgecolor='')
 
 
 plt.savefig('gauss.png')
