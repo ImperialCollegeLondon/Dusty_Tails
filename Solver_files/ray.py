@@ -24,7 +24,7 @@ def grid(r, t, p) :
 
 dt = np.dtype([('theta', np.float64), ('phi', np.float64),('ext', np.float64), ('od', np.float64)])
 
-data = np.fromfile("ray_tracer_test_300cells.bin", dt)
+data = np.fromfile("ray_tracer_test_200cells_right.bin", dt)
 df = pd.DataFrame(data)
 
 #print(df)
@@ -45,16 +45,16 @@ for phi in df['phi'].unique():
 
 for od in df['od']:
     if od == 0.0:
-        ods.append(math.log10(1e-4))
+        od = np.nan
+        ods.append(math.log10(od))
     else:
         ods.append(math.log10(od))
-
 """
+
 for od in df['od']:
     ods.append(od)
 print(len(ods))
 """
-
 
 xs= List()
 ys = List()
@@ -69,11 +69,11 @@ fig = plt.figure()
 #ax = plt.axes(projection='3d')
 ax = fig.add_subplot(111)
 
-o_reshape = np.reshape(ods, (300,300), order = 'C')
+o_reshape = np.reshape(ods, (200,200), order = 'C')
 
 print(type(o_reshape))
 
-plt.contourf(phis, thetas, o_reshape, 30, cmap='GnBu')
+plt.contourf(phis, thetas, o_reshape, 20, cmap='jet')
 
 plt.colorbar()
 #ax.scatter3D(df['theta'], df['phi'], df['od'])

@@ -26,26 +26,26 @@ uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 //open files to write data for python plotting
 ofstream ofile("kic_1255b_035_spherical.bin", ios::out | ios::binary);
 
-ofstream ray_tracer("ray_tracer_test_300cells.bin", ios::out | ios::binary);
+ofstream ray_tracer("ray_tracer_test_200cells_new.bin", ios::out | ios::binary);
 
 
 //define grid limits for ray tracing calculation
 //atm grid is uniform
 //anything with "a" in defines the A grid, anything with "b" defines B grid
-double r_a [301];
-double r_b [300];
-double theta_a [301];
-double theta_b [300];
-double phi_a [301];
-double phi_b [300];
+double r_a [201];
+double r_b [200];
+double theta_a [201];
+double theta_b [200];
+double phi_a [201];
+double phi_b [200];
 
-double n_cells = 300.0; //number of grid cells in each direction
+double n_cells = 200.0; //number of grid cells in each direction
 double r_min = 0.0;
-double r_max = 300.0;
+double r_max = 200.0;
 double theta_min = 0;
-double theta_max =  300.;
+double theta_max =  200.;
 double phi_min = 0.0;
-double phi_max = 300.;
+double phi_max = 200.;
 
 //spacing of grid
 double dr = (r_max - r_min)/ n_cells;
@@ -53,17 +53,17 @@ double dtheta = (theta_max - theta_min ) / n_cells;
 double dphi = ( phi_max - phi_min) / n_cells;
 
 //define 3d arrays to store extinctions and optical depths at each grid cell
-double extinction [300][300][300] = {};
-double optical_depth [300][300][300] = {};
+double extinction [200][200][200] = {};
+double optical_depth [200][200][200] = {};
 
 //limits of the particle distribution: this needs to be checked if using a
 //different planet or different initial conditions for particles
-double d_r_min = 0.92;
-double d_r_max = 1.18;
-double d_t_min = 1.4;
-double d_t_max = 1.8;
-double d_p_min = -0.6;
-double d_p_max = 0.05;
+double d_r_min = 0.0;
+double d_r_max = 1.14;
+double d_t_min = 1.54;
+double d_t_max = 1.76;
+double d_p_min = -0.60;
+double d_p_max = 0.01;
 
 //spacing of grid cells in scale of particle distribution
 double d_dr = (d_r_max - d_r_min)/ n_cells;
@@ -170,7 +170,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
     cout << " at " << total_t << endl;
 
-    if ( total_t >= 0.49 ) {
+    if ( total_t >= 1.99 ) {
 
       cout << "now at grid builder " << endl;
 
@@ -178,8 +178,8 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
       calculation_ext(particles, extinction);
       optical_depth_test(extinction, optical_depth);
 
-      for (unsigned int j = 0; j <300; j++){
-                for (unsigned int k = 0; k < 300; k++){
+      for (unsigned int j = 0; j <200; j++){
+                for (unsigned int k = 0; k < 200; k++){
                     double theta_local;
                     double phi_local;
 
@@ -187,8 +187,8 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
                     phi_local = phi_reverse(phi_a[k]);
                     ray_tracer.write((char*) &theta_local, sizeof(double));
                     ray_tracer.write((char*) &phi_local, sizeof(double));
-                    ray_tracer.write((char*) &extinction [299][j][k], sizeof(double));
-                    ray_tracer.write((char*) &optical_depth [299][j][k], sizeof(double));
+                    ray_tracer.write((char*) &extinction [199][j][k], sizeof(double));
+                    ray_tracer.write((char*) &optical_depth [199][j][k], sizeof(double));
 
 
             }
@@ -198,7 +198,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
     if (total_t > plot_time) {
       current_particles = total_particles;
-      total_particles = total_particles + 300;
+      total_particles = total_particles + 100;
       add_particles(particles, current_particles, total_particles, total_t);
       plot_time = plot_time + 0.01;
      }

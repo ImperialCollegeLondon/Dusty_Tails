@@ -24,14 +24,14 @@ void build_grids(double *r_a, double *r_b, double *theta_a, \
       phi_a[0] = phi_start;
 
 
-      for( unsigned int i = 1; i <= 300; i++){
+      for( unsigned int i = 1; i <= 200; i++){
           r_a [i] = r_a [i-1] + dr;
           theta_a [i] = theta_a [i-1] + dtheta;
           phi_a [i] = phi_a [i-1] + dphi;
 
       }
 
-      for (unsigned int i = 0; i <= 299; i++){
+      for (unsigned int i = 0; i <= 199; i++){
           r_b [i] = r_a [i] + dr/2.;
           theta_b [i] = theta_a[i] + dtheta/2.;
           phi_b [i] = phi_a [i] + dphi/2.;
@@ -43,7 +43,7 @@ void build_grids(double *r_a, double *r_b, double *theta_a, \
 
 
 
-void calculation_ext(vector <Particle>& particles, double ext [300][300][300]){
+void calculation_ext(vector <Particle>& particles, double ext [200][200][200]){
         vector <double> sphere_pos(3, 0.0);
         vector <double> scaled_pos(3, 0.0);
         int r_it, theta_it, phi_it;
@@ -127,7 +127,7 @@ void calculation_ext(vector <Particle>& particles, double ext [300][300][300]){
                       cout << "opacity " << op << endl;
 
                       old_ext = ext [r_index[i]][theta_index[j]][phi_index[k]];
-                      ext [r_index[i]][theta_index[j]][phi_index[k]] = old_ext + (((partial_vol/ vol_element) * n_mini * p.p_mass * 1.0e-3 * op) / (vol_element * pow(a, 3.0)));
+                      ext [r_index[i]][theta_index[j]][phi_index[k]] = old_ext + (partial_vol/ vol_element) * ((n_mini * p.p_mass * 1.0e-3 * op) / (vol_element * pow(a, 2.)));
                   }
                 }
               }
@@ -173,11 +173,11 @@ double phi_reverse(double old_phi){
 }
 
 
-void extinction_test(double *r_a, double *r_b, double *theta_a, double *theta_b, double *phi_a, double *phi_b, double function[300][300][300]){
+void extinction_test(double *r_a, double *r_b, double *theta_a, double *theta_b, double *phi_a, double *phi_b, double function[200][200][200]){
           double r_gauss, theta_gauss, phi_gauss;
-          for (unsigned int i = 0; i< 300; i++){
-                for (unsigned int j = 0; j <300; j++){
-                    for (unsigned int k = 0; k < 300; k++){
+          for (unsigned int i = 0; i< 200; i++){
+                for (unsigned int j = 0; j <200; j++){
+                    for (unsigned int k = 0; k < 200; k++){
                         r_gauss = gauss(r_b [i], 0.5, 0.1);
                         theta_gauss = gauss(theta_b [j], PI/2.0, 0.1);
                         phi_gauss = gauss(phi_b [k], PI, 0.1);
@@ -189,11 +189,11 @@ void extinction_test(double *r_a, double *r_b, double *theta_a, double *theta_b,
           }
 }
 
-void od_analytic(double ods[300][300][300]){
+void od_analytic(double ods[200][200][200]){
   double r_gauss, theta_gauss, phi_gauss;
-  for (unsigned int k = 0; k< 300; k++){
-        for (unsigned int j = 0; j <300; j++){
-            for (unsigned int i = 0; i < 300; i++){
+  for (unsigned int k = 0; k< 200; k++){
+        for (unsigned int j = 0; j <200; j++){
+            for (unsigned int i = 0; i < 200; i++){
                 theta_gauss = gauss(theta_b [j], PI/2.0, 0.1);
                 phi_gauss = gauss(phi_b [k], PI, 0.1);
 
@@ -204,11 +204,11 @@ void od_analytic(double ods[300][300][300]){
     }
 }
 
-void optical_depth_test(double ext [300][300][300], double od [300][300][300]){
-    for (unsigned int k = 1; k < 300; k++){
-        for (unsigned int j = 1; j < 300; j++){
-            for (unsigned int  i = 1; i < 300; i++){
-                  od[i][j][k] = od[i-1][j][k] + ext[i-1][j][k] * r_reverse(r_a[i]-r_a[i-1]) * a ;
+void optical_depth_test(double ext [200][200][200], double od [200][200][200]){
+    for (unsigned int k = 1; k < 200; k++){
+        for (unsigned int j = 1; j < 200; j++){
+            for (unsigned int  i = 1; i < 200; i++){
+                  od[i][j][k] = od[i-1][j][k] + ext[i-1][j][k] * r_reverse(r_a[i]-r_a[i-1]);
                 }
                 }
             }
@@ -217,10 +217,10 @@ void optical_depth_test(double ext [300][300][300], double od [300][300][300]){
 
 
 
-void error(double analytic [300][300][300], double numerical [300][300][300], double errors [300][300][300]){
-  for (unsigned int k = 0; k < 300; k++){
-      for (unsigned int j = 0; j < 300; j++){
-          for (unsigned int  i = 0; i < 300; i++){
+void error(double analytic [200][200][200], double numerical [200][200][200], double errors [200][200][200]){
+  for (unsigned int k = 0; k < 200; k++){
+      for (unsigned int j = 0; j < 200; j++){
+          for (unsigned int  i = 0; i < 200; i++){
 
                     errors [i][j][k] = exp(-1.0* (fabs(analytic[i][j][k] - numerical[i][j][k]) / analytic[i][j][k]) );
 

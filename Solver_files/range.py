@@ -20,7 +20,7 @@ def spherical(x, y, z):
     return particle_spherical
 
 
-dt = np.dtype([('time', np.float64), ('no', np.int64), ('id', np.int64), ('x', np.float64), \
+dt = np.dtype([('time', np.float64), ('id', np.int64), ('x', np.float64), \
 ('y', np.float64), ('z', np.float64), ('size', np.float64), ('mass', np.float64)])
 
 data = np.fromfile("kic_1255b_035_spherical.bin", dt)

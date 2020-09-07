@@ -11,15 +11,15 @@ extern vector <double> k1, k2, k3, k4, k5, k6, k7;
 extern vector <double> k1d, k2d, k3d, k4d, k5d, k6d, k7d;
 extern double ks1, ks2, ks3, ks4, ks5, ks6, ks7;
 
-extern double r_a [301];
-extern double r_b [300];
-extern double theta_a [301];
-extern double theta_b [300];
-extern double phi_a [301];
-extern double phi_b [300];
+extern double r_a [201];
+extern double r_b [200];
+extern double theta_a [201];
+extern double theta_b [200];
+extern double phi_a [201];
+extern double phi_b [200];
 
-extern double extinction [300][300][300];
-extern double optical_depth [300][300][300];
+extern double extinction [200][200][200];
+extern double optical_depth [200][200][200];
 
 
 extern double n_cells, r_min, r_max, theta_min, theta_max, phi_min, phi_max;
@@ -105,19 +105,19 @@ double gauss(double var, double var_c, double std);
 
 vector <double> grid_scaling(vector <double> s_position);
 
-void extinction_test(double r_a, double r_b, double theta_a, double theta_b, double phi_a, double phi_b, double function[300][300][300]);
+void extinction_test(double r_a, double r_b, double theta_a, double theta_b, double phi_a, double phi_b, double function[200][200][200]);
 
-void optical_depth_test(double ext [300][300][300], double od [300][300][300]);
+void optical_depth_test(double ext [200][200][200], double od [200][200][200]);
 
-void od_analytic(double ods[300][300][300]);
+void od_analytic(double ods[200][200][200]);
 
-void error(double analytic [300][300][300], double numerical [300][300][300], double errors [300][300][300]);
+void error(double analytic [200][200][200], double numerical [200][200][200], double errors [200][200][200]);
 
 void test_pos(double *r_test, double *theta_test, double *phi_test, \
                 double d_r_min, double d_r_max, double d_t_min, double d_t_max,
                 double d_p_min, double d_p_max, double d_dr, double d_dtheta, double d_dphi);
 
-void test_dist_ext(double *r_test, double *theta_test, double *phi_test, double function[300][300][300]);
+void test_dist_ext(double *r_test, double *theta_test, double *phi_test, double function[200][200][200]);
 
 double r_reverse(double old_r);
 
