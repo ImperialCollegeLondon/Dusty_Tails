@@ -126,13 +126,17 @@ void rm_particles(vector <Particle>& particles){
     }
 }
 
-
+// solve_particles takes as arguments the total time of the simulation (total_t)
+// the end time of the current iteration (end_t), the vector of no_particles
+// the total number of particles to be achieved (total_particles)
+//the current number of particles in the iteration (current_particles)
+//t_common and big_step are the big common time step
 void solve_particles(double total_t, double end_t, vector <Particle>& particles, \
                      long int total_particles, double t_common, double big_step, \
                     long int current_particles){
 
-  double plot_time = 0.01;
-  vector <double> updated_vector(8);
+  double plot_time = 0.01; //time when to output values for plotting
+  vector <double> updated_vector(8); //vector which will take updated values of positons, velocitites, size and optimal time step for particle
 
   while (total_t < end_t) {
 
@@ -140,44 +144,42 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
         double no_particles = particles.size();
 
+        //Lines to write binary file
         ofile.write((char*) &total_t, sizeof(double));
-
-        //ofile.write((char*) &no_particles, sizeof(long int));
-        //cout << "particles " << particles.size() << endl;
         ofile.write((char*) &p.id, sizeof(long int));
-
         ofile.write((char*) &p.position[0], sizeof(double));
-
         ofile.write((char*) &p.position[1], sizeof(double));
-
         ofile.write((char*) &p.position[2], sizeof(double));
-
         ofile.write((char*) &p.p_size, sizeof(double));
-
         ofile.write((char*) &p.p_mass, sizeof(double));
 
+        //updated vector is new positions, velocities, size and optimal small step size for particle
+        // RK_solver function is in "solver_new_err.cpp"
         updated_vector = RK_solver({p.position[0], p.position[1], p.position[2], \
         p.velocity[0], p.velocity[1], p.velocity[2], p.p_size}, total_t, t_common, p.h_updated);
         p.position = {updated_vector[0],updated_vector[1], updated_vector[2]};
         p.velocity = {updated_vector[3],updated_vector[4], updated_vector[5]};
         p.p_size = updated_vector[6];
-        p.p_mass = dust_mass(p.p_size);
+        p.p_mass = dust_mass(p.p_size); //dust_mass is in "microphysics.cpp"
         p.h_updated = updated_vector[7];
 
     }
 
-    rm_particles(particles);
+    rm_particles(particles); //removes particles that are too small
 
-    cout << " at " << total_t << endl;
+    //if condition below is just for a test of the ray tracer at a given time
 
     if ( total_t >= 1.99 ) {
 
       cout << "now at grid builder " << endl;
-
+      //build_grids is in ray_tracer.cpp - as the name says it builds the grid over the star for the ray tracing calculations
       build_grids(r_a, r_b, theta_a, theta_b, dr, dtheta, dphi, phi_a, phi_b, r_min, theta_min, phi_min);
+      //calculation_ext is in ray_tracer.cpp - calculates the extinction at each grid cell
       calculation_ext(particles, extinction);
+      //optical_depth_test is in ray_tracer.cpp - calculates the optical depth in each grid cell, dependent on the extinction distribution
       optical_depth_test(extinction, optical_depth);
 
+      //loop below write file for plotting
       for (unsigned int j = 0; j <200; j++){
                 for (unsigned int k = 0; k < 200; k++){
                     double theta_local;
@@ -195,10 +197,12 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         }
 
     }
-
+    //when plot time is reached the following condition adds 100 new no_particles
+    //should change this 100 to a variable
     if (total_t > plot_time) {
       current_particles = total_particles;
       total_particles = total_particles + 100;
+      //add particles explained above in this file
       add_particles(particles, current_particles, total_particles, total_t);
       plot_time = plot_time + 0.01;
      }
