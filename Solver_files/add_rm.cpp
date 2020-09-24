@@ -16,17 +16,17 @@ unsigned seed = 123;
 mt19937 generator (seed); //set the seed for the distrubutions of particle positions
 
 //Use something of the sort below to have particles starting on the day side of the planet
-//uniform_real_distribution<double> uniform_phi(0.625, 0.875);
-//uniform_real_distribution<double> uniform_theta(0.2, 0.8);
+uniform_real_distribution<double> uniform_phi(0.625, 0.875);
+uniform_real_distribution<double> uniform_theta(0.2, 0.8);
 
 //Use distrubutions below to have particles coming out of the whole planetary surface
-uniform_real_distribution<double> uniform_phi(0.0, 1.0);
-uniform_real_distribution<double> uniform_theta(0.0, 1.0);
+//uniform_real_distribution<double> uniform_phi(0.0, 1.0);
+//uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 
 //open files to write data for python plotting
-ofstream ofile("kic_1255b_035_spherical.bin", ios::out | ios::binary);
+ofstream ofile("kic_1255b_035_testing.bin", ios::out | ios::binary);
 
-ofstream ray_tracer("ray_tracer_test_200cells_new.bin", ios::out | ios::binary);
+ofstream ray_tracer("ray_tracer_testing.bin", ios::out | ios::binary);
 
 
 //define grid limits for ray tracing calculation
@@ -58,8 +58,8 @@ double optical_depth [200][200][200] = {};
 
 //limits of the particle distribution: this needs to be checked if using a
 //different planet or different initial conditions for particles
-double d_r_min = 0.0;
-double d_r_max = 1.14;
+double d_r_min = 0.95;
+double d_r_max = 1.15;
 double d_t_min = 1.54;
 double d_t_max = 1.76;
 double d_p_min = -0.60;
@@ -169,7 +169,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
     //if condition below is just for a test of the ray tracer at a given time
 
-    if ( total_t >= 1.99 ) {
+    if ( total_t >= 0.99 ) {
 
       cout << "now at grid builder " << endl;
       //build_grids is in ray_tracer.cpp - as the name says it builds the grid over the star for the ray tracing calculations

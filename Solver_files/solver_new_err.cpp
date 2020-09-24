@@ -11,26 +11,33 @@
 
 using namespace std;
 
-double star_x = -((m_planet) / (m_planet + 1.0));
-double planet_x = 1.0 / (m_planet + 1.0);
+double star_x = -((m_planet) / (m_planet + 1.0)); //stars x position in c.o.m frame of ref
+double planet_x = 1.0 / (m_planet + 1.0); // planets x position in c.o.m frame of ref
 
-vector <double> star_pos = {star_x,0.0, 0.0 };
+vector <double> star_pos = {star_x,0.0, 0.0 }; // stars position vector
 
-vector <double> planet_pos = {planet_x, 0.0, 0.0};
+vector <double> planet_pos = {planet_x, 0.0, 0.0}; //planets position vector
 
-
+//acceleration function takes as arguments the stars position, the planets position and the current pos and vel of the particle
+//integer i is an indication of which position/velocity is being calculated at the moment (x, y, or z direction)
+//acceleration calculates the acceleration contributions from the different forces acting on the particles
 double acceleration( int i, double pos_star, double pos_planet, vector <double> V){
 
   double vel_dot, grav_star, grav_planet, coriol, drag, radiation, centri;
-
+  //gravitational acceleration from star
   grav_star = (-G_dim * pos_star ) / pow( scalar(V[0] - star_pos[0], V[1] , V[2]), 3.0);
 
+  //gravitational acceleration from planet
   grav_planet = (-G_dim * m_planet* pos_planet ) / pow( scalar(V[0] - planet_pos[0]  + r_planet_dim, V[1] , V[2]), 3.0 );
 
-  coriol = coriolis(V)[i];
-  centri = centrifugal(V)[i];
-  radiation = rad_pressure(V)[i];
-  drag = pr_drag(V)[i];
+  //coriolis acceleration
+  coriol = coriolis(V)[i]; //coriolis function is in forces.cpp
+  //centrifugal acceleration
+  centri = centrifugal(V)[i]; //centrifugal function is in forces.cpp
+  //radiation pressure acceleration
+  radiation = rad_pressure(V)[i]; //rad pressure function is in forces.cpp
+  // PR drag acceleration
+  drag = pr_drag(V)[i]; //PR drag function is in forces.cpp*
 
   vel_dot = grav_star - centri - 2.0*coriol  + radiation - drag + grav_planet;
 
@@ -114,7 +121,7 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
     new_h = step_sizes[1];
 
     if (new_h == -1.0){
-      
+
       t = del_t;
       return {V_0[0], V_0[1], V_0[2], V_0[3], V_0[4], V_0[5], 0.01e-4, new_h};
     }
@@ -123,7 +130,7 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
     t = t + old_h;
 
     if (new_vector[6] < 0.1e-4){
-      
+
       t = del_t;
       return {new_vector[0], new_vector[1], new_vector[2], new_vector[3], new_vector[4], new_vector[5], 0.01e-4, new_h};
     }
@@ -144,7 +151,7 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
         old_h = step_sizes[0];
         new_h = step_sizes[1];
         if (new_h == -1.0){
-         
+
           t = del_t;
           return {new_vector[0], new_vector[1], new_vector[2], new_vector[3], new_vector[4], new_vector[5], 0.01e-4, new_h};
         }
@@ -153,7 +160,7 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
              new_vector = next_step(old_h, new_vector);
 
              if (new_vector[6] < 0.1e-4){
-               
+
                t = del_t;
                return {new_vector[0], new_vector[1], new_vector[2], new_vector[3], new_vector[4], new_vector[5], 0.01e-4, new_h};
              }
@@ -161,10 +168,10 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
              new_vector = next_step(del_t - (t-old_h), new_vector);
 
              if (new_vector[6] < 0.1e-4){
-               
+
                return {new_vector[0], new_vector[1], new_vector[2], new_vector[3], new_vector[4], new_vector[5], 0.01e-4, new_h};
              } else {
-             
+
              new_vector.push_back(new_h);
              return new_vector;
            }

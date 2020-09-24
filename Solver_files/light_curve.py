@@ -117,7 +117,7 @@ total_flux = []
 i = 0
 
 for t in df['time'].unique():
-  if (t > 2.75) and (t < 3.25):
+  if (t >= 1.5) and (t < 1.6):
 
     #print("this is running ")
     plot_df = df[df.time == t]

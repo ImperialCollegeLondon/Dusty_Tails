@@ -5,6 +5,7 @@ import math
 import pandas as pd
 from numba import jit
 from numba.typed import List
+import statistics
 
 @jit(nopython = True)
 def spherical(x, y, z):
@@ -19,11 +20,29 @@ def spherical(x, y, z):
 
     return particle_spherical
 
+@jit(nopython = True)
+def distances(particles):
+    shorter_d = []
+    for i in range(0, len(particles)):
+        p_distances = []
+        for j in range (0, len(particles)):
+          if (i != j):
+             u = (particles[i][3] - particles[j][3])**2.0 + (particles[i][4] - particles[j][4])**2. + (particles[i][5] - particles[j][5])**2.
+             current_d = np.sqrt((u))
+             p_distances.append(current_d)
+
+        shorter_d.append(min(p_distances))
+
+    #print(shorter_d)
+    return shorter_d
+
+
+
 
 dt = np.dtype([('time', np.float64), ('id', np.int64), ('x', np.float64), \
 ('y', np.float64), ('z', np.float64), ('size', np.float64), ('mass', np.float64)])
 
-data = np.fromfile("kic_1255b_035_spherical.bin", dt)
+data = np.fromfile("kic_1255b_035.bin", dt)
 df = pd.DataFrame(data)
 
 
@@ -39,6 +58,7 @@ all_phi_max = []
 all_phi_min = []
 
 for t in df['time'].unique():
+
 
     plot_df = df[df.time == t]
 
@@ -58,15 +78,15 @@ for t in df['time'].unique():
 
     particles = spherical(x_now, y_now, z_now)
 
+    #print(statistics.mean(distances(particles)))
+
     radii = List()
     thetas = List()
     phis = List()
 
     for particle in particles:
-        #print(particle)
         radii.append(particle[0])
         thetas.append(particle[1])
-        #print(particle[1])
         phis.append(particle[2])
 
     all_r_max.append(max(radii))
