@@ -16,12 +16,12 @@ unsigned seed = 123;
 mt19937 generator (seed); //set the seed for the distrubutions of particle positions
 
 //Use something of the sort below to have particles starting on the day side of the planet
-uniform_real_distribution<double> uniform_phi(0.625, 0.875);
-uniform_real_distribution<double> uniform_theta(0.2, 0.8);
+//uniform_real_distribution<double> uniform_phi(0.625, 0.875);
+//uniform_real_distribution<double> uniform_theta(0.2, 0.8);
 
 //Use distrubutions below to have particles coming out of the whole planetary surface
-//uniform_real_distribution<double> uniform_phi(0.0, 1.0);
-//uniform_real_distribution<double> uniform_theta(0.0, 1.0);
+uniform_real_distribution<double> uniform_phi(0.0, 1.0);
+uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 
 //open files to write data for python plotting
 ofstream ofile("kic_1255b_035_testing.bin", ios::out | ios::binary);
@@ -55,15 +55,16 @@ double dphi = ( phi_max - phi_min) / n_cells;
 //define 3d arrays to store extinctions and optical depths at each grid cell
 double extinction [200][200][200] = {};
 double optical_depth [200][200][200] = {};
+int no_particles[200][200][200] = {};
 
 //limits of the particle distribution: this needs to be checked if using a
 //different planet or different initial conditions for particles
-double d_r_min = 0.95;
-double d_r_max = 1.15;
-double d_t_min = 1.54;
-double d_t_max = 1.76;
-double d_p_min = -0.60;
-double d_p_max = 0.01;
+double d_r_min = 0.98;
+double d_r_max = 1.02;
+double d_t_min = 1.59;
+double d_t_max = 1.55;
+double d_p_min = -0.2;
+double d_p_max = -0.16;
 
 //spacing of grid cells in scale of particle distribution
 double d_dr = (d_r_max - d_r_min)/ n_cells;
@@ -169,15 +170,27 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
     //if condition below is just for a test of the ray tracer at a given time
 
-    if ( total_t >= 0.99 ) {
+    if ( total_t >= 1.985 ) {
 
       cout << "now at grid builder " << endl;
       //build_grids is in ray_tracer.cpp - as the name says it builds the grid over the star for the ray tracing calculations
       build_grids(r_a, r_b, theta_a, theta_b, dr, dtheta, dphi, phi_a, phi_b, r_min, theta_min, phi_min);
       //calculation_ext is in ray_tracer.cpp - calculates the extinction at each grid cell
-      calculation_ext(particles, extinction);
+      calculation_ext(particles, extinction, no_particles);
       //optical_depth_test is in ray_tracer.cpp - calculates the optical depth in each grid cell, dependent on the extinction distribution
       optical_depth_test(extinction, optical_depth);
+
+      for (unsigned int l = 0; l <200; l++){
+        for (unsigned int m = 0; m <200; m++){
+          for (unsigned int n = 0; n<200; n++){
+            if (no_particles[l][m][n] != 0) {
+              cout << no_particles[l][m][n] << endl;
+              cout << "l " << l << endl;
+              cout << "m " << m << endl;
+              cout << "n " << n << endl; }
+              }
+        }
+      }
 
       //loop below write file for plotting
       for (unsigned int j = 0; j <200; j++){

@@ -12,6 +12,7 @@ def grid(r, t, p) :
     x = List()
     y = List()
     z = List()
+    
     for i in range(0, len(r)):
         for j in range(0, len(t)):
             for k in range(0, len(p)):
@@ -24,7 +25,7 @@ def grid(r, t, p) :
 
 dt = np.dtype([('theta', np.float64), ('phi', np.float64),('ext', np.float64), ('od', np.float64)])
 
-data = np.fromfile("ray_tracer_test_200cells_right.bin", dt)
+data = np.fromfile("ray_tracer_testing.bin", dt)
 df = pd.DataFrame(data)
 
 #print(df)
@@ -42,7 +43,7 @@ for theta in df['theta'].unique():
 
 for phi in df['phi'].unique():
     phis.append(phi)
-
+"""
 for od in df['od']:
     if od == 0.0:
         od = np.nan
@@ -54,7 +55,6 @@ for od in df['od']:
 for od in df['od']:
     ods.append(od)
 print(len(ods))
-"""
 
 xs= List()
 ys = List()
@@ -63,6 +63,9 @@ zs = List()
 
 #xs, ys, zs = grid(radii, thetas, phis)
 
+a_test = np.zeros((200, 200, 200))
+a_test[199][199][199] = 1.0
+print(a_test)
 
 #print(len(ods))
 fig = plt.figure()

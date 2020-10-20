@@ -43,7 +43,8 @@ void build_grids(double *r_a, double *r_b, double *theta_a, \
 
 
 
-void calculation_ext(vector <Particle>& particles, double ext [200][200][200]){
+void calculation_ext(vector <Particle>& particles, double ext [200][200][200], \
+                    int nparticles [200][200][200]){
         vector <double> sphere_pos(3, 0.0);
         vector <double> scaled_pos(3, 0.0);
         int r_it, theta_it, phi_it;
@@ -61,17 +62,26 @@ void calculation_ext(vector <Particle>& particles, double ext [200][200][200]){
 
         double vol_element, partial_vol;
 
+        out << "total no particles " << particles.size() << endl;
+
         for( Particle& p : particles) {
 
               //cout << "in calculation test " << endl;
 
               sphere_pos = to_spherical(p.position[0], p.position[1], p.position[2]);
+              //cout << sphere_pos[0] << endl;
+              //cout << sphere_pos[1] << endl;
+              //cout << sphere_pos[2] << endl;
               scaled_pos = grid_scaling(sphere_pos);
+              //cout << scaled_pos[0] << endl;
+              //cout << scaled_pos[1] << endl;
+              //cout << scaled_pos[2] << endl;
+
+              if (scaled_pos[0] > 0.0){
 
               r_it = floor(scaled_pos[0]);
               theta_it = floor(scaled_pos[1]);
               phi_it = floor(scaled_pos[2]);
-
 
               //particles volume positions in "real" values
 
@@ -120,30 +130,38 @@ void calculation_ext(vector <Particle>& particles, double ext [200][200][200]){
 
                       op = (3./4.)*(1./4000)*(1./(p.p_size * 1e-2));
 
-                      //cout << "partial vol " << partial_vol << endl;
-                      //cout << "vol element" << vol_element << endl;
-
-                      //cout << "vol fraction " << partial_vol/vol_element << endl;
-                      //cout << "opacity " << op << endl;
-
+                      nparticles [r_index[i]][theta_index[j]][phi_index[k]] = nparticles [r_index[i]][theta_index[j]][phi_index[k]] + 1;
+                      //cout << nparticles [r_index[i]][theta_index[j]][phi_index[k]] << endl;
                       old_ext = ext [r_index[i]][theta_index[j]][phi_index[k]];
                       ext [r_index[i]][theta_index[j]][phi_index[k]] = old_ext + (partial_vol/ vol_element) * ((n_mini * p.p_mass * 1.0e-3 * op) / (vol_element * pow(a, 2.)));
                   }
                 }
               }
         }
-
+      }
 }
 
 vector <double> grid_scaling(vector <double> s_position){
   double r, theta, phi;
   vector <double> scaled(3, 0.0);
-  cout << "r pos no scaling " << s_position[0] << endl;
+
   r = (n_cells/ (d_r_max - d_r_min))* s_position[0]  - (n_cells / (d_r_max - d_r_min)) * d_r_min;
   theta = (n_cells/ (d_t_max - d_t_min))* s_position[1]  - (n_cells / (d_t_max - d_t_min)) * d_t_min;
   phi = (n_cells/ (d_p_max - d_p_min))* s_position[2]  - (n_cells /(d_p_max - d_p_min)) * d_p_min;
 
-  scaled = {r, theta, phi};
+
+
+  if ((r<0.) || (r>199.)){
+    scaled = {-1., -1., -1.};
+
+  } else if ((theta<0.) || (theta>199.)){
+    scaled = {-1., -1., -1.};
+
+  } else if ((phi<0.) || (phi>199.)){
+    scaled = {-1., -1., -1.};
+  } else {
+    scaled = {r, theta, phi};
+  }
 
   return scaled;
 }
