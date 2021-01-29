@@ -42,7 +42,7 @@ def distances(particles):
 dt = np.dtype([('time', np.float64), ('id', np.int64), ('x', np.float64), \
 ('y', np.float64), ('z', np.float64), ('size', np.float64), ('mass', np.float64)])
 
-data = np.fromfile("kic_1255b_035_spherical.bin", dt)
+data = np.fromfile("KIC1255b_040_3orb_sph.bin", dt)
 df = pd.DataFrame(data)
 
 
@@ -97,12 +97,12 @@ for t in df['time'].unique():
     all_phi_min.append(min(phis))
 
 
-print("max radius" , max(all_r_max))
-print("min radius" , min(all_r_min))
-print("max theta ", max(all_theta_max))
-print("min theta ", min(all_theta_min))
-print("max phi ", max(all_phi_max))
-print("min phi", min(all_phi_min))
+print("max radius" , statistics.mean(all_r_max))
+print("min radius" , statistics.mean(all_r_min))
+print("max theta ", statistics.mean(all_theta_max))
+print("min theta ", statistics.mean(all_theta_min))
+print("max phi ", statistics.mean(all_phi_max))
+print("min phi", statistics.mean(all_phi_min))
 
 
 

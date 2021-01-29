@@ -51,8 +51,9 @@ void calculation_ext(vector <Particle>& particles, double ext [cell_no][cell_no]
 
         double old_ext;
         double op;
+        double pib = 0.;
 
-        double n_mini = 1.0e+24;
+        double n_mini = 1.0e+23;
 
         vector <int> r_index, theta_index, phi_index;
 
@@ -69,13 +70,8 @@ void calculation_ext(vector <Particle>& particles, double ext [cell_no][cell_no]
               //cout << "in calculation test " << endl;
 
               sphere_pos = to_spherical(p.position[0], p.position[1], p.position[2]);
-              //cout << sphere_pos[0] << endl;
-              //cout << sphere_pos[1] << endl;
-              //cout << sphere_pos[2] << endl;
+
               scaled_pos = grid_scaling(sphere_pos);
-              //cout << scaled_pos[0] << endl;
-              //cout << scaled_pos[1] << endl;
-              //cout << scaled_pos[2] << endl;
 
               if (scaled_pos[0] > 0.0){
 
@@ -86,20 +82,19 @@ void calculation_ext(vector <Particle>& particles, double ext [cell_no][cell_no]
               //particles volume positions in "real" values
 
               p_rs = { r_reverse(scaled_pos[0] - (dr/2.)), r_reverse(scaled_pos[0] + (dr/2.))};
-              //cout << "p_rs " << p_rs[0] << "   " << p_rs[1] << endl;
+
               p_thetas = { theta_reverse(scaled_pos[1] - (dtheta/2.)), theta_reverse(scaled_pos[1] + (dtheta/2.))};
-              //cout << "p_thetas " << p_thetas[0] << "   " << p_thetas[1] << endl;
+
               p_phis= { phi_reverse(scaled_pos[2] - (dphi/2.)), phi_reverse(scaled_pos[2] + (dphi/2.))};
-              //cout << "p_phis " << p_phis[0] << "   " << p_phis[1] << endl;
 
 
               if (scaled_pos[0] > r_b[r_it]) {
                 r_index = {r_it, r_it + 1};
-                //cout << "r_a + 1 " << r_reverse(r_a[r_it +1]) << endl;
+
                 r_deltas = {pow(r_reverse(r_a [r_it +1]), 3.0) - pow(p_rs[0], 3.), pow(p_rs[1], 3.) - pow(r_reverse(r_a [r_it +1]), 3.) };
               } else {
                 r_index = {r_it - 1, r_it};
-                //cout << "r_a " << r_reverse(r_a[r_it]) << endl;
+
                 r_deltas = {pow(r_reverse(r_a [r_it]), 3.) - pow(p_rs[0], 3.0) , pow(p_rs[1], 3.0) - pow(r_reverse(r_a [r_it]), 3.) };
 
               }
@@ -124,21 +119,42 @@ void calculation_ext(vector <Particle>& particles, double ext [cell_no][cell_no]
                 for (unsigned int j = 0; j < 2; j++){
                   for (unsigned int k = 0; k < 2; k++){
 
+
                       partial_vol = 1./3. * abs(r_deltas[i] * theta_deltas[j] * phi_deltas[k]);
 
                       vol_element = 1./3. * abs((pow(p_rs[1], 3.) - pow(p_rs[0], 3.)) * (-cos(p_thetas[1]) + cos(p_thetas[0])) * (p_phis[1] - p_phis[0]));
 
-                      op = (3./4.)*(1./4000)*(1./(p.p_size * 1e-2));
+                      op = (3./4.)*(1./4000.)*(1./(p.p_size * 1.e-2));
 
                       nparticles [r_index[i]][theta_index[j]][phi_index[k]] = nparticles [r_index[i]][theta_index[j]][phi_index[k]] + 1;
                       //cout << nparticles [r_index[i]][theta_index[j]][phi_index[k]] << endl;
                       old_ext = ext [r_index[i]][theta_index[j]][phi_index[k]];
-                      ext [r_index[i]][theta_index[j]][phi_index[k]] = old_ext + (partial_vol/ vol_element) * ((n_mini * p.p_mass * 1.0e-3 * op) / (vol_element * pow(a, 2.)));
+                      ext [r_index[i]][theta_index[j]][phi_index[k]] = old_ext + (partial_vol/ vol_element) * ((n_mini * p.p_mass * 1.0e-3 * op) / (vol_element * pow(a, 3.)));
+
+
+                        if (theta_index[j] == 28 ) {
+                          if (phi_index[k] == 27 ) {
+                            cout << "particle id " << p.id << endl;
+                            cout << "r position " << r_index[i] << endl;
+                            cout << "particle mass " << p.p_mass << endl;
+                            cout << "particle size " << p.p_size << endl;
+                            cout << "partial vol " << partial_vol << endl;
+                            cout << "volume element " << vol_element << endl;
+                            cout << "opacity " << op << endl;
+                            cout << "extinction in cell before this particle " << old_ext << endl ;
+                            cout << "extinction in cell after " << ext [r_index[i]][theta_index[j]][phi_index[k]] << endl;
+
+
+                        }
+                      }
+
                   }
                 }
               }
         }
       }
+
+
 }
 
 vector <double> grid_scaling(vector <double> s_position){
@@ -151,20 +167,31 @@ vector <double> grid_scaling(vector <double> s_position){
 
 
 //verify if particle is within space where optical depth is relevant
-//CHANGE THE LIMITS TO THE LIMIST IN EACH VARIABLE
-  if ((r<0.) || (r>199.)){
+//CHANGE THE LIMITS TO THE LIMITS IN EACH VARIABLE
+  if ((r<0.) || (r>(n_cells - 1.))){
     scaled = {-1., -1., -1.};
 
-  } else if ((theta<0.) || (theta>199.)){
+  } else if ((theta<0.) || (theta>(n_cells - 1.))){
     scaled = {-1., -1., -1.};
 
-  } else if ((phi<0.) || (phi>199.)){
+  } else if ((phi<0.) || (phi>(n_cells - 1.))){
     scaled = {-1., -1., -1.};
   } else {
     scaled = {r, theta, phi};
   }
 
   return scaled;
+}
+
+void optical_depth_test(double ext [cell_no][cell_no][cell_no], double od [cell_no][cell_no][cell_no]){
+    for (unsigned int k = 1; k < cell_no; k++){
+        for (unsigned int j = 1; j < cell_no; j++){
+            for (unsigned int  i = 1; i < cell_no; i++){
+                  od[i][j][k] = od[i-1][j][k] + ext[i-1][j][k] * r_reverse(d_dr) * a ;
+                }
+                }
+            }
+
 }
 
 double r_reverse(double old_r){
@@ -189,20 +216,4 @@ double phi_reverse(double old_phi){
   new_phi = (old_phi + ((n_cells / (d_p_max - d_p_min)) * d_p_min)) / ((n_cells/ (d_p_max - d_p_min)));
 
   return new_phi;
-}
-
-
-void od_analytic(double ods[200][200][200]){
-  double r_gauss, theta_gauss, phi_gauss;
-  for (unsigned int k = 0; k< 200; k++){
-        for (unsigned int j = 0; j <200; j++){
-            for (unsigned int i = 0; i < 200; i++){
-                theta_gauss = gauss(theta_b [j], PI/2.0, 0.1);
-                phi_gauss = gauss(phi_b [k], PI, 0.1);
-
-                ods[i][j][k] = theta_gauss * phi_gauss * (-0.1) * pow(PI/2., 1./2.) * erf((0.5-r_b[i])/(pow(2, 1./2.) * 0.1)) + theta_gauss * phi_gauss * (0.1) * pow(PI/2., 1./2.) ;
-
-              }
-        }
-    }
 }

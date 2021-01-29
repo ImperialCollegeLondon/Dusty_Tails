@@ -24,7 +24,7 @@ uniform_real_distribution<double> uniform_phi(0.0, 1.0);
 uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 
 //open files to write data for python plotting
-ofstream ofile("KIC1255b_040_3orb_sph.bin", ios::out | ios::binary);
+ofstream ofile("KIC1255b_040_3orb_sph_100.bin", ios::out | ios::binary);
 
 ofstream ray_tracer("ray_tracer_testing.bin", ios::out | ios::binary);
 
@@ -42,7 +42,7 @@ double phi_b [cell_no];
 
 double r_min = 0.0;
 double r_max = n_cells;
-double theta_min = 0;
+double theta_min = 0.0;
 double theta_max =  n_cells;
 double phi_min = 0.0;
 double phi_max = n_cells;
@@ -62,8 +62,8 @@ int no_particles[cell_no][cell_no][cell_no] = {};
 //this is obviously not very sustainable
 double d_r_min = 0.9;
 double d_r_max = 1.1;
-double d_t_min = 1.45;
-double d_t_max = 1.65;
+double d_t_min = 1.52;
+double d_t_max = 1.72;
 double d_p_min = -0.2;
 double d_p_max = 0.0;
 
@@ -104,7 +104,7 @@ void add_particles(vector <Particle> &particles, long int current,
                                    v_esc*cos(theta)};
 
 
-                 grain.p_size = 0.4e-4; //initial grain size
+                 grain.p_size = 0.40e-4; //initial grain size
                  grain.p_tau = tau; //using a constant optical depth for now defined in constants.h
                  grain.p_density = rho_d; //bulk density
                  grain.h_updated = 0.001; //initial time step for numerical integrator
@@ -138,6 +138,11 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
   double plot_time = 0.01; //time when to output values for plotting
   vector <double> updated_vector(8); //vector which will take updated values of positons, velocitites, size and optimal time step for particle
+  int counter_ps = 0;
+  double optical_depth_avg = 0.0;
+  double optical_depth_sum = 0.0;
+  double particles_in_box = 0.;
+  double no_particles_avg = 0.0;
 
   while (total_t < end_t) {
 
@@ -170,7 +175,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
     //if condition below is just for a test of the ray tracer at a given time
 
-    if ( total_t >= 3.985 ) {
+    if ( total_t >= 1.99 ) {
 
       cout << "now at grid builder " << endl;
       //build_grids is in ray_tracer.cpp - as the name says it builds the grid over the star for the ray tracing calculations
@@ -182,16 +187,44 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
       for (unsigned int l = 0; l <cell_no; l++){
         for (unsigned int m = 0; m <cell_no; m++){
-          for (unsigned int n = 0; n<cell_no; n++){
+          for (unsigned int n = 0; n <cell_no; n++){
+            optical_depth_sum = optical_depth_sum + optical_depth[l][m][n];
+            if (l == 99) {
+              if (m == 28) {
+                if (n == 27) {
+                  //cout << "ext in specific cell " << extinction[l][m][n] << endl;
+                  //cout << "od in specific cell " << optical_depth[l][m][n] << endl;
+                }
+              }
+            }
             //cout << "at no particles writer" << endl;
             if (no_particles[l][m][n] != 0) {
-              cout << no_particles[l][m][n] << endl;
-              cout << "l " << l << endl;
-              cout << "m " << m << endl;
-              cout << "n " << n << endl; }
+              cout << "i " << l << endl;
+              cout << "j " << m << endl;
+              cout << "k " << n << endl;
+              cout << "optical depth " << optical_depth[l][m][n] << endl;
+
+              particles_in_box = particles_in_box + no_particles[l][m][n]; }
+              else {
+                counter_ps = counter_ps + 1; }
+              }
               }
         }
-      }
+
+      cout << "particles in box " << particles_in_box << endl;
+
+      no_particles_avg = particles_in_box / (pow(n_cells, 3.));
+
+      cout << "average number of particles per cell " << no_particles_avg << endl;
+
+      cout << "number of cells with 0 particles in" << counter_ps << endl;
+
+      optical_depth_avg = optical_depth_sum / (pow(n_cells, 3.));
+
+      cout <<"average optical depth per cell " << optical_depth_avg << endl;
+
+
+
 
       //loop below write file for plotting
       for (unsigned int j = 0; j <cell_no; j++){
@@ -209,13 +242,14 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
             }
         }
+      }
 
-    }
+
     //when plot time is reached the following condition adds 100 new no_particles
     //should change this 100 to a variable
     if (total_t > plot_time) {
       current_particles = total_particles;
-      total_particles = total_particles + 100;
+      total_particles = total_particles + 1000;
       //add particles explained above in this file
       add_particles(particles, current_particles, total_particles, total_t);
       plot_time = plot_time + 0.01;

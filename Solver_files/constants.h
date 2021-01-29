@@ -32,8 +32,8 @@ const double G_dim = (G* pow(T, 2.0) * Mstar_kg) / pow(a, 3.0); //dimensionless 
 const double c_dim = c * (T / a);
 const double r_h = pow(m_planet/3.0, 1.0/3.0); //hill radius
 
-const int cell_no = 200; //cell number for ray tracer calculations - used for vector declaration
-const double n_cells = 200.0; //number used for mathematical calculations
+const int cell_no = 120; //cell number for ray tracer calculations - used for vector declaration
+const double n_cells = 120.0; //number used for mathematical calculations
 
 extern double star_x;
 extern double planet_x;
