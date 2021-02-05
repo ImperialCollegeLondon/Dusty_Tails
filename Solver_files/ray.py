@@ -43,7 +43,7 @@ for theta in df['theta'].unique():
 
 for phi in df['phi'].unique():
     phis.append(phi)
-
+"""
 for od in df['od']:
     if od == 0.0:
         od = np.nan
@@ -57,7 +57,7 @@ print (df)
 for od in df['od']:
     ods.append(od)
 print(len(ods))
-"""
+
 xs= List()
 ys = List()
 zs = List()
@@ -82,8 +82,8 @@ plt.colorbar()
 #plt.scatter(df['radius'], ods, s= 0.01, c = "black")
 #plt.scatter(df['radius'], ods_a, s=0.01, c = "red")
 
-ax.set_xlabel("theta")
-ax.set_ylabel("phi")
+ax.set_xlabel("phi")
+ax.set_ylabel("theta")
 
 plt.savefig('od_test.png')
 

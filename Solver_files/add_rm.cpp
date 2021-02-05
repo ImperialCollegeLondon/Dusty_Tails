@@ -24,7 +24,7 @@ uniform_real_distribution<double> uniform_phi(0.0, 1.0);
 uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 
 //open files to write data for python plotting
-ofstream ofile("KIC1255b_040_3orb_sph_100.bin", ios::out | ios::binary);
+ofstream ofile("KIC1255b_040_2orb_sph_120_1k.bin", ios::out | ios::binary);
 
 ofstream ray_tracer("ray_tracer_testing.bin", ios::out | ios::binary);
 
@@ -87,6 +87,7 @@ void add_particles(vector <Particle> &particles, long int current,
 
         for ( unsigned long int i = current; i < total; i++){
 
+                 cout << "adding particle " << i << endl;
 
                  grain.id = i+1; //number ID of particle
                  double phi = 2.0*PI * uniform_phi(generator); //phi coordinate
@@ -146,6 +147,8 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
   while (total_t < end_t) {
 
+    cout << "orbit: " << total_t << endl;
+
     for( Particle& p : particles) {
 
         double no_particles = particles.size();
@@ -189,19 +192,12 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         for (unsigned int m = 0; m <cell_no; m++){
           for (unsigned int n = 0; n <cell_no; n++){
             optical_depth_sum = optical_depth_sum + optical_depth[l][m][n];
-            if (l == 99) {
-              if (m == 28) {
-                if (n == 27) {
-                  //cout << "ext in specific cell " << extinction[l][m][n] << endl;
-                  //cout << "od in specific cell " << optical_depth[l][m][n] << endl;
-                }
-              }
-            }
             //cout << "at no particles writer" << endl;
             if (no_particles[l][m][n] != 0) {
               cout << "i " << l << endl;
               cout << "j " << m << endl;
               cout << "k " << n << endl;
+              cout << "no particles in cell " << no_particles[l][m][n] << endl;
               cout << "optical depth " << optical_depth[l][m][n] << endl;
 
               particles_in_box = particles_in_box + no_particles[l][m][n]; }

@@ -132,22 +132,6 @@ void calculation_ext(vector <Particle>& particles, double ext [cell_no][cell_no]
                       ext [r_index[i]][theta_index[j]][phi_index[k]] = old_ext + (partial_vol/ vol_element) * ((n_mini * p.p_mass * 1.0e-3 * op) / (vol_element * pow(a, 3.)));
 
 
-                        if (theta_index[j] == 28 ) {
-                          if (phi_index[k] == 27 ) {
-                            cout << "particle id " << p.id << endl;
-                            cout << "r position " << r_index[i] << endl;
-                            cout << "particle mass " << p.p_mass << endl;
-                            cout << "particle size " << p.p_size << endl;
-                            cout << "partial vol " << partial_vol << endl;
-                            cout << "volume element " << vol_element << endl;
-                            cout << "opacity " << op << endl;
-                            cout << "extinction in cell before this particle " << old_ext << endl ;
-                            cout << "extinction in cell after " << ext [r_index[i]][theta_index[j]][phi_index[k]] << endl;
-
-
-                        }
-                      }
-
                   }
                 }
               }
