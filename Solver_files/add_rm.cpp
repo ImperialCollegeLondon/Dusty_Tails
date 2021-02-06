@@ -24,7 +24,7 @@ uniform_real_distribution<double> uniform_phi(0.0, 1.0);
 uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 
 //open files to write data for python plotting
-ofstream ofile("KIC1255b_040_2orb_sph_120_1k.bin", ios::out | ios::binary);
+ofstream ofile("KIC1255b_040_1orb_sph_120_1k.bin", ios::out | ios::binary);
 
 ofstream ray_tracer("ray_tracer_testing.bin", ios::out | ios::binary);
 
@@ -87,7 +87,7 @@ void add_particles(vector <Particle> &particles, long int current,
 
         for ( unsigned long int i = current; i < total; i++){
 
-                 cout << "adding particle " << i << endl;
+                 //cout << "adding particle " << i << endl;
 
                  grain.id = i+1; //number ID of particle
                  double phi = 2.0*PI * uniform_phi(generator); //phi coordinate
@@ -178,7 +178,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
     //if condition below is just for a test of the ray tracer at a given time
 
-    if ( total_t >= 1.99 ) {
+    if ( total_t >= 0.99 ) {
 
       cout << "now at grid builder " << endl;
       //build_grids is in ray_tracer.cpp - as the name says it builds the grid over the star for the ray tracing calculations
@@ -194,11 +194,12 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
             optical_depth_sum = optical_depth_sum + optical_depth[l][m][n];
             //cout << "at no particles writer" << endl;
             if (no_particles[l][m][n] != 0) {
-              cout << "i " << l << endl;
-              cout << "j " << m << endl;
-              cout << "k " << n << endl;
-              cout << "no particles in cell " << no_particles[l][m][n] << endl;
-              cout << "optical depth " << optical_depth[l][m][n] << endl;
+              if (no_particles[l][m][n] == 1 ) {
+                cout << "i " << l << endl;
+                cout << "j " << m << endl;
+                cout << "k " << n << endl;
+                cout << "no particles in cell " << no_particles[l][m][n] << endl;
+                cout << "optical depth " << optical_depth[l][m][n] << endl; }
 
               particles_in_box = particles_in_box + no_particles[l][m][n]; }
               else {
@@ -207,17 +208,17 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
               }
         }
 
-      cout << "particles in box " << particles_in_box << endl;
+      //cout << "particles in box " << particles_in_box << endl;
 
       no_particles_avg = particles_in_box / (pow(n_cells, 3.));
 
-      cout << "average number of particles per cell " << no_particles_avg << endl;
+      //cout << "average number of particles per cell " << no_particles_avg << endl;
 
-      cout << "number of cells with 0 particles in" << counter_ps << endl;
+      //cout << "number of cells with 0 particles in" << counter_ps << endl;
 
       optical_depth_avg = optical_depth_sum / (pow(n_cells, 3.));
 
-      cout <<"average optical depth per cell " << optical_depth_avg << endl;
+      //cout <<"average optical depth per cell " << optical_depth_avg << endl;
 
 
 
