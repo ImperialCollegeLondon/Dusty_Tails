@@ -34,6 +34,13 @@ const double r_h = pow(m_planet/3.0, 1.0/3.0); //hill radius
 
 const int cell_no = 120; //cell number for ray tracer calculations - used for vector declaration
 const double n_cells = 120.0; //number used for mathematical calculations
+const int r_cells = 100;
+const double r_cells_d = 100.;
+const int t_cells = 25;
+const double t_cells_d = 25.;
+const int p_cells = 150;
+const double p_cells_d = 150.;
+
 
 extern double star_x;
 extern double planet_x;

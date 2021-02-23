@@ -29,6 +29,6 @@ void solve_particles(double total_t, double end_t, vector <Particle> &particles,
 
 void rm_particles(vector <Particle> &particles);
 
-void calculation_ext(vector <Particle>& particles, double ext [cell_no][cell_no][cell_no], int nparticles [cell_no][cell_no][cell_no]);
+void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells][p_cells], int nparticles [r_cells][t_cells][p_cells]);
 
 extern vector <Particle> particles;

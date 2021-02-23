@@ -24,16 +24,25 @@ void build_grids(double *r_a, double *r_b, double *theta_a, \
       phi_a[0] = phi_start;
 
 
-      for( unsigned int i = 1; i <= cell_no; i++){
+      for( unsigned int i = 1; i <= r_cells; i++){
           r_a [i] = r_a [i-1] + dr;
+      }
+      for( unsigned int i = 1; i <= t_cells; i++){
           theta_a [i] = theta_a [i-1] + dtheta;
           phi_a [i] = phi_a [i-1] + dphi;
-
+      }
+      for( unsigned int i = 1; i <= p_cells; i++){
+          phi_a [i] = phi_a [i-1] + dphi;
       }
 
-      for (unsigned int i = 0; i <= (cell_no -1); i++){
+
+      for (unsigned int i = 0; i <= (r_cells -1); i++){
           r_b [i] = r_a [i] + dr/2.;
+      }
+      for (unsigned int i = 0; i <= (t_cells -1); i++){
           theta_b [i] = theta_a[i] + dtheta/2.;
+      }
+      for (unsigned int i = 0; i <= (p_cells -1); i++){
           phi_b [i] = phi_a [i] + dphi/2.;
       }
 
@@ -43,8 +52,8 @@ void build_grids(double *r_a, double *r_b, double *theta_a, \
 
 
 
-void calculation_ext(vector <Particle>& particles, double ext [cell_no][cell_no][cell_no], \
-                    int nparticles [cell_no][cell_no][cell_no]){
+void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells][p_cells], \
+                    int nparticles [r_cells][t_cells][p_cells]){
         vector <double> sphere_pos(3, 0.0);
         vector <double> scaled_pos(3, 0.0);
         int r_it, theta_it, phi_it;
@@ -62,8 +71,6 @@ void calculation_ext(vector <Particle>& particles, double ext [cell_no][cell_no]
         vector <double> r_deltas, theta_deltas, phi_deltas;
 
         double vol_element, partial_vol;
-
-        cout << "total no particles " << particles.size() << endl;
 
         for( Particle& p : particles) {
 
@@ -145,20 +152,20 @@ vector <double> grid_scaling(vector <double> s_position){
   double r, theta, phi;
   vector <double> scaled(3, 0.0);
 
-  r = (n_cells/ (d_r_max - d_r_min))* s_position[0]  - (n_cells / (d_r_max - d_r_min)) * d_r_min;
-  theta = (n_cells/ (d_t_max - d_t_min))* s_position[1]  - (n_cells / (d_t_max - d_t_min)) * d_t_min;
-  phi = (n_cells/ (d_p_max - d_p_min))* s_position[2]  - (n_cells /(d_p_max - d_p_min)) * d_p_min;
+  r = (r_cells_d/ d_dr)* (s_position[0]  -  d_r_min);
+  theta = (t_cells_d/ d_dtheta)* (s_position[1] - d_t_min);
+  phi = (p_cells_d/ d_dphi)* (s_position[2]  -  d_p_min);
 
 
 //verify if particle is within space where optical depth is relevant
 //CHANGE THE LIMITS TO THE LIMITS IN EACH VARIABLE
-  if ((r<0.) || (r>(n_cells - 1.))){
+  if ((r<0.) || (r>(r_cells_d - 1.))){
     scaled = {-1., -1., -1.};
 
-  } else if ((theta<0.) || (theta>(n_cells - 1.))){
+  } else if ((theta<0.) || (theta>(t_cells_d - 1.))){
     scaled = {-1., -1., -1.};
 
-  } else if ((phi<0.) || (phi>(n_cells - 1.))){
+  } else if ((phi<0.) || (phi>(p_cells_d - 1.))){
     scaled = {-1., -1., -1.};
   } else {
     scaled = {r, theta, phi};
@@ -167,37 +174,34 @@ vector <double> grid_scaling(vector <double> s_position){
   return scaled;
 }
 
-void optical_depth_test(double ext [cell_no][cell_no][cell_no], double od [cell_no][cell_no][cell_no]){
-    for (unsigned int k = 1; k < cell_no; k++){
-        for (unsigned int j = 1; j < cell_no; j++){
-            for (unsigned int  i = 1; i < cell_no; i++){
-                  od[i][j][k] = od[i-1][j][k] + ext[i-1][j][k] * r_reverse(d_dr) * a ;
+void optical_depth_test(double ext [r_cells][t_cells][p_cells], double od [r_cells][t_cells][p_cells]){
+    for (unsigned int k = 1; k < p_cells; k++){
+        for (unsigned int j = 1; j < t_cells; j++){
+            for (unsigned int  i = 1; i < r_cells; i++){
+                  od[i][j][k] = od[i-1][j][k] + ext[i-1][j][k] * d_dr * a ;
                 }
                 }
             }
 
 }
-
+//reverse function are from grid scale to "real" scale
 double r_reverse(double old_r){
   double new_r;
 
-  new_r = (old_r + ((n_cells / (d_r_max - d_r_min)) * d_r_min)) / ((n_cells/ (d_r_max - d_r_min)));
-
+  new_r = (old_r/ (r_cells_d/d_dr) ) + d_r_min;
   return new_r;
 }
 
 double theta_reverse(double old_theta){
   double new_theta;
 
-  new_theta = (old_theta + ((n_cells / (d_t_max - d_t_min)) * d_t_min)) / ((n_cells/ (d_t_max - d_t_min)));
-
+  new_theta = (old_theta / (t_cells_d/d_dtheta)) + d_t_min;
   return new_theta;
 }
 
 double phi_reverse(double old_phi){
   double new_phi;
 
-  new_phi = (old_phi + ((n_cells / (d_p_max - d_p_min)) * d_p_min)) / ((n_cells/ (d_p_max - d_p_min)));
-
+  new_phi = (old_phi / (p_cells_d/d_dphi)) + d_p_min;
   return new_phi;
 }

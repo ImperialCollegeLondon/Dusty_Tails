@@ -11,15 +11,16 @@ extern vector <double> k1, k2, k3, k4, k5, k6, k7;
 extern vector <double> k1d, k2d, k3d, k4d, k5d, k6d, k7d;
 extern double ks1, ks2, ks3, ks4, ks5, ks6, ks7;
 
-extern double r_a [cell_no +1];
-extern double r_b [cell_no];
-extern double theta_a [cell_no +1];
-extern double theta_b [cell_no];
-extern double phi_a [cell_no +1];
-extern double phi_b [cell_no];
+extern double r_a [r_cells + 1];
+extern double r_b [r_cells];
+extern double theta_a [t_cells + 1];
+extern double theta_b [t_cells];
+extern double phi_a [p_cells + 1];
+extern double phi_b [p_cells];
 
-extern double extinction [cell_no][cell_no][cell_no];
-extern double optical_depth [cell_no][cell_no][cell_no];
+
+extern double extinction [r_cells][t_cells][p_cells];
+extern double optical_depth [r_cells][t_cells][p_cells];
 
 
 extern double r_min, r_max, theta_min, theta_max, phi_min, phi_max;
@@ -105,19 +106,19 @@ double gauss(double var, double var_c, double std);
 
 vector <double> grid_scaling(vector <double> s_position);
 
-void extinction_test(double r_a, double r_b, double theta_a, double theta_b, double phi_a, double phi_b, double function[cell_no][cell_no][cell_no]);
+void extinction_test(double r_a, double r_b, double theta_a, double theta_b, double phi_a, double phi_b, double function[r_cells][t_cells][p_cells]);
 
-void optical_depth_test(double ext [cell_no][cell_no][cell_no], double od [cell_no][cell_no][cell_no]);
+void optical_depth_test(double ext [r_cells][t_cells][p_cells], double od [r_cells][t_cells][p_cells]);
 
-void od_analytic(double ods[cell_no][cell_no][cell_no]);
+void od_analytic(double ods[r_cells][t_cells][p_cells]);
 
-void error(double analytic [cell_no][cell_no][cell_no], double numerical [cell_no][cell_no][cell_no], double errors [cell_no][cell_no][cell_no]);
+void error(double analytic [r_cells][t_cells][p_cells], double numerical [r_cells][t_cells][p_cells], double errors [r_cells][t_cells][p_cells]);
 
 void test_pos(double *r_test, double *theta_test, double *phi_test, \
                 double d_r_min, double d_r_max, double d_t_min, double d_t_max,
                 double d_p_min, double d_p_max, double d_dr, double d_dtheta, double d_dphi);
 
-void test_dist_ext(double *r_test, double *theta_test, double *phi_test, double function[cell_no][cell_no][cell_no]);
+void test_dist_ext(double *r_test, double *theta_test, double *phi_test, double function[r_cells][t_cells][p_cells]);
 
 double r_reverse(double old_r);
 
