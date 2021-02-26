@@ -25,7 +25,7 @@ def grid(r, t, p) :
 
 dt = np.dtype([('theta', np.float64), ('phi', np.float64),('ext', np.float64), ('od', np.float64)])
 
-data = np.fromfile("ray_tracer_testing.bin", dt)
+data = np.fromfile("ray_tracer_test.bin", dt)
 df = pd.DataFrame(data)
 
 #print(df)
@@ -46,6 +46,7 @@ for phi in df['phi'].unique():
     phis.append(phi)
 
 for od in df['od']:
+    print(od)
     if od == 0.0:
         od = np.nan
         ods.append(math.log10(od))
@@ -53,6 +54,8 @@ for od in df['od']:
         ods.append(math.log10(od))
 
 print (df)
+
+df.to_csv('test.dat', index=False)
 """
 
 for od in df['od']:
@@ -72,7 +75,7 @@ fig = plt.figure()
 #ax = plt.axes(projection='3d')
 ax = fig.add_subplot(111)
 
-o_reshape = np.reshape(ods, (25,150), order = 'C')
+o_reshape = np.reshape(ods, (75,450), order = 'C')
 
 print(o_reshape)
 

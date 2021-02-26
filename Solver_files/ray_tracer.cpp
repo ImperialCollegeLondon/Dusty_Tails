@@ -29,7 +29,6 @@ void build_grids(double *r_a, double *r_b, double *theta_a, \
       }
       for( unsigned int i = 1; i <= t_cells; i++){
           theta_a [i] = theta_a [i-1] + dtheta;
-          phi_a [i] = phi_a [i-1] + dphi;
       }
       for( unsigned int i = 1; i <= p_cells; i++){
           phi_a [i] = phi_a [i-1] + dphi;
@@ -83,55 +82,68 @@ void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells]
               if (scaled_pos[0] > 0.0){
 
               r_it = floor(scaled_pos[0]);
+              //cout << "r_it " << r_it << endl;
               theta_it = floor(scaled_pos[1]);
+              //cout << "theta_it " << theta_it << endl;
               phi_it = floor(scaled_pos[2]);
+              //cout << "phi_it " << phi_it << endl;
 
               //particles volume positions in "real" values
 
               p_rs = { r_reverse(scaled_pos[0] - (dr/2.)), r_reverse(scaled_pos[0] + (dr/2.))};
-
+              //cout << "p_rs " << p_rs[0] << " " << p_rs[1] << endl;
               p_thetas = { theta_reverse(scaled_pos[1] - (dtheta/2.)), theta_reverse(scaled_pos[1] + (dtheta/2.))};
-
+              //cout << "p_thetas " << p_thetas[0] << " " << p_thetas[1] << endl;
               p_phis= { phi_reverse(scaled_pos[2] - (dphi/2.)), phi_reverse(scaled_pos[2] + (dphi/2.))};
-
+              //cout << "p_phis " << p_phis[0] << " " << p_phis[1] << endl;
 
               if (scaled_pos[0] > r_b[r_it]) {
                 r_index = {r_it, r_it + 1};
-
                 r_deltas = {pow(r_reverse(r_a [r_it +1]), 3.0) - pow(p_rs[0], 3.), pow(p_rs[1], 3.) - pow(r_reverse(r_a [r_it +1]), 3.) };
               } else {
                 r_index = {r_it - 1, r_it};
-
                 r_deltas = {pow(r_reverse(r_a [r_it]), 3.) - pow(p_rs[0], 3.0) , pow(p_rs[1], 3.0) - pow(r_reverse(r_a [r_it]), 3.) };
 
               }
 
               if (scaled_pos[1] > theta_b[theta_it]){
                 theta_index = {theta_it, theta_it + 1};
-                theta_deltas = {(-cos(theta_reverse(r_a [theta_it + 1])) + cos(p_thetas[0])), -cos(p_thetas[1]) + cos(theta_reverse(r_a [theta_it +1])) };
+                theta_deltas = {(-cos(theta_reverse(theta_a [theta_it + 1])) + cos(p_thetas[0])), -cos(p_thetas[1]) + cos(theta_reverse(theta_a [theta_it +1])) };
               } else {
                 theta_index = {theta_it - 1, theta_it};
-                theta_deltas = {(-cos(theta_reverse(r_a [theta_it])) + cos(p_thetas[0])), -cos(p_thetas[1]) + cos(theta_reverse(r_a [theta_it]))};
+                theta_deltas = {(-cos(theta_reverse(theta_a [theta_it])) + cos(p_thetas[0])), -cos(p_thetas[1]) + cos(theta_reverse(theta_a [theta_it]))};
               }
 
               if (scaled_pos[2] > phi_b[phi_it]){
                 phi_index = {phi_it, phi_it + 1};
-                phi_deltas = {(phi_reverse(r_a [phi_it +1]) - p_phis[0]), p_phis[1] - phi_reverse(r_a [phi_it +1]) };
+                phi_deltas = {(phi_reverse(phi_a [phi_it +1]) - p_phis[0]), p_phis[1] - phi_reverse(phi_a [phi_it +1]) };
               } else {
                 phi_index = {phi_it - 1, phi_it};
-                phi_deltas = {(phi_reverse(r_a [phi_it]) - p_phis[0]), p_phis[1] - phi_reverse(r_a [phi_it]) };
+                phi_deltas = {(phi_reverse(phi_a [phi_it]) - p_phis[0]), p_phis[1] - phi_reverse(phi_a [phi_it]) };
               }
 
               for (unsigned int i = 0; i < 2; i++){
                 for (unsigned int j = 0; j < 2; j++){
                   for (unsigned int k = 0; k < 2; k++){
 
-
+                      //cout << "partial vol: " << endl;
                       partial_vol = 1./3. * abs(r_deltas[i] * theta_deltas[j] * phi_deltas[k]);
-
+                      //cout << partial_vol << endl;
                       vol_element = 1./3. * abs((pow(p_rs[1], 3.) - pow(p_rs[0], 3.)) * (-cos(p_thetas[1]) + cos(p_thetas[0])) * (p_phis[1] - p_phis[0]));
-
+                      //cout << "vol element: " << endl;
+                      //cout << vol_element << endl;
                       op = (3./4.)*(1./4000.)*(1./(p.p_size * 1.e-2));
+
+                      if (partial_vol > vol_element) {
+                        cout << "r it" << r_it << endl;
+                        cout << "t it" << theta_it << endl;
+                        cout << "p it" << phi_it << endl;
+                        cout << "rb " << r_b[r_it] << endl;
+                        cout << "tb " << theta_b[theta_it] << endl;
+                        cout << "pb " << phi_b[phi_it] << endl;
+                        cout << "phi "  << phi_reverse(phi_it) << endl;
+
+                      }
 
                       nparticles [r_index[i]][theta_index[j]][phi_index[k]] = nparticles [r_index[i]][theta_index[j]][phi_index[k]] + 1;
                       //cout << nparticles [r_index[i]][theta_index[j]][phi_index[k]] << endl;
@@ -149,12 +161,24 @@ void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells]
 }
 
 vector <double> grid_scaling(vector <double> s_position){
-  double r, theta, phi;
+  double r, theta, phi, delta_r, delta_t, delta_p;
   vector <double> scaled(3, 0.0);
 
-  r = (r_cells_d/ d_dr)* (s_position[0]  -  d_r_min);
-  theta = (t_cells_d/ d_dtheta)* (s_position[1] - d_t_min);
-  phi = (p_cells_d/ d_dphi)* (s_position[2]  -  d_p_min);
+  delta_r = d_r_max - d_r_min;
+  delta_t = d_t_max - d_t_min;
+  delta_p = d_p_max - d_p_min;
+
+//  r = (r_cells_d/ delta_r)* (s_position[0]  -  d_r_min);
+  r = (r_cells_d/ (d_r_max - d_r_min))* s_position[0]  - (r_cells_d / (d_r_max - d_r_min)) * d_r_min;
+  //cout << "r " << r << endl;
+//  theta = (t_cells_d/ delta_t)* (s_position[1] - d_t_min);
+  theta = (t_cells_d/ (d_t_max - d_t_min))* s_position[1]  - (t_cells_d / (d_t_max - d_t_min)) * d_t_min;
+  phi = (p_cells_d/ (d_p_max - d_p_min))* s_position[2]  - (p_cells_d /(d_p_max - d_p_min)) * d_p_min;
+
+
+  //cout << "theta " << theta << endl;
+//  phi = (p_cells_d/ delta_p)* (s_position[2]  -  d_p_min);
+  //cout << "phi " << phi << endl;
 
 
 //verify if particle is within space where optical depth is relevant
@@ -169,15 +193,17 @@ vector <double> grid_scaling(vector <double> s_position){
     scaled = {-1., -1., -1.};
   } else {
     scaled = {r, theta, phi};
+    cout << "scaled vector " << scaled[0] << " " << scaled[1] << " "<< scaled[2] << endl;
   }
-
   return scaled;
 }
 
+
+
 void optical_depth_test(double ext [r_cells][t_cells][p_cells], double od [r_cells][t_cells][p_cells]){
-    for (unsigned int k = 1; k < p_cells; k++){
+    for (unsigned int i = 1; i < r_cells; i++){
         for (unsigned int j = 1; j < t_cells; j++){
-            for (unsigned int  i = 1; i < r_cells; i++){
+            for (unsigned int  k = 1; k < p_cells; k++){
                   od[i][j][k] = od[i-1][j][k] + ext[i-1][j][k] * d_dr * a ;
                 }
                 }
@@ -186,22 +212,25 @@ void optical_depth_test(double ext [r_cells][t_cells][p_cells], double od [r_cel
 }
 //reverse function are from grid scale to "real" scale
 double r_reverse(double old_r){
-  double new_r;
-
-  new_r = (old_r/ (r_cells_d/d_dr) ) + d_r_min;
+  double new_r, delta_r;
+  delta_r = d_r_max - d_r_min;
+  new_r = (old_r/ (r_cells_d/delta_r) ) + d_r_min;
+  //cout << "new r " << new_r << endl;
   return new_r;
 }
 
 double theta_reverse(double old_theta){
-  double new_theta;
-
-  new_theta = (old_theta / (t_cells_d/d_dtheta)) + d_t_min;
+  double new_theta, delta_t;
+  delta_t = d_t_max - d_t_min;
+  new_theta = (old_theta / (t_cells_d/delta_t)) + d_t_min;
+  //cout << "new t " << new_theta << endl;
   return new_theta;
 }
 
 double phi_reverse(double old_phi){
-  double new_phi;
-
-  new_phi = (old_phi / (p_cells_d/d_dphi)) + d_p_min;
+  double new_phi, delta_p;
+  delta_p = d_p_max - d_p_min;
+  new_phi = (old_phi / (p_cells_d/delta_p)) + d_p_min;
+  //cout << "new phi " << new_phi << endl;
   return new_phi;
 }

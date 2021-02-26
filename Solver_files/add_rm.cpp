@@ -24,9 +24,9 @@ uniform_real_distribution<double> uniform_phi(0.0, 1.0);
 uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 
 //open files to write data for python plotting
-ofstream ofile("KIC1255b_040_1orb_1.bin", ios::out | ios::binary);
+ofstream ofile("KIC1255b_test.bin", ios::out | ios::binary);
 
-ofstream ray_tracer("ray_tracer_testing.bin", ios::out | ios::binary);
+ofstream ray_tracer("ray_tracer_test.bin", ios::out | ios::binary);
 
 
 //define grid limits for ray tracing calculation
@@ -145,6 +145,10 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
   double particles_in_box = 0.;
   double no_particles_avg = 0.0;
 
+  cout << "dr " << d_dr << endl;
+  cout << "dtheta " << d_dtheta << endl;
+  cout << "dphi " << d_dphi << endl;
+
   while (total_t < end_t) {
 
     cout << "orbit: " << total_t << endl;
@@ -178,7 +182,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
     //if condition below is just for a test of the ray tracer at a given time
 
-    if ( total_t >= 0.99 ) {
+    if ( total_t >= 0.49 ) {
 
       cout << "now at grid builder " << endl;
       //build_grids is in ray_tracer.cpp - as the name says it builds the grid over the star for the ray tracing calculations
@@ -219,7 +223,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
                     ray_tracer.write((char*) &theta_local, sizeof(double));
                     ray_tracer.write((char*) &phi_local, sizeof(double));
                     ray_tracer.write((char*) &extinction [r_cells-1][j][k], sizeof(double));
-                    ray_tracer.write((char*) &optical_depth [r_cells -1][j][k], sizeof(double));
+                    ray_tracer.write((char*) &optical_depth [r_cells-1][j][k], sizeof(double));
 
 
             }
@@ -231,7 +235,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     //should change this 100 to a variable
     if (total_t > plot_time) {
       current_particles = total_particles;
-      total_particles = total_particles + 100;
+      total_particles = total_particles + 1000;
       //add particles explained above in this file
       add_particles(particles, current_particles, total_particles, total_t);
       plot_time = plot_time + 0.01;
