@@ -26,7 +26,7 @@ uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 //open files to write data for python plotting
 ofstream ofile("KIC1255b_test.bin", ios::out | ios::binary);
 
-ofstream ray_tracer("ray_tracer_test.bin", ios::out | ios::binary);
+ofstream ray_tracer("ray_kic1255b_test.bin", ios::out | ios::binary);
 
 
 //define grid limits for ray tracing calculation
@@ -182,7 +182,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
     //if condition below is just for a test of the ray tracer at a given time
 
-    if ( total_t >= 0.49 ) {
+    if ( total_t >= 0.19 ) {
 
       cout << "now at grid builder " << endl;
       //build_grids is in ray_tracer.cpp - as the name says it builds the grid over the star for the ray tracing calculations
@@ -192,25 +192,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
       //optical_depth_test is in ray_tracer.cpp - calculates the optical depth in each grid cell, dependent on the extinction distribution
       optical_depth_test(extinction, optical_depth);
 
-      for (unsigned int l = 0; l <r_cells; l++){
-        for (unsigned int m = 0; m <t_cells; m++){
-          for (unsigned int n = 0; n <p_cells; n++){
-            optical_depth_sum = optical_depth_sum + optical_depth[l][m][n];
-            //cout << "at no particles writer" << endl;
-            if (no_particles[l][m][n] != 0) {
-              if (no_particles[l][m][n] == 1 ) {
-                cout << "i " << l << endl;
-                cout << "j " << m << endl;
-                cout << "k " << n << endl;
-                cout << "no particles in cell " << no_particles[l][m][n] << endl;
-                cout << "optical depth " << optical_depth[l][m][n] << endl; }
-
-              particles_in_box = particles_in_box + no_particles[l][m][n]; }
-              else {
-                counter_ps = counter_ps + 1; }
-              }
-              }
-        }
+      
 
       //loop below write file for plotting
       for (unsigned int j = 0; j <t_cells; j++){
@@ -235,7 +217,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     //should change this 100 to a variable
     if (total_t > plot_time) {
       current_particles = total_particles;
-      total_particles = total_particles + 1000;
+      total_particles = total_particles + 100;
       //add particles explained above in this file
       add_particles(particles, current_particles, total_particles, total_t);
       plot_time = plot_time + 0.01;

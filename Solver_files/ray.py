@@ -4,14 +4,13 @@ import matplotlib
 import math
 import pandas as pd
 from numba import jit
-from numba.typed import List
 from mpl_toolkits import mplot3d
 
 @jit(nopython = True)
 def grid(r, t, p) :
-    x = List()
-    y = List()
-    z = List()
+    x = []
+    y = []
+    z = []
 
     for i in range(0, len(r)):
         for j in range(0, len(t)):
@@ -25,17 +24,17 @@ def grid(r, t, p) :
 
 dt = np.dtype([('theta', np.float64), ('phi', np.float64),('ext', np.float64), ('od', np.float64)])
 
-data = np.fromfile("ray_tracer_test.bin", dt)
+data = np.fromfile("ray_kic1255b_25t.bin", dt)
 df = pd.DataFrame(data)
 
 #print(df)
 
-radii = List()
-thetas = List()
-phis = List()
-ods = List()
-ods_a = List()
-errors = List()
+radii = []
+thetas = []
+phis = []
+ods = []
+ods_a = []
+errors = []
 
 
 for theta in df['theta'].unique():
@@ -44,7 +43,7 @@ for theta in df['theta'].unique():
 print(thetas)
 for phi in df['phi'].unique():
     phis.append(phi)
-
+"""
 for od in df['od']:
     print(od)
     if od == 0.0:
@@ -61,10 +60,10 @@ df.to_csv('test.dat', index=False)
 for od in df['od']:
     ods.append(od)
 print(len(ods))
-"""
-xs= List()
-ys = List()
-zs = List()
+
+xs= []
+ys = []
+zs = []
 
 
 #xs, ys, zs = grid(radii, thetas, phis)
@@ -75,7 +74,7 @@ fig = plt.figure()
 #ax = plt.axes(projection='3d')
 ax = fig.add_subplot(111)
 
-o_reshape = np.reshape(ods, (75,450), order = 'C')
+o_reshape = np.reshape(ods, (25,150), order = 'C')
 
 print(o_reshape)
 
@@ -91,7 +90,7 @@ plt.colorbar()
 ax.set_xlabel("phi")
 ax.set_ylabel("theta")
 
-plt.savefig('od_test.png')
+plt.savefig('od_25.png')
 
 plt.close()
 
