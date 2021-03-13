@@ -182,7 +182,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
     //if condition below is just for a test of the ray tracer at a given time
 
-    if ( total_t >= 0.19 ) {
+    if ( total_t >= 0.99 ) {
 
       cout << "now at grid builder " << endl;
       //build_grids is in ray_tracer.cpp - as the name says it builds the grid over the star for the ray tracing calculations
@@ -192,7 +192,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
       //optical_depth_test is in ray_tracer.cpp - calculates the optical depth in each grid cell, dependent on the extinction distribution
       optical_depth_test(extinction, optical_depth);
 
-      
+
 
       //loop below write file for plotting
       for (unsigned int j = 0; j <t_cells; j++){

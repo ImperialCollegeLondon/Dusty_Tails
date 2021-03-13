@@ -22,6 +22,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 
     vector <double> Vtemp(3);
     vector <double> Vtempdot(3);
+    vector <double> coriol, centri, radiation, drag;
     double s_temp =0.0;
 
     double s0 = V[6];
@@ -32,10 +33,19 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 
     ks1 = h* sublimation(V[6], V[0], V[1], V[2]);
 
+    coriol = coriolis(V); //coriolis function is in forces.cpp
+    //centrifugal acceleration
+    centri = centrifugal(V); //centrifugal function is in forces.cpp
+    //radiation pressure acceleration
+    radiation = rad_pressure(V); //rad pressure function is in forces.cpp
+    // PR drag acceleration
+    drag = pr_drag(V);
 
     for (unsigned int i = 0; i < 3; i++){
         k1d[i] = h* acceleration(i, V0[i]- star_pos[i], \
-                   V0[i] - planet_pos[i] + r_planet_dim, V);
+                   V0[i] - planet_pos[i] + r_planet_dim, V, \
+                   centri[i], coriol[i], radiation[i], drag[i]);
+
         k1[i] = h* V0dot[i];
 
 
@@ -45,13 +55,26 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     }
     s_temp = s0 + a21*ks1;
 
-
-    //k2 values
+  //k2 values
     ks2 = h* sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2]);
+
+    coriol = coriolis({Vtemp[0], Vtemp[1], Vtemp[2], \
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
+    centri = centrifugal({Vtemp[0], Vtemp[1], Vtemp[2], \
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
+    radiation = rad_pressure({Vtemp[0], Vtemp[1], Vtemp[2], \
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
+    drag = pr_drag({Vtemp[0], Vtemp[1], Vtemp[2], \
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
     for (unsigned int i = 0; i < 3; i++){
         k2d[i] = h* acceleration(i, Vtemp[i] - star_pos[i], \
                    Vtemp[i] - planet_pos[i] + r_planet_dim, {Vtemp[0], Vtemp[1], Vtemp[2], \
-                       Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+                       Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp}, \
+                     centri[i], coriol[i], radiation[i], drag[i]);
 
         k2[i] = h* Vtempdot[i];
 
@@ -64,11 +87,26 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 
 
     ks3 = h* sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2]);
+
+    coriol = coriolis({Vtemp[0], Vtemp[1], Vtemp[2], \
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
+    centri = centrifugal({Vtemp[0], Vtemp[1], Vtemp[2], \
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
+    radiation = rad_pressure({Vtemp[0], Vtemp[1], Vtemp[2], \
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
+    drag = pr_drag({Vtemp[0], Vtemp[1], Vtemp[2], \
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
+
     //k3 values
     for (unsigned int i = 0; i < 3; i++) {
         k3d[i] = h*acceleration(i, Vtemp[i] - star_pos[i], \
                   Vtemp[i] - planet_pos[i] + r_planet_dim, {Vtemp[0], Vtemp[1], Vtemp[2], \
-                      Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+                      Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp}, \
+                    centri[i], coriol[i], radiation[i], drag[i]);
 
         k3[i] = h* Vtempdot[i];
 
@@ -80,12 +118,25 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 
     ks4 = h* sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2]);
 
+    coriol = coriolis({Vtemp[0], Vtemp[1], Vtemp[2], \
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
+    centri = centrifugal({Vtemp[0], Vtemp[1], Vtemp[2], \
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
+    radiation = rad_pressure({Vtemp[0], Vtemp[1], Vtemp[2], \
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
+    drag = pr_drag({Vtemp[0], Vtemp[1], Vtemp[2], \
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
     //k4 values
     for (unsigned int i = 0; i < 3; i++) {
 
         k4d[i] = h* acceleration(i, Vtemp[i] - star_pos[i], \
                    Vtemp[i] - planet_pos[i] + r_planet_dim, {Vtemp[0], Vtemp[1], Vtemp[2], \
-                       Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+                       Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp}, \
+                     centri[i], coriol[i], radiation[i], drag[i]);
 
         k4[i] = h* Vtempdot[i];
 
@@ -98,10 +149,23 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 
     ks5 = h * sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2]);
 
+    coriol = coriolis({Vtemp[0], Vtemp[1], Vtemp[2], \
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
+    centri = centrifugal({Vtemp[0], Vtemp[1], Vtemp[2], \
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
+    radiation = rad_pressure({Vtemp[0], Vtemp[1], Vtemp[2], \
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
+    drag = pr_drag({Vtemp[0], Vtemp[1], Vtemp[2], \
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
     for (unsigned int i = 0; i < 3; i++) {
         k5d[i] = h* acceleration(i, Vtemp[i] - star_pos[i], \
             Vtemp[i] - planet_pos[i] + r_planet_dim, {Vtemp[0], Vtemp[1], Vtemp[2], \
-                Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+                Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp}, \
+              centri[i], coriol[i], radiation[i], drag[i]);
 
         k5[i] = h* Vtempdot[i];
 
@@ -115,10 +179,23 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 
     ks6 = h * sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2]);
 
+    coriol = coriolis({Vtemp[0], Vtemp[1], Vtemp[2], \
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
+    centri = centrifugal({Vtemp[0], Vtemp[1], Vtemp[2], \
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
+    radiation = rad_pressure({Vtemp[0], Vtemp[1], Vtemp[2], \
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
+    drag = pr_drag({Vtemp[0], Vtemp[1], Vtemp[2], \
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
     for (unsigned int i = 0; i < 3; i++) {
         k6d[i] = h* acceleration(i, Vtemp[i] - star_pos[i], \
                     Vtemp[i] - planet_pos[i] + r_planet_dim, {Vtemp[0], Vtemp[1], Vtemp[2], \
-                        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+                        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp}, \
+                      centri[i], coriol[i], radiation[i], drag[i]);
 
         k6[i] = h* Vtempdot[i];
 
@@ -131,11 +208,24 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 
     if (order5 == true) {
       ks7 = h * sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2]);
+
+      coriol = coriolis({Vtemp[0], Vtemp[1], Vtemp[2], \
+          Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
+      centri = centrifugal({Vtemp[0], Vtemp[1], Vtemp[2], \
+          Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
+      radiation = rad_pressure({Vtemp[0], Vtemp[1], Vtemp[2], \
+          Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+
+      drag = pr_drag({Vtemp[0], Vtemp[1], Vtemp[2], \
+          Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
       for (unsigned int i = 0; i<3; i++) {
 
         k7d[i] = h* acceleration(i, Vtemp[i] - star_pos[i], \
                     Vtemp[i] - planet_pos[i] + r_planet_dim, {Vtemp[0], Vtemp[1], Vtemp[2], \
-                        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+                        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp}, \
+                      centri[i], coriol[i], radiation[i], drag[i]);
 
         k7[i] = h* Vtempdot[i];
     }

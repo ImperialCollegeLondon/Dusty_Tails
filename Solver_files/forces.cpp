@@ -39,19 +39,20 @@ vector <double> coriolis(vector <double> V){
 
 vector <double> rad_pressure(vector <double> V){
   //function to calculate radiation pressure force, accounting for red shift
-  double beta, k, Lum, rad_x, rad_y, rad_z, constant;
+  double beta, k, constant;
+  double d_prod;
   vector <double> rad_vector(3);
 
   k = opacity(V[6], V[0], V[1], V[2]);
-  Lum = luminosity(Rstar);
-  beta = beta_fn(k, Lum, Mstar_sun);
+  beta = beta_fn(k);
 
   constant = (beta*G_dim)/(pow(scalar(V[0]- star_pos[0], V[1], V[2]), 3.0));
 
+  d_prod = dot_product({V[3], V[4], V[5]}, sunit_vector(V));
+
   for (unsigned int i = 0; i < 3; i++) {
 
-      rad_vector[i] = constant* (1-((dot_product({V[3], V[4], V[5]}, sunit_vector(V)))/c_dim))\
-  	 *(V[i]-star_pos[i]);
+      rad_vector[i] = constant* (1-((d_prod)/c_dim)) *(V[i]-star_pos[i]);
  }
 
   return rad_vector;
@@ -64,18 +65,15 @@ vector <double> pr_drag(vector <double> V){
 
 	double constant, beta, k, Lum;
 
-    k = opacity(V[6], V[0], V[1], V[2]);
-	  Lum = luminosity(Rstar);
-    beta = beta_fn(k, Lum, Mstar_sun);
+  k = opacity(V[6], V[0], V[1], V[2]);
+  beta = beta_fn(k);
 
-    constant = (beta*G_dim)/(pow(scalar(V[0]-star_pos[0], V[1], V[2]), 3.0)*c_dim);
+  constant = (beta*G_dim)/(pow(scalar(V[0]-star_pos[0], V[1], V[2]), 3.0)*c_dim);
 
-	  v_drag = drag_vel(V);
+  v_drag = drag_vel(V);
 
-    for (unsigned int i=0; i < 3; i++) {
-        pr_vector[i] = constant*v_drag[i];
-    }
-	  return pr_vector;
-
-
+  for (unsigned int i=0; i < 3; i++) {
+      pr_vector[i] = constant*v_drag[i];
+  }
+  return pr_vector;
 }

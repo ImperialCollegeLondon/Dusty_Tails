@@ -15,11 +15,11 @@ double omega(double mplanet, double mstar){
     return pow((G_dim *(m_planet + mstar)), 0.5);
 }
 
-double beta_fn(double k, double L_star, double M_star){
+double beta_fn(double k){
   //mass of star in terms of mass of sun, and everything in cgs units
   //function to evaluate beta (radiation accel/ gravity accel)
   double beta =0.0;
-	beta = (k*L_star*exp(-tau)) / (4.0*PI*c_cgs*G_cgs*M_star*Msun_cgs);
+	beta = (k*lum*exp(-tau)) / (4.0*PI*c_cgs*G_cgs*Mstar_sun*Msun_cgs);
 	return beta;
 
 }
@@ -33,24 +33,18 @@ double opacity(double s, double x, double y, double z){
 
 double qfactor(double s, double x, double y, double z){
   //cgs units
-  return (s*temp_dust(luminosity(Rstar),s, x, y, z)) / wien;
+  return (s*temp_dust(s, x, y, z)) / wien;
 }
 
 double clausius_clap(double s, double x, double y, double z){
   double cc =0.0;
 
-  cc = exp((-A/temp_dust(luminosity(Rstar), s, x, y, z)) + B);
+  cc = exp((-A/temp_dust(s, x, y, z)) + B);
 
   return cc;
 
 }
 
-double luminosity(double R_star){
-  //function to evaluate stars luminosity with stefan boltzmann law
-  //cgs units
-	return sigma*4.0*PI* pow(R_star*Rsun_cgs, 2.0) * pow(Temp, 4.0);
-
-}
 
 double radial_vel(vector <double> vel, vector <double> s_vector){
   //function to obtain radial velocity term
@@ -84,7 +78,7 @@ vector <double> sunit_vector(vector <double> V){
 	return s_unit;
 }
 
-double temp_dust(double lum, double s, double x, double y, double z){
+double temp_dust( double s, double x, double y, double z){
   double Tdust, dl;
   dl = scalar((x-star_pos[0]), y, z)*a*pow(10., 2.0);
 

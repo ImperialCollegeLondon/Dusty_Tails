@@ -21,7 +21,7 @@ int main() {
   long int total_particles = 100; //initial number of particles to start simulation with
   double t_common = 0.01;
   double big_step = 0.01; //big time step (in terms of planetary orbits)
-  double end_t = 0.2; // end time of simulation
+  double end_t = 1.0; // end time of simulation
   double total_t = 0.0; // total time that has passed, so 0 in the beginning
 
   long int current_particles = 0; // number of current particles in simulation

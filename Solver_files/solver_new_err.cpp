@@ -21,25 +21,20 @@ vector <double> planet_pos = {planet_x, 0.0, 0.0}; //planets position vector
 //acceleration function takes as arguments the stars position, the planets position and the current pos and vel of the particle
 //integer i is an indication of which position/velocity is being calculated at the moment (x, y, or z direction)
 //acceleration calculates the acceleration contributions from the different forces acting on the particles
-double acceleration( int i, double pos_star, double pos_planet, vector <double> V){
+double acceleration( int i, double pos_star, double pos_planet, vector <double> V, \
+                    double centrif, double coriolis, double rad_press, double dragf){
 
-  double vel_dot, grav_star, grav_planet, coriol, drag, radiation, centri;
+  double vel_dot, grav_star, grav_planet;
+
   //gravitational acceleration from star
   grav_star = (-G_dim * pos_star ) / pow( scalar(V[0] - star_pos[0], V[1] , V[2]), 3.0);
 
   //gravitational acceleration from planet
   grav_planet = (-G_dim * m_planet* pos_planet ) / pow( scalar(V[0] - planet_pos[0]  + r_planet_dim, V[1] , V[2]), 3.0 );
 
-  //coriolis acceleration
-  coriol = coriolis(V)[i]; //coriolis function is in forces.cpp
-  //centrifugal acceleration
-  centri = centrifugal(V)[i]; //centrifugal function is in forces.cpp
-  //radiation pressure acceleration
-  radiation = rad_pressure(V)[i]; //rad pressure function is in forces.cpp
-  // PR drag acceleration
-  drag = pr_drag(V)[i]; //PR drag function is in forces.cpp*
+  vel_dot = grav_star - centrif - 2.0*coriolis  + rad_press - dragf + grav_planet;
 
-  vel_dot = grav_star - centri - 2.0*coriol  + radiation - drag + grav_planet;
+  cout << vel_dot << endl;
 
   return vel_dot;
 }
@@ -49,7 +44,7 @@ double sublimation(double s, double x, double y, double z){
 
   ds1 = ((-alpha*clausius_clap(s, x, y, z))/rho_d);
 
-  ds2 = pow((mu*amu)/(2.0*PI*kb*temp_dust(luminosity(Rstar), s, x, y, z)), 0.5);
+  ds2 = pow((mu*amu)/(2.0*PI*kb*temp_dust( s, x, y, z)), 0.5);
   ds = ds1 * ds2;
 
   return ds;

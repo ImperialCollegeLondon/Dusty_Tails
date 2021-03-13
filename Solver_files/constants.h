@@ -61,6 +61,7 @@ const double alpha = 0.1;
 const double tau = 0.1; //optical depth
 const double mu = 101.961; //molecular weight
 
+
 //constants in cgs units for beta calculation
 #define amu 1.661e-24
 #define kb 1.381e-16
@@ -71,3 +72,5 @@ const double mu = 101.961; //molecular weight
 #define rho_d 4.0 //density of dust particle
 #define Msun_cgs 1.9885e+33 // solar mass
  //dust particle size
+
+const double lum = sigma*4.0*PI* pow(Rstar*Rsun_cgs, 2.0) * pow(Temp, 4.0);

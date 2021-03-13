@@ -55,13 +55,13 @@ vector <double> to_spherical(double x, double y, double z);
 
 //microphysics file
 double omega(double mplanet, double mstar);
-double beta_fn(double k, double L_star, double M_star);
+double beta_fn(double k);
 double opacity(double s, double x, double y, double z);
 double qfactor(double s, double x, double y, double z);
 double clausius_clap(double s, double x, double y, double z);
-double luminosity(double R_star);
+//double luminosity(double R_star);
 double radial_vel(vector <double> vel, vector <double> s_vector);
-double temp_dust( double lum, double s,  double x, double y, double z);
+double temp_dust( double s,  double x, double y, double z);
 double dust_mass( double s);
 
 vector <double> drag_vel(vector <double> V);
@@ -86,7 +86,8 @@ vector <double> new_step_size(double max_err, double h_old, int fail_status, vec
 
 //solver
 
-double acceleration( int i, double pos_star, double pos_planet, vector <double> V);
+double acceleration( int i, double pos_star, double pos_planet, vector <double> V, \
+                      double centrif, double coriolis, double rad_press, double dragf);
 double sublimation(double s, double x, double y, double z);
 
 vector <double> new_variables(double h, vector <double> V, bool order5);
