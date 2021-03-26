@@ -11,7 +11,7 @@ plt.ioff()
 dt = np.dtype([('time', np.float64), ('id', np.int64), ('x', np.float64), \
 ('y', np.float64), ('z', np.float64), ('size', np.float64), ('mass', np.float64)])
 
-data = np.fromfile("test.bin", dt)
+data = np.fromfile("KIC1255b_test.bin", dt)
 df = pd.DataFrame(data)
 #print(df['x'])
 #print(df['time'])
@@ -113,7 +113,7 @@ for t in df['time'].unique():
        dust2 = plt.scatter(y_front, z_front, s=10.0, c='#008080', alpha = 0.5)
 
 
-       plt.savefig("fig{0:01}.png".format(i))
+       plt.savefig("figp{0:01}.png".format(i))
 
        plt.close()
      else:
@@ -123,7 +123,7 @@ for t in df['time'].unique():
        dust2 = plt.scatter(y_front, z_front, s=10.0, c='#008080', alpha = 0.5)
 
 
-       plt.savefig("fig{0:01}.png".format(i))
+       plt.savefig("figp{0:01}.png".format(i))
 
        plt.close()
 

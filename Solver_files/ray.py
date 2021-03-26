@@ -24,7 +24,7 @@ def grid(r, t, p) :
 
 dt = np.dtype([('theta', np.float64), ('phi', np.float64),('ext', np.float64), ('od', np.float64)])
 
-data = np.fromfile("ray_kic1255b_25t.bin", dt)
+data = np.fromfile("ray_kic1255b_test.bin", dt)
 df = pd.DataFrame(data)
 
 #print(df)
@@ -43,7 +43,7 @@ for theta in df['theta'].unique():
 print(thetas)
 for phi in df['phi'].unique():
     phis.append(phi)
-"""
+
 for od in df['od']:
     print(od)
     if od == 0.0:
@@ -60,7 +60,7 @@ df.to_csv('test.dat', index=False)
 for od in df['od']:
     ods.append(od)
 print(len(ods))
-
+"""
 xs= []
 ys = []
 zs = []

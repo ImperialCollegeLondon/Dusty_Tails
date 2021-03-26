@@ -34,7 +34,7 @@ double acceleration( int i, double pos_star, double pos_planet, vector <double> 
 
   vel_dot = grav_star - centrif - 2.0*coriolis  + rad_press - dragf + grav_planet;
 
-  cout << vel_dot << endl;
+  //cout << vel_dot << endl;
 
   return vel_dot;
 }
