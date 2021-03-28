@@ -182,7 +182,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
     //if condition below is just for a test of the ray tracer at a given time
 
-    if ( total_t >= 0.99 ) {
+    if ( total_t >= 2.99 ) {
 
       cout << "now at grid builder " << endl;
       //build_grids is in ray_tracer.cpp - as the name says it builds the grid over the star for the ray tracing calculations
@@ -217,7 +217,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     //should change this 100 to a variable
     if (total_t > plot_time) {
       current_particles = total_particles;
-      total_particles = total_particles + 100;
+      total_particles = total_particles + 1000;
       //add particles explained above in this file
       add_particles(particles, current_particles, total_particles, total_t);
       plot_time = plot_time + 0.01;
