@@ -27,7 +27,7 @@ def patch(radii, phis, area):
         for a in range(1, len(phis)):
             area[r][a] = 0.5*(phis[a]-phis[a-1])*(radii[r]**2. - radii[r-1]**2.)
             total_area = total_area + area[r][a]
-    print('total_area ', total_area)
+    #print('total_area ', total_area)
     return area
 
 @jit(nopython = True)
@@ -57,7 +57,7 @@ def flux(area, optical_depths, radii, phis):
 dt = np.dtype([('time', np.float64), ('id', np.int64), ('x', np.float64), \
 ('y', np.float64), ('z', np.float64), ('size', np.float64), ('mass', np.float64)])
 
-data = np.fromfile("KIC1255b_test.bin", dt)
+data = np.fromfile("./data/KIC1255b_3o_035_1k_25t.bin", dt)
 df = pd.DataFrame(data)
 
 p_yprime = []
@@ -136,7 +136,7 @@ total_flux = []
 i = 0
 
 for t in df['time'].unique():
-  if (t >= 0.0) and (t < 2.0):
+  if (t >= 0.0) and (t < 3.0):
 
     print("this is running ")
     print("time", t)
@@ -165,7 +165,7 @@ for t in df['time'].unique():
         t_flux.append(t)
         total_flux.append(1.0)
     else:
-        print("particles ", len(y_front))
+        #print("particles ", len(y_front))
         particles = to_radius_angle(y_front,z_front,p_sizes)
         depths = where_grid(particles, radii, phis, area_new)
 
@@ -180,14 +180,14 @@ for t in df['time'].unique():
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
-    ax.set_ylim(0.95, 1.001)
-    ax.set_xlim(0.0, 2.0)
+    ax.set_ylim(0.985, 1.005)
+    ax.set_xlim(0.75, 3.0)
 
     plt.plot(t_flux, total_flux)
 
 
 
-    plt.savefig("fig{0:01}.png".format(i))
+    plt.savefig("./plots/fig{0:01}.png".format(i))
 
     plt.close()
 

@@ -24,7 +24,7 @@ def grid(r, t, p) :
 
 dt = np.dtype([('theta', np.float64), ('phi', np.float64),('ext', np.float64), ('od', np.float64)])
 
-data = np.fromfile("ray_kic1255b_test.bin", dt)
+data = np.fromfile("./data/ray_kic1255b_3o_035_1k_25t.bin", dt)
 df = pd.DataFrame(data)
 
 #print(df)
@@ -52,9 +52,7 @@ for od in df['od']:
     else:
         ods.append(math.log10(od))
 
-print (df)
 
-df.to_csv('test.dat', index=False)
 """
 
 for od in df['od']:
@@ -80,17 +78,19 @@ print(o_reshape)
 
 print(type(o_reshape))
 
-plt.contourf(phis, thetas, o_reshape, 20, cmap='jet')
+plt.contourf(phis, thetas, o_reshape, 20, cmap='jet', extend='both')
 
-plt.colorbar()
+
 #ax.scatter3D(df['theta'], df['phi'], df['od'])
 #plt.scatter(df['radius'], ods, s= 0.01, c = "black")
 #plt.scatter(df['radius'], ods_a, s=0.01, c = "red")
 
+cbar = plt.colorbar()
+cbar.ax.set_ylabel('log(tau)')
 ax.set_xlabel("phi")
 ax.set_ylabel("theta")
 
-plt.savefig('od_25.png')
+plt.savefig('./plots/od_25_035.png')
 
 plt.close()
 
