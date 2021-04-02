@@ -33,7 +33,7 @@ double opacity(double s, double x, double y, double z){
 
 double qfactor(double s, double x, double y, double z){
   //cgs units
-  return (s*temp_dust(s, x, y, z)) / wien;
+  return (s*Temp) / wien;
 }
 
 double clausius_clap(double s, double x, double y, double z){

@@ -11,7 +11,7 @@ plt.ioff()
 dt = np.dtype([('time', np.float64), ('id', np.int64), ('x', np.float64), \
 ('y', np.float64), ('z', np.float64), ('size', np.float64), ('mass', np.float64)])
 
-data = np.fromfile("KIC1255b_test.bin", dt)
+data = np.fromfile("./data/KIC1255b_3o_035_1k_25t.bin", dt)
 df = pd.DataFrame(data)
 #print(df['x'])
 #print(df['time'])
@@ -107,23 +107,23 @@ for t in df['time'].unique():
 
      if plot_df['x_planet'][plot_df.index[0]] <  0.0:
 
-       dust1 = plt.scatter(y_behind, z_behind, s= 10.0, c='#008080', alpha=0.5)
-       #planet = plt.scatter(plot_df['y_planet'], plot_df['z_planet'], s=100.0 , c= '#C6492B')
+       dust1 = plt.scatter(y_behind, z_behind, s= 0.1, c='#008080', alpha=0.01)
+       planet = plt.scatter(plot_df['y_planet'], plot_df['z_planet'], s=100.0 , c= '#C6492B')
        star = plt.scatter(0.0, 0.0, s=10000.0, c='#ffcc00')
-       dust2 = plt.scatter(y_front, z_front, s=10.0, c='#008080', alpha = 0.5)
+       dust2 = plt.scatter(y_front, z_front, s=0.1, c='#008080', alpha = 0.01)
 
 
-       plt.savefig("figp{0:01}.png".format(i))
+       plt.savefig("./plots/figp{0:01}.png".format(i))
 
        plt.close()
      else:
-       dust1 = plt.scatter(y_behind, z_behind, s= 10.0, c='#008080', alpha=0.5)
+       dust1 = plt.scatter(y_behind, z_behind, s= 0.1, c='#008080', alpha=0.01)
        star = plt.scatter(0.0, 0.0, s=10000.0, c='#ffcc00')
-       #planet = plt.scatter(plot_df['y_planet'], plot_df['z_planet'], s= 20.0 , c= '#C6492B')
-       dust2 = plt.scatter(y_front, z_front, s=10.0, c='#008080', alpha = 0.5)
+       planet = plt.scatter(plot_df['y_planet'], plot_df['z_planet'], s= 20.0 , c= '#C6492B')
+       dust2 = plt.scatter(y_front, z_front, s=0.1, c='#008080', alpha = 0.01)
 
 
-       plt.savefig("figp{0:01}.png".format(i))
+       plt.savefig("./plots/figp{0:01}.png".format(i))
 
        plt.close()
 

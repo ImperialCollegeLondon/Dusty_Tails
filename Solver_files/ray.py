@@ -74,9 +74,9 @@ ax = fig.add_subplot(111)
 
 o_reshape = np.reshape(ods, (25,150), order = 'C')
 
-print(o_reshape)
+#print(o_reshape)
 
-print(type(o_reshape))
+#print(type(o_reshape))
 
 plt.contourf(phis, thetas, o_reshape, 20, cmap='jet', extend='both')
 

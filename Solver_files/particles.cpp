@@ -24,9 +24,9 @@ uniform_real_distribution<double> uniform_phi(0.0, 1.0);
 uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 
 //open files to write data for python plotting
-ofstream ofile("./data/KIC1255b_3o_035_1k_100t.bin", ios::out | ios::binary);
+ofstream ofile("./data/KIC1255b_3o_040_1k_25t.bin", ios::out | ios::binary);
 
-ofstream ray_tracer("./data/ray_kic1255b_3o_035_1k_100t.bin", ios::out | ios::binary);
+ofstream ray_tracer("./data/ray_kic1255b_3o_040_1k_25t.bin", ios::out | ios::binary);
 
 
 //define grid limits for ray tracing calculation
@@ -105,7 +105,7 @@ void add_particles(vector <Particle> &particles, long int current,
                                    v_esc*cos(theta)};
 
 
-                 grain.p_size = 0.35e-4; //initial grain size
+                 grain.p_size = 0.40e-4; //initial grain size
                  grain.p_tau = tau; //using a constant optical depth for now defined in constants.h
                  grain.p_density = rho_d; //bulk density
                  grain.h_updated = 0.001; //initial time step for numerical integrator
