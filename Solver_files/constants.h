@@ -16,11 +16,11 @@ using namespace std;
 #define c 2.9979245e+8
 #define Rearth 6.3781e+6
 
-const double Mstar_kg = 0.67*Msun; //mass of star in kg
-const double Mstar_sun = 0.67; //mass of star in terms of mass of the sun
-const double Period_days = 15.68/24.0; //period of planet in days
-const double T = 15.68*60.0*60.0; //period of planet in seconds
-const double Rstar = 0.67;
+const double Mstar_kg = 0.60*Msun; //mass of star in kg
+const double Mstar_sun = 0.60; //mass of star in terms of mass of the sun
+const double Period_days = 9.146/24.0; //period of planet in days
+const double T = 9.146*60.0*60.0; //period of planet in seconds
+const double Rstar = 0.57;
 
 
 const double a = pow((G*Mstar_kg* pow(T, 2.0))/ (4.0*pow(PI, 2.0)), 1.0/3.0);
@@ -52,7 +52,7 @@ extern vector <double> planet_pos;
 
 //const double h0 = 0.001; //initial time step
 
-const double Temp = 4550.0; //stars temperature
+const double Temp = 3830.0; //stars temperature
 const double S = 0.9; //safety factor
 const double tol = 1.0e-4; //error tolerance
 const double A = 77365.; //clausius claperyon relation

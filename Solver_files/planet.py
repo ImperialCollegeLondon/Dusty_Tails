@@ -11,7 +11,7 @@ plt.ioff()
 dt = np.dtype([('time', np.float64), ('id', np.int64), ('x', np.float64), \
 ('y', np.float64), ('z', np.float64), ('size', np.float64), ('mass', np.float64)])
 
-data = np.fromfile("./data/KIC1255b_3o_035_1k_25t.bin", dt)
+data = np.fromfile("./data/K222b_3o_035_1k_25t_day2.bin", dt)
 df = pd.DataFrame(data)
 #print(df['x'])
 #print(df['time'])
@@ -30,9 +30,9 @@ for t in df['time']:
 df['angles'] = theta
 
 for angle in df['angles']:
-    x_p = math.cos(angle) * math.sin(1.38)
+    x_p = math.cos(angle) * math.sin(1.36)
     y_p = math.sin(angle)
-    z_p = -math.cos(angle) * math.cos(1.38)
+    z_p = -math.cos(angle) * math.cos(1.36)
     p_yprime.append(y_p)
     p_xprime.append(x_p)
     p_z.append(z_p)
@@ -61,7 +61,7 @@ x_dprime = []
 z_dprime = []
 
 for i in range(df['xprime'].size):
-    incl = 1.38
+    incl = 1.36
 
     xdp = df['xprime'][i]* math.sin(incl) + df['z'][i]*math.cos(incl)
     zdp = -df['xprime'][i]* math.cos(incl) + df['z'][i]*math.sin(incl)
@@ -75,6 +75,7 @@ df['z_double_prime'] = z_dprime
 i = 0
 
 for t in df['time'].unique():
+  if (t>1.5) and (t<2.5):
 
      plot_df = df[df.time == t]
      fig = plt.figure()
@@ -86,7 +87,7 @@ for t in df['time'].unique():
      ax.get_xaxis().set_visible(False)
      ax.get_yaxis().set_visible(False)
 
-     t_hours = 15.6* t
+     t_hours = 9.146* t
      #plt.title("time: %.2f hours" % t_hours)
 
      y_behind = []
@@ -108,12 +109,12 @@ for t in df['time'].unique():
      if plot_df['x_planet'][plot_df.index[0]] <  0.0:
 
        dust1 = plt.scatter(y_behind, z_behind, s= 0.1, c='#008080', alpha=0.01)
-       planet = plt.scatter(plot_df['y_planet'], plot_df['z_planet'], s=100.0 , c= '#C6492B')
+       planet = plt.scatter(plot_df['y_planet'], plot_df['z_planet'], s=20.0 , c= '#C6492B')
        star = plt.scatter(0.0, 0.0, s=10000.0, c='#ffcc00')
        dust2 = plt.scatter(y_front, z_front, s=0.1, c='#008080', alpha = 0.01)
 
 
-       plt.savefig("./plots/figp{0:01}.png".format(i))
+       plt.savefig("./plots/K2_2{0:01}.png".format(i))
 
        plt.close()
      else:
@@ -123,7 +124,7 @@ for t in df['time'].unique():
        dust2 = plt.scatter(y_front, z_front, s=0.1, c='#008080', alpha = 0.01)
 
 
-       plt.savefig("./plots/figp{0:01}.png".format(i))
+       plt.savefig("./plots/K2_2{0:01}.png".format(i))
 
        plt.close()
 

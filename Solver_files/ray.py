@@ -24,7 +24,7 @@ def grid(r, t, p) :
 
 dt = np.dtype([('theta', np.float64), ('phi', np.float64),('ext', np.float64), ('od', np.float64)])
 
-data = np.fromfile("./data/ray_kic1255b_3o_035_1k_25t.bin", dt)
+data = np.fromfile("./data/ray_kic1255b_3o_035_1k_75t.bin", dt)
 df = pd.DataFrame(data)
 
 #print(df)
@@ -43,7 +43,7 @@ for theta in df['theta'].unique():
 print(thetas)
 for phi in df['phi'].unique():
     phis.append(phi)
-
+"""
 for od in df['od']:
     print(od)
     if od == 0.0:
@@ -58,7 +58,7 @@ for od in df['od']:
 for od in df['od']:
     ods.append(od)
 print(len(ods))
-"""
+
 xs= []
 ys = []
 zs = []
@@ -72,13 +72,13 @@ fig = plt.figure()
 #ax = plt.axes(projection='3d')
 ax = fig.add_subplot(111)
 
-o_reshape = np.reshape(ods, (25,150), order = 'C')
+o_reshape = np.reshape(ods, (75,450), order = 'C')
 
 #print(o_reshape)
 
 #print(type(o_reshape))
 
-plt.contourf(phis, thetas, o_reshape, 20, cmap='jet', extend='both')
+plt.contourf(phis, thetas, o_reshape, 15, cmap='jet', extend='both')
 
 
 #ax.scatter3D(df['theta'], df['phi'], df['od'])
@@ -90,7 +90,7 @@ cbar.ax.set_ylabel('log(tau)')
 ax.set_xlabel("phi")
 ax.set_ylabel("theta")
 
-plt.savefig('./plots/od_25_035.png')
+plt.savefig('./plots/od_75_035_lin.png')
 
 plt.close()
 

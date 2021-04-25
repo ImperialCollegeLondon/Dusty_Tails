@@ -16,17 +16,17 @@ unsigned seed = 123;
 mt19937 generator (seed); //set the seed for the distrubutions of particle positions
 
 //Use something of the sort below to have particles starting on the day side of the planet
-//uniform_real_distribution<double> uniform_phi(0.625, 0.875);
-//uniform_real_distribution<double> uniform_theta(0.2, 0.8);
+uniform_real_distribution<double> uniform_phi(0.375, 0.625);
+uniform_real_distribution<double> uniform_theta(0.2, 0.8);
 
 //Use distrubutions below to have particles coming out of the whole planetary surface
-uniform_real_distribution<double> uniform_phi(0.0, 1.0);
-uniform_real_distribution<double> uniform_theta(0.0, 1.0);
+//uniform_real_distribution<double> uniform_phi(0.0, 1.0);
+//uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 
 //open files to write data for python plotting
-ofstream ofile("./data/KIC1255b_3o_040_1k_25t.bin", ios::out | ios::binary);
+ofstream ofile("./data/K222b_3o_040_1k_25t_day2.bin", ios::out | ios::binary);
 
-ofstream ray_tracer("./data/ray_kic1255b_3o_040_1k_25t.bin", ios::out | ios::binary);
+ofstream ray_tracer("./data/ray_k222b_3o_040_1k_25t_day2.bin", ios::out | ios::binary);
 
 
 //define grid limits for ray tracing calculation
@@ -105,7 +105,7 @@ void add_particles(vector <Particle> &particles, long int current,
                                    v_esc*cos(theta)};
 
 
-                 grain.p_size = 0.40e-4; //initial grain size
+                 grain.p_size = 0.4e-4; //initial grain size
                  grain.p_tau = tau; //using a constant optical depth for now defined in constants.h
                  grain.p_density = rho_d; //bulk density
                  grain.h_updated = 0.001; //initial time step for numerical integrator

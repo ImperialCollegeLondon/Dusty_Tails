@@ -1,6 +1,6 @@
 C_COMPILER     = g++ -std=c++11
 C_FLAGS        = -O3 -mavx -g 
-OUTPUT         = ./dynamics_040_25t.exe
+OUTPUT         = ./dynamics_040_k222_day2.exe
 LIBS           = -lm
 
 HEADERS = constants.h functions.h butcher.h particle.h
