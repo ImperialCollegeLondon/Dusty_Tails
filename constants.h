@@ -13,7 +13,7 @@ using namespace std;
 #define AU_to_m 1.496e+11
 #define m_to_AU 6.68459e-12
 #define Mearth 5.972e+24
-#define c 2.9979245e+8
+#define clight 2.9979245e+8
 #define Rearth 6.3781e+6
 
 const double Mstar_kg = 0.67*Msun; //mass of star in kg
@@ -29,7 +29,7 @@ const double r_planet = 0.38*Rearth;
 const double r_start = (2.*r_planet)/a;
 const double r_planet_dim = r_planet/a;
 const double G_dim = (G* pow(T, 2.0) * Mstar_kg) / pow(a, 3.0); //dimensionless gravitational constant
-const double c_dim = c * (T / a);
+const double c_dim = clight * (T / a);
 const double r_h = pow(m_planet/3.0, 1.0/3.0); //hill radius
 
 //const int cell_no = 120; //cell number for ray tracer calculations - used for vector declaration
@@ -58,7 +58,7 @@ const double tol = 1.0e-4; //error tolerance
 const double A = 77365.; //clausius claperyon relation
 const double B = 39.3; //clausius claperyon relation
 const double alpha = 0.1;
-const double tau = 0.1; //optical depth
+//const double tau = 0.1; //optical depth
 const double mu = 101.961; //molecular weight
 
 

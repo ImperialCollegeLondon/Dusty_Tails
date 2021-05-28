@@ -51,8 +51,7 @@ void build_grids(double *r_a, double *r_b, double *theta_a, \
 }
 
 
-void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells][p_cells], \
-                    int nparticles [r_cells][t_cells][p_cells]){
+void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells][p_cells]){
         vector <double> sphere_pos(3, 0.0);
         vector <double> scaled_pos(3, 0.0);
         int r_it, theta_it, phi_it;
@@ -75,7 +74,7 @@ void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells]
 
               //cout << "in calculation test " << endl;
 
-              sphere_pos = to_spherical(p.position[0], p.position[1], p.position[2]);
+              sphere_pos = pos_to_spherical(p.position[0], p.position[1], p.position[2]);
 
               scaled_pos = grid_scaling(sphere_pos);
 
@@ -131,7 +130,6 @@ void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells]
                       //cout << vol_element << endl;
                       op = (3./4.)*(1./4000.)*(1./(p.p_size * 1.e-2));
 
-                      nparticles [r_index[i]][theta_index[j]][phi_index[k]] = nparticles [r_index[i]][theta_index[j]][phi_index[k]] + 1;
                       //cout << nparticles [r_index[i]][theta_index[j]][phi_index[k]] << endl;
                       old_ext = ext [r_index[i]][theta_index[j]][phi_index[k]];
                       ext [r_index[i]][theta_index[j]][phi_index[k]] = old_ext + (partial_vol/ vol_element) * ((n_mini * p.p_mass * 1.0e-3 * op) / (vol_element * pow(a, 3.)));
@@ -206,4 +204,41 @@ double phi_reverse(double old_phi){
   delta_p = d_p_max - d_p_min;
   new_phi = (old_phi / (p_cells_d/delta_p)) + d_p_min;
   return new_phi;
+}
+
+vector < vector < vector <double> > >  tau_to_vector(double tau[r_cells][t_cells][p_cells]) {
+  vector < vector < vector <double> > > tauv;
+  for (unsigned int i = 0; i < r_cells; i++){
+        for (unsigned int j = 0; j < t_cells; j++){
+            for (unsigned int  k = 0; k < p_cells; k++){
+                  tauv[i][j][k] = tau[i][j][k];
+            }
+        }
+  }
+
+  return tauv;
+}
+
+vector <double> r_grid_to_vector(double r[r_cells+1]){
+  vector <double> r_v;
+  for (unsigned int i = 0; i <r_cells; i++){
+    r_v[i] = r[i];
+  }
+  return r_v;
+}
+
+vector <double> t_grid_to_vector(double t[t_cells+1]){
+  vector <double> t_v;
+  for (unsigned int i = 0; i <t_cells; i++){
+    t_v[i] = t[i];
+  }
+  return t_v;
+}
+
+vector <double> p_grid_to_vector(double p[p_cells+1]){
+  vector <double> p_v;
+  for (unsigned int i = 0; i <p_cells; i++){
+    p_v[i] = p[i];
+  }
+  return p_v;
 }

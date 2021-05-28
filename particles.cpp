@@ -25,9 +25,9 @@ uniform_real_distribution<double> uniform_phi(0.0, 1.0);
 uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 
 //open files to write data for python plotting
-ofstream ofile("./data/KIC1255b_2o_035_1k_25t_sph.bin", ios::out | ios::binary);
+ofstream ofile("./data/KIC1255b_2o_040_1k_25t_sph_tau.bin", ios::out | ios::binary);
 
-ofstream ray_tracer("./data/ray_kic1255b_2o_035_1k_25t_sph.bin", ios::out | ios::binary);
+ofstream ray_tracer("./data/ray_kic1255b_2o_040_1k_25t_sph_tau.bin", ios::out | ios::binary);
 
 
 //define 3d arrays to store extinctions and optical depths at each grid cell
@@ -72,6 +72,7 @@ void add_particles(vector <Particle> &particles, long int current,
 
                  double theta = acos(1- 2.0* uniform_theta(generator)); //theta coordinate
 
+
                  //position of particle in cartesian
                  grain.position = {r_start*sin(theta)*cos(phi) + planet_x, \
                                    r_start*sin(theta)*sin(phi), \
@@ -82,9 +83,12 @@ void add_particles(vector <Particle> &particles, long int current,
                                    v_esc*sin(theta)*sin(phi), \
                                    v_esc*cos(theta)};
 
+                 grain.pos_spherical = pos_to_spherical(grain.position[0], grain.position[1], grain.position[2]);
+
+                 grain.v_spherical = vel_to_spherical(grain.velocity[0], grain.velocity[1], grain.velocity[2]);
 
                  grain.p_size = 0.4e-4; //initial grain size
-                 grain.p_tau = tau; //using a constant optical depth for now defined in constants.h
+                 grain.p_tau = 0.0;
                  grain.p_density = rho_d; //bulk density
                  grain.h_updated = 0.001; //initial time step for numerical integrator
                  grain.p_mass = dust_mass(grain.p_size); //initial particle mass
@@ -117,16 +121,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
   double plot_time = 0.01; //time when to output values for plotting
   vector <double> updated_vector(8); //vector which will take updated values of positons, velocitites, size and optimal time step for particle
-  int counter_ps = 0;
-  double optical_depth_avg = 0.0;
-  double optical_depth_sum = 0.0;
-  double particles_in_box = 0.;
-  double no_particles_avg = 0.0;
-
-  cout << "dr " << d_dr << endl;
-  cout << "dtheta " << d_dtheta << endl;
-  cout << "dphi " << d_dphi << endl;
-
+  
   while (total_t < end_t) {
 
     cout << "orbit: " << total_t << endl;
@@ -134,6 +129,9 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     for( Particle& p : particles) {
 
         double no_particles = particles.size();
+
+        p.p_tau = tricubicInterpolate(tau, radii_v, thetas_v, phis_v, \
+                                      p.pos_spherical[0], p.pos_spherical[1], p.pos_spherical[2]);
 
         //Lines to write binary file
         ofile.write((char*) &total_t, sizeof(double));
@@ -143,11 +141,16 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         ofile.write((char*) &p.position[2], sizeof(double));
         ofile.write((char*) &p.p_size, sizeof(double));
         ofile.write((char*) &p.p_mass, sizeof(double));
+        ofile.write((char*) &p.p_tau, sizeof(double));
+
+        if (p.id == 20) {
+          cout << p.p_tau << endl;
+        }
 
         //updated vector is new positions, velocities, size and optimal small step size for particle
         // RK_solver function is in "solver_new_err.cpp"
         updated_vector = RK_solver({p.position[0], p.position[1], p.position[2], \
-        p.velocity[0], p.velocity[1], p.velocity[2], p.p_size}, total_t, t_common, p.h_updated);
+        p.velocity[0], p.velocity[1], p.velocity[2], p.p_size, p.p_tau}, total_t, t_common, p.h_updated);
         p.position = {updated_vector[0],updated_vector[1], updated_vector[2]};
         p.velocity = {updated_vector[3],updated_vector[4], updated_vector[5]};
         p.p_size = updated_vector[6];
@@ -160,16 +163,12 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
     //if condition below is just for a test of the ray tracer at a given time
 
-    if ( total_t >= 2.99 ) {
-
-      cout << "now at grid builder " << endl;
-      //build_grids is in ray_tracer.cpp - as the name says it builds the grid over the star for the ray tracing calculations
-      build_grids(r_a, r_b, theta_a, theta_b, dr, dtheta, dphi, phi_a, phi_b, r_min, theta_min, phi_min);
+    if ( total_t >= 1.99 ) {
       //calculation_ext is in ray_tracer.cpp - calculates the extinction at each grid cell
-      calculation_ext(particles, extinction, no_particles);
+      //calculation_ext(particles, extinction, no_particles);
       //optical_depth_test is in ray_tracer.cpp - calculates the optical depth in each grid cell, dependent on the extinction distribution
-      optical_depth_test(extinction, optical_depth);
-
+      //optical_depth_test(extinction, optical_depth);
+      //tau = tau_to_vector(optical_depth);
 
 
       //loop below write file for plotting
@@ -191,13 +190,16 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
       }
 
 
-    //when plot time is reached the following condition adds 100 new no_particles
+    //when plot time is reached the following condition adds new no_particles
     //should change this 100 to a variable
     if (total_t > plot_time) {
       current_particles = total_particles;
       total_particles = total_particles + 1000;
       //add particles explained above in this file
       add_particles(particles, current_particles, total_particles, total_t);
+      calculation_ext(particles, extinction);
+      optical_depth_calc(extinction, optical_depth);
+      tau = tau_to_vector(optical_depth);
       plot_time = plot_time + 0.01;
      }
 

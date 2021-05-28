@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 
-
 using namespace std;
 
 class Particle {
@@ -10,6 +9,7 @@ class Particle {
     vector <double> position; //current position of the particle
     vector <double> velocity; //current velocity of the particle
     vector <double> pos_spherical; // current position in spherical coordinates
+    vector <double> v_spherical; //curretn velocity in spherical coordinates
     double p_size; //size of the particle
     double p_density; //particle density
     double h_updated; //current optimal time step for particle
@@ -29,6 +29,6 @@ void solve_particles(double total_t, double end_t, vector <Particle> &particles,
 
 void rm_particles(vector <Particle> &particles);
 
-
+void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells][p_cells]);
 
 extern vector <Particle> particles;

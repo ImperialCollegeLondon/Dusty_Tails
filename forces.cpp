@@ -44,7 +44,7 @@ vector <double> rad_pressure(vector <double> V){
   vector <double> rad_vector(3);
 
   k = opacity(V[6], V[0], V[1], V[2]);
-  beta = beta_fn(k);
+  beta = beta_fn(k, V[7]);
 
   constant = (beta*G_dim)/(pow(scalar(V[0]- star_pos[0], V[1], V[2]), 3.0));
 
@@ -66,7 +66,7 @@ vector <double> pr_drag(vector <double> V){
 	double constant, beta, k, Lum;
 
   k = opacity(V[6], V[0], V[1], V[2]);
-  beta = beta_fn(k);
+  beta = beta_fn(k, V[7]);
 
   constant = (beta*G_dim)/(pow(scalar(V[0]-star_pos[0], V[1], V[2]), 3.0)*c_dim);
 

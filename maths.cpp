@@ -49,7 +49,7 @@ double fRand(double fMin, double fMax)
     return fMin + f * (fMax - fMin);
 }
 
-vector <double> to_spherical(double x, double y, double z){
+vector <double> pos_to_spherical(double x, double y, double z){
   double x_new, radius, theta, phi;
   vector <double> s_pos(3, 0.0);
   x_new = x - planet_x + 1.0;
@@ -61,5 +61,19 @@ vector <double> to_spherical(double x, double y, double z){
   s_pos = {radius, theta, phi};
 
   return s_pos;
+
+}
+
+vector <double> vel_to_spherical(double x, double y, double z){
+  double v_radius, v_theta, v_phi;
+  vector <double> v_pos(3, 0.0);
+
+  v_radius = pow( pow(x, 2.) + pow(y, 2.) + pow(z, 2.), 1./2.);
+  v_theta = acos(z / v_radius);
+  v_phi = atan(y / x);
+
+  v_pos = {v_radius, v_theta, v_phi};
+
+  return v_pos;
 
 }

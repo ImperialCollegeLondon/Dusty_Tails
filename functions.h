@@ -2,7 +2,6 @@
 #include <iostream>
 #include <vector>
 
-
 using namespace std;
 
 ///k values declared
@@ -26,9 +25,10 @@ extern double optical_depth [r_cells][t_cells][p_cells];
 extern double r_min, r_max, theta_min, theta_max, phi_min, phi_max;
 
 extern double dr, dtheta, dphi;
-
-
 extern double d_r_min, d_r_max, d_t_max, d_t_min, d_p_min, d_p_max, d_dr, d_dtheta, d_dphi;
+
+extern vector < vector < vector <double> > >  tau;
+extern vector <double> radii_v, thetas_v, phis_v;
 
 
 double fRand(double fMin, double fMax);
@@ -51,11 +51,12 @@ vector <double> cross_product(double m1, double m2, double m3, \
                               double n1, double n2, double n3);
 
 double dot_product(vector <double> n,  vector <double> m);
-vector <double> to_spherical(double x, double y, double z);
+vector <double> pos_to_spherical(double x, double y, double z);
+vector <double> vel_to_spherical(double x, double y, double z);
 
 //microphysics file
 double omega(double mplanet, double mstar);
-double beta_fn(double k);
+double beta_fn(double k, double tau);
 double opacity(double s, double x, double y, double z);
 double qfactor(double s, double x, double y, double z);
 double clausius_clap(double s, double x, double y, double z);
@@ -107,8 +108,6 @@ double gauss(double var, double var_c, double std);
 
 vector <double> grid_scaling(vector <double> s_position);
 
-void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells][p_cells], \
-                    int nparticles [r_cells][t_cells][p_cells]);
 
 void optical_depth_calc(double ext [r_cells][t_cells][p_cells], double od [r_cells][t_cells][p_cells]);
 
@@ -127,3 +126,15 @@ double r_reverse(double old_r);
 double theta_reverse(double old_theta);
 
 double phi_reverse(double old_phi);
+
+vector < vector < vector <double> > >  tau_to_vector(double tau[r_cells][t_cells][p_cells]);
+
+double cubicInterpolate ( vector <double> p, vector <double> s1, double x);
+
+double bicubicInterpolate (vector< vector <double> > p,vector <double> s1, vector <double> s2, double x, double y);
+
+double tricubicInterpolate (vector <vector< vector <double> > > p, vector <double> s1, vector <double> s2, vector <double> s3, double x, double y, double z);
+
+vector <double> r_grid_to_vector(double r[r_cells+1]);
+vector <double> t_grid_to_vector(double t[t_cells+1]);
+vector <double> p_grid_to_vector(double p[p_cells+1]);

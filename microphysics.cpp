@@ -15,7 +15,7 @@ double omega(double mplanet, double mstar){
     return pow((G_dim *(m_planet + mstar)), 0.5);
 }
 
-double beta_fn(double k){
+double beta_fn(double k, double tau){
   //mass of star in terms of mass of sun, and everything in cgs units
   //function to evaluate beta (radiation accel/ gravity accel)
   double beta =0.0;
