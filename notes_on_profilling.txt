@@ -1,0 +1,8 @@
+to profile the code:
+
+add flag -pg (And -g).
+after running the code it will produce a file called gmon out
+
+run: gprof 'executable of program' gmon.out > filewithprofinfo.txt
+
+

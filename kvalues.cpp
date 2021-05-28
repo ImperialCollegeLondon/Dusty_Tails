@@ -28,6 +28,8 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     double s0 = V[6];
     vector <double> V0 = {V[0], V[1], V[2]};
     vector <double> V0dot = {V[3], V[4], V[5]};
+
+    double tau_particle = V[7];
     //function to obtain several k values of RK-DP method
     //k1 values
 
