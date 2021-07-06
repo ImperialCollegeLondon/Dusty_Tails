@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include "spline.h"
 
 using namespace std;
 

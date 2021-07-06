@@ -46,9 +46,8 @@
 
 // unnamed namespace only because the implementation is in this
 // header file and we don't want to export symbols to the obj files
-namespace
-{
 
+namespace {
 namespace tk
 {
 
@@ -148,7 +147,6 @@ public:
 #endif // HAVE_SSTREAM
 
 };
-
 
 
 namespace internal
@@ -939,9 +937,7 @@ std::vector<double> solve_cubic(double a, double b, double c, double d,
 
 } // namespace tk
 
-
-} // namespace
-
+}
 #pragma GCC diagnostic pop
 
 #endif /* TK_SPLINE_H */

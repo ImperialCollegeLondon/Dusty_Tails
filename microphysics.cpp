@@ -19,6 +19,10 @@ double beta_fn(double k, double tau){
   //mass of star in terms of mass of sun, and everything in cgs units
   //function to evaluate beta (radiation accel/ gravity accel)
   double beta =0.0;
+  if (tau < 1.0e-33) {
+    tau = 0.0;
+  }
+  //cout << "tau at beta " << tau << endl;
 	beta = (k*lum*exp(-tau)) / (4.0*PI*c_cgs*G_cgs*Mstar_sun*Msun_cgs);
 	return beta;
 

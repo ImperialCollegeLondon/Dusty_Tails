@@ -7,9 +7,9 @@
 #include <algorithm>
 #include "constants.h"
 #include "butcher.h"
+#include "spline.h"
 #include "functions.h"
 #include "particle.h"
-#include "spline.h"
 #include <stdlib.h>
 #include <time.h>
 
@@ -25,8 +25,6 @@ vector <Particle> particles; //initiate vector of "Particle" (Object defined in 
   double phi_a [p_cells + 1];
   double phi_b [p_cells];
 
-  vector < vector < vector <double> > >  tau;
-  vector <double> radii_v, thetas_v, phis_v;
 
   double r_min = 0.0;
   double r_max = r_cells_d;
@@ -40,11 +38,11 @@ vector <Particle> particles; //initiate vector of "Particle" (Object defined in 
   double dphi = ( phi_max - phi_min) / p_cells_d;
 
 int main() {
-
+  cout << planet_x << endl;
   long int total_particles = 1000; //initial number of particles to start simulation with
   double t_common = 0.01;
   double big_step = 0.01; //big time step (in terms of planetary orbits)
-  double end_t = 2.0; // end time of simulation
+  double end_t = 5.0; // end time of simulation
   double total_t = 0.0; // total time that has passed, so 0 in the beginning
 
 
@@ -60,16 +58,8 @@ int main() {
 
   build_grids(r_a, r_b, theta_a, theta_b, dr, dtheta, dphi, phi_a, phi_b, r_min, theta_min, phi_min); //grid for optical depth calculations
   add_particles(particles, current_particles, total_particles, 0.0); // call function that adds particles to simulation (in add_rm.cpp file)
-  
+  cout << "built grids and added particles" << endl;
   rm_particles(particles);
-  //calculation_ext is in ray_tracer.cpp - calculates the extinction at each grid cell
-  calculation_ext(particles, extinction);
-  //optical_depth_test is in ray_tracer.cpp - calculates the optical depth in each grid cell, dependent on the extinction distribution
-  optical_depth_calc(extinction, optical_depth);
-  tau = tau_to_vector(optical_depth);
-  radii_v = r_grid_to_vector(r_a);
-  thetas_v = t_grid_to_vector(theta_a);
-  phis_v = p_grid_to_vector(phi_a);
   solve_particles(total_t, end_t, particles, total_particles, t_common, big_step,
                        current_particles); //solver function (in add_rm.cpp file)
 

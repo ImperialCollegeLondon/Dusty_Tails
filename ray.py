@@ -24,11 +24,18 @@ def grid(r, t, p) :
 
 dt = np.dtype([('theta', np.float64), ('phi', np.float64),('ext', np.float64), ('od', np.float64)])
 
-data = np.fromfile("./data/ray_kic1255b_3o_035_1k_75t.bin", dt)
+data = np.fromfile("./data/ray_kic1255b_3o_035_1k_25t_tau_more_01.bin", dt)
 df = pd.DataFrame(data)
 
-#print(df)
 
+"""
+for i in df.index:
+    if (df['od'][i] > 0.1):
+        print(df['theta'][i])
+        print(df['phi'][i])
+        print(df['od'][i])
+#print(df)
+"""
 radii = []
 thetas = []
 phis = []
@@ -36,28 +43,36 @@ ods = []
 ods_a = []
 errors = []
 
-
+#print(df)
 for theta in df['theta'].unique():
     thetas.append(theta)
 
-print(thetas)
+#print(thetas)
 for phi in df['phi'].unique():
     phis.append(phi)
+
+#print(len(phis))
 """
 for od in df['od']:
-    print(od)
+    #print(od)
     if od == 0.0:
         od = np.nan
+        ods.append(math.log10(od))
+    elif od == np.nan:
+        print("od in nan")
         ods.append(math.log10(od))
     else:
         ods.append(math.log10(od))
 
-
 """
 
+
 for od in df['od']:
-    ods.append(od)
-print(len(ods))
+    if math.isnan(od):
+        ods.append(0.0)
+    else:
+        ods.append(od)
+#print(len(ods))
 
 xs= []
 ys = []
@@ -72,13 +87,13 @@ fig = plt.figure()
 #ax = plt.axes(projection='3d')
 ax = fig.add_subplot(111)
 
-o_reshape = np.reshape(ods, (75,450), order = 'C')
+o_reshape = np.reshape(ods, (25,125), order = 'C')
 
 #print(o_reshape)
 
 #print(type(o_reshape))
 
-plt.contourf(phis, thetas, o_reshape, 15, cmap='jet', extend='both')
+plt.contourf(phis, thetas, o_reshape, 20, cmap='jet', extend='both')
 
 
 #ax.scatter3D(df['theta'], df['phi'], df['od'])
@@ -90,7 +105,7 @@ cbar.ax.set_ylabel('log(tau)')
 ax.set_xlabel("phi")
 ax.set_ylabel("theta")
 
-plt.savefig('./plots/od_75_035_lin.png')
+plt.savefig('test_tau_nsph_01.png')
 
 plt.close()
 

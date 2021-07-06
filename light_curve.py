@@ -14,9 +14,10 @@ def to_radius_angle(y, z, sizes):
         radius = np.sqrt(value**2.0 + z[counter]**2.0)
         phi = np.arctan(z[counter]/value)
 
-        if radius <= 0.2:
-            #print("particle within star")
-            particles_stuff.append([radius, phi, sizes[counter]])
+        if radius <= 0.24:
+            if math.isnan(sizes[counter]) == False:
+                #print("particle within star")
+                particles_stuff.append([radius, phi, sizes[counter]])
         counter += 1
     return particles_stuff
 
@@ -38,8 +39,7 @@ def where_grid(particles_stuff, radii, phis, area):
         if (radii[r-1] <= particle[0] < radii[r]):
           for a in range(1, len(phis)):
             if (phis[a-1] <= particle[1] < phis[a]):
-                s = (np.pi * (particle[2] / (1.30*10.**(11.)))**(2.) * (1.0*10.**(25.))) / area[r][a]
-
+                s = (np.pi * (particle[2] / (1.93*10.**(11.)))**(2.) * (1.0*10.**(23.))) / area[r][a]
                 optical_depths[r-1][a-1] = optical_depths[r-1][a-1] + s
     return optical_depths
 
@@ -48,16 +48,15 @@ def flux(area, optical_depths, radii, phis):
     f = 0.0
     for r in range(1, len(radii)):
         for a in range(1, len(phis)):
-            #print(area[r][a])
-            f = f + ((area[r][a] * np.exp(-1.0*optical_depths[r-1][a-1])) / (np.pi * 0.2**(2.)))
+            f = f + ((area[r][a] * np.exp(-1.0*optical_depths[r-1][a-1])) / (np.pi * 0.24**(2.)))
 
     return f
 
 
 dt = np.dtype([('time', np.float64), ('id', np.int64), ('x', np.float64), \
-('y', np.float64), ('z', np.float64), ('size', np.float64), ('mass', np.float64)])
+('y', np.float64), ('z', np.float64), ('size', np.float64), ('mass', np.float64), ('tau', np.float64)])
 
-data = np.fromfile("./data/K222b_3o_035_1k_25t_sph.bin", dt)
+data = np.fromfile("./data/KIC1255b_5orb_035_tau_01micro_01taumin_1node_sph.bin", dt)
 df = pd.DataFrame(data)
 
 p_yprime = []
@@ -67,7 +66,6 @@ p_z = []
 t_0 = 0.0
 theta = []
 
-
 for t in df['time']:
     angle = 2.0*math.pi * (t - t_0)
     #print("angle", angle)
@@ -76,9 +74,9 @@ for t in df['time']:
 df['angles'] = theta
 
 for angle in df['angles']:
-    x_p = math.cos(angle) * math.sin(1.36)
+    x_p = math.cos(angle) * math.sin(1.38)
     y_p = math.sin(angle)
-    z_p = -math.cos(angle) * math.cos(1.36)
+    z_p = -math.cos(angle) * math.cos(1.38)
     p_yprime.append(y_p)
     p_xprime.append(x_p)
     p_z.append(z_p)
@@ -109,7 +107,7 @@ df['xprime'] = x_prime
 df['yprime'] = y_prime
 
 for i in range(df['xprime'].size):
-    incl = 1.36
+    incl = 1.38
 
     xdp = df['xprime'][i]* math.sin(incl) + df['z'][i]*math.cos(incl)
     zdp = -df['xprime'][i]* math.cos(incl) + df['z'][i]*math.sin(incl)
@@ -122,7 +120,7 @@ df['z_double_prime'] = z_dp
 radii = List()
 phis = List()
 
-radii = np.linspace(0.0, 0.2, num = 100)
+radii = np.linspace(0.0, 0.24, num = 100)
 phis = np.linspace(0.0, 2.*np.pi, num = 100)
 
 area = np.zeros((100, 100), dtype = np.float64)
@@ -136,13 +134,12 @@ total_flux = []
 i = 0
 
 for t in df['time'].unique():
-  if (t >= 1.5) and (t < 2.5):
 
     print("this is running ")
     print("time", t)
     plot_df = df[df.time == t]
 
-    t_hours = 9.146 * t
+    t_hours = 15.68 * t
     #plt.title("time: %.2f hours" % t_hours)
 
     y_behind = []
@@ -180,14 +177,14 @@ for t in df['time'].unique():
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
-    ax.set_ylim(0.996, 1.002)
-    ax.set_xlim(1.8, 2.2)
+    ax.set_ylim(0.992, 1.002)
+    ax.set_xlim(0.0, 5.0)
 
     plt.plot(t_flux, total_flux)
 
 
 
-    plt.savefig("./plots/lck2_sph{0:01}.png".format(i))
+    plt.savefig("./plots/lckic1255b_sphtau{0:01}.png".format(i))
 
     plt.close()
 

@@ -207,22 +207,26 @@ double phi_reverse(double old_phi){
 }
 
 vector < vector < vector <double> > >  tau_to_vector(double tau[r_cells][t_cells][p_cells]) {
-  vector < vector < vector <double> > > tauv;
+  cout << "inside tau to vector" << endl;
+  vector < vector < vector <double> > > tauv ;
   for (unsigned int i = 0; i < r_cells; i++){
+        tauv.push_back({});
         for (unsigned int j = 0; j < t_cells; j++){
+            tauv[i].push_back({});
             for (unsigned int  k = 0; k < p_cells; k++){
-                  tauv[i][j][k] = tau[i][j][k];
+              tauv[i][j].push_back(tau[i][j][k]);
+              //cout << tau[i][j][k] << endl;
+              //cout << tauv[i][j][k] << endl;
             }
         }
-  }
-
+  } 
   return tauv;
 }
 
 vector <double> r_grid_to_vector(double r[r_cells+1]){
   vector <double> r_v;
   for (unsigned int i = 0; i <r_cells; i++){
-    r_v[i] = r[i];
+    r_v.push_back(r[i]);
   }
   return r_v;
 }
@@ -230,7 +234,7 @@ vector <double> r_grid_to_vector(double r[r_cells+1]){
 vector <double> t_grid_to_vector(double t[t_cells+1]){
   vector <double> t_v;
   for (unsigned int i = 0; i <t_cells; i++){
-    t_v[i] = t[i];
+    t_v.push_back(t[i]);
   }
   return t_v;
 }
@@ -238,7 +242,7 @@ vector <double> t_grid_to_vector(double t[t_cells+1]){
 vector <double> p_grid_to_vector(double p[p_cells+1]){
   vector <double> p_v;
   for (unsigned int i = 0; i <p_cells; i++){
-    p_v[i] = p[i];
+    p_v.push_back(p[i]);
   }
   return p_v;
 }

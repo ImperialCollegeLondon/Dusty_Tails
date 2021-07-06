@@ -40,9 +40,9 @@ def distances(particles):
 
 
 dt = np.dtype([('time', np.float64), ('id', np.int64), ('x', np.float64), \
-('y', np.float64), ('z', np.float64), ('size', np.float64), ('mass', np.float64)])
+('y', np.float64), ('z', np.float64), ('size', np.float64), ('mass', np.float64), ('tau', np.float64)])
 
-data = np.fromfile("KIC1255b_040_1orb_sph_120_100.bin", dt)
+data = np.fromfile("./data/KIC1255b_3o_035_1k_25t_sph_tau.bin", dt)
 df = pd.DataFrame(data)
 
 

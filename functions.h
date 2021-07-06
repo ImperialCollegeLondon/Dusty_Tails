@@ -1,6 +1,7 @@
 //Functions declared here
 #include <iostream>
 #include <vector>
+#include "spline.h"
 
 using namespace std;
 
@@ -9,7 +10,6 @@ using namespace std;
 extern vector <double> k1, k2, k3, k4, k5, k6, k7;
 extern vector <double> k1d, k2d, k3d, k4d, k5d, k6d, k7d;
 extern double ks1, ks2, ks3, ks4, ks5, ks6, ks7;
-
 extern double r_a [r_cells + 1];
 extern double r_b [r_cells];
 extern double theta_a [t_cells + 1];
@@ -17,7 +17,7 @@ extern double theta_b [t_cells];
 extern double phi_a [p_cells + 1];
 extern double phi_b [p_cells];
 
-
+extern vector < vector < tk:: spline > > s_phi;
 extern double extinction [r_cells][t_cells][p_cells];
 extern double optical_depth [r_cells][t_cells][p_cells];
 
@@ -138,3 +138,10 @@ double tricubicInterpolate (vector <vector< vector <double> > > p, vector <doubl
 vector <double> r_grid_to_vector(double r[r_cells+1]);
 vector <double> t_grid_to_vector(double t[t_cells+1]);
 vector <double> p_grid_to_vector(double p[p_cells+1]);
+
+double tau_p (vector<double> theta_splines_p, vector<double> radii, vector<double> thetas, vector<double> phis, double radius);
+vector < vector < tk:: spline > > splines_phi (vector <vector< vector <double> > > taus, vector <double> radii, vector <double> thetas, vector <double> phis);
+vector <vector <double> > phi_spline_result(vector < vector < tk:: spline >> splines , vector<double> radii, \
+                            vector <double> thetas, vector<double> phis, double phi);
+vector < tk:: spline > splines_theta( vector <vector <double>> phi_splines_p, vector<double> radii, vector<double> thetas);
+vector <double> theta_spline_result( vector <tk:: spline> splines, vector<double> radii, vector<double> thetas, vector<double> phis , double theta);

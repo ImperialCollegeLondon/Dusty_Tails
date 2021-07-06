@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include "spline.h"
 
 
 using namespace std;
@@ -38,8 +39,8 @@ const int r_cells = 100;
 const double r_cells_d = 100.;
 const int t_cells = 25;
 const double t_cells_d = 25.;
-const int p_cells = 150;
-const double p_cells_d = 150.;
+const int p_cells = 125;
+const double p_cells_d = 125.;
 
 
 extern double star_x;
@@ -74,3 +75,4 @@ const double mu = 101.961; //molecular weight
  //dust particle size
 
 const double lum = sigma*4.0*PI* pow(Rstar*Rsun_cgs, 2.0) * pow(Temp, 4.0);
+
