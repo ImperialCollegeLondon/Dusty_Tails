@@ -29,7 +29,7 @@ uniform_real_distribution<double> uniform_theta(0.2, 0.8);
 //open files to write data for python plotting
 ofstream ofile("./data/KIC1255b_theta08_smallgrid.bin", ios::out | ios::binary);
 
-ofstream ray_tracer("./data/ray_KIC1255b_theta08_smallgrid.bin", ios::out | ios::binary);
+//ofstream ray_tracer("./data/ray_KIC1255b_theta08_smallgrid.bin", ios::out | ios::binary);
 
 
 //define 3d arrays to store extinctions and optical depths at each grid cell
