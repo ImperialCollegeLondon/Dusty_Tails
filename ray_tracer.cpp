@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <array>
 #include <fstream>
 #include <algorithm>
 #include <random>
@@ -19,7 +20,7 @@ using namespace std;
 void build_grids(double *r_a, double *r_b, double *theta_a, \
                 double *theta_b, double dr, double dtheta, double dphi,
                 double *phi_a, double *phi_b, double r_start, double theta_start, double phi_start){
-
+    
       r_a[0] = r_start;
       theta_a[0] = theta_start;
       phi_a[0] = phi_start;
@@ -46,12 +47,16 @@ void build_grids(double *r_a, double *r_b, double *theta_a, \
           phi_b [i] = phi_a [i] + dphi/2.;
       }
 
-
+      for( unsigned int i = 0; i <= r_cells; i++){
+          cout << r_a [i] << endl;
+      }
 
 }
 
 
-void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells][p_cells]){
+vector <vector < vector <double> > > calculation_ext(){
+        vector <vector < vector <double> > > ext;
+        ext = vector<vector<vector<double>>>(p_cells, vector<vector<double>>(t_cells, vector<double>(r_cells, 0.0)));
         vector <double> sphere_pos(3, 0.0);
         vector <double> scaled_pos(3, 0.0);
         int r_it, theta_it, phi_it;
@@ -70,11 +75,10 @@ void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells]
 
         double vol_element, partial_vol;
 
+        cout << "calculating extinction" << endl;
         for( Particle& p : particles) {
 
-              //cout << "in calculation test " << endl;
-
-              sphere_pos = pos_to_spherical(p.position[0], p.position[1], p.position[2]);
+              sphere_pos = p.pos_spherical;
 
               scaled_pos = grid_scaling(sphere_pos);
 
@@ -134,12 +138,12 @@ void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells]
                       old_ext = ext [r_index[i]][theta_index[j]][phi_index[k]];
                       ext [r_index[i]][theta_index[j]][phi_index[k]] = old_ext + (partial_vol/ vol_element) * ((n_mini * p.p_mass * 1.0e-3 * op) / (vol_element * pow(a, 3.)));
 
-
                   }
                 }
               }
         }
       }
+      return(ext);
 
 
 }
@@ -173,16 +177,36 @@ vector <double> grid_scaling(vector <double> s_position){
   return scaled;
 }
 
+vector <double> vel_grid_scaling(vector <double> s_velocity){
+  double vr, vtheta, vphi, delta_r, delta_t, delta_p;
+  vector <double> scaled(3, 0.0);
+
+  delta_r = d_r_max - d_r_min;
+  delta_t = d_t_max - d_t_min;
+  delta_p = d_p_max - d_p_min;
+
+  vr = (r_cells_d/ (d_r_max - d_r_min))* s_velocity[0];
+  vtheta = (t_cells_d/ (d_t_max - d_t_min))* s_velocity[1];
+  vphi = (p_cells_d/ (d_p_max - d_p_min))* s_velocity[2];
+
+  scaled = {vr, vtheta, vphi};
+  return scaled;
+}
 
 
-void optical_depth_calc(double ext [r_cells][t_cells][p_cells], double od [r_cells][t_cells][p_cells]){
+vector <vector < vector <double> > > optical_depth_calc(vector <vector < vector <double> > > ext){
+    vector <vector < vector <double> > > od;
+    od = vector<vector<vector<double>>>(p_cells, vector<vector<double>>(t_cells, vector<double>(r_cells, 0.0)));
     for (unsigned int i = 1; i < r_cells; i++){
         for (unsigned int j = 1; j < t_cells; j++){
             for (unsigned int  k = 1; k < p_cells; k++){
-                  od[i][j][k] = od[i-1][j][k] + ext[i-1][j][k] * d_dr * a ;
+              if (od[i-1][j][k] + ext[i-1][j][k] * d_dr * a > 1.0e-300) {
+                  od[i][j][k] = od[i-1][j][k] + ext[i-1][j][k] * d_dr * a ;}
                 }
                 }
             }
+    cout << "calculated optical depth " << endl;
+    return(od);
 }
 //reverse function are from grid scale to "real" scale
 double r_reverse(double old_r){
@@ -206,7 +230,7 @@ double phi_reverse(double old_phi){
   return new_phi;
 }
 
-vector < vector < vector <double> > >  tau_to_vector(double tau[r_cells][t_cells][p_cells]) {
+vector < vector < vector <double> > >  tau_to_vector(vector < vector < vector <double> > > tau) {
   cout << "inside tau to vector" << endl;
   vector < vector < vector <double> > > tauv ;
   for (unsigned int i = 0; i < r_cells; i++){
@@ -228,6 +252,7 @@ vector <double> r_grid_to_vector(double r[r_cells+1]){
   for (unsigned int i = 0; i <r_cells; i++){
     r_v.push_back(r[i]);
   }
+  cout << "r grid to vector ok" << endl;
   return r_v;
 }
 
@@ -236,6 +261,7 @@ vector <double> t_grid_to_vector(double t[t_cells+1]){
   for (unsigned int i = 0; i <t_cells; i++){
     t_v.push_back(t[i]);
   }
+  cout << "theta grid to vector ok" << endl;
   return t_v;
 }
 
@@ -244,5 +270,6 @@ vector <double> p_grid_to_vector(double p[p_cells+1]){
   for (unsigned int i = 0; i <p_cells; i++){
     p_v.push_back(p[i]);
   }
+  cout << "phi grid to vector ok" << endl;
   return p_v;
 }
