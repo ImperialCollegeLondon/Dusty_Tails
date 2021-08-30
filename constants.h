@@ -33,6 +33,14 @@ const double G_dim = (G* pow(T, 2.0) * Mstar_kg) / pow(a, 3.0); //dimensionless 
 const double c_dim = clight * (T / a);
 const double r_h = pow(m_planet/3.0, 1.0/3.0); //hill radius
 
+//const int cell_no = 120; //cell number for ray tracer calculations - used for vector declaration
+//const double n_cells = 120.0; //number used for mathematical calculations
+const int r_cells = 200;
+const double r_cells_d = 200.;
+const int t_cells = 50;
+const double t_cells_d = 50.;
+const int p_cells = 250;
+const double p_cells_d = 250.;
 
 
 extern double star_x;
@@ -67,4 +75,3 @@ const double mu = 101.961; //molecular weight
  //dust particle size
 
 const double lum = sigma*4.0*PI* pow(Rstar*Rsun_cgs, 2.0) * pow(Temp, 4.0);
-

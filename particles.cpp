@@ -11,6 +11,7 @@
 #include <random>
 #include <chrono>
 #include <stdlib.h>
+#include <cstring>
 
 using namespace std;
 
@@ -27,7 +28,7 @@ uniform_real_distribution<double> uniform_theta(0.2, 0.8);
 //uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 
 //open files to write data for python plotting
-ofstream ofile("./data/KIC1255b_theta08_smallgrid.bin", ios::out | ios::binary);
+ofstream ofile("./data/KIC1255b_theta08_smallgrid_notsph.bin", ios::out | ios::binary);
 
 //ofstream ray_tracer("./data/ray_KIC1255b_theta08_smallgrid.bin", ios::out | ios::binary);
 
@@ -35,7 +36,23 @@ ofstream ofile("./data/KIC1255b_theta08_smallgrid.bin", ios::out | ios::binary);
 //define 3d arrays to store extinctions and optical depths at each grid cell
 //double extinction [r_cells][t_cells][p_cells] = {};
 //double optical_depth [r_cells][t_cells][p_cells] = {};
+
+double d_r_min = 0.9;
+double d_r_max = 1.1;
+double d_t_min = 1.55;
+double d_t_max = 1.60;
+double d_p_min = -0.25;
+double d_p_max = 0.0;
+
+//spacing of grid cells in scale of particle distribution
+double d_dr = (d_r_max - d_r_min)/ r_cells_d;
+double d_dtheta = (d_t_max - d_t_min ) / t_cells_d;
+double d_dphi = ( d_p_max - d_p_min) / p_cells_d;
+
 int no_particles[r_cells][t_cells][p_cells] = {};
+
+//double extinction [r_cells][t_cells][p_cells];
+//double optical_depth [r_cells][t_cells][p_cells];
 
 //limits of the particle distribution: this needs to be checked if using a
 //different planet or different initial conditions for particles
@@ -138,19 +155,16 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
   double old_t_global_min = 0.0;
   while (t_global < end_t) {
     double t_global_min = 0.01;
-    vector< vector < vector <double >>> extinction;
-    extinction = vector<vector<vector<double>>>(p_cells, vector<vector<double>>(t_cells, vector<double>(r_cells, 0.0)));
-    vector< vector < vector <double >>> optical_depth;
-    optical_depth = vector<vector<vector<double>>>(p_cells, vector<vector<double>>(t_cells, vector<double>(r_cells, 0.0)));
-
-    extinction = calculation_ext();
-    optical_depth = optical_depth_calc(extinction);
+    memset(extinction, 0.0, sizeof(extinction));
+    memset(optical_depth, 0.0, sizeof(optical_depth));
+    calculation_ext(particles, extinction);
+    optical_depth_calc(extinction, optical_depth);
+    
     tau.clear();
     tau = tau_to_vector(optical_depth);
     s_phi.clear();
     s_phi = splines_phi( tau, radii_v, thetas_v, phis_v);
-    optical_depth.clear();
-    extinction.clear();
+    
 
     cout << "orbit: " << t_global << endl;
     for ( Particle& p : particles) {
