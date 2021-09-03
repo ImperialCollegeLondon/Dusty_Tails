@@ -11,9 +11,9 @@
 using namespace std;
 random_device rd;
 default_random_engine generator(rd()); // rd() provides a random seed
-uniform_real_distribution<double> distribution_r(0.0,5.0);
-uniform_real_distribution<double> distribution_t(0.0,4.0);
-uniform_real_distribution<double> distribution_p(0.0,3.0);
+uniform_real_distribution<double> distribution_r(0.0,100.0);
+uniform_real_distribution<double> distribution_t(0.0,25.0);
+uniform_real_distribution<double> distribution_p(0.0,150.0);
 
 int cells;
 int cells_x = 4;
@@ -97,13 +97,39 @@ int main() {
     
 
     // default cubic spline (C^2) with natural boundary conditions (f''=0)
-    vector< vector <vector <double>>> tau = {{{1,2,3,4}, {5,6,7,8}, {9,10,11, 12}, {13,14,15,16}, {17,18,19,20}}, {{1,2,3,4}, {5,6,7,8}, {9,10,11, 12}, {13,14,15,16}, {17,18,19,20}}, \
-                                            {{1,2,3,4}, {5,6,7,8}, {9,10,11, 12}, {13,14,15,16}, {17,18,19,20}},{{1,2,3,4}, {5,6,7,8}, {9,10,11, 12}, {13,14,15,16},  {17,18,19,20}}, \
-                                            {{1,2,3,4}, {5,6,7,8}, {9,10,11, 12}, {13,14,15,16},  {17,18,19,20}}, {{1,2,3,4}, {5,6,7,8}, {9,10,11, 12}, {13,14,15,16},  {17,18,19,20}} };
-    vector <double> xs = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0};
-    vector <double> ys = {0.0, 1.0, 2.0, 3.0, 4.0};
-    vector <double> zs = {0.0, 1.0, 2.0, 3.0};
-    
+    vector< vector <vector <double>>> tau;
+    vector <double> xs = {};
+    vector <double> ys = {};
+    vector <double> zs = {};
+
+    double counter = 0.0;    
+    for (int i = 0; i < 100; i++) {
+        xs.push_back(counter);
+        counter = counter + 1.0;
+    }
+
+    counter = 0.0;
+    for (int i = 0; i < 25; i++) {
+        ys.push_back(counter);
+        counter = counter + 1.0;
+    }
+    counter = 0.0;
+
+    for (int i = 0; i < 150; i++) {
+        zs.push_back(counter);
+        counter = counter + 1.0;
+    }
+
+    counter = 0.0;
+    for (int i=0; i < 100; i++) {
+        tau.push_back({});
+        for (int j=0; j< 25; j++) {
+            tau[i].push_back({});
+            for (int k=0; k<150; k++) {
+                tau[i][j].push_back(k);
+            }
+        }
+    }
     //double test = bicubicInterpolate(tau2, xs, ys, 1.0, 0.0);
     //double test = tricubicInterpolate(tau, xs, ys, zs, 0.0, 4.0, 2.0);
     //cout << tau[2][2][1] << endl;
@@ -116,44 +142,51 @@ int main() {
         double p = distribution_p(generator);
         points.push_back({r,t,p});
     }
-    //auto start = std::chrono::high_resolution_clock::now();
+    auto start = std::chrono::high_resolution_clock::now();
     
     for (int i = 0; i< 15000; i++) {
         vector <double> point = points[i];
         tricubicInterpolate(tau, xs, ys, zs, point[0], point[1], point[2]);
     }
     
-    //auto finish = std::chrono::high_resolution_clock::now();
+    auto finish = std::chrono::high_resolution_clock::now();
 
-    //td::chrono::duration<double> elapsed = finish - start;
+    std::chrono::duration<double> elapsed = finish - start;
 
-    //std::cout << "Elapsed time: " << elapsed.count() << " s\n";
+    std::cout << "Elapsed time: " << elapsed.count() << " s\n";
 
-    auto start = std::chrono::high_resolution_clock::now();
-
+    //auto start = std::chrono::high_resolution_clock::now();
+    
     vector< vector <tk::spline >> s_phi;
 
     s_phi = splines_phi (tau, xs, ys, zs);
+    auto start = std::chrono::high_resolution_clock::now();
 
-    vector < vector <double> > s_phi_values;
-    s_phi_values = phi_spline_result(s_phi , xs, ys, zs, 1.0);
+    for (int i = 0; i< 15000; i++) {
+        vector <double> point = points[i];
+    
+        vector < vector <double> > s_phi_values;
+        s_phi_values = phi_spline_result(s_phi , xs, ys, zs, point[2]);
 
-    vector < tk:: spline > s_theta;
+        vector < tk:: spline > s_theta;
 
-    s_theta =  splines_theta ( s_phi_values, xs, ys);
+        s_theta =  splines_theta ( s_phi_values, xs, ys);
 
-    vector <double> s_theta_values;
+        vector <double> s_theta_values;
 
-    s_theta_values = theta_spline_result( s_theta, xs, ys, zs , 2.0);
+        s_theta_values = theta_spline_result( s_theta, xs, ys, zs , point[1]);
 
-    double result;
-    result =  tau_p (s_theta_values, xs, ys, zs, 4.0);
+        double result;
+        result =  tau_p (s_theta_values, xs, ys, zs, point[0]);
+
+    }
+    
+    
     auto finish = std::chrono::high_resolution_clock::now();
-
-    cout << result << endl;
 
     std::chrono::duration<double> elapsed = finish - start;
     std::cout << "Elapsed time: " << elapsed.count() << " s\n";
+    
 }
 
 

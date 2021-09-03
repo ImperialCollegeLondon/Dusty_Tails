@@ -32,3 +32,4 @@ void rm_particles(vector <Particle> &particles);
 void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells][p_cells]);
 
 extern vector <Particle> particles;
+extern bool tau_constant;

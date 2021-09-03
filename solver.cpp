@@ -68,7 +68,16 @@ vector <double> new_variables(double h, vector <double> V, bool order5){
 
          new_pos[i] = V0[i] + b1*k1[i] + b3*k3[i] + b4*k4[i] + b5*k5[i] + b6*k6[i];
          new_vel[i] = V0dot[i] + b1*k1d[i] + b3*k3d[i] + b4*k4d[i] + b5*k5d[i] + b6*k6d[i];
-
+         if (isnan(new_pos[i])){
+            cout << "i " << i << endl;
+            cout << "V0 " << V0[i] << endl;
+            cout << "k1 " << k1[i] << endl;
+            cout << "k2 " << k2[i] << endl;
+            cout << "k3 " << k3[i] << endl;
+            cout << "k4 " << k4[i] << endl;
+            cout << "k5 " << k5[i] << endl;
+            cout << "k6 " << k6[i] << endl;
+          }
         }
 
         s_new = V[6] + b1*ks1 + b3*ks3 + b4*ks4 + b5*ks5 + b6*ks6;
@@ -174,4 +183,6 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
         }
     }
 }
+
+
 

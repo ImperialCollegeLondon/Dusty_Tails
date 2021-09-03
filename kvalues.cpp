@@ -47,6 +47,13 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
         k1d[i] = h* acceleration(i, V0[i]- star_pos[i], \
                    V0[i] - planet_pos[i] + r_planet_dim, V, \
                    centri[i], coriol[i], radiation[i], drag[i]);
+        
+        if (isnan(k1d[i])) {
+            cout << "coriol " << coriol[i] << endl;
+            cout << "centri " << centri[i] << endl;
+            cout << "raditation " << radiation[i] << endl;
+            cout << "drag " << drag[i] << endl;
+        }
 
         k1[i] = h* V0dot[i];
 

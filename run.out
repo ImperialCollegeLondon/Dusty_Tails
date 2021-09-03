@@ -1,0 +1,289 @@
+adding particles 
+built grids and added particles
+At rm particles 
+rm particles fine
+1
+1
+orbit: 0
+At rm particles 
+at plot stuff 0.01
+adding particles 
+orbit: 0.01
+At rm particles 
+at plot stuff 0.02
+adding particles 
+orbit: 0.02
+At rm particles 
+at plot stuff 0.03
+adding particles 
+orbit: 0.03
+At rm particles 
+at plot stuff 0.04
+adding particles 
+orbit: 0.04
+At rm particles 
+at plot stuff 0.05
+adding particles 
+orbit: 0.05
+At rm particles 
+at plot stuff 0.06
+adding particles 
+orbit: 0.06
+At rm particles 
+at plot stuff 0.07
+adding particles 
+orbit: 0.07
+At rm particles 
+at plot stuff 0.08
+adding particles 
+orbit: 0.08
+At rm particles 
+at plot stuff 0.09
+adding particles 
+orbit: 0.09
+At rm particles 
+at plot stuff 0.1
+adding particles 
+orbit: 0.1
+At rm particles 
+at plot stuff 0.11
+adding particles 
+orbit: 0.11
+At rm particles 
+at plot stuff 0.12
+adding particles 
+orbit: 0.12
+At rm particles 
+at plot stuff 0.13
+adding particles 
+orbit: 0.13
+At rm particles 
+at plot stuff 0.14
+adding particles 
+orbit: 0.14
+At rm particles 
+at plot stuff 0.15
+adding particles 
+orbit: 0.15
+At rm particles 
+at plot stuff 0.16
+adding particles 
+orbit: 0.16
+At rm particles 
+at plot stuff 0.17
+adding particles 
+orbit: 0.17
+At rm particles 
+at plot stuff 0.18
+adding particles 
+orbit: 0.18
+At rm particles 
+at plot stuff 0.19
+adding particles 
+orbit: 0.19
+At rm particles 
+at plot stuff 0.2
+adding particles 
+orbit: 0.2
+At rm particles 
+at plot stuff 0.21
+adding particles 
+orbit: 0.21
+At rm particles 
+at plot stuff 0.22
+adding particles 
+orbit: 0.22
+error is nan 
+3
+-1.60071
+-nan
+error is nan 
+4
+0.14821
+-nan
+error is nan 
+5
+-0.847677
+-nan
+error is nan 
+6
+-nan
+-nan
+i 0
+V0 0.879669
+k1 -0.000953874
+k2 -nan
+k3 -nan
+k4 -nan
+k5 -nan
+k6 -nan
+i 1
+V0 -0.136428
+k1 8.83196e-05
+k2 -nan
+k3 -nan
+k4 -nan
+k5 -nan
+k6 -nan
+i 2
+V0 -0.19051
+k1 -0.000505137
+k2 -nan
+k3 -nan
+k4 -nan
+k5 -nan
+k6 -nan
+error is nan 
+0
+-nan
+-nan
+error is nan 
+1
+-nan
+-nan
+error is nan 
+2
+-nan
+-nan
+error is nan 
+3
+-nan
+-nan
+error is nan 
+4
+-nan
+-nan
+error is nan 
+5
+-nan
+-nan
+error is nan 
+6
+nan
+nan
+i 0
+V0 0.887997
+k1 -0.000184413
+k2 -0.000184433
+k3 -0.000184442
+k4 -0.000184491
+k5 -0.000184499
+k6 -nan
+i 1
+V0 -0.118928
+k1 2.15483e-05
+k2 2.16105e-05
+k3 2.16416e-05
+k4 2.17971e-05
+k5 2.18249e-05
+k6 -nan
+i 2
+V0 -0.17971
+k1 -0.000102541
+k2 -0.000102513
+k3 -0.000102499
+k4 -0.000102429
+k5 -0.000102416
+k6 -nan
+error is nan 
+0
+-nan
+-nan
+error is nan 
+1
+-nan
+-nan
+error is nan 
+2
+-nan
+-nan
+error is nan 
+3
+-nan
+-nan
+error is nan 
+4
+-nan
+-nan
+error is nan 
+5
+-nan
+-nan
+error is nan 
+6
+-nan
+-nan
+At rm particles 
+at plot stuff 0.23
+adding particles 
+orbit: 0.23
+error is nan 
+3
+-0.705876
+-nan
+error is nan 
+4
+0.18718
+-nan
+error is nan 
+5
+-0.261441
+-nan
+error is nan 
+6
+-nan
+-nan
+i 0
+V0 0.935836
+k1 -0.0010943
+k2 -nan
+k3 -nan
+k4 -nan
+k5 -nan
+k6 -nan
+i 1
+V0 -0.0557545
+k1 0.000290181
+k2 -nan
+k3 -nan
+k4 -nan
+k5 -nan
+k6 -nan
+i 2
+V0 -0.070846
+k1 -0.000405307
+k2 -nan
+k3 -nan
+k4 -nan
+k5 -nan
+k6 -nan
+error is nan 
+0
+-nan
+-nan
+error is nan 
+1
+-nan
+-nan
+error is nan 
+2
+-nan
+-nan
+error is nan 
+3
+-nan
+-nan
+error is nan 
+4
+-nan
+-nan
+error is nan 
+5
+-nan
+-nan
+error is nan 
+6
+nan
+nan
+At rm particles 
+at plot stuff 0.24

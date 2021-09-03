@@ -24,18 +24,10 @@ def grid(r, t, p) :
 
 dt = np.dtype([('theta', np.float64), ('phi', np.float64),('ext', np.float64), ('od', np.float64)])
 
-data = np.fromfile("./data/ray_kic1255b_3o_035_1k_25t_tau_more_01.bin", dt)
+data = np.fromfile("./data/tau_KIC1255b.bin", dt)
 df = pd.DataFrame(data)
-
-
-"""
-for i in df.index:
-    if (df['od'][i] > 0.1):
-        print(df['theta'][i])
-        print(df['phi'][i])
-        print(df['od'][i])
-#print(df)
-"""
+#df = #df.iloc[3125:,:]
+print(data)
 radii = []
 thetas = []
 phis = []
@@ -43,7 +35,7 @@ ods = []
 ods_a = []
 errors = []
 
-#print(df)
+print(df)
 for theta in df['theta'].unique():
     thetas.append(theta)
 
@@ -52,7 +44,7 @@ for phi in df['phi'].unique():
     phis.append(phi)
 
 #print(len(phis))
-"""
+
 for od in df['od']:
     #print(od)
     if od == 0.0:
@@ -72,6 +64,8 @@ for od in df['od']:
         ods.append(0.0)
     else:
         ods.append(od)
+"""
+
 #print(len(ods))
 
 xs= []
@@ -105,7 +99,7 @@ cbar.ax.set_ylabel('log(tau)')
 ax.set_xlabel("phi")
 ax.set_ylabel("theta")
 
-plt.savefig('test_tau_nsph_01.png')
+plt.savefig('./plots/tau.png')
 
 plt.close()
 

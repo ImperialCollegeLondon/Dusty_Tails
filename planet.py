@@ -15,7 +15,7 @@ plt.ioff()
 dt = np.dtype([('time', np.float64), ('id', np.int64), ('x', np.float64), \
 ('y', np.float64), ('z', np.float64), ('size', np.float64), ('mass', np.float64), ('tau', np.float64)])
 
-data = np.fromfile("./data/KIC1255b_5orb_035_tau_01micro_1node_sph.bin", dt)
+data = np.fromfile("./data/KIC1255b_theta08.bin", dt)
 df = pd.DataFrame(data)
 #print(df['x'])
 #print(df['time'])
@@ -26,9 +26,20 @@ p_z = []
 t_0 = 0.0
 
 theta = []
-
-
 """
+for t in df['time'].unique():
+        
+        if (t>1.495) and (t<1.505):
+         plot_df = df[df.time == t]
+         counter=0
+         for tau in plot_df['tau']:
+              if(tau>1.0) and (tau<20.0):
+                  counter +=1
+print(counter)
+         #plt.hist(df['tau'])
+         #plt.savefig("histogram.png")
+
+
 for i in df['tau']:
     if (i>0.1):
         #print(i)
@@ -132,7 +143,7 @@ for t in df['time'].unique():
        dust2 = plt.scatter(y_front, z_front, s=0.1, alpha = 0.01, c='#008080')
 
 
-       plt.savefig("./plots/kictau_nomin_sph{0:01}.png".format(i))
+       plt.savefig("./plots/kic_08test{0:01}.png".format(i))
 
        plt.close()
      else:
@@ -142,7 +153,7 @@ for t in df['time'].unique():
        dust2 = plt.scatter(y_front, z_front, s=0.1, alpha = 0.01, c='#008080')
 
 
-       plt.savefig("./plots/kictau_nomin_sph{0:01}.png".format(i))
+       plt.savefig("./plots/kic_08test{0:01}.png".format(i))
 
        plt.close()
 

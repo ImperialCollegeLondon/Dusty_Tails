@@ -38,16 +38,17 @@ double dr = (r_max - r_min)/ r_cells_d;
 double dtheta = (theta_max - theta_min ) / t_cells_d;
 double dphi = ( phi_max - phi_min) / p_cells_d;
 
-  double extinction [r_cells][t_cells][p_cells];
-  double optical_depth [r_cells][t_cells][p_cells];
+double extinction [r_cells][t_cells][p_cells];
+double optical_depth [r_cells][t_cells][p_cells];
 
+bool tau_constant = true;
 
 int main() {
 
-  long int total_particles = 1000; //initial number of particles to start simulation with
+  long int total_particles = 100; //initial number of particles to start simulation with
   double t_common = 0.01;
   double big_step = 0.01; //big time step (in terms of planetary orbits)
-  double end_t = 5.0; // end time of simulation
+  double end_t = 3.0; // end time of simulation
   double total_t = 0.0; // total time that has passed, so 0 in the beginning
 
 
@@ -62,8 +63,7 @@ int main() {
   cout << "built grids and added particles" << endl;
   rm_particles(particles);
   cout << "rm particles fine" << endl;
-  calculation_ext(particles, extinction);
-  optical_depth_calc(extinction, optical_depth);
+  cout<< tau_constant << endl;
   solve_particles(0.00, end_t, particles, total_particles,current_particles);
   return 0;
 
