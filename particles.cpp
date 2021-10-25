@@ -28,9 +28,9 @@ uniform_real_distribution<double> uniform_phi(0.0, 1.0);
 uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 
 //open files to write data for python plotting
-ofstream ofile("./data/KIC1255b_ttest.bin", ios::out | ios::binary);
+ofstream ofile("./data/KIC1255b_sph_tauconstant_2micro_05mdot.bin", ios::out | ios::binary);
 
-ofstream ray_tracer("./data/tau_test.bin", ios::out | ios::binary);
+ofstream ray_tracer("./data/tau_KIC1255b_sph_constant_thin_2micro_05mdot.bin", ios::out | ios::binary);
 
 
 double d_r_min = 0.9;
@@ -98,11 +98,11 @@ void add_particles(vector <Particle> &particles, long int current,
 
                  grain.v_spherical = vel_to_spherical(grain.velocity[0], grain.velocity[1], grain.velocity[2]);
 
-                 grain.p_size = 0.35e-4; //initial grain size
+                 grain.p_size = 2.0e-4; //initial grain size
                  if (tau_constant == true) {
                      grain.p_tau = 0.1;
                  } else  {
-                     grain.p_tau = 0.0;
+                     grain.p_tau = 0.1;
                  }
                  grain.p_density = rho_d; //bulk density
                  grain.h_updated = 1.0e-5; //initial time step for numerical integrator
@@ -119,11 +119,13 @@ void add_particles(vector <Particle> &particles, long int current,
 //Argument is the vector of particles
 void rm_particles(vector <Particle>& particles){
     cout << "At rm particles " << endl;
+    cout << particles.size() << endl;
     for (unsigned long int i = 0; i < particles.size(); i++){
-      //cout << "loop " << i << endl;
-      if (particles[i].p_size < 0.1e-4) {
+      //cout << particles[i].p_size << endl;
+      if (particles[i].p_size < 0.01e-4) {
         particles.erase(particles.begin() + i);
-        i--;
+        if (i!=0) {
+        i--; }
       }
       if (isnan(particles[i].p_size)  ) {
         cout << "size is nan " << endl;
@@ -149,7 +151,6 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
   vector <double> s_theta_values;
   vector < vector < vector <double> > >  tau;
   vector <double> radii_v, thetas_v, phis_v;
-  cout << tau_constant << endl;
   if (tau_constant == false ) {
   radii_v = r_grid_to_vector(r_a);
   thetas_v = t_grid_to_vector(theta_a);
@@ -221,7 +222,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
   if (t_next >= plot_time) {
            t_next = plot_time;
   }
-  
+  int tau_thick = 0;
   for( Particle& p : particles) {
 
         double no_particles = particles.size();
@@ -232,17 +233,21 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
             pos_scaled = grid_scaling(p.pos_spherical);
         
             if (pos_scaled[0] == -1.0) {
-                p.p_tau = 0.0;
+                p.p_tau = 0.1;
             } else {
                 s_phi_values = phi_spline_result(s_phi , radii_v, thetas_v, phis_v, pos_scaled[2]);
                 s_theta =  splines_theta ( s_phi_values, radii_v, thetas_v);
                 s_theta_values = theta_spline_result( s_theta, radii_v, thetas_v, phis_v , pos_scaled[1]);
                 p.p_tau =  tau_p (s_theta_values, radii_v, thetas_v, phis_v, pos_scaled[0]);
-                if (p.p_tau <=1.e-33) {
-                    p.p_tau = 0.0;
+                if (p.p_tau <=0.1) {
+                    p.p_tau = 0.1;
                 }
                 if (isnan(p.p_tau) ) {
-                    p.p_tau = 0.0;
+                    cout << "p tau from spline is nan " << endl;
+                    p.p_tau = 0.1;
+                }
+                if (p.p_tau > 1.0){
+                    tau_thick = tau_thick + 1;
                 }
             }
         
@@ -262,15 +267,16 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         p.v_spherical = vel_to_spherical(p.velocity[0], p.velocity[1], p.velocity[2]);
     
     }
-
+    cout << "no of tau thick particles " << tau_thick << endl;
     rm_particles(particles); //removes particles that are too small
-
+    cout << "after remove particles " << endl;
     //if condition below is just for a test of the ray tracer at a given time
-    
+    cout << t_next << endl;
+    cout << previous_t << endl;
     //when plot time is reached the following condition adds new no_particles
     //should change this 100 to a variable
-    if (tau_constant == true ){
-        if (t_next >=3.005){
+    
+    if (t_next >0.985){
             calculation_ext(particles, extinction);
             optical_depth_calc(extinction, optical_depth);
 
@@ -291,10 +297,10 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
             }
         }
 
-    }
+    
     cout << (t_next-plot_time) << endl;
     if (abs(t_next-plot_time) < 1.0e-8) {
-      cout << "at plot stuff " << t_next << endl;
+      cout << "writting to bin file " << endl;
       for( Particle& p : particles) {
         ofile.write((char*) &t_next, sizeof(double));
         ofile.write((char*) &p.id, sizeof(long int));
@@ -306,7 +312,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         ofile.write((char*) &p.p_tau, sizeof(double));
       }
       current_particles = total_particles;
-      total_particles = total_particles + 100;
+      total_particles = total_particles + 1000;
       //add particles explained above in this file
       add_particles(particles, current_particles, total_particles, t_next);
       plot_time = plot_time + 0.01;

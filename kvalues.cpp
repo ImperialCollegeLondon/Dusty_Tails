@@ -35,6 +35,8 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 
     ks1 = h* sublimation(V[6], V[0], V[1], V[2]);
 
+    
+
     coriol = coriolis(V); //coriolis function is in forces.cpp
     //centrifugal acceleration
     centri = centrifugal(V); //centrifugal function is in forces.cpp
@@ -48,12 +50,6 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
                    V0[i] - planet_pos[i] + r_planet_dim, V, \
                    centri[i], coriol[i], radiation[i], drag[i]);
         
-        if (isnan(k1d[i])) {
-            cout << "coriol " << coriol[i] << endl;
-            cout << "centri " << centri[i] << endl;
-            cout << "raditation " << radiation[i] << endl;
-            cout << "drag " << drag[i] << endl;
-        }
 
         k1[i] = h* V0dot[i];
 

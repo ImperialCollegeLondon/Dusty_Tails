@@ -45,10 +45,10 @@ bool tau_constant = true;
 
 int main() {
 
-  long int total_particles = 100; //initial number of particles to start simulation with
+  long int total_particles = 1000; //initial number of particles to start simulation with
   double t_common = 0.01;
   double big_step = 0.01; //big time step (in terms of planetary orbits)
-  double end_t = 3.0; // end time of simulation
+  double end_t = 1.0; // end time of simulation
   double total_t = 0.0; // total time that has passed, so 0 in the beginning
 
 
@@ -61,9 +61,7 @@ int main() {
   build_grids(r_a, r_b, theta_a, theta_b, dr, dtheta, dphi, phi_a, phi_b, r_min, theta_min, phi_min); //grid for optical depth calculations
   add_particles(particles, current_particles, total_particles, 0.0); // call function that adds particles to simulation (in add_rm.cpp file)
   cout << "built grids and added particles" << endl;
-  rm_particles(particles);
-  cout << "rm particles fine" << endl;
-  cout<< tau_constant << endl;
+  //rm_particles(particles);
   solve_particles(0.00, end_t, particles, total_particles,current_particles);
   return 0;
 

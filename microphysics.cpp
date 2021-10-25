@@ -40,18 +40,18 @@ double qfactor(double s, double x, double y, double z){
   if (s > (wien/Temp)) {
     return 1.00;
   } else {
-    return (s * T / wien);
+    return (s * Temp / wien);
   }
 }
 
 double clausius_clap(double s, double x, double y, double z){
   double cc =0.0;
-
   cc = exp((-A/temp_dust(s, x, y, z)) + B);
 
-  return cc;
 
-}
+    return cc;
+  }
+
 
 
 double radial_vel(vector <double> vel, vector <double> s_vector){

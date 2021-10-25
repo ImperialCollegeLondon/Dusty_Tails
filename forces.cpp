@@ -48,14 +48,12 @@ vector <double> rad_pressure(vector <double> V){
 
 
   constant = (beta*G_dim)/(pow(scalar(V[0]- star_pos[0], V[1], V[2]), 3.0));
-  if (isnan(constant)) {
-    cout << "oops constant is nan " << endl;
+  if (isnan(k)) {
+    cout << "oops opacity is nan " << endl;
   }
 
   d_prod = dot_product({V[3], V[4], V[5]}, sunit_vector(V));
-  if (isnan(d_prod)) {
-    cout << "oops dot product is nan " << endl;
-  }
+  
 
   for (unsigned int i = 0; i < 3; i++) {
 

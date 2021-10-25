@@ -50,6 +50,7 @@ vector <double> new_step_size(double max_err, double h_old, int fail_status, vec
 
 
   if (isnan(max_err)){
+    cout << "max err is nan " << endl;
     return {-1.0, -1.0};
   }
 

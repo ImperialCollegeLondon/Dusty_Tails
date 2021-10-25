@@ -60,7 +60,7 @@ void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells]
         double op;
         double pib = 0.;
 
-        double n_mini = 1.0e+23;
+        double n_mini = 4.0e+23;
 
         vector <int> r_index, theta_index, phi_index;
 
@@ -128,11 +128,12 @@ void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells]
                       vol_element = 1./3. * abs((pow(p_rs[1], 3.) - pow(p_rs[0], 3.)) * (-cos(p_thetas[1]) + cos(p_thetas[0])) * (p_phis[1] - p_phis[0]));
                       //cout << "vol element: " << endl;
                       //cout << vol_element << endl;
-                      op = (3./4.)*(1./4000.)*(1./(p.p_size * 1.e-2));
-
+                      //op = (3./4.)*(1./4000.)*(1./(p.p_size * 1.e-2)); //opacity in SI units m2/kg
+                      op = opacity(p.p_size, p.position[0], p.position[1], p.position[2]); //opacity in CGS units cm2/g
+                      op = op*(pow(10.,-4)/pow(10.,-3)); //opacity in SI units
                       //cout << nparticles [r_index[i]][theta_index[j]][phi_index[k]] << endl;
                       old_ext = ext [r_index[i]][theta_index[j]][phi_index[k]];
-                      ext [r_index[i]][theta_index[j]][phi_index[k]] = old_ext + (partial_vol/ vol_element) * ((n_mini * p.p_mass * 1.0e-3 * op) / (vol_element * pow(a, 3.)));
+                      ext [r_index[i]][theta_index[j]][phi_index[k]] = old_ext + (partial_vol/ vol_element) * ((n_mini * p.p_mass*pow(10.,-3) * op) / (vol_element * pow(a, 3)));
 
 
                   }
@@ -185,7 +186,7 @@ void optical_depth_calc(double ext [r_cells][t_cells][p_cells], double od [r_cel
                 }
             }
 }
-//reverse function are from grid scale to "real" scale
+//reverse function are from grid scale to "real" scale (in terms of semimajor)
 double r_reverse(double old_r){
   double new_r, delta_r;
   delta_r = d_r_max - d_r_min;
