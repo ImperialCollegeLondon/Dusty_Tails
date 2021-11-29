@@ -1,0 +1,6 @@
+STAR:   T= 4550.0  M= 0.67   R= 0.67
+PLANET: P= 15.68   M= 0.05     R= 0.38
+DUST:   A= 77365.  B= 39.3     alpha= 0.10     rho=4.0     s0=0.35          //s0 in micro
+GRID:   rmin= 0.90   rmax= 1.10   tmin= 1.55   tmax= 1.60   pmin= 0.24   pmax= 0.01     //note pmin is read as negative!
+OUTFLOW: sph= 1   mdot= 1.0    tau= 1        //sph=1, spherical, sph=0 dayside, tau=0 for constant optical depth, tau=1 for optical depth tracing
+RUN:   Dt= 0.01   orbits= 1.0   npart= 1000
