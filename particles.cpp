@@ -19,26 +19,11 @@ using namespace std;
 unsigned seed = 123;
 mt19937 generator (seed); //set the seed for the distrubutions of particle positions
 
-//Use something of the sort below to have particles starting on the day side of the planet
-//uniform_real_distribution<double> uniform_phi(0.375, 0.625);
-//uniform_real_distribution<double> uniform_theta(0.2, 0.8);
-
-//Use distrubutions below to have particles coming out of the whole planetary surface
-uniform_real_distribution<double> uniform_phi(0.0, 1.0);
-uniform_real_distribution<double> uniform_theta(0.0, 1.0);
-
 //open files to write data for python plotting
-ofstream ofile("./data/KIC1255b_sph_tauconstant_2micro_05mdot.bin", ios::out | ios::binary);
+ofstream ofile("./data/test.bin", ios::out | ios::binary);
 
-ofstream ray_tracer("./data/tau_KIC1255b_sph_constant_thin_2micro_05mdot.bin", ios::out | ios::binary);
+ofstream ray_tracer("./data/grid_test.bin", ios::out | ios::binary);
 
-
-double d_r_min = 0.9;
-double d_r_max = 1.1;
-double d_t_min = 1.55;
-double d_t_max = 1.60;
-double d_p_min = -0.25;
-double d_p_max = 0.0;
 
 //spacing of grid cells in scale of particle distribution
 double d_dr = (d_r_max - d_r_min)/ r_cells_d;
@@ -47,18 +32,14 @@ double d_dphi = ( d_p_max - d_p_min) / p_cells_d;
 
 int no_particles[r_cells][t_cells][p_cells] = {};
 
-//double extinction [r_cells][t_cells][p_cells];
-//double optical_depth [r_cells][t_cells][p_cells];
-
-//limits of the particle distribution: this needs to be checked if using a
-//different planet or different initial conditions for particles
-//this is obviously not very sustainable
-
-
-//spacing of grid cells in scale of particle distribution
-
-
 vector < vector < tk:: spline > > s_phi;
+
+//Use something of the sort below to have particles starting on the day side of the planet
+uniform_real_distribution<double> uniform_phi_short(0.375, 0.625);
+uniform_real_distribution<double> uniform_theta_short(0.2, 0.8);
+//Use distrubutions below to have particles coming out of the whole planetary surface
+uniform_real_distribution<double> uniform_phi(0.0, 1.0);
+uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 
 
 //function add particles adds more particles to the simulation at a given time
@@ -67,68 +48,75 @@ vector < vector < tk:: spline > > s_phi;
 void add_particles(vector <Particle> &particles, long int current,
                    long int total, double time){
 
-        double v_esc; //escape velocity
-        Particle grain;
-        cout << "adding particles " << endl;
+    Particle grain;
+    for ( unsigned long int i = current; i < total; i++){
+        double phi,theta;
+        grain.id = i+1; //number ID of particle
+        
+        //generate particles initial position
+        if (outflow==1) {
+        //spherical
+        phi = 2.0*PI * uniform_phi(generator); //phi coordinate
+        theta = acos(1- 2.0* uniform_theta(generator)); //theta coordinate
+        } else {
+        //dayside
+        phi = 2.0*PI * uniform_phi_short(generator); //phi coordinate
+        theta = acos(1- 2.0* uniform_theta_short(generator)); //theta coordinate
+        }
 
-        v_esc = (pow((2.0*G *0.05*Mearth)/(0.38*Rearth), 0.5)) * (T/a);
-        //escape velocity m/s
+        //initial position of particle in cartesian
+        grain.position = {r_start*sin(theta)*cos(phi) + planet_x, \
+                        r_start*sin(theta)*sin(phi), \
+                        r_start*cos(theta)};
 
-        for ( unsigned long int i = current; i < total; i++){
+        //velocity of particle in cartesian
+        grain.velocity = {v_esc*sin(theta)*cos(phi), \
+                        v_esc*sin(theta)*sin(phi), \
+                        v_esc*cos(theta)};
 
-                 //cout << "adding particle " << i << endl;
+        //initial position of particle in spherical
+        grain.pos_spherical = pos_to_spherical(grain.position[0], grain.position[1], grain.position[2]);
+        //initial velocity of particle in cartesian
+        grain.v_spherical = vel_to_spherical(grain.velocity[0], grain.velocity[1], grain.velocity[2]);
 
-                 grain.id = i+1; //number ID of particle
-                 double phi = 2.0*PI * uniform_phi(generator); //phi coordinate
+        grain.p_size = s_0; //initial grain size
 
-                 double theta = acos(1- 2.0* uniform_theta(generator)); //theta coordinate
+        //Initial particle optical depth
+        if (tau_constant == true) {
+            grain.p_tau = 0.1;
+        } else  {
+            grain.p_tau = 0.001;
+        }
+        
+        grain.h_updated = 1.0e-5; //initial time step for numerical integrator
+        grain.p_mass = dust_mass(grain.p_size); //initial particle mass
+        grain.p_opacity = opacity(grain.p_size, grain.position[0], 
+                                grain.position[1], grain.position[2]); //initial opacity
+        //initial particle temperature
+        grain.p_temp = temp_dust( grain.p_size, grain.position[0], 
+                                grain.position[1], grain.position[2], grain.p_tau); 
 
-
-                 //position of particle in cartesian
-                 grain.position = {r_start*sin(theta)*cos(phi) + planet_x, \
-                                   r_start*sin(theta)*sin(phi), \
-                                   r_start*cos(theta)};
-
-                //velocity of particle in cartesian
-                 grain.velocity = {v_esc*sin(theta)*cos(phi), \
-                                   v_esc*sin(theta)*sin(phi), \
-                                   v_esc*cos(theta)};
-
-                 grain.pos_spherical = pos_to_spherical(grain.position[0], grain.position[1], grain.position[2]);
-
-                 grain.v_spherical = vel_to_spherical(grain.velocity[0], grain.velocity[1], grain.velocity[2]);
-
-                 grain.p_size = 2.0e-4; //initial grain size
-                 if (tau_constant == true) {
-                     grain.p_tau = 0.1;
-                 } else  {
-                     grain.p_tau = 0.1;
-                 }
-                 grain.p_density = rho_d; //bulk density
-                 grain.h_updated = 1.0e-5; //initial time step for numerical integrator
-                 grain.p_mass = dust_mass(grain.p_size); //initial particle mass
-
-                 particles.push_back(grain); //add particle to the vector of particles
+        particles.push_back(grain); //add particle to the vector of particles
                  
 
-               }
+    }
 
 }
 
-//The function below removes particles that have become too small for it to be worth of being considered
+//The function below removes particles that have become too small 
+//for it to be worth tracking
 //Argument is the vector of particles
 void rm_particles(vector <Particle>& particles){
-    cout << "At rm particles " << endl;
-    cout << particles.size() << endl;
     for (unsigned long int i = 0; i < particles.size(); i++){
-      //cout << particles[i].p_size << endl;
-      if (particles[i].p_size < 0.01e-4) {
+     
+      if (particles[i].p_size < 0.1e-4) {
+        
         particles.erase(particles.begin() + i);
         if (i!=0) {
         i--; }
       }
       if (isnan(particles[i].p_size)  ) {
-        cout << "size is nan " << endl;
+        cout << "Size of particle is NaN, something has gone wrong " << endl;
         particles.erase(particles.begin() + i);
         i--;
       }
@@ -139,38 +127,43 @@ void rm_particles(vector <Particle>& particles){
 // the end time of the current iteration (end_t), the vector of no_particles
 // the total number of particles to be achieved (total_particles)
 //the current number of particles in the iteration (current_particles)
-//t_common and big_step are the big common time step
+
 void solve_particles(double total_t, double end_t, vector <Particle>& particles, \
                      long int total_particles, long int current_particles){
   double previous_t = 0.00;
   double plot_time = 0.01;
   double t_next = 0.00; 
-  vector <double> updated_vector(8); //vector which will take updated values of positons, velocitites, size and optimal time step for particle
+  //vector which will take updated values of positons, velocitites, size and optimal time step for particle
+  vector <double> updated_vector(8); 
+
+  //variables related to the optical depth interpolation
   vector < vector <double> > s_phi_values;
   vector < tk:: spline > s_theta;
   vector <double> s_theta_values;
   vector < vector < vector <double> > >  tau;
   vector <double> radii_v, thetas_v, phis_v;
+
+  //Intepolator needs grid in vector format.
   if (tau_constant == false ) {
-  radii_v = r_grid_to_vector(r_a);
-  thetas_v = t_grid_to_vector(theta_a);
-  phis_v = p_grid_to_vector(phi_a);}
+    radii_v = r_grid_to_vector(r_a);
+    thetas_v = t_grid_to_vector(theta_a);
+    phis_v = p_grid_to_vector(phi_a);
+   }
 
 
   while (t_next < end_t) {
     double t_global_min = 0.01;
-    cout << "orbit: " << t_next << endl;
-    if (tau_constant == false) {
+    cout << "At orbit " << t_next << endl;
+    if ((tau_constant == false) && (t_next > 1.0)) {
         memset(extinction, 0.0, sizeof(extinction));
         memset(optical_depth, 0.0, sizeof(optical_depth));
-        calculation_ext(particles, extinction);
+        calculation_ext(particles, extinction, t_global_min);
         optical_depth_calc(extinction, optical_depth);
-    
         tau.clear();
         tau = tau_to_vector(optical_depth);
         s_phi.clear();
         s_phi = splines_phi( tau, radii_v, thetas_v, phis_v);
-    
+        /*
         for ( Particle& p : particles) {
             vector <double> grid_pos, grid_vel;
             int r_it, theta_it, phi_it;
@@ -217,7 +210,9 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
                 t_global_min = t_global_min;
             }
         } 
-    }    
+        */
+    } 
+  t_global_min = 1.0e-3;
   t_next = t_global_min + previous_t;
   if (t_next >= plot_time) {
            t_next = plot_time;
@@ -227,25 +222,22 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
         double no_particles = particles.size();
         vector <double> pos_scaled;
-        if (tau_constant == true){
-            p.p_tau = 0.1;
+        if ((tau_constant == true) || (previous_t <= 1.0) ) {
+            p.p_tau = 0.001;
         } else {
             pos_scaled = grid_scaling(p.pos_spherical);
-        
             if (pos_scaled[0] == -1.0) {
-                p.p_tau = 0.1;
+                p.p_tau = 0.001;
             } else {
                 s_phi_values = phi_spline_result(s_phi , radii_v, thetas_v, phis_v, pos_scaled[2]);
                 s_theta =  splines_theta ( s_phi_values, radii_v, thetas_v);
                 s_theta_values = theta_spline_result( s_theta, radii_v, thetas_v, phis_v , pos_scaled[1]);
                 p.p_tau =  tau_p (s_theta_values, radii_v, thetas_v, phis_v, pos_scaled[0]);
-                if (p.p_tau <=0.1) {
-                    p.p_tau = 0.1;
+                
+                if (p.p_tau <=0.001) {
+                    p.p_tau = 0.001;
                 }
-                if (isnan(p.p_tau) ) {
-                    cout << "p tau from spline is nan " << endl;
-                    p.p_tau = 0.1;
-                }
+    
                 if (p.p_tau > 1.0){
                     tau_thick = tau_thick + 1;
                 }
@@ -265,19 +257,14 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         p.h_updated = updated_vector[7];
         p.pos_spherical = pos_to_spherical(p.position[0], p.position[1], p.position[2]);
         p.v_spherical = vel_to_spherical(p.velocity[0], p.velocity[1], p.velocity[2]);
-    
+        //cout << "size " << p.p_size << endl;
     }
-    cout << "no of tau thick particles " << tau_thick << endl;
+    cout << "Number of tau thick particles " << tau_thick << endl;
     rm_particles(particles); //removes particles that are too small
-    cout << "after remove particles " << endl;
-    //if condition below is just for a test of the ray tracer at a given time
-    cout << t_next << endl;
-    cout << previous_t << endl;
-    //when plot time is reached the following condition adds new no_particles
-    //should change this 100 to a variable
     
-    if (t_next >0.985){
-            calculation_ext(particles, extinction);
+    
+    if (t_next > 4.985){
+            calculation_ext(particles, extinction, t_global_min);
             optical_depth_calc(extinction, optical_depth);
 
             for (unsigned int j = 0; j <t_cells; j++){
@@ -298,9 +285,9 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         }
 
     
-    cout << (t_next-plot_time) << endl;
+    //cout << (t_next-plot_time) << endl;
     if (abs(t_next-plot_time) < 1.0e-8) {
-      cout << "writting to bin file " << endl;
+      //cout << "writting to bin file " << endl;
       for( Particle& p : particles) {
         ofile.write((char*) &t_next, sizeof(double));
         ofile.write((char*) &p.id, sizeof(long int));
@@ -323,6 +310,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 }
 
 
+//interpolation routine for the optical depth - functions are written in spline.h
 
 double cubicInterpolate ( vector <double> p, vector <double> s1, double x) {
     tk::spline s(s1,p, tk::spline::cspline);

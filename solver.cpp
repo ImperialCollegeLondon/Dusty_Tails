@@ -33,22 +33,22 @@ double acceleration( int i, double pos_star, double pos_planet, vector <double> 
   grav_planet = (-G_dim * m_planet* pos_planet ) / pow( scalar(V[0] - planet_pos[0]  + r_planet_dim, V[1] , V[2]), 3.0 );
 
   vel_dot = grav_star - centrif - 2.0*coriolis  + rad_press - dragf + grav_planet;
-
+  
   //cout << "star grav " << grav_star << endl;
   //cout << "rad press " << rad_press << endl;
 
   return vel_dot;
 }
 
-double sublimation(double s, double x, double y, double z){
+double sublimation(double s, double x, double y, double z, double tau){
   double ds1, ds2, ds;
-  if (s < 0.01e-4) {
+  if (s < 0.1e-4) {
     ds1 = 0.0;
     ds2= 0.0;
     ds = 0.0;
   } else {
-    ds1 = ((-alpha*clausius_clap(s, x, y, z))/rho_d);
-    ds2 = pow((mu*amu)/(2.0*PI*kb*temp_dust( s, x, y, z)), 0.5);
+    ds1 = ((-alpha*clausius_clap(s, x, y, z, tau))/rho_d);
+    ds2 = pow((mu*amu)/(2.0*PI*kb*temp_dust( s, x, y, z, tau)), 0.5);
     ds = ds1 * ds2;
 
   }
@@ -108,12 +108,16 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
                double del_t, double h_p){
 
     double t = t_0;
-    double maximum_err;
+    double maximum_err,k,beta;
     vector <double> step_sizes;
     double old_h, new_h;
     vector <double> new_vector;
     new_vector.clear();
     step_sizes.clear();
+    k = opacity(V_0[6], V_0[0], V_0[1], V_0[2]);
+    beta = beta_fn(k, V_0[7]);
+    //cout << " opacity " << k;
+    //cout << " beta " << beta << " ";
     //obtain delta values for the 6 variables
     maximum_err = error_max(h_p, V_0);
 
