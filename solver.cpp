@@ -34,23 +34,16 @@ double acceleration( int i, double pos_star, double pos_planet, vector <double> 
 
   vel_dot = grav_star - centrif - 2.0*coriolis  + rad_press - dragf + grav_planet;
   
-  //cout << "star grav " << grav_star << endl;
-  //cout << "rad press " << rad_press << endl;
 
   return vel_dot;
 }
 
 double sublimation(double s, double x, double y, double z, double tau){
-  double ds1, ds2, ds;
-  if (s < 0.1e-4) {
-    ds1 = 0.0;
-    ds2= 0.0;
+  double ds;
+  if (s < 0.01e-4) {
     ds = 0.0;
   } else {
-    ds1 = ((-alpha*clausius_clap(s, x, y, z, tau))/rho_d);
-    ds2 = pow((mu*amu)/(2.0*PI*kb*temp_dust( s, x, y, z, tau)), 0.5);
-    ds = ds1 * ds2;
-
+    ds =  clausius_clap(s, x, y, z, tau)/rho_d;
   }
 
   return ds;
@@ -76,9 +69,6 @@ vector <double> new_variables(double h, vector <double> V, bool order5){
         }
 
         s_new = V[6] + b1*ks1 + b3*ks3 + b4*ks4 + b5*ks5 + b6*ks6;
-
-        
-        
 
     } else {
         k_values(h, V, true, k1, k2 , k3, k4, k5 , k6, k7, k1d, k2d, k3d, k4d, k5d, k6d, k7d);

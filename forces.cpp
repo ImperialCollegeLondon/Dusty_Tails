@@ -15,10 +15,7 @@ vector <double> rad_vector(3);
 vector <double> centrifugal(vector <double> V){
   //function to calculate centrifugal force
   vector <double> omxr, finalx(3);
-  double ang_vel;
-  ang_vel = omega(m_planet, 1.0);
   omxr = cross_product(0.0, 0.0, ang_vel, V[0], V[1], V[2]);
-
   finalx = cross_product(0.0, 0.0, ang_vel, omxr[0], omxr[1], omxr[2]);
 
   return finalx;
@@ -27,12 +24,7 @@ vector <double> centrifugal(vector <double> V){
 vector <double> coriolis(vector <double> V){
   //function to calculate coriolis force
   vector <double> omxv,  rvxr, finalx;
-
-  double ang_vel;
-
-  ang_vel = omega(m_planet, 1.0);
   omxv = cross_product(0.0, 0.0, ang_vel, V[3], V[4], V[5]);
-
   return omxv;
 
 }

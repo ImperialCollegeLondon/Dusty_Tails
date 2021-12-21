@@ -1,6 +1,7 @@
 //File that has the main function
 
 #include <iostream>
+#include <string>
 #include <vector>
 #include <cmath>
 #include <fstream>
@@ -29,7 +30,7 @@ int in_c = 0;
 int tau_type, outflow;
 double t_star, m_star, r_star;
 double period, planet_mass, planet_radius;
-double A_dust, B_dust, alpha_dust, rho_dust, s_0, mu_dust;
+double s_0;
 double rmin, rmax, tmin, tmax, pmin,pmax;
 double mdot_read, major_timestep, no_orbits, nparticles;
 bool tau_constant;
@@ -41,6 +42,8 @@ ifstream input("dusty_tails.in", ios::out);
 //**********************************************************************
 
 // variables declarations
+//frame of reference parameters:
+double ang_vel;
 //Stellar parameters:
  double Mstar_kg, Mstar_sun, Rstar, Temp, lum;
 
@@ -48,7 +51,7 @@ ifstream input("dusty_tails.in", ios::out);
  double Period_days, T, a, m_planet, r_planet, r_start, r_planet_dim, r_h;
 
 //Dust parameters:
- double A, B, alpha, mu, rho_d;
+ double A, Bp, rho_d;
 
 //Outflow parameters:
  double mdot, v_esc;
@@ -58,6 +61,10 @@ ifstream input("dusty_tails.in", ios::out);
 
 //Grid parameters:
 double d_r_min, d_r_max,  d_t_min, d_t_max, d_p_min, d_p_max;
+
+//variables for opacity:
+string composition;
+string opac_data;
 
 //**********************************************************************
 //**********************************************************************
@@ -111,17 +118,10 @@ int main() {
       }
       if (in_c == 2) {
         cout << "Reading dust parameters... " << endl;
-        A_dust = stod(line.substr(11,17));
-        B_dust = stod(line.substr(22,26));
-        alpha_dust = stod(line.substr(38,42));
-        rho_dust = stod(line.substr(51,54));
-        s_0 = stod(line.substr(65,70)) * 1.0e-4;
-        mu_dust = stod(line.substr(79,86));
-        cout << "rho= " << rho_dust << "g/cm3, initial size= " << s_0 << " cm." << endl;
-        cout << "Sublimation coefficient= " << alpha_dust << ", molecular weight " << mu_dust << " gm" <<endl;
-        cout << "Clausius-Claperyon parameters, A= " << A_dust << ", B= " << B_dust << endl;
-        cout << "\n" ;
-        
+        s_0 = stod(line.substr(12,18)) * 1.0e-4;
+        composition = line.substr(25,36);
+        cout << s_0 << endl;
+        cout << composition << endl;
       }
       if (in_c == 3) {
         rmin = stod(line.substr(14,18));
@@ -168,6 +168,7 @@ int main() {
 //**********************************************************************
 //**********************************************************************
 // variables defined
+
 //Stellar parameters:
  Mstar_kg = m_star*Msun; //mass of star in kg
  Mstar_sun = m_star; //mass of star in terms of mass of the sun
@@ -179,18 +180,16 @@ int main() {
  Period_days = period/24.0; //period of planet in days
  T = period*60.0*60.0; //period of planet in seconds
  a = pow((G*Mstar_kg* pow(T, 2.0))/ (4.0*pow(PI, 2.0)), 1.0/3.0); //semi major axis in meters
- m_planet = (planet_mass*Mearth)/Mstar_kg; //planetary mass in kg
+ m_planet = (planet_mass*Mearth)/Mstar_kg; //planetary mass in solar masses
  r_planet = planet_radius*Rearth; //planetary radius in meters
  r_start = (2.*r_planet)/a; //start position for particles
  r_planet_dim = r_planet/a; //planetary radius in terms of semi major axis
  r_h = pow(m_planet/3.0, 1.0/3.0); //hill radius
 
-//Dust parameters:
- A = A_dust; //clausius claperyon relation
- B = B_dust; //clausius claperyon relation
- alpha = alpha_dust;
- mu = mu_dust; //molecular weight
- rho_d = rho_dust; //dust density
+// Frame of reference parameters:
+
+ang_vel = omega(m_planet, 1.0);
+
 
 //Outflow parameters:
  mdot =  mdot_read*Mearth_cgs/gyr;
@@ -208,6 +207,58 @@ d_t_max = tmax;
 d_p_min = pmin;
 d_p_max = pmax;
 
+//Dust parameters
+if (composition.substr(0,5) == "Al2O3") {
+  cout << "Dust is composed of Corundum." << endl;
+  opac_data = "corundum_K95";
+  A = 7.74e+4; //clausius claperyon relation
+  Bp = 39.3; //clausius claperyon relation
+  rho_d = 4.0; //dust density
+
+} else if (composition.substr(0,7) == "Fe2SiO4") {
+  cout << "Dust is composed of Fayalite." << endl;
+  opac_data = "fayalite_F01";
+  A = 6.04e+4;
+  Bp = 38.1;
+  rho_d = 4.39;
+
+} else if (composition.substr(0,1)=="C") {
+  cout << "Dust is composed of Graphite." << endl;
+  opac_data = "graphite_D84";
+  A = 9.36e+4;
+  Bp = 36.2;
+  rho_d = 2.16;
+
+} else if (composition.substr(0,6)=="MgSiO3"){
+  cout << "Dust is composed of Enstatite." << endl;
+  opac_data = "enstatite_J98_J94_D95";
+  A = 6.89e+4;
+  Bp = 37.8;
+  rho_d = 3.20;
+
+} else if (composition.substr(0,7)=="Mg2SiO4") {
+  cout << "Dust is composed of Olivine." << endl;
+  opac_data = "olivine_F01";
+  A = 6.53e+4;
+  Bp = 34.3;
+  rho_d = 3.27;
+
+} else if (composition.substr(0,3)=="SiC") {
+  cout << "Dust is composed of silicon carbide." << endl;
+  opac_data = "silicon_carbide_L93";
+  A= 7.85e+4;
+  Bp = 37.4;
+  rho_d = 3.22;
+
+} else{
+  cout << "Composition unknown, stopping programme.";
+  abort();
+}
+
+cout << "rho= " << rho_d << " g/cm3, initial size= " << s_0 << " cm." << endl;
+cout << "Clausius-Claperyon parameters, A= " << A << "K, B= " << Bp << endl;
+cout << "\n" ;
+        
 //initiation parameters
 long int total_particles = nparticles; //initial number of particles to start simulation with
 double t_common = major_timestep;
@@ -228,7 +279,7 @@ long int current_particles = 0; // number of current particles in simulation
   add_particles(particles, current_particles, total_particles, 0.0); // call function that adds particles to simulation (in particles.cpp file)
   
   //Solve particles is the main routine of the program. It is in particles.cpp.
-  solve_particles(0.00, end_t, particles, total_particles,current_particles);
+  //solve_particles(0.00, end_t, particles, total_particles,current_particles);
 
 
 

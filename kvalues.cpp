@@ -33,7 +33,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     //function to obtain several k values of RK-DP method
     //k1 values
 
-    ks1 = h* sublimation(V[6], V[0], V[1], V[2]);
+    ks1 = h* sublimation(V[6], V[0], V[1], V[2], tau_particle);
 
     
 
@@ -61,7 +61,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     s_temp = s0 + a21*ks1;
 
   //k2 values
-    ks2 = h* sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2]);
+    ks2 = h* sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2], tau_particle);
 
     coriol = coriolis({Vtemp[0], Vtemp[1], Vtemp[2], \
         Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
@@ -91,7 +91,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     s_temp = s0 + a31*ks1 + a32*ks2;
 
 
-    ks3 = h* sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2]);
+    ks3 = h* sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2], tau_particle);
 
     coriol = coriolis({Vtemp[0], Vtemp[1], Vtemp[2], \
         Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
@@ -121,7 +121,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     }
     s_temp = s0 + a41*ks1 + a42*ks2 + a43*ks3;
 
-    ks4 = h* sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2]);
+    ks4 = h* sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2], tau_particle);
 
     coriol = coriolis({Vtemp[0], Vtemp[1], Vtemp[2], \
         Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
@@ -152,7 +152,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 
     s_temp = s0 + a51*ks1 + a52*ks2 + a53*ks3 + a54*ks4;
 
-    ks5 = h * sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2]);
+    ks5 = h * sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2], tau_particle);
 
     coriol = coriolis({Vtemp[0], Vtemp[1], Vtemp[2], \
         Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
@@ -182,7 +182,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 
     s_temp = s0 + a61*ks1 + a62*ks2 + a63*ks3 + a64*ks4 + a65*ks5;
 
-    ks6 = h * sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2]);
+    ks6 = h * sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2], tau_particle);
 
     coriol = coriolis({Vtemp[0], Vtemp[1], Vtemp[2], \
         Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
@@ -212,7 +212,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 
 
     if (order5 == true) {
-      ks7 = h * sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2]);
+      ks7 = h * sublimation(s_temp, Vtemp[0], Vtemp[1], Vtemp[2], tau_particle);
 
       coriol = coriolis({Vtemp[0], Vtemp[1], Vtemp[2], \
           Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});

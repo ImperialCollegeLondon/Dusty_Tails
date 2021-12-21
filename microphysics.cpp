@@ -22,7 +22,7 @@ double beta_fn(double k, double tau){
   if (tau < 1.0e-33) {
     tau = 0.0;
   }
-  //cout << "tau at beta " << tau << endl;
+  
 	beta = (k*lum*exp(-tau)) / (4.0*PI*c_cgs*G_cgs*Mstar_sun*Msun_cgs);
 	return beta;
 
@@ -44,12 +44,12 @@ double qfactor(double s, double x, double y, double z){
   }
 }
 
-double clausius_clap(double s, double x, double y, double z){
-  double cc =0.0;
-  cc = exp((-A/temp_dust(s, x, y, z)) + B);
+double clausius_clap(double s, double x, double y, double z, double tau){
+  double cc =0.0, Td;
+  Td = temp_dust(s,x,y,z,tau);
+  cc = -1.0*exp((-A/Td) + Bp) * pow(amu/(2.0*PI*kb*Td), 0.5);
 
-
-    return cc;
+  return cc;
   }
 
 
@@ -86,12 +86,12 @@ vector <double> sunit_vector(vector <double> V){
 	return s_unit;
 }
 
-double temp_dust( double s, double x, double y, double z){
+double temp_dust( double s, double x, double y, double z, double tau){
   double Tdust, dl;
-  dl = scalar((x-star_pos[0]), y, z)*a*pow(10., 2.0);
-
-  Tdust = pow((lum*wien)/(16.0*PI*pow(dl, 2.0)*sigma*s), 1./5.);
-
+ 
+  dl = scalar((x-star_pos[0]), y, z)*a;
+ 
+  Tdust = Temp*pow(Rstar*Rsun/(2.*dl),1./2.)*pow(qfactor(s,x,y,z)*exp(-1.0*tau),1./4.);
   return Tdust;
 }
 

@@ -7,15 +7,15 @@
 #include "butcher.h"
 #include "functions.h"
 #include "particle.h"
-
+//calculates errors on numerical solver to accept,increase 
+//or decrease current "small" timestep
 using namespace std;
 
 double error( double value1, double value2){
-    //evaluate error
+    //evaluate relative error
     double err;
-    err = fabs(value1 - value2);
-    //cout << "error " << err/tol << endl;
-    return err / tol;
+    err = fabs(value1 - value2)/abs(value1);
+    return err;
 }
 
 double error_max(double h, vector <double> V){

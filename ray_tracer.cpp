@@ -51,7 +51,7 @@ void build_grids(double *r_a, double *r_b, double *theta_a, \
 }
 
 
-void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells][p_cells]){
+void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells][p_cells], double delta_t){
         vector <double> sphere_pos(3, 0.0);
         vector <double> scaled_pos(3, 0.0);
         int r_it, theta_it, phi_it;
@@ -60,7 +60,10 @@ void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells]
         double op;
         double pib = 0.;
 
-        double n_mini = 4.0e+23;
+        //double n_mini = 4.0e+23;
+        double mbig = (mdot * T * 0.01) / 1000. ; // 0.01 dependent on when particles are being thrown out of planet
+        double n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(1.0e-4, 3));
+        //cout <<  "Number of mini particles: " <<  n_mini << endl;
 
         vector <int> r_index, theta_index, phi_index;
 
@@ -209,7 +212,7 @@ double phi_reverse(double old_phi){
 }
 
 vector < vector < vector <double> > >  tau_to_vector(double tau[r_cells][t_cells][p_cells]) {
-  cout << "inside tau to vector" << endl;
+  //cout << "inside tau to vector" << endl;
   vector < vector < vector <double> > > tauv ;
   for (unsigned int i = 0; i < r_cells; i++){
         tauv.push_back({});
