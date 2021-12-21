@@ -2,17 +2,25 @@
 #include <cstdlib>
 #include <cmath>
 #include <vector>
+#include <fstream>
+#include <algorithm>
+#include "constants.h"
+#include "butcher.h"
+#include "functions.h"
+#include "particle.h"
+#include <iostream>
 
 #include "opacities.h"
 
 using namespace std;
 
-Opacities::Opacities(const char *s_temp_table, const char *s_size_table,
+void Opacities::read_data(const char *s_temp_table, const char *s_size_table,
                      const char *s_stellar_abs_table, const char *s_stellar_scat_table,
                      const char *s_particle_abs_table, const char *s_particle_scat_table,
                      bool log_tables_n)
 {
     // open files
+    
     FILE *f_temp_table = fopen(s_temp_table, "r");
     FILE *f_size_table = fopen(s_size_table, "r");
     FILE *f_stellar_abs_table = fopen(s_stellar_abs_table, "r");
@@ -20,6 +28,7 @@ Opacities::Opacities(const char *s_temp_table, const char *s_size_table,
     FILE *f_particle_abs_table = fopen(s_particle_abs_table, "r");
     FILE *f_particle_scat_table = fopen(s_particle_scat_table, "r");
 
+    
     // declare variables
     double x;
 
@@ -27,30 +36,33 @@ Opacities::Opacities(const char *s_temp_table, const char *s_size_table,
     temp_table = {};
     while (fscanf(f_temp_table, "%lf ", &x) != EOF)
         temp_table.push_back(x);
-
+        
     size_table = {};
     while (fscanf(f_size_table, "%lf ", &x) != EOF)
         size_table.push_back(x);
-
+       
+   
     // keep table dimensions
     temp_table_length = temp_table.size();
     size_table_length = size_table.size();
-
+    
     // read absorption and scattering coefficients to stellar radiation
     stellar_abs_table = {};
     for (int i=0; i<size_table_length; i++)
-    {
+    {   
+       
         fscanf(f_stellar_abs_table, "%lf", &x);
         stellar_abs_table.push_back(x);
+        
     }
-
+    
     stellar_scat_table = {};
     for (int i=0; i<size_table_length; i++)
     {
         fscanf(f_stellar_scat_table, "%lf", &x);
         stellar_scat_table.push_back(x);
     }
-
+    
     // read absorption and scattering coefficients to particle own radiation
     particle_abs_table = {};
     for (int i=0; i<size_table_length; i++)
@@ -75,7 +87,7 @@ Opacities::Opacities(const char *s_temp_table, const char *s_size_table,
         }
         particle_scat_table.push_back(opac_line);
     }
-
+   
     // set whether the temperature and size tables are log-spaced
     log_tables = log_tables_n;
 

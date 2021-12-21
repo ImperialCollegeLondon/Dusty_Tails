@@ -12,10 +12,11 @@ class Particle {
     vector <double> pos_spherical; // current position in spherical coordinates
     vector <double> v_spherical; //curretn velocity in spherical coordinates
     double p_size; //size of the particle
-    double p_density; //particle density
+    double p_opacity; //particle opacity
     double h_updated; //current optimal time step for particle
     double p_mass; //mass of particle
     double p_tau; //optical depth
+    double p_temp; //particle temperature
 
 };
 
@@ -29,7 +30,7 @@ void solve_particles(double total_t, double end_t, vector <Particle> &particles,
 
 void rm_particles(vector <Particle> &particles);
 
-void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells][p_cells]);
+void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells][p_cells], double delta_t);
 
 extern vector <Particle> particles;
 extern bool tau_constant;

@@ -5,6 +5,16 @@
 #include<string>
 #include<iostream>
 
+#include <fstream>
+#include <algorithm>
+#include "constants.h"
+#include "butcher.h"
+#include "spline.h"
+#include "functions.h"
+#include "particle.h"
+#include <stdlib.h>
+#include <time.h>
+#include <cstring>
 #include "opacities.h"
 
 using namespace std;
@@ -12,7 +22,7 @@ using namespace std;
 double kappa_abs()
 {
     // read the planck-mean absorption, scattering
-    string opacity_dir("./opacs_jankovic/calc_dust_opac/fayalite_F01");
+    string opacity_dir("./opacs_jankovic/calc_dust_opac/"+);
     opacity_dir = opacity_dir + "/opac_";
 
     Opacities opac = Opacities((opacity_dir+"temp.dat").c_str(), (opacity_dir+"sizes.dat").c_str(),

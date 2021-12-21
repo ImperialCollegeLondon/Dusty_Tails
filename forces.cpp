@@ -7,6 +7,9 @@
 #include "butcher.h"
 #include "particle.h"
 #include "functions.h"
+#include "opacities.h"
+
+
 
 
 using namespace std;

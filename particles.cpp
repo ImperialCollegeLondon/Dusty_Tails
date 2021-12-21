@@ -12,6 +12,9 @@
 #include <chrono>
 #include <stdlib.h>
 #include <cstring>
+#include "opacities.h"
+
+
 
 using namespace std;
 

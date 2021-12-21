@@ -32,6 +32,9 @@ extern double planet_x; //x position of the planet, w.r.t CoM of system
 extern vector <double> star_pos; //vector of the stars position
 extern vector <double> planet_pos; //vector of the planets position
 
+//Frame of reference parameters
+extern double ang_vel;
+
 //Stellar parameters:
 extern  double Mstar_kg, Mstar_sun, Rstar, Temp, lum; 
 
@@ -39,7 +42,8 @@ extern  double Mstar_kg, Mstar_sun, Rstar, Temp, lum;
 extern  double Period_days, T, a, m_planet, r_planet, r_start, r_planet_dim, r_h;
 
 //Dust parameters:
-extern  double A, B, alpha, mu, rho_d, s_0;
+extern  double A, Bp, rho_d, s_0;
+extern  string opac_data, opacity_dir;
 
 //Outflow parameters:
 extern double mdot, v_esc;
@@ -55,7 +59,7 @@ extern double G_dim, c_dim;
 
 //Numerical factors for integrator:
 const double S = 0.9; //safety factor
-const double tol = 1.0e-4; //error tolerance
+const double tol = 1.0e-7; //error tolerance
 
 //GYR in seconds
 const double gyr = pow(10.,9) * 365. * 24. * 60. * 60. ;// 1Gyr in seconds

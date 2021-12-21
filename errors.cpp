@@ -7,6 +7,9 @@
 #include "butcher.h"
 #include "functions.h"
 #include "particle.h"
+#include "opacities.h"
+
+
 //calculates errors on numerical solver to accept,increase 
 //or decrease current "small" timestep
 using namespace std;

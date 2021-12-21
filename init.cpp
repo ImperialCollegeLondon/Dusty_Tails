@@ -1,5 +1,10 @@
 //File that has the main function
-
+#include<cstdio>
+#include<cstdlib>
+#include<cmath>
+#include<vector>
+#include<string>
+#include<iostream>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -14,7 +19,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <cstring>
-
+#include "opacities.h"
 
 using namespace std;
 using std::fill;
@@ -64,7 +69,7 @@ double d_r_min, d_r_max,  d_t_min, d_t_max, d_p_min, d_p_max;
 
 //variables for opacity:
 string composition;
-string opac_data;
+string opac_data, opacity_dir;
 
 //**********************************************************************
 //**********************************************************************
@@ -258,6 +263,19 @@ if (composition.substr(0,5) == "Al2O3") {
 cout << "rho= " << rho_d << " g/cm3, initial size= " << s_0 << " cm." << endl;
 cout << "Clausius-Claperyon parameters, A= " << A << "K, B= " << Bp << endl;
 cout << "\n" ;
+
+opacity_dir = "./opacs_jankovic/calc_dust_opac/"+opac_data+"/opac_";
+
+Opacities opac;
+int T_int {Temp};
+string T_int_s = to_string(T_int);
+
+opac.read_data((opacity_dir+"temp.dat").c_str(), (opacity_dir+"sizes.dat").c_str(),
+        (opacity_dir+"planck_abs_tstar"+T_int_s+".dat").c_str(), 
+        (opacity_dir+"planck_sca_tstar"+T_int_s+".dat").c_str(),
+        (opacity_dir+"planck_abs.dat").c_str(), (opacity_dir+"planck_sca.dat").c_str(),
+        true);
+
         
 //initiation parameters
 long int total_particles = nparticles; //initial number of particles to start simulation with
@@ -281,6 +299,8 @@ long int current_particles = 0; // number of current particles in simulation
   //Solve particles is the main routine of the program. It is in particles.cpp.
   //solve_particles(0.00, end_t, particles, total_particles,current_particles);
 
+  //test opac function
+  cout << kappa_abs(s_0, 2500.0, opac) << endl;
 
 
   return 0;

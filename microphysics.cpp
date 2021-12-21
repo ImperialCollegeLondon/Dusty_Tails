@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 #include <cmath>
 #include <fstream>
 #include <algorithm>
@@ -7,9 +8,13 @@
 #include "butcher.h"
 #include "functions.h"
 #include "particle.h"
-
+#include "opacities.h"
 
 using namespace std;
+
+//initialisation for tables for opacity calculations
+
+
 
 double omega(double mplanet, double mstar){
     return pow((G_dim *(m_planet + mstar)), 0.5);
@@ -99,4 +104,13 @@ double dust_mass(double s){
     double md;
     md = rho_d * (4.0/3.0) * PI * pow(s, 3.0);
     return md;
+}
+
+
+double kappa_abs(double s, double T, Opacities opac){
+  return opac.particle_abs(s, T);
+}
+
+double kappa_scat(double s, double T, Opacities opac){
+  return opac.particle_scat(s,T);
 }
