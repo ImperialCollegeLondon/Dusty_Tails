@@ -1,0 +1,44 @@
+# depslib dependency file v1.0
+1596125195 source:d:\science\onedrive - imperial college london\project_estrada\optdepth\main.cpp
+	<cstdio>
+	<cstdlib>
+	<cmath>
+	<vector>
+	<string>
+	<iostream>
+	"opacities.h"
+
+1595511228 d:\science\onedrive - imperial college london\project_estrada\optdepth\opacity.h
+	<vector>
+
+1595511430 source:d:\science\onedrive - imperial college london\project_estrada\optdepth\opacity.cpp
+	<cstdio>
+	<cstdlib>
+	<cmath>
+	<vector>
+	"opacity.h"
+
+1595513015 source:d:\science\onedrive - imperial college london\project_estrada\optdepth\grid.cpp
+
+1596124153 d:\science\onedrive - imperial college london\project_estrada\optdepth\opacities.h
+	<vector>
+
+1595512986 source:d:\science\onedrive - imperial college london\project_estrada\optdepth\optdepth.cpp
+
+1596124951 source:d:\science\onedrive - imperial college london\project_estrada\optdepth\opacities.cpp
+	<cstdio>
+	<cstdlib>
+	<cmath>
+	<vector>
+	"opacities.h"
+
+1596125315 source:d:\radmc-3d\calc_dust_opac\opacity\opacities.cpp
+	<cstdio>
+	<cstdlib>
+	<cmath>
+	<vector>
+	"opacities.h"
+
+1596124153 d:\radmc-3d\calc_dust_opac\opacity\opacities.h
+	<vector>
+
