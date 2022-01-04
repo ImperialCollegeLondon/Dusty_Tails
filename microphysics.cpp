@@ -11,10 +11,7 @@
 #include "opacities.h"
 
 using namespace std;
-
 //initialisation for tables for opacity calculations
-
-
 
 double omega(double mplanet, double mstar){
     return pow((G_dim *(m_planet + mstar)), 0.5);
@@ -27,37 +24,19 @@ double beta_fn(double k, double tau){
   if (tau < 1.0e-33) {
     tau = 0.0;
   }
-  
 	beta = (k*lum*exp(-tau)) / (4.0*PI*c_cgs*G_cgs*Mstar_sun*Msun_cgs);
 	return beta;
 
 }
 
-double opacity(double s, double x, double y, double z){
-    //function to calculate opacity in cgs units
-    //might need to add density and size as parameters later
-    //cout << "Opacity " << (3.0/4.0)* (qfactor(s, x, y, z)/ (rho_d * s)) << endl;
-    return (3.0/4.0)* (qfactor(s, x, y, z)/ (rho_d * s)) ;
-}
-
-double qfactor(double s, double x, double y, double z){
-  //cgs units
-  if (s > (wien/Temp)) {
-    return 1.00;
-  } else {
-    return (s * Temp / wien);
-  }
-}
-
-double clausius_clap(double s, double x, double y, double z, double tau){
-  double cc =0.0, Td;
-  Td = temp_dust(s,x,y,z,tau);
+double clausius_clap(double s, double x, double y, double z, double tau, double Td){
+  double cc =0.0;
+  //double Td;
+  Td = brent(s,x,y,z,tau);
   cc = -1.0*exp((-A/Td) + Bp) * pow(amu/(2.0*PI*kb*Td), 0.5);
 
   return cc;
   }
-
-
 
 double radial_vel(vector <double> vel, vector <double> s_vector){
   //function to obtain radial velocity term
@@ -91,14 +70,97 @@ vector <double> sunit_vector(vector <double> V){
 	return s_unit;
 }
 
-double temp_dust( double s, double x, double y, double z, double tau){
-  double Tdust, dl;
+double f_Tdust( double s, double x, double y, double z, double tau, double Tdust){
+  double fTdust, dl;
  
-  dl = scalar((x-star_pos[0]), y, z)*a;
- 
-  Tdust = Temp*pow(Rstar*Rsun/(2.*dl),1./2.)*pow(qfactor(s,x,y,z)*exp(-1.0*tau),1./4.);
-  return Tdust;
+  dl = scalar((x-star_pos[0]), y, z)*a*pow(10.0,2);
+  
+  fTdust = (opac.stellar_abs(s) * lum*exp(-tau))/(4.0*PI*pow(dl,2)) - 
+            opac.particle_abs(Tdust, s) * 4.0 *sigma * pow(Tdust,4); 
+  
+  fTdust = fTdust/(a*pow(10.0,2));
+  return fTdust;
 }
+
+double brent(double size, double x, double y, double z, double tau){
+  const int itmax=100;
+  const double eps = std::numeric_limits<double>::epsilon();
+  bool cond1, cond2, cond3, cond4, cond5;
+  int mflag=0;
+  double Ac, Bc, Cc, Dc;
+  double p, q, r, s, tol1, xm;
+  double fa, fb, fc, fs;
+  double tol = 1.0e-3;
+  Ac = 0.0;
+  Bc = 10000.0;
+  fa = f_Tdust(size,x,y,z,tau, Ac);
+  fb = f_Tdust(size,x,y,z,tau, Bc);
+
+
+  if (fa*fb >= 0.0) {
+    cout << "root must be bracketed in zbrent" << endl;
+    abort();
+  }
+  if (abs(fa)<abs(fb)) {
+    swap(Ac,Bc);
+    swap(fa,fb);
+  }
+  Cc=Ac;
+  fc = fa;
+  mflag = 1;
+  int iter = 0;
+  
+  while (abs(Bc-Ac) > tol) {
+        if (iter > 100){
+          cout << "more than 100 iterations in brent " << endl;
+          abort();
+        }
+        //cout << abs(Bc-Ac) << endl;
+        if ((fa != fc) && (fb != fc)) {
+          s = ((Ac*fb*fc) / ((fa-fb)*(fa-fc))) +
+              ((Bc*fa*fc) / ((fb-fa)*(fb-fc))) +
+              ((Cc*fa*fb) / ((fc-fa)*(fc-fb)));
+        } else {
+          s = Bc - fb*(Bc-Ac)/(fb-fa);
+        }
+        cond1 = (s < (3.0*Ac + Bc)/4.) || (s > Bc) ;
+        cond2 = (mflag==1) && (abs(s-Bc) >= abs(Bc-Cc)/2.);
+        cond3 = (mflag==0) && (abs(s-Bc) >= abs(Cc-Dc)/2.);
+        cond4 = (mflag==1) && (abs(Bc-Cc) < tol);
+        cond5 = (mflag==0) && (abs(Cc-Dc) < tol);
+
+        if (cond1 || cond2 || cond3 || cond4 || cond5 ) {
+          s = (Ac + Bc)/2.;
+          mflag == 1;
+        } else {
+          mflag == 0;
+        }
+        fs = f_Tdust(size,x,y,z,tau,s);
+        Dc = Cc;
+        Cc = Bc;
+
+        if (fa*fs < 0.0) {
+          Bc = s;
+        } else {
+          Ac = s;
+        }
+
+        if (abs(fa)<abs(fb)) {
+          swap(Ac, Bc);
+          swap(fa, fb);
+        }
+
+    iter +=1;
+    }
+    if (fb == 0.0) {
+      return Bc;
+    } else {
+      return s;
+    }
+  
+  }
+
+
 
 double dust_mass(double s){
     double md;
@@ -106,11 +168,3 @@ double dust_mass(double s){
     return md;
 }
 
-
-double kappa_abs(double s, double T, Opacities opac){
-  return opac.particle_abs(s, T);
-}
-
-double kappa_scat(double s, double T, Opacities opac){
-  return opac.particle_scat(s,T);
-}

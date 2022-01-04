@@ -33,6 +33,9 @@ vector <Particle> particles; //initiate vector of "Particle" (Object defined in 
 
 int in_c = 0;
 int tau_type, outflow;
+string T_int_s;
+string outflow_s;
+string output_file;
 double t_star, m_star, r_star;
 double period, planet_mass, planet_radius;
 double s_0;
@@ -41,7 +44,7 @@ double mdot_read, major_timestep, no_orbits, nparticles;
 bool tau_constant;
 string line;
 ifstream input("dusty_tails.in", ios::out);
-
+Opacities opac;
 
 //**********************************************************************
 //**********************************************************************
@@ -68,7 +71,7 @@ double ang_vel;
 double d_r_min, d_r_max,  d_t_min, d_t_max, d_p_min, d_p_max;
 
 //variables for opacity:
-string composition;
+string composition, comp;
 string opac_data, opacity_dir;
 
 //**********************************************************************
@@ -125,8 +128,9 @@ int main() {
         cout << "Reading dust parameters... " << endl;
         s_0 = stod(line.substr(12,18)) * 1.0e-4;
         composition = line.substr(25,36);
-        cout << s_0 << endl;
-        cout << composition << endl;
+        //cout << "Dust is composed of " << composition << endl;
+        //cout << "initial dust grains size " << s_0 << " micron" << endl;
+        
       }
       if (in_c == 3) {
         rmin = stod(line.substr(14,18));
@@ -143,8 +147,10 @@ int main() {
         tau_type = stoi(line.substr(36));
         if (outflow==1)  {
           cout << "Outflow is radially outwards from the whole planetary surface." << endl;
+          outflow_s = "sph";
         } else {
           cout <<  "Outflow is from the planet's dayside." << endl;
+          outflow_s = "dayside";
         }
         cout << "\n" ;
         cout << "The planetary mass loss rate is " << mdot_read << " Mearth/Gyr." << endl;
@@ -163,6 +169,8 @@ int main() {
         no_orbits = stod(line.substr(25,28));
         nparticles = stoi(line.substr(38,41));
       }
+
+     
       
       in_c = in_c + 1;
       
@@ -216,6 +224,7 @@ d_p_max = pmax;
 if (composition.substr(0,5) == "Al2O3") {
   cout << "Dust is composed of Corundum." << endl;
   opac_data = "corundum_K95";
+  comp = "Al2O3";
   A = 7.74e+4; //clausius claperyon relation
   Bp = 39.3; //clausius claperyon relation
   rho_d = 4.0; //dust density
@@ -223,6 +232,7 @@ if (composition.substr(0,5) == "Al2O3") {
 } else if (composition.substr(0,7) == "Fe2SiO4") {
   cout << "Dust is composed of Fayalite." << endl;
   opac_data = "fayalite_F01";
+  comp = "Fe2SiO4";
   A = 6.04e+4;
   Bp = 38.1;
   rho_d = 4.39;
@@ -230,6 +240,7 @@ if (composition.substr(0,5) == "Al2O3") {
 } else if (composition.substr(0,1)=="C") {
   cout << "Dust is composed of Graphite." << endl;
   opac_data = "graphite_D84";
+  comp = "C";
   A = 9.36e+4;
   Bp = 36.2;
   rho_d = 2.16;
@@ -237,6 +248,7 @@ if (composition.substr(0,5) == "Al2O3") {
 } else if (composition.substr(0,6)=="MgSiO3"){
   cout << "Dust is composed of Enstatite." << endl;
   opac_data = "enstatite_J98_J94_D95";
+  comp = "MgSiO3";
   A = 6.89e+4;
   Bp = 37.8;
   rho_d = 3.20;
@@ -244,6 +256,7 @@ if (composition.substr(0,5) == "Al2O3") {
 } else if (composition.substr(0,7)=="Mg2SiO4") {
   cout << "Dust is composed of Olivine." << endl;
   opac_data = "olivine_F01";
+  comp = "Mg2SiO4";
   A = 6.53e+4;
   Bp = 34.3;
   rho_d = 3.27;
@@ -251,6 +264,7 @@ if (composition.substr(0,5) == "Al2O3") {
 } else if (composition.substr(0,3)=="SiC") {
   cout << "Dust is composed of silicon carbide." << endl;
   opac_data = "silicon_carbide_L93";
+  comp = "SiC";
   A= 7.85e+4;
   Bp = 37.4;
   rho_d = 3.22;
@@ -266,9 +280,9 @@ cout << "\n" ;
 
 opacity_dir = "./opacs_jankovic/calc_dust_opac/"+opac_data+"/opac_";
 
-Opacities opac;
-int T_int {Temp};
-string T_int_s = to_string(T_int);
+
+int T_int { static_cast<int> (Temp)};
+T_int_s = to_string(T_int);
 
 opac.read_data((opacity_dir+"temp.dat").c_str(), (opacity_dir+"sizes.dat").c_str(),
         (opacity_dir+"planck_abs_tstar"+T_int_s+".dat").c_str(), 
@@ -297,11 +311,7 @@ long int current_particles = 0; // number of current particles in simulation
   add_particles(particles, current_particles, total_particles, 0.0); // call function that adds particles to simulation (in particles.cpp file)
   
   //Solve particles is the main routine of the program. It is in particles.cpp.
-  //solve_particles(0.00, end_t, particles, total_particles,current_particles);
-
-  //test opac function
-  cout << kappa_abs(s_0, 2500.0, opac) << endl;
-
+  solve_particles(0.00, end_t, particles, total_particles,current_particles);
 
   return 0;
 

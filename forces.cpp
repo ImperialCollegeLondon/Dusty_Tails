@@ -34,46 +34,23 @@ vector <double> coriolis(vector <double> V){
 
 vector <double> rad_pressure(vector <double> V){
   //function to calculate radiation pressure force, accounting for red shift
-  double beta, k, constant;
+  // and to evaluate poynting roberston drag
+	vector <double> v_drag(3), pr_vector(3);
+  double beta, kappa, constant;
   double d_prod;
   vector <double> rad_vector(3);
 
-  k = opacity(V[6], V[0], V[1], V[2]);
-  beta = beta_fn(k, V[7]);
-
+  kappa =opac.stellar_abs(V[6]) + opac.stellar_scat(V[6]);
+  beta = beta_fn(kappa, V[7]);
 
   constant = (beta*G_dim)/(pow(scalar(V[0]- star_pos[0], V[1], V[2]), 3.0));
-  if (isnan(k)) {
-    cout << "oops opacity is nan " << endl;
-  }
-
-  d_prod = dot_product({V[3], V[4], V[5]}, sunit_vector(V));
   
-
-  for (unsigned int i = 0; i < 3; i++) {
-
-      rad_vector[i] = constant* (1-((d_prod)/c_dim)) *(V[i]-star_pos[i]);
- }
-
-  return rad_vector;
-
-}
-
-vector <double> pr_drag(vector <double> V){
-  //function to evaluate poynting roberston drag
-	vector <double> v_drag(3), pr_vector(3);
-
-	double constant, beta, k, Lum;
-
-  k = opacity(V[6], V[0], V[1], V[2]);
-  beta = beta_fn(k, V[7]);
-
-  constant = (beta*G_dim)/(pow(scalar(V[0]-star_pos[0], V[1], V[2]), 3.0)*c_dim);
-
+  d_prod = dot_product({V[3], V[4], V[5]}, sunit_vector(V));
   v_drag = drag_vel(V);
 
-  for (unsigned int i=0; i < 3; i++) {
-      pr_vector[i] = constant*v_drag[i];
-  }
-  return pr_vector;
+  for (unsigned int i = 0; i < 3; i++) {
+      rad_vector[i] = constant* (1-((d_prod)/c_dim)) *(V[i]-star_pos[i]) - constant*v_drag[i]/c_dim;
+ }
+  return rad_vector;
+
 }

@@ -17,15 +17,12 @@
 
 
 using namespace std;
-
-
 unsigned seed = 123;
 mt19937 generator (seed); //set the seed for the distrubutions of particle positions
 
 //open files to write data for python plotting
-ofstream ofile("./data/test.bin", ios::out | ios::binary);
-
-ofstream ray_tracer("./data/grid_test.bin", ios::out | ios::binary);
+ofstream ofile("./data/output.bin", ios::out | ios::binary);
+//ofstream ray_tracer("./data/grid_test.bin", ios::out | ios::binary);
 
 
 //spacing of grid cells in scale of particle distribution
@@ -52,6 +49,8 @@ void add_particles(vector <Particle> &particles, long int current,
                    long int total, double time){
 
     Particle grain;
+    double kappa_init =  opac.stellar_abs(s_0) 
+                     + opac.stellar_scat(s_0);
     for ( unsigned long int i = current; i < total; i++){
         double phi,theta;
         grain.id = i+1; //number ID of particle
@@ -86,14 +85,13 @@ void add_particles(vector <Particle> &particles, long int current,
             grain.p_tau = 0.001;
         }
         
-        grain.h_updated = 1.0e-5; //initial time step for numerical integrator
+        grain.h_updated = 1.0e-6; //initial time step for numerical integrator
         grain.p_mass = dust_mass(grain.p_size); //initial particle mass
-        grain.p_opacity = opacity(grain.p_size, grain.position[0], 
-                                grain.position[1], grain.position[2]); //initial opacity
+        grain.p_opacity = kappa_init; //initial rad pressure efficiency
         //initial particle temperature
-        grain.p_temp = temp_dust( grain.p_size, grain.position[0], 
+        grain.p_temp = brent( grain.p_size, grain.position[0], 
                                 grain.position[1], grain.position[2], grain.p_tau); 
-
+        //cout << grain.p_temp << endl;
         particles.push_back(grain); //add particle to the vector of particles
                  
 
@@ -106,7 +104,9 @@ void add_particles(vector <Particle> &particles, long int current,
 //Argument is the vector of particles
 void rm_particles(vector <Particle>& particles){
     for (unsigned long int i = 0; i < particles.size(); i++){
-     
+      if (particles[i].id == 14) {
+          cout << particles[i].p_size << endl;
+      }
       if (particles[i].p_size < 0.01e-4) {
         
         particles.erase(particles.begin() + i);
@@ -171,6 +171,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
            t_next = plot_time;
   }
   int tau_thick = 0; //counter for particles with a thick optical depth
+  
   for( Particle& p : particles) {
     double no_particles = particles.size();
     vector <double> pos_spherical;
@@ -205,17 +206,22 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         //function RK solver calls the numerical solver to obtain the new particle
         //positions, velocities, size (and mass - consequence of the size change)
         updated_vector = RK_solver({p.position[0], p.position[1], p.position[2], \
-        p.velocity[0], p.velocity[1], p.velocity[2], p.p_size, p.p_tau}, previous_t, t_next, p.h_updated);
+        p.velocity[0], p.velocity[1], p.velocity[2], p.p_size, p.p_tau, p.p_temp}, previous_t, t_next, p.h_updated);
         p.position = {updated_vector[0],updated_vector[1], updated_vector[2]};
         p.velocity = {updated_vector[3],updated_vector[4], updated_vector[5]};
         p.p_size = updated_vector[6];
+        p.p_opacity = opac.stellar_abs(p.p_size) + opac.stellar_scat(p.p_size);
         p.p_mass = dust_mass(p.p_size); 
-        p.h_updated = updated_vector[7];    
+        p.h_updated = updated_vector[8];    
+        p.p_temp = brent( p.p_size, p.position[0], 
+                                p.position[1], p.position[2], p.p_tau); 
+        //cout << p.id << endl;
     }
     cout << "Number of optically thick particles " << tau_thick << endl;
     rm_particles(particles); //removes particles that are too small
     
     //to obtain optical depth plot when optical depth is constant
+    /*
     if (t_next > (end_t-t_global_min)){
             calculation_ext(particles, extinction, t_global_min);
             optical_depth_calc(extinction, optical_depth);
@@ -236,6 +242,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
                 }
             }
         }
+        */
 
     if (abs(t_next-plot_time) < 1.0e-8) {  
       for( Particle& p : particles) {
@@ -248,6 +255,8 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         ofile.write((char*) &p.p_size, sizeof(double));
         ofile.write((char*) &p.p_mass, sizeof(double));
         ofile.write((char*) &p.p_tau, sizeof(double));
+        ofile.write((char*) &p.p_temp, sizeof(double));
+        ofile.write((char*) &p.p_opacity, sizeof(double));
       }
       current_particles = total_particles;
       total_particles = total_particles + 1000;

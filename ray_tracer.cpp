@@ -75,8 +75,6 @@ void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells]
 
         for( Particle& p : particles) {
 
-              //cout << "in calculation test " << endl;
-
               sphere_pos = pos_to_spherical(p.position[0], p.position[1], p.position[2]);
 
               scaled_pos = grid_scaling(sphere_pos);
@@ -84,12 +82,9 @@ void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells]
               if (scaled_pos[0] > 0.0){
 
               r_it = floor(scaled_pos[0]);
-              //cout << "r_it " << r_it << endl;
               theta_it = floor(scaled_pos[1]);
-              //cout << "theta_it " << theta_it << endl;
               phi_it = floor(scaled_pos[2]);
-              //cout << "phi_it " << phi_it << endl;
-
+      
               //particles volume positions in "real" values
 
               p_rs = { r_reverse(scaled_pos[0] - (dr/2.)), r_reverse(scaled_pos[0] + (dr/2.))};
@@ -124,17 +119,12 @@ void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells]
               for (unsigned int i = 0; i < 2; i++){
                 for (unsigned int j = 0; j < 2; j++){
                   for (unsigned int k = 0; k < 2; k++){
-
-                      //cout << "partial vol: " << endl;
                       partial_vol = 1./3. * abs(r_deltas[i] * theta_deltas[j] * phi_deltas[k]);
-                      //cout << partial_vol << endl;
-                      vol_element = 1./3. * abs((pow(p_rs[1], 3.) - pow(p_rs[0], 3.)) * (-cos(p_thetas[1]) + cos(p_thetas[0])) * (p_phis[1] - p_phis[0]));
-                      //cout << "vol element: " << endl;
-                      //cout << vol_element << endl;
-                      //op = (3./4.)*(1./4000.)*(1./(p.p_size * 1.e-2)); //opacity in SI units m2/kg
-                      op = opacity(p.p_size, p.position[0], p.position[1], p.position[2]); //opacity in CGS units cm2/g
-                      op = op*(pow(10.,-4)/pow(10.,-3)); //opacity in SI units
-                      //cout << nparticles [r_index[i]][theta_index[j]][phi_index[k]] << endl;
+                      vol_element = 1./3. * abs((pow(p_rs[1], 3.) - pow(p_rs[0], 3.)) * (-cos(p_thetas[1]) 
+                                    + cos(p_thetas[0])) * (p_phis[1] - p_phis[0]));
+                      
+                      op = p.p_opacity*(pow(10.,-4)/pow(10.,-3)); //opacity in SI units
+                      
                       old_ext = ext [r_index[i]][theta_index[j]][phi_index[k]];
                       ext [r_index[i]][theta_index[j]][phi_index[k]] = old_ext + (partial_vol/ vol_element) * ((n_mini * p.p_mass*pow(10.,-3) * op) / (vol_element * pow(a, 3)));
 
