@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "spline.h"
+#include <tuple>
 
 using namespace std;
 
@@ -59,7 +60,7 @@ double omega(double mplanet, double mstar);
 double beta_fn(double k, double tau);
 double opacity(double s, double x, double y, double z);
 double qfactor(double s, double x, double y, double z);
-double clausius_clap(double s, double x, double y, double z, double tau);
+double clausius_clap(double s, double x, double y, double z, double tau, double Td);
 //double luminosity(double R_star);
 double radial_vel(vector <double> vel, vector <double> s_vector);
 double temp_dust( double s,  double x, double y, double z, double tau);
@@ -79,8 +80,8 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 //errors
 
 double error( double value1, double value2);
-double error_max(double h, vector <double> V);
-vector <double> new_step_size(double max_err, double h_old, int fail_status, vector <double> V);
+tuple<double, int> error_max(double h, vector <double> V);
+vector <double> new_step_size(tuple<double,int> errors, double h_old, int fail_status, vector <double> V);
 
 
 
@@ -88,7 +89,7 @@ vector <double> new_step_size(double max_err, double h_old, int fail_status, vec
 //solver
 
 double acceleration( int i, double pos_star, double pos_planet, vector <double> V, \
-                      double centrif, double coriolis, double rad_press, double dragf);
+                      double centrif, double coriolis, double rad_press);
 double sublimation(double s, double x, double y, double z, double tau);
 
 vector <double> new_variables(double h, vector <double> V, bool order5);
@@ -148,5 +149,4 @@ vector <double> theta_spline_result( vector <tk:: spline> splines, vector<double
 
 vector <double> vel_grid_scaling(vector <double> s_velocity);
 
-//opacities
-
+double brent(double size, double x, double y, double z, double tau);

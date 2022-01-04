@@ -33,6 +33,3 @@ class Opacities
 
 extern Opacities opac;
 
-double kappa_abs(double s, double T, Opacities opac);
-double kappa_scat(double s, double T, Opacities opac);
-

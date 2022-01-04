@@ -44,11 +44,13 @@ extern  double Period_days, T, a, m_planet, r_planet, r_start, r_planet_dim, r_h
 //Dust parameters:
 extern  double A, Bp, rho_d, s_0;
 extern  string opac_data, opacity_dir;
+extern  string comp, outflow_s, T_int_s, output_file;
 
 //Outflow parameters:
-extern double mdot, v_esc;
-extern int outflow;
+extern double mdot, v_esc, mdot_read;
+extern int outflow, tau_type;
 extern bool tau_constant;
+
 
 //Grid parameters:
 extern double d_r_min, d_r_max,  d_t_min, d_t_max, d_p_min, d_p_max;
