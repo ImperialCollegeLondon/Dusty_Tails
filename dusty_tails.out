@@ -1,0 +1,198 @@
+Reading stellar parameters... 
+Tstar= 4550K, Mstar= 0.67 Msun, Rstar= 0.67 Rsun.
+
+Reading planetary parameters... 
+Period= 15.68hours, Mplanet= 0.05 Mearth, Rplanet= 0.38 Rearth.
+
+Reading dust parameters... 
+Outflow is radially outwards from the whole planetary surface.
+
+The planetary mass loss rate is 1 Mearth/Gyr.
+
+Optical depth of dust is traced.
+
+DELTA T 0.001
+Dust is composed of Fayalite.
+rho= 4.39 g/cm3, initial size= 5e-05 cm.
+Clausius-Claperyon parameters, A= 60400K, B= 38.1
+
+Built grid for optical depth tracing.
+At orbit 0
+size 4.99999e-05
+temp 1461.52
+beta 0.0999803
+Number of optically thick particles 0
+At orbit 0.005
+size 4.99999e-05
+temp 1462.51
+beta 0.0999804
+Number of optically thick particles 0
+At orbit 0.01
+size 4.99998e-05
+temp 1464.14
+beta 0.0999806
+Number of optically thick particles 0
+At orbit 0.015
+size 4.99998e-05
+temp 1466.43
+beta 0.0999807
+Number of optically thick particles 0
+At orbit 0.02
+size 4.99997e-05
+temp 1469.4
+beta 0.0999808
+Number of optically thick particles 0
+At orbit 0.025
+size 4.99997e-05
+temp 1473.07
+beta 0.099981
+Number of optically thick particles 0
+At orbit 0.03
+size 4.99996e-05
+temp 1477.45
+beta 0.0999812
+Number of optically thick particles 0
+At orbit 0.035
+size 4.99995e-05
+temp 1482.59
+beta 0.0999814
+Number of optically thick particles 0
+At orbit 0.04
+size 4.99994e-05
+temp 1488.5
+beta 0.0999816
+Number of optically thick particles 0
+At orbit 0.045
+size 4.99993e-05
+temp 1495.24
+beta 0.0999818
+Number of optically thick particles 0
+At orbit 0.05
+size 4.99992e-05
+temp 1502.85
+beta 0.0999822
+Number of optically thick particles 0
+At orbit 0.055
+size 4.9999e-05
+temp 1511.37
+beta 0.0999825
+Number of optically thick particles 0
+At orbit 0.06
+size 4.99988e-05
+temp 1520.88
+beta 0.099983
+Number of optically thick particles 0
+At orbit 0.065
+size 4.99986e-05
+temp 1531.46
+beta 0.0999836
+Number of optically thick particles 0
+At orbit 0.07
+size 4.99982e-05
+temp 1543.17
+beta 0.0999844
+Number of optically thick particles 0
+At orbit 0.075
+size 4.99978e-05
+temp 1556.14
+beta 0.0999855
+Number of optically thick particles 0
+At orbit 0.08
+size 4.99972e-05
+temp 1570.48
+beta 0.099987
+Number of optically thick particles 0
+At orbit 0.085
+size 4.99963e-05
+temp 1586.33
+beta 0.0999891
+Number of optically thick particles 0
+At orbit 0.09
+size 4.9995e-05
+temp 1603.86
+beta 0.0999922
+Number of optically thick particles 0
+At orbit 0.095
+size 4.99931e-05
+temp 1623.28
+beta 0.0999968
+Number of optically thick particles 0
+At orbit 0.1
+size 4.99901e-05
+temp 1644.84
+beta 0.100004
+Number of optically thick particles 0
+At orbit 0.105
+size 4.99852e-05
+temp 1668.82
+beta 0.100016
+Number of optically thick particles 0
+At orbit 0.11
+size 4.9977e-05
+temp 1695.62
+beta 0.100036
+Number of optically thick particles 0
+At orbit 0.115
+size 4.99625e-05
+temp 1725.69
+beta 0.10007
+Number of optically thick particles 0
+At orbit 0.12
+size 4.99359e-05
+temp 1759.63
+beta 0.100134
+Number of optically thick particles 0
+At orbit 0.125
+size 4.98841e-05
+temp 1798.2
+beta 0.100258
+Number of optically thick particles 0
+At orbit 0.13
+size 4.97772e-05
+temp 1842.41
+beta 0.100515
+Number of optically thick particles 0
+At orbit 0.135
+size 4.95407e-05
+temp 1893.62
+beta 0.101088
+Number of optically thick particles 0
+At orbit 0.14
+size 4.89745e-05
+temp 1953.69
+beta 0.10248
+Number of optically thick particles 0
+At orbit 0.145
+size 4.74882e-05
+temp 2025.16
+beta 0.106247
+Number of optically thick particles 0
+At orbit 0.15
+size 4.31418e-05
+temp 2109.69
+beta 0.118213
+Number of optically thick particles 0
+At orbit 0.155
+size 2.90736e-05
+temp 2181.55
+beta 0.163483
+Number of optically thick particles 0
+At orbit 0.16
+size -6.4505e-06
+temp 1971.03
+beta 0.103671
+Number of optically thick particles 0
+At orbit 0.165
+Number of optically thick particles 0
+At orbit 0.17
+Number of optically thick particles 0
+At orbit 0.175
+Number of optically thick particles 0
+At orbit 0.18
+Number of optically thick particles 0
+At orbit 0.185
+Number of optically thick particles 0
+At orbit 0.19
+Number of optically thick particles 0
+At orbit 0.195
+Number of optically thick particles 0

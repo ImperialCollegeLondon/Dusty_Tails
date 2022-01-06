@@ -21,7 +21,7 @@ unsigned seed = 123;
 mt19937 generator (seed); //set the seed for the distrubutions of particle positions
 
 //open files to write data for python plotting
-ofstream ofile("./data/output.bin", ios::out | ios::binary);
+ofstream ofile("./data/output10.bin", ios::out | ios::binary);
 //ofstream ray_tracer("./data/grid_test.bin", ios::out | ios::binary);
 
 
@@ -41,7 +41,6 @@ uniform_real_distribution<double> uniform_theta_short(0.2, 0.8);
 uniform_real_distribution<double> uniform_phi(0.0, 1.0);
 uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 
-
 //function add particles adds more particles to the simulation at a given time
 //as arguments it takes the vector of particles, the current number of particles,
 //the total of particles we want to get and the current time in the simulation
@@ -51,12 +50,15 @@ void add_particles(vector <Particle> &particles, long int current,
     Particle grain;
     double kappa_init =  opac.stellar_abs(s_0) 
                      + opac.stellar_scat(s_0);
+
+
     for ( unsigned long int i = current; i < total; i++){
         double phi,theta;
         grain.id = i+1; //number ID of particle
-        
+       
         //generate particles initial position
         if (outflow==1) {
+        //cout << "spherical" << endl;
         //spherical
         phi = 2.0*PI * uniform_phi(generator); //phi coordinate
         theta = acos(1- 2.0* uniform_theta(generator)); //theta coordinate
@@ -72,9 +74,9 @@ void add_particles(vector <Particle> &particles, long int current,
                         r_start*cos(theta)};
 
         //velocity of particle in cartesian
-        grain.velocity = {v_esc*sin(theta)*cos(phi), \
-                        v_esc*sin(theta)*sin(phi), \
-                        v_esc*cos(theta)};
+        grain.velocity = {0.001*v_esc*sin(theta)*cos(phi), \
+                        0.001*v_esc*sin(theta)*sin(phi), \
+                        0.001*v_esc*cos(theta)};
 
         grain.p_size = s_0; //initial grain size
 
@@ -85,12 +87,13 @@ void add_particles(vector <Particle> &particles, long int current,
             grain.p_tau = 0.001;
         }
         
-        grain.h_updated = 1.0e-6; //initial time step for numerical integrator
+        grain.h_updated = 1.0e-4; //initial time step for numerical integrator
         grain.p_mass = dust_mass(grain.p_size); //initial particle mass
         grain.p_opacity = kappa_init; //initial rad pressure efficiency
         //initial particle temperature
         grain.p_temp = brent( grain.p_size, grain.position[0], 
                                 grain.position[1], grain.position[2], grain.p_tau); 
+        grain.pos_spherical = pos_to_spherical(grain.position[0], grain.position[1], grain.position[2]);
         //cout << grain.p_temp << endl;
         particles.push_back(grain); //add particle to the vector of particles
                  
@@ -104,15 +107,19 @@ void add_particles(vector <Particle> &particles, long int current,
 //Argument is the vector of particles
 void rm_particles(vector <Particle>& particles){
     for (unsigned long int i = 0; i < particles.size(); i++){
-      if (particles[i].id == 14) {
-          cout << particles[i].p_size << endl;
-      }
+      
       if (particles[i].p_size < 0.01e-4) {
         
         particles.erase(particles.begin() + i);
         if (i!=0) {
         i--; }
+      } else if (particles[i].pos_spherical[0]>20.0){
+
+          particles.erase(particles.begin() + i);
+          if (i !=0) i--;
+
       }
+      
       if (isnan(particles[i].p_size)  ) {
         cout << "Size of particle is NaN, something has gone wrong " << endl;
         particles.erase(particles.begin() + i);
@@ -150,7 +157,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
 
   while (t_next < end_t) {
-    double t_global_min = 0.01;
+    double t_global_min = 0.005;
     cout << "At orbit " << t_next << endl;
     if ((tau_constant == false) && (t_next > 1.0)) {
         memset(extinction, 0.0, sizeof(extinction));
@@ -176,7 +183,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     double no_particles = particles.size();
     vector <double> pos_spherical;
     vector <double> pos_scaled;
-    if ((tau_constant == true) || (previous_t <= 1.0) ) {
+    if ((tau_constant == true) || (previous_t <= 14000.0) ) {
             p.p_tau = 0.001;
     } else {
             pos_spherical = pos_to_spherical(p.position[0], p.position[1], p.position[2]);
@@ -210,11 +217,19 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         p.position = {updated_vector[0],updated_vector[1], updated_vector[2]};
         p.velocity = {updated_vector[3],updated_vector[4], updated_vector[5]};
         p.p_size = updated_vector[6];
+        
+        
         p.p_opacity = opac.stellar_abs(p.p_size) + opac.stellar_scat(p.p_size);
         p.p_mass = dust_mass(p.p_size); 
-        p.h_updated = updated_vector[8];    
+        p.h_updated = updated_vector[9];    
         p.p_temp = brent( p.p_size, p.position[0], 
                                 p.position[1], p.position[2], p.p_tau); 
+        if (p.id == 1) {
+             cout << "size " << p.p_size << endl;
+             cout << "temp " << p.p_temp << endl;
+             cout << "beta " << beta_fn(p.p_opacity, p.p_tau, p.p_size) << endl;
+        }
+        p.pos_spherical = pos_to_spherical(p.position[0], p.position[1], p.position[2]);
         //cout << p.id << endl;
     }
     cout << "Number of optically thick particles " << tau_thick << endl;
@@ -259,10 +274,10 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         ofile.write((char*) &p.p_opacity, sizeof(double));
       }
       current_particles = total_particles;
-      total_particles = total_particles + 1000;
+      //total_particles = total_particles + 1000;
 
       //add particles every 100th of an orbit
-      add_particles(particles, current_particles, total_particles, t_next);
+      //add_particles(particles, current_particles, total_particles, t_next);
       plot_time = plot_time + 0.01;
      }
     previous_t = t_next;

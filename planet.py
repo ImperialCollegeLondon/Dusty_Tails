@@ -13,12 +13,24 @@ jet = cm.get_cmap('jet', 30)
 plt.ioff()
 
 dt = np.dtype([('time', np.float64), ('id', np.int64), ('x', np.float64), \
-('y', np.float64), ('z', np.float64), ('size', np.float64), ('mass', np.float64), ('tau', np.float64)])
+('y', np.float64), ('z', np.float64), ('size', np.float64), ('mass', np.float64), ('tau', np.float64),
+('temp', np.float64), ('kappa', np.float64)])
 
-data = np.fromfile("./data/KIC1255b_theta08.bin", dt)
+data = np.fromfile("./data/output10.bin", dt)
 df = pd.DataFrame(data)
-#print(df['x'])
+i = 0
+
+
+for value in df['id']:
+     if value == 861:
+        print(df['x'][i], df['y'][i],df['z'][i])
+     i+=1
+    
+
+#print(df['size']) 
+#print(df['kappa'])
 #print(df['time'])
+
 p_yprime = []
 p_xprime = []
 p_z = []
@@ -38,13 +50,10 @@ for t in df['time'].unique():
 print(counter)
          #plt.hist(df['tau'])
          #plt.savefig("histogram.png")
-
-
 for i in df['tau']:
     if (i>0.1):
         #print(i)
 
-"""
 
 #tau_norm = [float(i)/(df['tau'].sum()) for i in df['tau']]
 
@@ -52,6 +61,7 @@ for i in df['tau']:
 
 #df['tau_norm'] = tau_norm
 
+"""
 
 for t in df['time']:
     angle = 2.0*math.pi * (t - t_0)
@@ -60,9 +70,9 @@ for t in df['time']:
 df['angles'] = theta
 
 for angle in df['angles']:
-    x_p = math.cos(angle) * math.sin(1.38)
+    x_p = math.cos(angle) 
     y_p = math.sin(angle)
-    z_p = -math.cos(angle) * math.cos(1.38)
+    z_p = 0.0
     p_yprime.append(y_p)
     p_xprime.append(x_p)
     p_z.append(z_p)
@@ -82,6 +92,12 @@ for i in range(df['x'].size):
     math.cos(df['angles'][i])*df['y'][i]
 
     x_prime.append(xp)
+    print("angle ", df['angles'])
+    print("x", df['x'][i])
+    print("xp ", xp)
+    print("y", df['y'][i])
+    print("yp ", yp)
+
     y_prime.append(yp)
 
 df['xprime'] = x_prime
@@ -93,8 +109,9 @@ z_dprime = []
 for i in range(df['xprime'].size):
     incl = 1.38
 
-    xdp = df['xprime'][i]* math.sin(incl) + df['z'][i]*math.cos(incl)
-    zdp = -df['xprime'][i]* math.cos(incl) + df['z'][i]*math.sin(incl)
+    xdp = df['xprime'][i]* math.cos(incl) - df['z'][i]*math.sin(incl)
+    zdp = df['xprime'][i]* math.sin(incl) + df['z'][i]*math.cos(incl)
+   
     x_dprime.append(xdp)
     z_dprime.append(zdp)
 
@@ -123,41 +140,45 @@ for t in df['time'].unique():
      z_behind = []
      y_front = []
      z_front = []
-
+     
      for index in plot_df.index:
-         if (plot_df['x_double_prime'][index] < 0.0):
+         if (plot_df['xprime'][index] < 0.0):
              y_behind.append(plot_df['yprime'][index])
-             z_behind.append(plot_df['z_double_prime'][index])
+             z_behind.append(plot_df['z'][index])
          else:
              y_front.append(plot_df['yprime'][index])
-             z_front.append(plot_df['z_double_prime'][index])
+             z_front.append(plot_df['z'][index])
 
 
-
-
+     """
+     
      if plot_df['x_planet'][plot_df.index[0]] <  0.0:
 
-       dust1 = plt.scatter(y_behind, z_behind, s= 0.1,  alpha=0.01, c='#008080')
+       dust1 = plt.scatter(y_behind, z_behind, s= 0.5,  alpha=0.1, c='#008080')
        planet = plt.scatter(plot_df['y_planet'], plot_df['z_planet'], s=20.0 , c= '#C6492B')
        star = plt.scatter(0.0, 0.0, s=10000.0, c='#ffcc00')
-       dust2 = plt.scatter(y_front, z_front, s=0.1, alpha = 0.01, c='#008080')
+       dust2 = plt.scatter(y_front, z_front, s=0.5, alpha = 0.1, c='#008080')
 
 
-       plt.savefig("./plots/kic_08test{0:01}.png".format(i))
+       plt.savefig("./plots/kic_test{0:01}.png".format(i))
 
        plt.close()
      else:
-       dust1 = plt.scatter(y_behind, z_behind, s= 0.1, alpha=0.01, c='#008080')
+       dust1 = plt.scatter(y_behind, z_behind, s= 0.5, alpha=0.1, c='#008080')
        star = plt.scatter(0.0, 0.0, s=10000.0, c='#ffcc00')
        planet = plt.scatter(plot_df['y_planet'], plot_df['z_planet'], s= 20.0 , c= '#C6492B')
-       dust2 = plt.scatter(y_front, z_front, s=0.1, alpha = 0.01, c='#008080')
+       dust2 = plt.scatter(y_front, z_front, s=0.5, alpha = 0.1, c='#008080')
 
 
-       plt.savefig("./plots/kic_08test{0:01}.png".format(i))
+       plt.savefig("./plots/kic_test{0:01}.png".format(i))
 
        plt.close()
-
-
+     """
+     planet = plt.scatter(plot_df['x_planet'], plot_df['y_planet'], s= 20.0 , c= '#C6492B')
+     dust1 = plt.scatter(plot_df['xprime'], plot_df['yprime'], s= 0.5,  alpha=0.1, c='#008080')
+     plt.savefig("./plots/kic_test{0:01}.png".format(i))
+     plt.close()
+     
 
      i +=1
 

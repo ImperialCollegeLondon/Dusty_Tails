@@ -1,0 +1,27 @@
+#!/bin/csh
+#makeinput
+#/dev/shm/uffegj
+
+#KOPIER MARCS TIL $TMPDIR
+# cp ..... $TMPDIR/
+# cd $TMPDIR
+# ...koer marcs...
+# mv mxmodel.dat $CWD/...
+# cd $CWD
+# rm -rf $TMPDIR 
+#
+#
+
+setenv CWD `pwd`
+setenv TMPDIR `mktemp -p /dev/shm/ -u`
+mkdir $TMPDIR
+cp -r ./* $TMPDIR/.
+cd $TMPDIR 
+
+#***************************
+
+./executables/dusty_tails.exe
+
+mv ./data/output.bin  $CWD/simulations/output_test2.bin
+
+rm -rf $TMPDIR

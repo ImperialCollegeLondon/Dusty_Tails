@@ -24,10 +24,11 @@ def grid(r, t, p) :
 
 dt = np.dtype([('theta', np.float64), ('phi', np.float64),('ext', np.float64), ('od', np.float64)])
 
-data = np.fromfile("./data/tau_KIC1255b.bin", dt)
+data = np.fromfile("./data/grid_kic1255b_sph_1micro_1orb_3mdot_25t.bin", dt)
 df = pd.DataFrame(data)
-#df = #df.iloc[3125:,:]
-print(data)
+df = df.iloc[3125:,:]
+#print(df)
+#print(data)
 radii = []
 thetas = []
 phis = []
@@ -86,8 +87,8 @@ o_reshape = np.reshape(ods, (25,125), order = 'C')
 #print(o_reshape)
 
 #print(type(o_reshape))
-
-plt.contourf(phis, thetas, o_reshape, 20, cmap='jet', extend='both')
+levels = np.arange(-1.0, 0.3, 0.1)
+plt.contourf(phis, thetas, o_reshape, levels = levels ,cmap='jet', extend='both')
 
 
 #ax.scatter3D(df['theta'], df['phi'], df['od'])
@@ -98,8 +99,8 @@ cbar = plt.colorbar()
 cbar.ax.set_ylabel('log(tau)')
 ax.set_xlabel("phi")
 ax.set_ylabel("theta")
-
-plt.savefig('./plots/tau.png')
+plt.title('Optical depth at R=1.1a.\n25 cells in theta, 125 in phi and 100 in R.\nMdot=3 Mearth/Gyr. s0=1micro.')
+plt.savefig('./plots/optical_depth_25t_3mdot_1micro.png')
 
 plt.close()
 

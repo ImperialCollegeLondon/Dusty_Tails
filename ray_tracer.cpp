@@ -75,7 +75,7 @@ void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells]
 
         for( Particle& p : particles) {
 
-              sphere_pos = pos_to_spherical(p.position[0], p.position[1], p.position[2]);
+              sphere_pos = p.pos_spherical;
 
               scaled_pos = grid_scaling(sphere_pos);
 

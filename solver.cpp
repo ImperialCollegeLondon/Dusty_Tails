@@ -33,6 +33,13 @@ double acceleration( int i, double pos_star, double pos_planet, vector <double> 
   grav_planet = (-G_dim * m_planet* pos_planet ) / pow( scalar(V[0] - planet_pos[0]  + r_planet_dim, V[1] , V[2]), 3.0 );
 
   vel_dot = grav_star - centrif - 2.0*coriolis  + rad_press  + grav_planet;
+  //cout << "x " << V[0] << endl;
+  //cout << "y " << V[1] << endl;
+  //cout << "z " << V[2] << endl;
+  //cout << "star pos " << star_pos[0] << endl;
+  //cout << "pos_star " << pos_star << endl;
+  //cout << "grav star " << grav_star << endl;
+  //cout << "rad press " << rad_press << endl;
   
   return vel_dot;
 }
@@ -65,7 +72,7 @@ vector <double> new_variables(double h, vector <double> V, bool order5){
         }
         s_new = V[6] + bs1*ks1 + bs3*ks3 + bs4*ks4 + bs5*ks5 + bs6*ks6 + bs7*ks7;
     }
-    new_vars = {new_pos[0], new_pos[1], new_pos[2], new_vel[0], new_vel[1], new_vel[2], s_new,V[7]};
+    new_vars = {new_pos[0], new_pos[1], new_pos[2], new_vel[0], new_vel[1], new_vel[2], s_new, V[7], V[8]};
     return new_vars;
 }
 
@@ -91,26 +98,17 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
     new_vector.clear();
     step_sizes.clear();
     
-    //obtain delta values for the 6 variables
+    
     errors = error_max(h_p, V_0);
     step_sizes = new_step_size(errors, h_p, 0, V_0);
     //first value is old step size, second value is step size to be used in the next iteration
     old_h = step_sizes[0];
     new_h = step_sizes[1];
-
-    //if (new_h == -1.0){
-      //t = del_t;
-      //return {V_0[0], V_0[1], V_0[2], V_0[3], V_0[4], V_0[5], 0.01e-4, new_h};
-    //}
-
+    //cout << "old time step " << old_h << endl;
+    //cout << "new time step " << new_h << endl;
     new_vector = next_step(old_h, V_0);
     t = t + old_h;
-
-    //if (new_vector[6] < 0.01e-4){
-      //t = del_t;
-      //return {new_vector[0], new_vector[1], new_vector[2], new_vector[3], new_vector[4], new_vector[5], 0.001e-4, new_h};
-    //}
-
+    //cout << "del t" << del_t << endl;
     if (t > del_t){
       new_vector = next_step(del_t - (t-old_h), new_vector);
       new_vector.push_back(new_h);
@@ -126,23 +124,16 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
         old_h = step_sizes[0];
         new_h = step_sizes[1];
        
-        //if (new_h == -1.0){
-          //t = del_t;
-          //return {new_vector[0], new_vector[1], new_vector[2], new_vector[3], new_vector[4], new_vector[5], 0.001e-4, new_h};
-        //}
+        //cout << " old time step " << old_h << endl;
+        //cout << " new time step " << new_h << endl;
+        
         t = t + old_h;
+        //cout << "time " << t << endl;
         if (t < del_t) {
              new_vector = next_step(old_h, new_vector);
-             //if (new_vector[6] < 0.01e-4){
-               //t = del_t;
-               //return {new_vector[0], new_vector[1], new_vector[2], new_vector[3], new_vector[4], new_vector[5], 0.001e-4, new_h};
-             //}
+             
            } else {
              new_vector = next_step(del_t - (t-old_h), new_vector);
-
-             //if (new_vector[6] < 0.01e-4){
-               //return {new_vector[0], new_vector[1], new_vector[2], new_vector[3], new_vector[4], new_vector[5], 0.001e-4, new_h};
-             //} else {
 
              new_vector.push_back(new_h);
              return new_vector;

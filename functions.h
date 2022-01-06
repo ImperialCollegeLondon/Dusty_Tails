@@ -57,7 +57,7 @@ vector <double> vel_to_spherical(double x, double y, double z);
 
 //microphysics file
 double omega(double mplanet, double mstar);
-double beta_fn(double k, double tau);
+double beta_fn(double q, double tau, double s);
 double opacity(double s, double x, double y, double z);
 double qfactor(double s, double x, double y, double z);
 double clausius_clap(double s, double x, double y, double z, double tau, double Td);

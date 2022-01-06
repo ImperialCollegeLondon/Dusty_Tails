@@ -1,0 +1,2021 @@
+Reading stellar parameters... 
+Tstar= 4550K, Mstar= 0.67 Msun, Rstar= 0.67 Rsun.
+
+Reading planetary parameters... 
+Period= 15.68hours, Mplanet= 0.05 Mearth, Rplanet= 0.38 Rearth.
+
+Reading dust parameters... 
+Outflow is radially outwards from the whole planetary surface.
+
+The planetary mass loss rate is 1 Mearth/Gyr.
+
+Optical depth of dust is traced.
+
+DELTA T 0.001
+Dust is composed of Corundum.
+rho= 4 g/cm3, initial size= 0.0001 cm.
+Clausius-Claperyon parameters, A= 77400K, B= 39.3
+
+Built grid for optical depth tracing.
+667.574
+1330.4
+At orbit 0
+Number of optically thick particles 0
+At orbit 0.001
+Number of optically thick particles 0
+At orbit 0.002
+Number of optically thick particles 0
+At orbit 0.003
+Number of optically thick particles 0
+At orbit 0.004
+Number of optically thick particles 0
+At orbit 0.005
+Number of optically thick particles 0
+At orbit 0.006
+Number of optically thick particles 0
+At orbit 0.007
+Number of optically thick particles 0
+At orbit 0.008
+Number of optically thick particles 0
+At orbit 0.009
+Number of optically thick particles 0
+At orbit 0.01
+Number of optically thick particles 0
+At orbit 0.011
+Number of optically thick particles 0
+At orbit 0.012
+Number of optically thick particles 0
+At orbit 0.013
+Number of optically thick particles 0
+At orbit 0.014
+Number of optically thick particles 0
+At orbit 0.015
+Number of optically thick particles 0
+At orbit 0.016
+Number of optically thick particles 0
+At orbit 0.017
+Number of optically thick particles 0
+At orbit 0.018
+Number of optically thick particles 0
+At orbit 0.019
+Number of optically thick particles 0
+At orbit 0.02
+Number of optically thick particles 0
+At orbit 0.021
+Number of optically thick particles 0
+At orbit 0.022
+Number of optically thick particles 0
+At orbit 0.023
+Number of optically thick particles 0
+At orbit 0.024
+Number of optically thick particles 0
+At orbit 0.025
+Number of optically thick particles 0
+At orbit 0.026
+Number of optically thick particles 0
+At orbit 0.027
+Number of optically thick particles 0
+At orbit 0.028
+Number of optically thick particles 0
+At orbit 0.029
+Number of optically thick particles 0
+At orbit 0.03
+Number of optically thick particles 0
+At orbit 0.031
+Number of optically thick particles 0
+At orbit 0.032
+Number of optically thick particles 0
+At orbit 0.033
+Number of optically thick particles 0
+At orbit 0.034
+Number of optically thick particles 0
+At orbit 0.035
+Number of optically thick particles 0
+At orbit 0.036
+Number of optically thick particles 0
+At orbit 0.037
+Number of optically thick particles 0
+At orbit 0.038
+Number of optically thick particles 0
+At orbit 0.039
+Number of optically thick particles 0
+At orbit 0.04
+Number of optically thick particles 0
+At orbit 0.041
+Number of optically thick particles 0
+At orbit 0.042
+Number of optically thick particles 0
+At orbit 0.043
+Number of optically thick particles 0
+At orbit 0.044
+Number of optically thick particles 0
+At orbit 0.045
+Number of optically thick particles 0
+At orbit 0.046
+Number of optically thick particles 0
+At orbit 0.047
+Number of optically thick particles 0
+At orbit 0.048
+Number of optically thick particles 0
+At orbit 0.049
+Number of optically thick particles 0
+At orbit 0.05
+Number of optically thick particles 0
+At orbit 0.051
+Number of optically thick particles 0
+At orbit 0.052
+Number of optically thick particles 0
+At orbit 0.053
+Number of optically thick particles 0
+At orbit 0.054
+Number of optically thick particles 0
+At orbit 0.055
+Number of optically thick particles 0
+At orbit 0.056
+Number of optically thick particles 0
+At orbit 0.057
+Number of optically thick particles 0
+At orbit 0.058
+Number of optically thick particles 0
+At orbit 0.059
+Number of optically thick particles 0
+At orbit 0.06
+Number of optically thick particles 0
+At orbit 0.061
+Number of optically thick particles 0
+At orbit 0.062
+Number of optically thick particles 0
+At orbit 0.063
+Number of optically thick particles 0
+At orbit 0.064
+Number of optically thick particles 0
+At orbit 0.065
+Number of optically thick particles 0
+At orbit 0.066
+Number of optically thick particles 0
+At orbit 0.067
+Number of optically thick particles 0
+At orbit 0.068
+Number of optically thick particles 0
+At orbit 0.069
+Number of optically thick particles 0
+At orbit 0.07
+Number of optically thick particles 0
+At orbit 0.071
+Number of optically thick particles 0
+At orbit 0.072
+Number of optically thick particles 0
+At orbit 0.073
+Number of optically thick particles 0
+At orbit 0.074
+Number of optically thick particles 0
+At orbit 0.075
+Number of optically thick particles 0
+At orbit 0.076
+Number of optically thick particles 0
+At orbit 0.077
+Number of optically thick particles 0
+At orbit 0.078
+Number of optically thick particles 0
+At orbit 0.079
+Number of optically thick particles 0
+At orbit 0.08
+Number of optically thick particles 0
+At orbit 0.081
+Number of optically thick particles 0
+At orbit 0.082
+Number of optically thick particles 0
+At orbit 0.083
+Number of optically thick particles 0
+At orbit 0.084
+Number of optically thick particles 0
+At orbit 0.085
+Number of optically thick particles 0
+At orbit 0.086
+Number of optically thick particles 0
+At orbit 0.087
+Number of optically thick particles 0
+At orbit 0.088
+Number of optically thick particles 0
+At orbit 0.089
+Number of optically thick particles 0
+At orbit 0.09
+Number of optically thick particles 0
+At orbit 0.091
+Number of optically thick particles 0
+At orbit 0.092
+Number of optically thick particles 0
+At orbit 0.093
+Number of optically thick particles 0
+At orbit 0.094
+Number of optically thick particles 0
+At orbit 0.095
+Number of optically thick particles 0
+At orbit 0.096
+Number of optically thick particles 0
+At orbit 0.097
+Number of optically thick particles 0
+At orbit 0.098
+Number of optically thick particles 0
+At orbit 0.099
+Number of optically thick particles 0
+At orbit 0.1
+Number of optically thick particles 0
+At orbit 0.101
+Number of optically thick particles 0
+At orbit 0.102
+Number of optically thick particles 0
+At orbit 0.103
+Number of optically thick particles 0
+At orbit 0.104
+Number of optically thick particles 0
+At orbit 0.105
+Number of optically thick particles 0
+At orbit 0.106
+Number of optically thick particles 0
+At orbit 0.107
+Number of optically thick particles 0
+At orbit 0.108
+Number of optically thick particles 0
+At orbit 0.109
+Number of optically thick particles 0
+At orbit 0.11
+Number of optically thick particles 0
+At orbit 0.111
+Number of optically thick particles 0
+At orbit 0.112
+Number of optically thick particles 0
+At orbit 0.113
+Number of optically thick particles 0
+At orbit 0.114
+Number of optically thick particles 0
+At orbit 0.115
+Number of optically thick particles 0
+At orbit 0.116
+Number of optically thick particles 0
+At orbit 0.117
+Number of optically thick particles 0
+At orbit 0.118
+Number of optically thick particles 0
+At orbit 0.119
+Number of optically thick particles 0
+At orbit 0.12
+Number of optically thick particles 0
+At orbit 0.121
+Number of optically thick particles 0
+At orbit 0.122
+Number of optically thick particles 0
+At orbit 0.123
+Number of optically thick particles 0
+At orbit 0.124
+Number of optically thick particles 0
+At orbit 0.125
+Number of optically thick particles 0
+At orbit 0.126
+Number of optically thick particles 0
+At orbit 0.127
+Number of optically thick particles 0
+At orbit 0.128
+Number of optically thick particles 0
+At orbit 0.129
+Number of optically thick particles 0
+At orbit 0.13
+Number of optically thick particles 0
+At orbit 0.131
+Number of optically thick particles 0
+At orbit 0.132
+Number of optically thick particles 0
+At orbit 0.133
+Number of optically thick particles 0
+At orbit 0.134
+Number of optically thick particles 0
+At orbit 0.135
+Number of optically thick particles 0
+At orbit 0.136
+Number of optically thick particles 0
+At orbit 0.137
+Number of optically thick particles 0
+At orbit 0.138
+Number of optically thick particles 0
+At orbit 0.139
+Number of optically thick particles 0
+At orbit 0.14
+Number of optically thick particles 0
+At orbit 0.141
+Number of optically thick particles 0
+At orbit 0.142
+Number of optically thick particles 0
+At orbit 0.143
+Number of optically thick particles 0
+At orbit 0.144
+Number of optically thick particles 0
+At orbit 0.145
+Number of optically thick particles 0
+At orbit 0.146
+Number of optically thick particles 0
+At orbit 0.147
+Number of optically thick particles 0
+At orbit 0.148
+Number of optically thick particles 0
+At orbit 0.149
+Number of optically thick particles 0
+At orbit 0.15
+Number of optically thick particles 0
+At orbit 0.151
+Number of optically thick particles 0
+At orbit 0.152
+Number of optically thick particles 0
+At orbit 0.153
+Number of optically thick particles 0
+At orbit 0.154
+Number of optically thick particles 0
+At orbit 0.155
+Number of optically thick particles 0
+At orbit 0.156
+Number of optically thick particles 0
+At orbit 0.157
+Number of optically thick particles 0
+At orbit 0.158
+Number of optically thick particles 0
+At orbit 0.159
+Number of optically thick particles 0
+At orbit 0.16
+Number of optically thick particles 0
+At orbit 0.161
+Number of optically thick particles 0
+At orbit 0.162
+Number of optically thick particles 0
+At orbit 0.163
+Number of optically thick particles 0
+At orbit 0.164
+Number of optically thick particles 0
+At orbit 0.165
+Number of optically thick particles 0
+At orbit 0.166
+Number of optically thick particles 0
+At orbit 0.167
+Number of optically thick particles 0
+At orbit 0.168
+Number of optically thick particles 0
+At orbit 0.169
+Number of optically thick particles 0
+At orbit 0.17
+Number of optically thick particles 0
+At orbit 0.171
+Number of optically thick particles 0
+At orbit 0.172
+Number of optically thick particles 0
+At orbit 0.173
+Number of optically thick particles 0
+At orbit 0.174
+Number of optically thick particles 0
+At orbit 0.175
+Number of optically thick particles 0
+At orbit 0.176
+Number of optically thick particles 0
+At orbit 0.177
+Number of optically thick particles 0
+At orbit 0.178
+Number of optically thick particles 0
+At orbit 0.179
+Number of optically thick particles 0
+At orbit 0.18
+Number of optically thick particles 0
+At orbit 0.181
+Number of optically thick particles 0
+At orbit 0.182
+Number of optically thick particles 0
+At orbit 0.183
+Number of optically thick particles 0
+At orbit 0.184
+Number of optically thick particles 0
+At orbit 0.185
+Number of optically thick particles 0
+At orbit 0.186
+Number of optically thick particles 0
+At orbit 0.187
+Number of optically thick particles 0
+At orbit 0.188
+Number of optically thick particles 0
+At orbit 0.189
+Number of optically thick particles 0
+At orbit 0.19
+Number of optically thick particles 0
+At orbit 0.191
+Number of optically thick particles 0
+At orbit 0.192
+Number of optically thick particles 0
+At orbit 0.193
+Number of optically thick particles 0
+At orbit 0.194
+Number of optically thick particles 0
+At orbit 0.195
+Number of optically thick particles 0
+At orbit 0.196
+Number of optically thick particles 0
+At orbit 0.197
+Number of optically thick particles 0
+At orbit 0.198
+Number of optically thick particles 0
+At orbit 0.199
+Number of optically thick particles 0
+At orbit 0.2
+Number of optically thick particles 0
+At orbit 0.201
+Number of optically thick particles 0
+At orbit 0.202
+Number of optically thick particles 0
+At orbit 0.203
+Number of optically thick particles 0
+At orbit 0.204
+Number of optically thick particles 0
+At orbit 0.205
+Number of optically thick particles 0
+At orbit 0.206
+Number of optically thick particles 0
+At orbit 0.207
+Number of optically thick particles 0
+At orbit 0.208
+Number of optically thick particles 0
+At orbit 0.209
+Number of optically thick particles 0
+At orbit 0.21
+Number of optically thick particles 0
+At orbit 0.211
+Number of optically thick particles 0
+At orbit 0.212
+Number of optically thick particles 0
+At orbit 0.213
+Number of optically thick particles 0
+At orbit 0.214
+Number of optically thick particles 0
+At orbit 0.215
+Number of optically thick particles 0
+At orbit 0.216
+Number of optically thick particles 0
+At orbit 0.217
+Number of optically thick particles 0
+At orbit 0.218
+Number of optically thick particles 0
+At orbit 0.219
+Number of optically thick particles 0
+At orbit 0.22
+Number of optically thick particles 0
+At orbit 0.221
+Number of optically thick particles 0
+At orbit 0.222
+Number of optically thick particles 0
+At orbit 0.223
+Number of optically thick particles 0
+At orbit 0.224
+Number of optically thick particles 0
+At orbit 0.225
+Number of optically thick particles 0
+At orbit 0.226
+Number of optically thick particles 0
+At orbit 0.227
+Number of optically thick particles 0
+At orbit 0.228
+Number of optically thick particles 0
+At orbit 0.229
+Number of optically thick particles 0
+At orbit 0.23
+Number of optically thick particles 0
+At orbit 0.231
+Number of optically thick particles 0
+At orbit 0.232
+Number of optically thick particles 0
+At orbit 0.233
+Number of optically thick particles 0
+At orbit 0.234
+Number of optically thick particles 0
+At orbit 0.235
+Number of optically thick particles 0
+At orbit 0.236
+Number of optically thick particles 0
+At orbit 0.237
+Number of optically thick particles 0
+At orbit 0.238
+Number of optically thick particles 0
+At orbit 0.239
+Number of optically thick particles 0
+At orbit 0.24
+Number of optically thick particles 0
+At orbit 0.241
+Number of optically thick particles 0
+At orbit 0.242
+Number of optically thick particles 0
+At orbit 0.243
+Number of optically thick particles 0
+At orbit 0.244
+Number of optically thick particles 0
+At orbit 0.245
+Number of optically thick particles 0
+At orbit 0.246
+Number of optically thick particles 0
+At orbit 0.247
+Number of optically thick particles 0
+At orbit 0.248
+Number of optically thick particles 0
+At orbit 0.249
+Number of optically thick particles 0
+At orbit 0.25
+Number of optically thick particles 0
+At orbit 0.251
+Number of optically thick particles 0
+At orbit 0.252
+Number of optically thick particles 0
+At orbit 0.253
+Number of optically thick particles 0
+At orbit 0.254
+Number of optically thick particles 0
+At orbit 0.255
+Number of optically thick particles 0
+At orbit 0.256
+Number of optically thick particles 0
+At orbit 0.257
+Number of optically thick particles 0
+At orbit 0.258
+Number of optically thick particles 0
+At orbit 0.259
+Number of optically thick particles 0
+At orbit 0.26
+Number of optically thick particles 0
+At orbit 0.261
+Number of optically thick particles 0
+At orbit 0.262
+Number of optically thick particles 0
+At orbit 0.263
+Number of optically thick particles 0
+At orbit 0.264
+Number of optically thick particles 0
+At orbit 0.265
+Number of optically thick particles 0
+At orbit 0.266
+Number of optically thick particles 0
+At orbit 0.267
+Number of optically thick particles 0
+At orbit 0.268
+Number of optically thick particles 0
+At orbit 0.269
+Number of optically thick particles 0
+At orbit 0.27
+Number of optically thick particles 0
+At orbit 0.271
+Number of optically thick particles 0
+At orbit 0.272
+Number of optically thick particles 0
+At orbit 0.273
+Number of optically thick particles 0
+At orbit 0.274
+Number of optically thick particles 0
+At orbit 0.275
+Number of optically thick particles 0
+At orbit 0.276
+Number of optically thick particles 0
+At orbit 0.277
+Number of optically thick particles 0
+At orbit 0.278
+Number of optically thick particles 0
+At orbit 0.279
+Number of optically thick particles 0
+At orbit 0.28
+Number of optically thick particles 0
+At orbit 0.281
+Number of optically thick particles 0
+At orbit 0.282
+Number of optically thick particles 0
+At orbit 0.283
+Number of optically thick particles 0
+At orbit 0.284
+Number of optically thick particles 0
+At orbit 0.285
+Number of optically thick particles 0
+At orbit 0.286
+Number of optically thick particles 0
+At orbit 0.287
+Number of optically thick particles 0
+At orbit 0.288
+Number of optically thick particles 0
+At orbit 0.289
+Number of optically thick particles 0
+At orbit 0.29
+Number of optically thick particles 0
+At orbit 0.291
+Number of optically thick particles 0
+At orbit 0.292
+Number of optically thick particles 0
+At orbit 0.293
+Number of optically thick particles 0
+At orbit 0.294
+Number of optically thick particles 0
+At orbit 0.295
+Number of optically thick particles 0
+At orbit 0.296
+Number of optically thick particles 0
+At orbit 0.297
+Number of optically thick particles 0
+At orbit 0.298
+Number of optically thick particles 0
+At orbit 0.299
+Number of optically thick particles 0
+At orbit 0.3
+Number of optically thick particles 0
+At orbit 0.301
+Number of optically thick particles 0
+At orbit 0.302
+Number of optically thick particles 0
+At orbit 0.303
+Number of optically thick particles 0
+At orbit 0.304
+Number of optically thick particles 0
+At orbit 0.305
+Number of optically thick particles 0
+At orbit 0.306
+Number of optically thick particles 0
+At orbit 0.307
+Number of optically thick particles 0
+At orbit 0.308
+Number of optically thick particles 0
+At orbit 0.309
+Number of optically thick particles 0
+At orbit 0.31
+Number of optically thick particles 0
+At orbit 0.311
+Number of optically thick particles 0
+At orbit 0.312
+Number of optically thick particles 0
+At orbit 0.313
+Number of optically thick particles 0
+At orbit 0.314
+Number of optically thick particles 0
+At orbit 0.315
+Number of optically thick particles 0
+At orbit 0.316
+Number of optically thick particles 0
+At orbit 0.317
+Number of optically thick particles 0
+At orbit 0.318
+Number of optically thick particles 0
+At orbit 0.319
+Number of optically thick particles 0
+At orbit 0.32
+Number of optically thick particles 0
+At orbit 0.321
+Number of optically thick particles 0
+At orbit 0.322
+Number of optically thick particles 0
+At orbit 0.323
+Number of optically thick particles 0
+At orbit 0.324
+Number of optically thick particles 0
+At orbit 0.325
+Number of optically thick particles 0
+At orbit 0.326
+Number of optically thick particles 0
+At orbit 0.327
+Number of optically thick particles 0
+At orbit 0.328
+Number of optically thick particles 0
+At orbit 0.329
+Number of optically thick particles 0
+At orbit 0.33
+Number of optically thick particles 0
+At orbit 0.331
+Number of optically thick particles 0
+At orbit 0.332
+Number of optically thick particles 0
+At orbit 0.333
+Number of optically thick particles 0
+At orbit 0.334
+Number of optically thick particles 0
+At orbit 0.335
+Number of optically thick particles 0
+At orbit 0.336
+Number of optically thick particles 0
+At orbit 0.337
+Number of optically thick particles 0
+At orbit 0.338
+Number of optically thick particles 0
+At orbit 0.339
+Number of optically thick particles 0
+At orbit 0.34
+Number of optically thick particles 0
+At orbit 0.341
+Number of optically thick particles 0
+At orbit 0.342
+Number of optically thick particles 0
+At orbit 0.343
+Number of optically thick particles 0
+At orbit 0.344
+Number of optically thick particles 0
+At orbit 0.345
+Number of optically thick particles 0
+At orbit 0.346
+Number of optically thick particles 0
+At orbit 0.347
+Number of optically thick particles 0
+At orbit 0.348
+Number of optically thick particles 0
+At orbit 0.349
+Number of optically thick particles 0
+At orbit 0.35
+Number of optically thick particles 0
+At orbit 0.351
+Number of optically thick particles 0
+At orbit 0.352
+Number of optically thick particles 0
+At orbit 0.353
+Number of optically thick particles 0
+At orbit 0.354
+Number of optically thick particles 0
+At orbit 0.355
+Number of optically thick particles 0
+At orbit 0.356
+Number of optically thick particles 0
+At orbit 0.357
+Number of optically thick particles 0
+At orbit 0.358
+Number of optically thick particles 0
+At orbit 0.359
+Number of optically thick particles 0
+At orbit 0.36
+Number of optically thick particles 0
+At orbit 0.361
+Number of optically thick particles 0
+At orbit 0.362
+Number of optically thick particles 0
+At orbit 0.363
+Number of optically thick particles 0
+At orbit 0.364
+Number of optically thick particles 0
+At orbit 0.365
+Number of optically thick particles 0
+At orbit 0.366
+Number of optically thick particles 0
+At orbit 0.367
+Number of optically thick particles 0
+At orbit 0.368
+Number of optically thick particles 0
+At orbit 0.369
+Number of optically thick particles 0
+At orbit 0.37
+Number of optically thick particles 0
+At orbit 0.371
+Number of optically thick particles 0
+At orbit 0.372
+Number of optically thick particles 0
+At orbit 0.373
+Number of optically thick particles 0
+At orbit 0.374
+Number of optically thick particles 0
+At orbit 0.375
+Number of optically thick particles 0
+At orbit 0.376
+Number of optically thick particles 0
+At orbit 0.377
+Number of optically thick particles 0
+At orbit 0.378
+Number of optically thick particles 0
+At orbit 0.379
+Number of optically thick particles 0
+At orbit 0.38
+Number of optically thick particles 0
+At orbit 0.381
+Number of optically thick particles 0
+At orbit 0.382
+Number of optically thick particles 0
+At orbit 0.383
+Number of optically thick particles 0
+At orbit 0.384
+Number of optically thick particles 0
+At orbit 0.385
+Number of optically thick particles 0
+At orbit 0.386
+Number of optically thick particles 0
+At orbit 0.387
+Number of optically thick particles 0
+At orbit 0.388
+Number of optically thick particles 0
+At orbit 0.389
+Number of optically thick particles 0
+At orbit 0.39
+Number of optically thick particles 0
+At orbit 0.391
+Number of optically thick particles 0
+At orbit 0.392
+Number of optically thick particles 0
+At orbit 0.393
+Number of optically thick particles 0
+At orbit 0.394
+Number of optically thick particles 0
+At orbit 0.395
+Number of optically thick particles 0
+At orbit 0.396
+Number of optically thick particles 0
+At orbit 0.397
+Number of optically thick particles 0
+At orbit 0.398
+Number of optically thick particles 0
+At orbit 0.399
+Number of optically thick particles 0
+At orbit 0.4
+Number of optically thick particles 0
+At orbit 0.401
+Number of optically thick particles 0
+At orbit 0.402
+Number of optically thick particles 0
+At orbit 0.403
+Number of optically thick particles 0
+At orbit 0.404
+Number of optically thick particles 0
+At orbit 0.405
+Number of optically thick particles 0
+At orbit 0.406
+Number of optically thick particles 0
+At orbit 0.407
+Number of optically thick particles 0
+At orbit 0.408
+Number of optically thick particles 0
+At orbit 0.409
+Number of optically thick particles 0
+At orbit 0.41
+Number of optically thick particles 0
+At orbit 0.411
+Number of optically thick particles 0
+At orbit 0.412
+Number of optically thick particles 0
+At orbit 0.413
+Number of optically thick particles 0
+At orbit 0.414
+Number of optically thick particles 0
+At orbit 0.415
+Number of optically thick particles 0
+At orbit 0.416
+Number of optically thick particles 0
+At orbit 0.417
+Number of optically thick particles 0
+At orbit 0.418
+Number of optically thick particles 0
+At orbit 0.419
+Number of optically thick particles 0
+At orbit 0.42
+Number of optically thick particles 0
+At orbit 0.421
+Number of optically thick particles 0
+At orbit 0.422
+Number of optically thick particles 0
+At orbit 0.423
+Number of optically thick particles 0
+At orbit 0.424
+Number of optically thick particles 0
+At orbit 0.425
+Number of optically thick particles 0
+At orbit 0.426
+Number of optically thick particles 0
+At orbit 0.427
+Number of optically thick particles 0
+At orbit 0.428
+Number of optically thick particles 0
+At orbit 0.429
+Number of optically thick particles 0
+At orbit 0.43
+Number of optically thick particles 0
+At orbit 0.431
+Number of optically thick particles 0
+At orbit 0.432
+Number of optically thick particles 0
+At orbit 0.433
+Number of optically thick particles 0
+At orbit 0.434
+Number of optically thick particles 0
+At orbit 0.435
+Number of optically thick particles 0
+At orbit 0.436
+Number of optically thick particles 0
+At orbit 0.437
+Number of optically thick particles 0
+At orbit 0.438
+Number of optically thick particles 0
+At orbit 0.439
+Number of optically thick particles 0
+At orbit 0.44
+Number of optically thick particles 0
+At orbit 0.441
+Number of optically thick particles 0
+At orbit 0.442
+Number of optically thick particles 0
+At orbit 0.443
+Number of optically thick particles 0
+At orbit 0.444
+Number of optically thick particles 0
+At orbit 0.445
+Number of optically thick particles 0
+At orbit 0.446
+Number of optically thick particles 0
+At orbit 0.447
+Number of optically thick particles 0
+At orbit 0.448
+Number of optically thick particles 0
+At orbit 0.449
+Number of optically thick particles 0
+At orbit 0.45
+Number of optically thick particles 0
+At orbit 0.451
+Number of optically thick particles 0
+At orbit 0.452
+Number of optically thick particles 0
+At orbit 0.453
+Number of optically thick particles 0
+At orbit 0.454
+Number of optically thick particles 0
+At orbit 0.455
+Number of optically thick particles 0
+At orbit 0.456
+Number of optically thick particles 0
+At orbit 0.457
+Number of optically thick particles 0
+At orbit 0.458
+Number of optically thick particles 0
+At orbit 0.459
+Number of optically thick particles 0
+At orbit 0.46
+Number of optically thick particles 0
+At orbit 0.461
+Number of optically thick particles 0
+At orbit 0.462
+Number of optically thick particles 0
+At orbit 0.463
+Number of optically thick particles 0
+At orbit 0.464
+Number of optically thick particles 0
+At orbit 0.465
+Number of optically thick particles 0
+At orbit 0.466
+Number of optically thick particles 0
+At orbit 0.467
+Number of optically thick particles 0
+At orbit 0.468
+Number of optically thick particles 0
+At orbit 0.469
+Number of optically thick particles 0
+At orbit 0.47
+Number of optically thick particles 0
+At orbit 0.471
+Number of optically thick particles 0
+At orbit 0.472
+Number of optically thick particles 0
+At orbit 0.473
+Number of optically thick particles 0
+At orbit 0.474
+Number of optically thick particles 0
+At orbit 0.475
+Number of optically thick particles 0
+At orbit 0.476
+Number of optically thick particles 0
+At orbit 0.477
+Number of optically thick particles 0
+At orbit 0.478
+Number of optically thick particles 0
+At orbit 0.479
+Number of optically thick particles 0
+At orbit 0.48
+Number of optically thick particles 0
+At orbit 0.481
+Number of optically thick particles 0
+At orbit 0.482
+Number of optically thick particles 0
+At orbit 0.483
+Number of optically thick particles 0
+At orbit 0.484
+Number of optically thick particles 0
+At orbit 0.485
+Number of optically thick particles 0
+At orbit 0.486
+Number of optically thick particles 0
+At orbit 0.487
+Number of optically thick particles 0
+At orbit 0.488
+Number of optically thick particles 0
+At orbit 0.489
+Number of optically thick particles 0
+At orbit 0.49
+Number of optically thick particles 0
+At orbit 0.491
+Number of optically thick particles 0
+At orbit 0.492
+Number of optically thick particles 0
+At orbit 0.493
+Number of optically thick particles 0
+At orbit 0.494
+Number of optically thick particles 0
+At orbit 0.495
+Number of optically thick particles 0
+At orbit 0.496
+Number of optically thick particles 0
+At orbit 0.497
+Number of optically thick particles 0
+At orbit 0.498
+Number of optically thick particles 0
+At orbit 0.499
+Number of optically thick particles 0
+At orbit 0.5
+Number of optically thick particles 0
+At orbit 0.501
+Number of optically thick particles 0
+At orbit 0.502
+Number of optically thick particles 0
+At orbit 0.503
+Number of optically thick particles 0
+At orbit 0.504
+Number of optically thick particles 0
+At orbit 0.505
+Number of optically thick particles 0
+At orbit 0.506
+Number of optically thick particles 0
+At orbit 0.507
+Number of optically thick particles 0
+At orbit 0.508
+Number of optically thick particles 0
+At orbit 0.509
+Number of optically thick particles 0
+At orbit 0.51
+Number of optically thick particles 0
+At orbit 0.511
+Number of optically thick particles 0
+At orbit 0.512
+Number of optically thick particles 0
+At orbit 0.513
+Number of optically thick particles 0
+At orbit 0.514
+Number of optically thick particles 0
+At orbit 0.515
+Number of optically thick particles 0
+At orbit 0.516
+Number of optically thick particles 0
+At orbit 0.517
+Number of optically thick particles 0
+At orbit 0.518
+Number of optically thick particles 0
+At orbit 0.519
+Number of optically thick particles 0
+At orbit 0.52
+Number of optically thick particles 0
+At orbit 0.521
+Number of optically thick particles 0
+At orbit 0.522
+Number of optically thick particles 0
+At orbit 0.523
+Number of optically thick particles 0
+At orbit 0.524
+Number of optically thick particles 0
+At orbit 0.525
+Number of optically thick particles 0
+At orbit 0.526
+Number of optically thick particles 0
+At orbit 0.527
+Number of optically thick particles 0
+At orbit 0.528
+Number of optically thick particles 0
+At orbit 0.529
+Number of optically thick particles 0
+At orbit 0.53
+Number of optically thick particles 0
+At orbit 0.531
+Number of optically thick particles 0
+At orbit 0.532
+Number of optically thick particles 0
+At orbit 0.533
+Number of optically thick particles 0
+At orbit 0.534
+Number of optically thick particles 0
+At orbit 0.535
+Number of optically thick particles 0
+At orbit 0.536
+Number of optically thick particles 0
+At orbit 0.537
+Number of optically thick particles 0
+At orbit 0.538
+Number of optically thick particles 0
+At orbit 0.539
+Number of optically thick particles 0
+At orbit 0.54
+Number of optically thick particles 0
+At orbit 0.541
+Number of optically thick particles 0
+At orbit 0.542
+Number of optically thick particles 0
+At orbit 0.543
+Number of optically thick particles 0
+At orbit 0.544
+Number of optically thick particles 0
+At orbit 0.545
+Number of optically thick particles 0
+At orbit 0.546
+Number of optically thick particles 0
+At orbit 0.547
+Number of optically thick particles 0
+At orbit 0.548
+Number of optically thick particles 0
+At orbit 0.549
+Number of optically thick particles 0
+At orbit 0.55
+Number of optically thick particles 0
+At orbit 0.551
+Number of optically thick particles 0
+At orbit 0.552
+Number of optically thick particles 0
+At orbit 0.553
+Number of optically thick particles 0
+At orbit 0.554
+Number of optically thick particles 0
+At orbit 0.555
+Number of optically thick particles 0
+At orbit 0.556
+Number of optically thick particles 0
+At orbit 0.557
+Number of optically thick particles 0
+At orbit 0.558
+Number of optically thick particles 0
+At orbit 0.559
+Number of optically thick particles 0
+At orbit 0.56
+Number of optically thick particles 0
+At orbit 0.561
+Number of optically thick particles 0
+At orbit 0.562
+Number of optically thick particles 0
+At orbit 0.563
+Number of optically thick particles 0
+At orbit 0.564
+Number of optically thick particles 0
+At orbit 0.565
+Number of optically thick particles 0
+At orbit 0.566
+Number of optically thick particles 0
+At orbit 0.567
+Number of optically thick particles 0
+At orbit 0.568
+Number of optically thick particles 0
+At orbit 0.569
+Number of optically thick particles 0
+At orbit 0.57
+Number of optically thick particles 0
+At orbit 0.571
+Number of optically thick particles 0
+At orbit 0.572
+Number of optically thick particles 0
+At orbit 0.573
+Number of optically thick particles 0
+At orbit 0.574
+Number of optically thick particles 0
+At orbit 0.575
+Number of optically thick particles 0
+At orbit 0.576
+Number of optically thick particles 0
+At orbit 0.577
+Number of optically thick particles 0
+At orbit 0.578
+Number of optically thick particles 0
+At orbit 0.579
+Number of optically thick particles 0
+At orbit 0.58
+Number of optically thick particles 0
+At orbit 0.581
+Number of optically thick particles 0
+At orbit 0.582
+Number of optically thick particles 0
+At orbit 0.583
+Number of optically thick particles 0
+At orbit 0.584
+Number of optically thick particles 0
+At orbit 0.585
+Number of optically thick particles 0
+At orbit 0.586
+Number of optically thick particles 0
+At orbit 0.587
+Number of optically thick particles 0
+At orbit 0.588
+Number of optically thick particles 0
+At orbit 0.589
+Number of optically thick particles 0
+At orbit 0.59
+Number of optically thick particles 0
+At orbit 0.591
+Number of optically thick particles 0
+At orbit 0.592
+Number of optically thick particles 0
+At orbit 0.593
+Number of optically thick particles 0
+At orbit 0.594
+Number of optically thick particles 0
+At orbit 0.595
+Number of optically thick particles 0
+At orbit 0.596
+Number of optically thick particles 0
+At orbit 0.597
+Number of optically thick particles 0
+At orbit 0.598
+Number of optically thick particles 0
+At orbit 0.599
+Number of optically thick particles 0
+At orbit 0.6
+Number of optically thick particles 0
+At orbit 0.601
+Number of optically thick particles 0
+At orbit 0.602
+Number of optically thick particles 0
+At orbit 0.603
+Number of optically thick particles 0
+At orbit 0.604
+Number of optically thick particles 0
+At orbit 0.605
+Number of optically thick particles 0
+At orbit 0.606
+Number of optically thick particles 0
+At orbit 0.607
+Number of optically thick particles 0
+At orbit 0.608
+Number of optically thick particles 0
+At orbit 0.609
+Number of optically thick particles 0
+At orbit 0.61
+Number of optically thick particles 0
+At orbit 0.611
+Number of optically thick particles 0
+At orbit 0.612
+Number of optically thick particles 0
+At orbit 0.613
+Number of optically thick particles 0
+At orbit 0.614
+Number of optically thick particles 0
+At orbit 0.615
+Number of optically thick particles 0
+At orbit 0.616
+Number of optically thick particles 0
+At orbit 0.617
+Number of optically thick particles 0
+At orbit 0.618
+Number of optically thick particles 0
+At orbit 0.619
+Number of optically thick particles 0
+At orbit 0.62
+Number of optically thick particles 0
+At orbit 0.621
+Number of optically thick particles 0
+At orbit 0.622
+Number of optically thick particles 0
+At orbit 0.623
+Number of optically thick particles 0
+At orbit 0.624
+Number of optically thick particles 0
+At orbit 0.625
+Number of optically thick particles 0
+At orbit 0.626
+Number of optically thick particles 0
+At orbit 0.627
+Number of optically thick particles 0
+At orbit 0.628
+Number of optically thick particles 0
+At orbit 0.629
+Number of optically thick particles 0
+At orbit 0.63
+Number of optically thick particles 0
+At orbit 0.631
+Number of optically thick particles 0
+At orbit 0.632
+Number of optically thick particles 0
+At orbit 0.633
+Number of optically thick particles 0
+At orbit 0.634
+Number of optically thick particles 0
+At orbit 0.635
+Number of optically thick particles 0
+At orbit 0.636
+Number of optically thick particles 0
+At orbit 0.637
+Number of optically thick particles 0
+At orbit 0.638
+Number of optically thick particles 0
+At orbit 0.639
+Number of optically thick particles 0
+At orbit 0.64
+Number of optically thick particles 0
+At orbit 0.641
+Number of optically thick particles 0
+At orbit 0.642
+Number of optically thick particles 0
+At orbit 0.643
+Number of optically thick particles 0
+At orbit 0.644
+Number of optically thick particles 0
+At orbit 0.645
+Number of optically thick particles 0
+At orbit 0.646
+Number of optically thick particles 0
+At orbit 0.647
+Number of optically thick particles 0
+At orbit 0.648
+Number of optically thick particles 0
+At orbit 0.649
+Number of optically thick particles 0
+At orbit 0.65
+Number of optically thick particles 0
+At orbit 0.651
+Number of optically thick particles 0
+At orbit 0.652
+Number of optically thick particles 0
+At orbit 0.653
+Number of optically thick particles 0
+At orbit 0.654
+Number of optically thick particles 0
+At orbit 0.655
+Number of optically thick particles 0
+At orbit 0.656
+Number of optically thick particles 0
+At orbit 0.657
+Number of optically thick particles 0
+At orbit 0.658
+Number of optically thick particles 0
+At orbit 0.659
+Number of optically thick particles 0
+At orbit 0.66
+Number of optically thick particles 0
+At orbit 0.661
+Number of optically thick particles 0
+At orbit 0.662
+Number of optically thick particles 0
+At orbit 0.663
+Number of optically thick particles 0
+At orbit 0.664
+Number of optically thick particles 0
+At orbit 0.665
+Number of optically thick particles 0
+At orbit 0.666
+Number of optically thick particles 0
+At orbit 0.667
+Number of optically thick particles 0
+At orbit 0.668
+Number of optically thick particles 0
+At orbit 0.669
+Number of optically thick particles 0
+At orbit 0.67
+Number of optically thick particles 0
+At orbit 0.671
+Number of optically thick particles 0
+At orbit 0.672
+Number of optically thick particles 0
+At orbit 0.673
+Number of optically thick particles 0
+At orbit 0.674
+Number of optically thick particles 0
+At orbit 0.675
+Number of optically thick particles 0
+At orbit 0.676
+Number of optically thick particles 0
+At orbit 0.677
+Number of optically thick particles 0
+At orbit 0.678
+Number of optically thick particles 0
+At orbit 0.679
+Number of optically thick particles 0
+At orbit 0.68
+Number of optically thick particles 0
+At orbit 0.681
+Number of optically thick particles 0
+At orbit 0.682
+Number of optically thick particles 0
+At orbit 0.683
+Number of optically thick particles 0
+At orbit 0.684
+Number of optically thick particles 0
+At orbit 0.685
+Number of optically thick particles 0
+At orbit 0.686
+Number of optically thick particles 0
+At orbit 0.687
+Number of optically thick particles 0
+At orbit 0.688
+Number of optically thick particles 0
+At orbit 0.689
+Number of optically thick particles 0
+At orbit 0.69
+Number of optically thick particles 0
+At orbit 0.691
+Number of optically thick particles 0
+At orbit 0.692
+Number of optically thick particles 0
+At orbit 0.693
+Number of optically thick particles 0
+At orbit 0.694
+Number of optically thick particles 0
+At orbit 0.695
+Number of optically thick particles 0
+At orbit 0.696
+Number of optically thick particles 0
+At orbit 0.697
+Number of optically thick particles 0
+At orbit 0.698
+Number of optically thick particles 0
+At orbit 0.699
+Number of optically thick particles 0
+At orbit 0.7
+Number of optically thick particles 0
+At orbit 0.701
+Number of optically thick particles 0
+At orbit 0.702
+Number of optically thick particles 0
+At orbit 0.703
+Number of optically thick particles 0
+At orbit 0.704
+Number of optically thick particles 0
+At orbit 0.705
+Number of optically thick particles 0
+At orbit 0.706
+Number of optically thick particles 0
+At orbit 0.707
+Number of optically thick particles 0
+At orbit 0.708
+Number of optically thick particles 0
+At orbit 0.709
+Number of optically thick particles 0
+At orbit 0.71
+Number of optically thick particles 0
+At orbit 0.711
+Number of optically thick particles 0
+At orbit 0.712
+Number of optically thick particles 0
+At orbit 0.713
+Number of optically thick particles 0
+At orbit 0.714
+Number of optically thick particles 0
+At orbit 0.715
+Number of optically thick particles 0
+At orbit 0.716
+Number of optically thick particles 0
+At orbit 0.717
+Number of optically thick particles 0
+At orbit 0.718
+Number of optically thick particles 0
+At orbit 0.719
+Number of optically thick particles 0
+At orbit 0.72
+Number of optically thick particles 0
+At orbit 0.721
+Number of optically thick particles 0
+At orbit 0.722
+Number of optically thick particles 0
+At orbit 0.723
+Number of optically thick particles 0
+At orbit 0.724
+Number of optically thick particles 0
+At orbit 0.725
+Number of optically thick particles 0
+At orbit 0.726
+Number of optically thick particles 0
+At orbit 0.727
+Number of optically thick particles 0
+At orbit 0.728
+Number of optically thick particles 0
+At orbit 0.729
+Number of optically thick particles 0
+At orbit 0.73
+Number of optically thick particles 0
+At orbit 0.731
+Number of optically thick particles 0
+At orbit 0.732
+Number of optically thick particles 0
+At orbit 0.733
+Number of optically thick particles 0
+At orbit 0.734
+Number of optically thick particles 0
+At orbit 0.735
+Number of optically thick particles 0
+At orbit 0.736
+Number of optically thick particles 0
+At orbit 0.737
+Number of optically thick particles 0
+At orbit 0.738
+Number of optically thick particles 0
+At orbit 0.739
+Number of optically thick particles 0
+At orbit 0.74
+Number of optically thick particles 0
+At orbit 0.741
+Number of optically thick particles 0
+At orbit 0.742
+Number of optically thick particles 0
+At orbit 0.743
+Number of optically thick particles 0
+At orbit 0.744
+Number of optically thick particles 0
+At orbit 0.745
+Number of optically thick particles 0
+At orbit 0.746
+Number of optically thick particles 0
+At orbit 0.747
+Number of optically thick particles 0
+At orbit 0.748
+Number of optically thick particles 0
+At orbit 0.749
+Number of optically thick particles 0
+At orbit 0.75
+Number of optically thick particles 0
+At orbit 0.751
+Number of optically thick particles 0
+At orbit 0.752
+Number of optically thick particles 0
+At orbit 0.753
+Number of optically thick particles 0
+At orbit 0.754
+Number of optically thick particles 0
+At orbit 0.755
+Number of optically thick particles 0
+At orbit 0.756
+Number of optically thick particles 0
+At orbit 0.757
+Number of optically thick particles 0
+At orbit 0.758
+Number of optically thick particles 0
+At orbit 0.759
+Number of optically thick particles 0
+At orbit 0.76
+Number of optically thick particles 0
+At orbit 0.761
+Number of optically thick particles 0
+At orbit 0.762
+Number of optically thick particles 0
+At orbit 0.763
+Number of optically thick particles 0
+At orbit 0.764
+Number of optically thick particles 0
+At orbit 0.765
+Number of optically thick particles 0
+At orbit 0.766
+Number of optically thick particles 0
+At orbit 0.767
+Number of optically thick particles 0
+At orbit 0.768
+Number of optically thick particles 0
+At orbit 0.769
+Number of optically thick particles 0
+At orbit 0.77
+Number of optically thick particles 0
+At orbit 0.771
+Number of optically thick particles 0
+At orbit 0.772
+Number of optically thick particles 0
+At orbit 0.773
+Number of optically thick particles 0
+At orbit 0.774
+Number of optically thick particles 0
+At orbit 0.775
+Number of optically thick particles 0
+At orbit 0.776
+Number of optically thick particles 0
+At orbit 0.777
+Number of optically thick particles 0
+At orbit 0.778
+Number of optically thick particles 0
+At orbit 0.779
+Number of optically thick particles 0
+At orbit 0.78
+Number of optically thick particles 0
+At orbit 0.781
+Number of optically thick particles 0
+At orbit 0.782
+Number of optically thick particles 0
+At orbit 0.783
+Number of optically thick particles 0
+At orbit 0.784
+Number of optically thick particles 0
+At orbit 0.785
+Number of optically thick particles 0
+At orbit 0.786
+Number of optically thick particles 0
+At orbit 0.787
+Number of optically thick particles 0
+At orbit 0.788
+Number of optically thick particles 0
+At orbit 0.789
+Number of optically thick particles 0
+At orbit 0.79
+Number of optically thick particles 0
+At orbit 0.791
+Number of optically thick particles 0
+At orbit 0.792
+Number of optically thick particles 0
+At orbit 0.793
+Number of optically thick particles 0
+At orbit 0.794
+Number of optically thick particles 0
+At orbit 0.795
+Number of optically thick particles 0
+At orbit 0.796
+Number of optically thick particles 0
+At orbit 0.797
+Number of optically thick particles 0
+At orbit 0.798
+Number of optically thick particles 0
+At orbit 0.799
+Number of optically thick particles 0
+At orbit 0.8
+Number of optically thick particles 0
+At orbit 0.801
+Number of optically thick particles 0
+At orbit 0.802
+Number of optically thick particles 0
+At orbit 0.803
+Number of optically thick particles 0
+At orbit 0.804
+Number of optically thick particles 0
+At orbit 0.805
+Number of optically thick particles 0
+At orbit 0.806
+Number of optically thick particles 0
+At orbit 0.807
+Number of optically thick particles 0
+At orbit 0.808
+Number of optically thick particles 0
+At orbit 0.809
+Number of optically thick particles 0
+At orbit 0.81
+Number of optically thick particles 0
+At orbit 0.811
+Number of optically thick particles 0
+At orbit 0.812
+Number of optically thick particles 0
+At orbit 0.813
+Number of optically thick particles 0
+At orbit 0.814
+Number of optically thick particles 0
+At orbit 0.815
+Number of optically thick particles 0
+At orbit 0.816
+Number of optically thick particles 0
+At orbit 0.817
+Number of optically thick particles 0
+At orbit 0.818
+Number of optically thick particles 0
+At orbit 0.819
+Number of optically thick particles 0
+At orbit 0.82
+Number of optically thick particles 0
+At orbit 0.821
+Number of optically thick particles 0
+At orbit 0.822
+Number of optically thick particles 0
+At orbit 0.823
+Number of optically thick particles 0
+At orbit 0.824
+Number of optically thick particles 0
+At orbit 0.825
+Number of optically thick particles 0
+At orbit 0.826
+Number of optically thick particles 0
+At orbit 0.827
+Number of optically thick particles 0
+At orbit 0.828
+Number of optically thick particles 0
+At orbit 0.829
+Number of optically thick particles 0
+At orbit 0.83
+Number of optically thick particles 0
+At orbit 0.831
+Number of optically thick particles 0
+At orbit 0.832
+Number of optically thick particles 0
+At orbit 0.833
+Number of optically thick particles 0
+At orbit 0.834
+Number of optically thick particles 0
+At orbit 0.835
+Number of optically thick particles 0
+At orbit 0.836
+Number of optically thick particles 0
+At orbit 0.837
+Number of optically thick particles 0
+At orbit 0.838
+Number of optically thick particles 0
+At orbit 0.839
+Number of optically thick particles 0
+At orbit 0.84
+Number of optically thick particles 0
+At orbit 0.841
+Number of optically thick particles 0
+At orbit 0.842
+Number of optically thick particles 0
+At orbit 0.843
+Number of optically thick particles 0
+At orbit 0.844
+Number of optically thick particles 0
+At orbit 0.845
+Number of optically thick particles 0
+At orbit 0.846
+Number of optically thick particles 0
+At orbit 0.847
+Number of optically thick particles 0
+At orbit 0.848
+Number of optically thick particles 0
+At orbit 0.849
+Number of optically thick particles 0
+At orbit 0.85
+Number of optically thick particles 0
+At orbit 0.851
+Number of optically thick particles 0
+At orbit 0.852
+Number of optically thick particles 0
+At orbit 0.853
+Number of optically thick particles 0
+At orbit 0.854
+Number of optically thick particles 0
+At orbit 0.855
+Number of optically thick particles 0
+At orbit 0.856
+Number of optically thick particles 0
+At orbit 0.857
+Number of optically thick particles 0
+At orbit 0.858
+Number of optically thick particles 0
+At orbit 0.859
+Number of optically thick particles 0
+At orbit 0.86
+Number of optically thick particles 0
+At orbit 0.861
+Number of optically thick particles 0
+At orbit 0.862
+Number of optically thick particles 0
+At orbit 0.863
+Number of optically thick particles 0
+At orbit 0.864
+Number of optically thick particles 0
+At orbit 0.865
+Number of optically thick particles 0
+At orbit 0.866
+Number of optically thick particles 0
+At orbit 0.867
+Number of optically thick particles 0
+At orbit 0.868
+Number of optically thick particles 0
+At orbit 0.869
+Number of optically thick particles 0
+At orbit 0.87
+Number of optically thick particles 0
+At orbit 0.871
+Number of optically thick particles 0
+At orbit 0.872
+Number of optically thick particles 0
+At orbit 0.873
+Number of optically thick particles 0
+At orbit 0.874
+Number of optically thick particles 0
+At orbit 0.875
+Number of optically thick particles 0
+At orbit 0.876
+Number of optically thick particles 0
+At orbit 0.877
+Number of optically thick particles 0
+At orbit 0.878
+Number of optically thick particles 0
+At orbit 0.879
+Number of optically thick particles 0
+At orbit 0.88
+Number of optically thick particles 0
+At orbit 0.881
+Number of optically thick particles 0
+At orbit 0.882
+Number of optically thick particles 0
+At orbit 0.883
+Number of optically thick particles 0
+At orbit 0.884
+Number of optically thick particles 0
+At orbit 0.885
+Number of optically thick particles 0
+At orbit 0.886
+Number of optically thick particles 0
+At orbit 0.887
+Number of optically thick particles 0
+At orbit 0.888
+Number of optically thick particles 0
+At orbit 0.889
+Number of optically thick particles 0
+At orbit 0.89
+Number of optically thick particles 0
+At orbit 0.891
+Number of optically thick particles 0
+At orbit 0.892
+Number of optically thick particles 0
+At orbit 0.893
+Number of optically thick particles 0
+At orbit 0.894
+Number of optically thick particles 0
+At orbit 0.895
+Number of optically thick particles 0
+At orbit 0.896
+Number of optically thick particles 0
+At orbit 0.897
+Number of optically thick particles 0
+At orbit 0.898
+Number of optically thick particles 0
+At orbit 0.899
+Number of optically thick particles 0
+At orbit 0.9
+Number of optically thick particles 0
+At orbit 0.901
+Number of optically thick particles 0
+At orbit 0.902
+Number of optically thick particles 0
+At orbit 0.903
+Number of optically thick particles 0
+At orbit 0.904
+Number of optically thick particles 0
+At orbit 0.905
+Number of optically thick particles 0
+At orbit 0.906
+Number of optically thick particles 0
+At orbit 0.907
+Number of optically thick particles 0
+At orbit 0.908
+Number of optically thick particles 0
+At orbit 0.909
+Number of optically thick particles 0
+At orbit 0.91
+Number of optically thick particles 0
+At orbit 0.911
+Number of optically thick particles 0
+At orbit 0.912
+Number of optically thick particles 0
+At orbit 0.913
+Number of optically thick particles 0
+At orbit 0.914
+Number of optically thick particles 0
+At orbit 0.915
+Number of optically thick particles 0
+At orbit 0.916
+Number of optically thick particles 0
+At orbit 0.917
+Number of optically thick particles 0
+At orbit 0.918
+Number of optically thick particles 0
+At orbit 0.919
+Number of optically thick particles 0
+At orbit 0.92
+Number of optically thick particles 0
+At orbit 0.921
+Number of optically thick particles 0
+At orbit 0.922
+Number of optically thick particles 0
+At orbit 0.923
+Number of optically thick particles 0
+At orbit 0.924
+Number of optically thick particles 0
+At orbit 0.925
+Number of optically thick particles 0
+At orbit 0.926
+Number of optically thick particles 0
+At orbit 0.927
+Number of optically thick particles 0
+At orbit 0.928
+Number of optically thick particles 0
+At orbit 0.929
+Number of optically thick particles 0
+At orbit 0.93
+Number of optically thick particles 0
+At orbit 0.931
+Number of optically thick particles 0
+At orbit 0.932
+Number of optically thick particles 0
+At orbit 0.933
+Number of optically thick particles 0
+At orbit 0.934
+Number of optically thick particles 0
+At orbit 0.935
+Number of optically thick particles 0
+At orbit 0.936
+Number of optically thick particles 0
+At orbit 0.937
+Number of optically thick particles 0
+At orbit 0.938
+Number of optically thick particles 0
+At orbit 0.939
+Number of optically thick particles 0
+At orbit 0.94
+Number of optically thick particles 0
+At orbit 0.941
+Number of optically thick particles 0
+At orbit 0.942
+Number of optically thick particles 0
+At orbit 0.943
+Number of optically thick particles 0
+At orbit 0.944
+Number of optically thick particles 0
+At orbit 0.945
+Number of optically thick particles 0
+At orbit 0.946
+Number of optically thick particles 0
+At orbit 0.947
+Number of optically thick particles 0
+At orbit 0.948
+Number of optically thick particles 0
+At orbit 0.949
+Number of optically thick particles 0
+At orbit 0.95
+Number of optically thick particles 0
+At orbit 0.951
+Number of optically thick particles 0
+At orbit 0.952
+Number of optically thick particles 0
+At orbit 0.953
+Number of optically thick particles 0
+At orbit 0.954
+Number of optically thick particles 0
+At orbit 0.955
+Number of optically thick particles 0
+At orbit 0.956
+Number of optically thick particles 0
+At orbit 0.957
+Number of optically thick particles 0
+At orbit 0.958
+Number of optically thick particles 0
+At orbit 0.959
+Number of optically thick particles 0
+At orbit 0.96
+Number of optically thick particles 0
+At orbit 0.961
+Number of optically thick particles 0
+At orbit 0.962
+Number of optically thick particles 0
+At orbit 0.963
+Number of optically thick particles 0
+At orbit 0.964
+Number of optically thick particles 0
+At orbit 0.965
+Number of optically thick particles 0
+At orbit 0.966
+Number of optically thick particles 0
+At orbit 0.967
+Number of optically thick particles 0
+At orbit 0.968
+Number of optically thick particles 0
+At orbit 0.969
+Number of optically thick particles 0
+At orbit 0.97
+Number of optically thick particles 0
+At orbit 0.971
+Number of optically thick particles 0
+At orbit 0.972
+Number of optically thick particles 0
+At orbit 0.973
+Number of optically thick particles 0
+At orbit 0.974
+Number of optically thick particles 0
+At orbit 0.975
+Number of optically thick particles 0
+At orbit 0.976
+Number of optically thick particles 0
+At orbit 0.977
+Number of optically thick particles 0
+At orbit 0.978
+Number of optically thick particles 0
+At orbit 0.979
+Number of optically thick particles 0
+At orbit 0.98
+Number of optically thick particles 0
+At orbit 0.981
+Number of optically thick particles 0
+At orbit 0.982
+Number of optically thick particles 0
+At orbit 0.983
+Number of optically thick particles 0
+At orbit 0.984
+Number of optically thick particles 0
+At orbit 0.985
+Number of optically thick particles 0
+At orbit 0.986
+Number of optically thick particles 0
+At orbit 0.987
+Number of optically thick particles 0
+At orbit 0.988
+Number of optically thick particles 0
+At orbit 0.989
+Number of optically thick particles 0
+At orbit 0.99
+Number of optically thick particles 0
+At orbit 0.991
+Number of optically thick particles 0
+At orbit 0.992
+Number of optically thick particles 0
+At orbit 0.993
+Number of optically thick particles 0
+At orbit 0.994
+Number of optically thick particles 0
+At orbit 0.995
+Number of optically thick particles 0
+At orbit 0.996
+Number of optically thick particles 0
+At orbit 0.997
+Number of optically thick particles 0
+At orbit 0.998
+Number of optically thick particles 0
+At orbit 0.999
+Number of optically thick particles 0

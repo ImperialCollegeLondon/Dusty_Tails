@@ -18,9 +18,10 @@ using namespace std;
 double error( double value1, double value2){
     //evaluate relative error
     double err;
-   
-    err = fabs(value1 - value2)/abs(value1);
     
+    err = fabs(value1 - value2)/(1.e-10 + max(abs(value1), abs(value2))*1.e-10);
+    //cout <<"delta " << fabs(value1 - value2) << endl;
+    //cout << "scale " << (1.e-7 + max(abs(value1), abs(value2))*1.e-7) << endl;
     return err;
 }
 
@@ -38,12 +39,12 @@ tuple<double, int> error_max(double h, vector <double> V){
     for (unsigned int i = 0; i < 7; i++){
         
         errors[i] = error(order4[i], order5[i]);
-
+        
     }
-
+    
     err_max = *max_element(errors.begin(), errors.end());
     max_index = max_element(errors.begin(),errors.end()) - errors.begin();
-    
+    //cout << "err max " << err_max << " index  " << max_index << endl;
     return make_tuple(err_max, max_index);
 
 }
@@ -62,14 +63,27 @@ vector <double> new_step_size(tuple<double,int> errors, double h_old, int fail_s
  // } else {
     //tol1 = 1.0e-7;
   //}
-  tol1 = 1.0e-3;
-  rho = 1.25 * pow((max_err / tol1), 1.0/5.0);
+  //tol1 = 1.0e-4;
+  //rho = 1.25 * pow((max_err / tol1), 1.0/5.0);
 
   if (isnan(max_err)){
     cout << "max err is NaN " << endl;
     abort();
   }
 
+  if (max_err <= 1.0) {
+    //sucessful step choice
+    //cout << "time step worked " << max_err << endl;
+    h_new = (S*h_old) / pow(max_err, 1./5.);
+    steps = {h_old, h_new};
+    return steps;
+  } else {
+    //failed
+      h_new = (S*h_old) / pow(max_err, 1./5.);
+      errors = error_max(h_new, V);
+      return new_step_size(errors, h_new, 1, V);
+  }
+  /*
   if (max_err <= tol1){
     if (rho > 0.2){
       h_new = h_old / rho;
@@ -92,6 +106,6 @@ vector <double> new_step_size(tuple<double,int> errors, double h_old, int fail_s
       errors = error_max(h_new, V);
       return new_step_size(errors, h_new, 1, V);
     }
-  }
+  }*/
 
 }

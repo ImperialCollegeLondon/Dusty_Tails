@@ -166,6 +166,7 @@ int main() {
       }
       if (in_c == 5) {
         major_timestep = stod(line.substr(10,14));
+        cout << "DELTA T " << major_timestep << endl;
         no_orbits = stod(line.substr(25,28));
         nparticles = stoi(line.substr(38,41));
       }
@@ -312,7 +313,7 @@ long int current_particles = 0; // number of current particles in simulation
   
   //Solve particles is the main routine of the program. It is in particles.cpp.
   solve_particles(0.00, end_t, particles, total_particles,current_particles);
-
+  //cout << brent(0.2e-4,planet_x,0.0,0.0,0.0) << endl;
   return 0;
 
 }
