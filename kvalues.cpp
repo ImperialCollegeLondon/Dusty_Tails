@@ -72,7 +72,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
         Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
 
     radiation = rad_pressure({Vtemp[0], Vtemp[1], Vtemp[2], \
-        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp, tau_particle});
 
 
     for (unsigned int i = 0; i < 3; i++){
@@ -101,7 +101,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
         Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
 
     radiation = rad_pressure({Vtemp[0], Vtemp[1], Vtemp[2], \
-        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp, tau_particle});
 
     //k3 values
     for (unsigned int i = 0; i < 3; i++) {
@@ -128,7 +128,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
         Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
 
     radiation = rad_pressure({Vtemp[0], Vtemp[1], Vtemp[2], \
-        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp, tau_particle});
 
     //k4 values
     for (unsigned int i = 0; i < 3; i++) {
@@ -156,7 +156,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
         Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
 
     radiation = rad_pressure({Vtemp[0], Vtemp[1], Vtemp[2], \
-        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp, tau_particle});
 
     for (unsigned int i = 0; i < 3; i++) {
         //cout << "k5" << endl;
@@ -184,7 +184,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
         Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
 
     radiation = rad_pressure({Vtemp[0], Vtemp[1], Vtemp[2], \
-        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp, tau_particle});
 
     for (unsigned int i = 0; i < 3; i++) {
         //cout << "k6" << endl;
@@ -212,7 +212,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
           Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
 
       radiation = rad_pressure({Vtemp[0], Vtemp[1], Vtemp[2], \
-          Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
+          Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp, tau_particle});
 
     
       for (unsigned int i = 0; i<3; i++) {

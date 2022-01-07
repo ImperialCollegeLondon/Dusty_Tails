@@ -18,6 +18,7 @@ vector <double> rad_vector(3);
 vector <double> centrifugal(vector <double> V){
   //function to calculate centrifugal force
   vector <double> omxr, finalx(3);
+  //cout << ang_vel << endl;
   omxr = cross_product(0.0, 0.0, ang_vel, V[0], V[1], V[2]);
   finalx = cross_product(0.0, 0.0, ang_vel, omxr[0], omxr[1], omxr[2]);
 
@@ -39,8 +40,9 @@ vector <double> rad_pressure(vector <double> V){
   double beta, kappa, constant;
   double d_prod;
   vector <double> rad_vector(3);
-
+  //cout << V[6] << endl;
   kappa =opac.stellar_abs(V[6]) + opac.stellar_scat(V[6]);
+  //cout << kappa << endl;
   beta = beta_fn(kappa, V[7], V[6]);
   //cout << "previous kappa " << (3.0/4.0) / (rho_d * 1.e-4) << endl ;
   //cout << "current kappa " << kappa << endl;

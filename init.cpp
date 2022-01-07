@@ -59,7 +59,7 @@ double ang_vel;
  double Period_days, T, a, m_planet, r_planet, r_start, r_planet_dim, r_h;
 
 //Dust parameters:
- double A, Bp, rho_d;
+ double A, Bp, rho_d, mu, alpha;
 
 //Outflow parameters:
  double mdot, v_esc;
@@ -188,6 +188,7 @@ int main() {
  Mstar_sun = m_star; //mass of star in terms of mass of the sun
  Rstar = r_star; //stellar radius in sun radii
  Temp = t_star; //stars temperature
+ cout << Temp << endl;
  lum = sigma*4.0*PI* pow(Rstar*Rsun_cgs, 2.0) * pow(Temp, 4.0); //stellar luminosity
 
 //Planetary parameters:
@@ -202,17 +203,15 @@ int main() {
 
 // Frame of reference parameters:
 
-ang_vel = omega(m_planet, 1.0);
-
 
 //Outflow parameters:
  mdot =  mdot_read*Mearth_cgs/gyr;
- v_esc = (pow((2.0*G *m_planet*Mearth)/(r_planet*Rearth), 0.5)) * (T/a); //escape velocity m/s
+ v_esc = (pow((2.0*G *planet_mass*Mearth)/(planet_radius*Rearth), 0.5)) * (T/a); //escape velocity
 
 //Some dimensionless quantitites:
  G_dim = (G* pow(T, 2.0) * Mstar_kg) / pow(a, 3.0); //dimensionless gravitational constant
  c_dim = clight * (T / a); //dimensionless speed of light
-
+ ang_vel = pow((G_dim *(m_planet + 1.0)), 0.5);
 //Grid parameters:
 d_r_min = rmin;
 d_r_max = rmax;
@@ -229,6 +228,8 @@ if (composition.substr(0,5) == "Al2O3") {
   A = 7.74e+4; //clausius claperyon relation
   Bp = 39.3; //clausius claperyon relation
   rho_d = 4.0; //dust density
+  mu = 101.961;
+  alpha = 0.1;
 
 } else if (composition.substr(0,7) == "Fe2SiO4") {
   cout << "Dust is composed of Fayalite." << endl;
@@ -237,6 +238,8 @@ if (composition.substr(0,5) == "Al2O3") {
   A = 6.04e+4;
   Bp = 38.1;
   rho_d = 4.39;
+  mu =  203.774;
+  alpha = 0.1;
 
 } else if (composition.substr(0,1)=="C") {
   cout << "Dust is composed of Graphite." << endl;
@@ -245,6 +248,8 @@ if (composition.substr(0,5) == "Al2O3") {
   A = 9.36e+4;
   Bp = 36.2;
   rho_d = 2.16;
+  mu =  12.011;
+  alpha = 0.1;
 
 } else if (composition.substr(0,6)=="MgSiO3"){
   cout << "Dust is composed of Enstatite." << endl;
@@ -253,6 +258,8 @@ if (composition.substr(0,5) == "Al2O3") {
   A = 6.89e+4;
   Bp = 37.8;
   rho_d = 3.20;
+  mu = 100.389;
+  alpha = 0.1;
 
 } else if (composition.substr(0,7)=="Mg2SiO4") {
   cout << "Dust is composed of Olivine." << endl;
@@ -261,6 +268,8 @@ if (composition.substr(0,5) == "Al2O3") {
   A = 6.53e+4;
   Bp = 34.3;
   rho_d = 3.27;
+  mu = 140.694;
+  alpha = 0.1;
 
 } else if (composition.substr(0,3)=="SiC") {
   cout << "Dust is composed of silicon carbide." << endl;
@@ -269,6 +278,9 @@ if (composition.substr(0,5) == "Al2O3") {
   A= 7.85e+4;
   Bp = 37.4;
   rho_d = 3.22;
+  mu = 44.085;
+  alpha = 0.04;
+
 
 } else{
   cout << "Composition unknown, stopping programme.";
@@ -313,7 +325,9 @@ long int current_particles = 0; // number of current particles in simulation
   
   //Solve particles is the main routine of the program. It is in particles.cpp.
   solve_particles(0.00, end_t, particles, total_particles,current_particles);
-  //cout << brent(0.2e-4,planet_x,0.0,0.0,0.0) << endl;
+  //cout << planet_x << endl;
+  
+  //cout << opac.stellar_abs(0.2e-4) + opac.stellar_scat(0.2e-4) << endl;
   return 0;
 
 }

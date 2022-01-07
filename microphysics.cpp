@@ -13,9 +13,6 @@
 using namespace std;
 //initialisation for tables for opacity calculations
 
-double omega(double mplanet, double mstar){
-    return pow((G_dim *(m_planet + mstar)), 0.5);
-}
 
 double beta_fn(double k, double tau, double s){
   //mass of star in terms of mass of sun, and everything in cgs units
@@ -38,9 +35,12 @@ double clausius_clap(double s, double x, double y, double z, double tau, double 
   //T_ = brent(s,x,y,z,tau);
   //cout << (exp((-A/Td) + Bp) * pow(amu/(2.0*PI*kb*Td), 0.5) ) << endl;
   //cout << Td << endl;
-  double cc = (-1.0*exp((-A/Td) + Bp) * pow(amu/(2.0*PI*kb*Td), 0.5) )/rho_d;
-
-  return cc;
+  double c1 = -alpha*exp((-A/Td) + Bp)/rho_d;
+  double c2 = pow((mu*amu)/(2.0*PI*kb*Td), 0.5);
+  //cout << Td << endl;
+  //cout << "ds1 " << c1 << endl;
+  //cout << "ds2 " << c2 << endl;
+  return c1*c2;
   }
 
 double radial_vel(vector <double> vel, vector <double> s_vector){
@@ -77,9 +77,10 @@ double f_Tdust( double s, double x, double y, double z, double tau, double Tdust
   
   dl = scalar((x-star_pos[0]), y, z)*a*pow(10.0,2);
   //sa = 2.0*(1-pow(1-pow((Rstar*Rsun_cgs)/dl, 2.0), 0.5));
-  fTdust = (opac.stellar_abs(s) * lum*exp(-tau))/(4.0*PI*pow(dl,2)) - 
-            opac.particle_abs(Tdust, s) * 4.0 *sigma * pow(Tdust,4); 
-  
+  fTdust = opac.stellar_abs(s) *pow(Temp,4) * pow(Rstar*Rsun_cgs, 2)/(4.0*pow(dl,2)) - 
+            opac.particle_abs(s, Tdust) * pow(Tdust,4); 
+  //cout << opac.particle_abs(Tdust,s) << endl;
+  //cout << opac.stellar_abs(s) << endl;
   //fTdust = fTdust/(a*pow(10.0,2));
   return fTdust;
 }
@@ -92,9 +93,9 @@ double brent(double size, double x, double y, double z, double tau){
   double Ac, Bc, Cc, Dc;
   double p, q, r, s, tol1, xm;
   double fa, fb, fc, fs;
-  double tol = 1.0e-3;
-  Ac = 10.0;
-  Bc = 5000.0;
+  double tol = 1.0e-5;
+  Ac = 100.0;
+  Bc = 4000.0;
   fa = f_Tdust(size,x,y,z,tau, Ac);
   fb = f_Tdust(size,x,y,z,tau, Bc);
   

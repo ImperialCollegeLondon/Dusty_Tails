@@ -42,7 +42,7 @@ extern  double Mstar_kg, Mstar_sun, Rstar, Temp, lum;
 extern  double Period_days, T, a, m_planet, r_planet, r_start, r_planet_dim, r_h;
 
 //Dust parameters:
-extern  double A, Bp, rho_d, s_0;
+extern  double A, Bp, rho_d, s_0,alpha, mu;
 extern  string opac_data, opacity_dir;
 extern  string comp, outflow_s, T_int_s, output_file;
 

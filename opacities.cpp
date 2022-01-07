@@ -155,6 +155,8 @@ double Opacities::interpolate_1d(const vector<double> &opac_table, double A) con
 double Opacities::interpolate_2d(const vector<vector<double>> &opac_table, double A, double T) const
 {
     // find the size interval in which to interpolate
+    //cout << "size   " << A << endl;
+    //cout << "temp   " << T << endl;
     int x = size_table_length/2; // approx. index
     if (log_tables)
         x = (int)floor((log10(A)-log10(size_table[0])) * (size_table_length-1) / (log10(size_table[size_table_length-1])-log10(size_table[0])));
@@ -211,10 +213,12 @@ double Opacities::interpolate_2d(const vector<vector<double>> &opac_table, doubl
     // handling cases where input is outside the limits of temperature, size tables
     if ((A <= size_table[0] || A >= size_table[size_table_length-1]) && !(T <= temp_table[0] || T >= temp_table[temp_table_length-1]))
     {
+        
         return opac_table[x][y] + (T-temp_table[y]) * (opac_table[x][y+1]-opac_table[x][y]) / (temp_table[y+1]-temp_table[y]);
     }
     else if (!(A <= size_table[0] || A >= size_table[size_table_length-1]) && (T <= temp_table[0] || T >= temp_table[temp_table_length-1]))
     {
+        //cout << "at exception because temperature is outside table limit" << endl;
         return opac_table[x][y] + (A-size_table[x]) * (opac_table[x+1][y]-opac_table[x][y]) / (size_table[x+1]-size_table[x]);
     }
     else if ((A <= size_table[0] || A >= size_table[size_table_length-1]) && (T <= temp_table[0] || T >= temp_table[temp_table_length-1]))

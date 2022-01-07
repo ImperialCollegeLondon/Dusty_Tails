@@ -19,7 +19,7 @@ double error( double value1, double value2){
     //evaluate relative error
     double err;
     
-    err = fabs(value1 - value2)/(1.e-10 + max(abs(value1), abs(value2))*1.e-10);
+    err = fabs(value1 - value2)/(1.e-9 + max(abs(value1), abs(value2))*1.e-9);
     //cout <<"delta " << fabs(value1 - value2) << endl;
     //cout << "scale " << (1.e-7 + max(abs(value1), abs(value2))*1.e-7) << endl;
     return err;

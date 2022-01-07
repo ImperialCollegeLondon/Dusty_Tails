@@ -33,13 +33,7 @@ double acceleration( int i, double pos_star, double pos_planet, vector <double> 
   grav_planet = (-G_dim * m_planet* pos_planet ) / pow( scalar(V[0] - planet_pos[0]  + r_planet_dim, V[1] , V[2]), 3.0 );
 
   vel_dot = grav_star - centrif - 2.0*coriolis  + rad_press  + grav_planet;
-  //cout << "x " << V[0] << endl;
-  //cout << "y " << V[1] << endl;
-  //cout << "z " << V[2] << endl;
-  //cout << "star pos " << star_pos[0] << endl;
-  //cout << "pos_star " << pos_star << endl;
-  //cout << "grav star " << grav_star << endl;
-  //cout << "rad press " << rad_press << endl;
+  
   
   return vel_dot;
 }

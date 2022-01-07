@@ -74,9 +74,9 @@ void add_particles(vector <Particle> &particles, long int current,
                         r_start*cos(theta)};
 
         //velocity of particle in cartesian
-        grain.velocity = {0.001*v_esc*sin(theta)*cos(phi), \
-                        0.001*v_esc*sin(theta)*sin(phi), \
-                        0.001*v_esc*cos(theta)};
+        grain.velocity = {v_esc*sin(theta)*cos(phi), \
+                        v_esc*sin(theta)*sin(phi), \
+                        v_esc*cos(theta)};
 
         grain.p_size = s_0; //initial grain size
 
@@ -157,7 +157,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
 
   while (t_next < end_t) {
-    double t_global_min = 0.005;
+    double t_global_min = 0.001;
     cout << "At orbit " << t_next << endl;
     if ((tau_constant == false) && (t_next > 1.0)) {
         memset(extinction, 0.0, sizeof(extinction));
@@ -226,8 +226,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
                                 p.position[1], p.position[2], p.p_tau); 
         if (p.id == 1) {
              cout << "size " << p.p_size << endl;
-             cout << "temp " << p.p_temp << endl;
-             cout << "beta " << beta_fn(p.p_opacity, p.p_tau, p.p_size) << endl;
+             
         }
         p.pos_spherical = pos_to_spherical(p.position[0], p.position[1], p.position[2]);
         //cout << p.id << endl;
@@ -274,6 +273,9 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         ofile.write((char*) &p.p_opacity, sizeof(double));
       }
       current_particles = total_particles;
+      if (total_particles == 0) {
+          abort();
+      }
       //total_particles = total_particles + 1000;
 
       //add particles every 100th of an orbit
