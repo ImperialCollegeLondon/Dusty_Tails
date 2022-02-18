@@ -155,12 +155,12 @@ int main() {
         cout << "\n" ;
         cout << "The planetary mass loss rate is " << mdot_read << " Mearth/Gyr." << endl;
         cout << "\n" ;
-        if (tau_type ==1) {
+        if (tau_type ==0) {
           cout << "Optical depth of dust is traced." << endl;
-          bool tau_constant = false;
+          tau_constant = false;
         } else {
           cout << "Optical depth of dust is constant and thin (0.1)." << endl;
-          bool tau_constant = true;
+          tau_constant = true;
         }
         cout << "\n" ;
       }
@@ -283,7 +283,7 @@ if (composition.substr(0,5) == "Al2O3") {
 
 
 } else{
-  cout << "Composition unknown, stopping programme.";
+  cout << "Composition unknown, stopping.";
   abort();
 }
 

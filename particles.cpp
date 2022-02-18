@@ -14,16 +14,35 @@
 #include <cstring>
 #include "opacities.h"
 
+#include <chrono>
+using namespace std::chrono;
 
 
 using namespace std;
 unsigned seed = 123;
 mt19937 generator (seed); //set the seed for the distrubutions of particle positions
 
+//struct for data in output file
+struct dust {
+   double timestamp;
+   int id;
+   double x_dust;
+   double y_dust;
+   double z_dust;
+   double vx_dust;
+   double vy_dust;
+   double vz_dust;
+   double s_dust;
+   double h_dust;
+   double m_dust;
+   double temp_dust;
+   double tau_dust;
+   double kappa_dust;
+};
 //open files to write data for python plotting
-ofstream ofile("./data/output10.bin", ios::out | ios::binary);
+//ofstream output("./data/output.bin", ios::out | ios::binary);
 //ofstream ray_tracer("./data/grid_test.bin", ios::out | ios::binary);
-
+ofstream output_lt("./data/output_lt.bin", ios::out | ios::binary);
 
 //spacing of grid cells in scale of particle distribution
 double d_dr = (d_r_max - d_r_min)/ r_cells_d;
@@ -156,10 +175,12 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
    }
 
 
-  while (t_next < end_t) {
-    double t_global_min = 0.001;
-    cout << "At orbit " << t_next << endl;
-    if ((tau_constant == false) && (t_next > 1.0)) {
+  while (t_next <= end_t) {
+    double t_global_min = 0.01;
+    auto start = high_resolution_clock::now();
+    cout << "At time " << previous_t << endl;
+    //cout << tau_constant << endl;
+    if ((tau_constant == false)) {
         memset(extinction, 0.0, sizeof(extinction));
         memset(optical_depth, 0.0, sizeof(optical_depth));
         calculation_ext(particles, extinction, t_global_min);
@@ -169,7 +190,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         s_phi.clear();
         s_phi = splines_phi(tau, radii_v, thetas_v, phis_v);
 
-        t_global_min = 1.0e-3;
+        t_global_min = 0.5e-2;
     } 
   //do bigger time steps in first orbit and smaller ones afterwards
   //to establish a primary population of dust particles
@@ -183,8 +204,8 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     double no_particles = particles.size();
     vector <double> pos_spherical;
     vector <double> pos_scaled;
-    if ((tau_constant == true) || (previous_t <= 14000.0) ) {
-            p.p_tau = 0.001;
+    if ((tau_constant == true)) {
+            p.p_tau = 0.1;
     } else {
             pos_spherical = pos_to_spherical(p.position[0], p.position[1], p.position[2]);
             pos_scaled = grid_scaling(pos_spherical); //position of particle in optical depth grid
@@ -201,8 +222,9 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
                 
                 if (p.p_tau <=0.001) {
                     p.p_tau = 0.001;}
-    
-                if (p.p_tau > 1.0){
+
+                if (p.p_tau > 0.1){
+                    cout << "tau > 0.1 for p id " << p.id << endl;
                     tau_thick = tau_thick + 1;}
             }
             s_phi_values.clear();
@@ -217,71 +239,75 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         p.position = {updated_vector[0],updated_vector[1], updated_vector[2]};
         p.velocity = {updated_vector[3],updated_vector[4], updated_vector[5]};
         p.p_size = updated_vector[6];
-        
+        if (p.id == 1) {
+            cout << p.p_size << endl;
+            cout << p.p_tau << endl;
+        }
         
         p.p_opacity = opac.stellar_abs(p.p_size) + opac.stellar_scat(p.p_size);
         p.p_mass = dust_mass(p.p_size); 
         p.h_updated = updated_vector[9];    
         p.p_temp = brent( p.p_size, p.position[0], 
                                 p.position[1], p.position[2], p.p_tau); 
-        if (p.id == 1) {
-             cout << "size " << p.p_size << endl;
-             
-        }
+        
         p.pos_spherical = pos_to_spherical(p.position[0], p.position[1], p.position[2]);
         //cout << p.id << endl;
     }
-    cout << "Number of optically thick particles " << tau_thick << endl;
+    //cout << "Number of optically thick particles " << tau_thick << endl;
     rm_particles(particles); //removes particles that are too small
     
-    //to obtain optical depth plot when optical depth is constant
-    /*
-    if (t_next > (end_t-t_global_min)){
-            calculation_ext(particles, extinction, t_global_min);
-            optical_depth_calc(extinction, optical_depth);
 
-            for (unsigned int j = 0; j <t_cells; j++){
-                for (unsigned int k = 0; k < p_cells; k++){
-                    double theta_local;
-                    double phi_local;
-
-                    theta_local = theta_reverse(theta_a[j]);
-                    phi_local = phi_reverse(phi_a[k]);
-                    ray_tracer.write((char*) &theta_local, sizeof(double));
-                    ray_tracer.write((char*) &phi_local, sizeof(double));
-                    ray_tracer.write((char*) &extinction [r_cells-1][j][k], sizeof(double));
-                    ray_tracer.write((char*) &optical_depth [r_cells-1][j][k], sizeof(double));
-
-
-                }
-            }
-        }
-        */
-
-    if (abs(t_next-plot_time) < 1.0e-8) {  
+    if (abs(t_next-plot_time) < 1.0e-8) { 
+      long int total = particles.size();
+      dust dust_grains_out[total]; 
+      int counter = 0;
       for( Particle& p : particles) {
+        dust_grains_out[counter].timestamp = t_next;
+        dust_grains_out[counter].id = p.id;
+        dust_grains_out[counter].x_dust = p.position[0];
+        dust_grains_out[counter].y_dust = p.position[1];
+        dust_grains_out[counter].z_dust = p.position[2];
+        dust_grains_out[counter].vx_dust = p.velocity[0];
+        dust_grains_out[counter].vy_dust = p.velocity[1];
+        dust_grains_out[counter].vz_dust = p.velocity[2];
+        dust_grains_out[counter].s_dust = p.p_size;
+        dust_grains_out[counter].h_dust = p.h_updated;
+        dust_grains_out[counter].kappa_dust = p.p_opacity;
+        dust_grains_out[counter].m_dust = p.p_mass;
+        dust_grains_out[counter].temp_dust = p.p_temp;
+        dust_grains_out[counter].tau_dust = p.p_tau;
         //write file with particle data
-        ofile.write((char*) &t_next, sizeof(double));
-        ofile.write((char*) &p.id, sizeof(long int));
-        ofile.write((char*) &p.position[0], sizeof(double));
-        ofile.write((char*) &p.position[1], sizeof(double));
-        ofile.write((char*) &p.position[2], sizeof(double));
-        ofile.write((char*) &p.p_size, sizeof(double));
-        ofile.write((char*) &p.p_mass, sizeof(double));
-        ofile.write((char*) &p.p_tau, sizeof(double));
-        ofile.write((char*) &p.p_temp, sizeof(double));
-        ofile.write((char*) &p.p_opacity, sizeof(double));
+        /*
+        output.write((char*) &t_next, sizeof(double));
+        output.write((char*) &p.id, sizeof(long int));
+        output.write((char*) &p.position[0], sizeof(double));
+        output.write((char*) &p.position[1], sizeof(double));
+        output.write((char*) &p.position[2], sizeof(double));
+        output.write((char*) &p.p_size, sizeof(double));
+        output.write((char*) &p.p_mass, sizeof(double));
+        output.write((char*) &p.p_tau, sizeof(double));
+        output.write((char*) &p.p_temp, sizeof(double));
+        output.write((char*) &p.p_opacity, sizeof(double));
+        */
+        counter = counter +1;
       }
+
+      for(int i = 0; i < total; i++){
+        output_lt.write((char *) &dust_grains_out[i], sizeof(dust));
+      }
+
       current_particles = total_particles;
-      if (total_particles == 0) {
-          abort();
-      }
-      //total_particles = total_particles + 1000;
+      total_particles = total_particles + 1000;
+
+
 
       //add particles every 100th of an orbit
-      //add_particles(particles, current_particles, total_particles, t_next);
+      add_particles(particles, current_particles, total_particles, t_next);
       plot_time = plot_time + 0.01;
      }
+     auto stop = high_resolution_clock::now();
+     auto duration = duration_cast<seconds>(stop - start);
+     cout << "Iteration took " << duration.count() << " seconds." << endl;
     previous_t = t_next;
     
   }
