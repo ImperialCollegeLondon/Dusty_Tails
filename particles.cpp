@@ -21,11 +21,11 @@ using namespace std::chrono;
 using namespace std;
 unsigned seed = 123;
 mt19937 generator (seed); //set the seed for the distrubutions of particle positions
-
+long int counter = 0;
 //struct for data in output file
 struct dust {
    double timestamp;
-   int id;
+   long int id;
    double x_dust;
    double y_dust;
    double z_dust;
@@ -40,9 +40,9 @@ struct dust {
    double kappa_dust;
 };
 //open files to write data for python plotting
-//ofstream output("./data/output.bin", ios::out | ios::binary);
+ofstream output("./data/output.bin", ios::out | ios::binary);
 //ofstream ray_tracer("./data/grid_test.bin", ios::out | ios::binary);
-ofstream output_lt("./data/output_lt.bin", ios::out | ios::binary);
+ofstream output_lt("./data/output_struct.bin", ios::out | ios::binary);
 
 //spacing of grid cells in scale of particle distribution
 double d_dr = (d_r_max - d_r_min)/ r_cells_d;
@@ -239,12 +239,15 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         p.position = {updated_vector[0],updated_vector[1], updated_vector[2]};
         p.velocity = {updated_vector[3],updated_vector[4], updated_vector[5]};
         p.p_size = updated_vector[6];
-        if (p.id == 1) {
-            cout << p.p_size << endl;
-            cout << p.p_tau << endl;
-        }
-        
         p.p_opacity = opac.stellar_abs(p.p_size) + opac.stellar_scat(p.p_size);
+        if (p.id == 1) {
+            cout << "s " << p.p_size << endl;
+            cout << "tau " << p.p_tau << endl;
+            cout << "kappa " << p.p_opacity << endl;
+            double beta_test;
+            beta_test = beta_fn(p.p_opacity, p.p_tau, p.p_size);
+            cout << "beta " << beta_test << endl;
+        }
         p.p_mass = dust_mass(p.p_size); 
         p.h_updated = updated_vector[9];    
         p.p_temp = brent( p.p_size, p.position[0], 
@@ -256,13 +259,18 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     //cout << "Number of optically thick particles " << tau_thick << endl;
     rm_particles(particles); //removes particles that are too small
     
-
+    
     if (abs(t_next-plot_time) < 1.0e-8) { 
       long int total = particles.size();
-      dust dust_grains_out[total]; 
-      int counter = 0;
+      //cout << "total " << total << endl;
+      
+      //dust dust_grains_out[total]; 
+      vector < dust > dust_grains_out;
+      
+      cout << "Writting data to file.." << endl;
       for( Particle& p : particles) {
-        dust_grains_out[counter].timestamp = t_next;
+        dust_grains_out.push_back(dust());
+        dust_grains_out[counter].timestamp = t_global_min;
         dust_grains_out[counter].id = p.id;
         dust_grains_out[counter].x_dust = p.position[0];
         dust_grains_out[counter].y_dust = p.position[1];
@@ -272,12 +280,13 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         dust_grains_out[counter].vz_dust = p.velocity[2];
         dust_grains_out[counter].s_dust = p.p_size;
         dust_grains_out[counter].h_dust = p.h_updated;
-        dust_grains_out[counter].kappa_dust = p.p_opacity;
         dust_grains_out[counter].m_dust = p.p_mass;
         dust_grains_out[counter].temp_dust = p.p_temp;
         dust_grains_out[counter].tau_dust = p.p_tau;
+        dust_grains_out[counter].kappa_dust = p.p_opacity;
+        
         //write file with particle data
-        /*
+        
         output.write((char*) &t_next, sizeof(double));
         output.write((char*) &p.id, sizeof(long int));
         output.write((char*) &p.position[0], sizeof(double));
@@ -288,19 +297,26 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         output.write((char*) &p.p_tau, sizeof(double));
         output.write((char*) &p.p_temp, sizeof(double));
         output.write((char*) &p.p_opacity, sizeof(double));
-        */
         counter = counter +1;
       }
-
+      
       for(int i = 0; i < total; i++){
-        output_lt.write((char *) &dust_grains_out[i], sizeof(dust));
+      output_lt.write((char *) &dust_grains_out[i], sizeof(dust));
       }
-
+      dust_grains_out.clear();
+      //output_lt.close();
+      /*
+      std::fstream test_file;
+      test_file.open("./data/output_struct.bin", std::fstream::in | std::fstream::binary);
+      for(int i = 0; i < total; i++){
+      test_file.read((char *) &dust_grains_out[i], sizeof(dust));
+      }
+      */
+      //cout << "lines in output " << counter << endl;
       current_particles = total_particles;
+      //cout << "current " << current_particles << endl;
       total_particles = total_particles + 1000;
-
-
-
+      //cout << "total next " << total_particles << endl;
       //add particles every 100th of an orbit
       add_particles(particles, current_particles, total_particles, t_next);
       plot_time = plot_time + 0.01;
