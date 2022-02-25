@@ -262,11 +262,11 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     
     if (abs(t_next-plot_time) < 1.0e-8) { 
       long int total = particles.size();
-      //cout << "total " << total << endl;
+      cout << "total " << total << endl;
       
       //dust dust_grains_out[total]; 
       vector < dust > dust_grains_out;
-      
+      counter = 0;
       cout << "Writting data to file.." << endl;
       for( Particle& p : particles) {
         dust_grains_out.push_back(dust());

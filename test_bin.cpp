@@ -1,6 +1,7 @@
 #include <iostream>
 #include<iostream>
 #include<fstream>
+#include<vector>
 using namespace std;
 double size;
 struct dust {
@@ -42,20 +43,23 @@ int main() {
    }
    */
   std::fstream test_file;
-  test_file.open("./simulations/KIC1255b_03micro_1mdot_day_025orb_struct_test.bin", std::fstream::in | std::fstream::binary);
+  test_file.open("./simulations/KIC1255b_03micro_1mdot_day_2orb_struct_test.bin", std::fstream::in | std::fstream::binary);
    test_file.seekg(0, ios::end);
    size=test_file.tellg();
    test_file.seekg(0, ios::beg);
    cout << "size " << size << endl;
    long int total = size/sizeof(dust);
-   dust dust_grains_out[total];
-   for(int i = 0; i < total; i++){
-      test_file.read((char *) &dust_grains_out[i], sizeof(dust));
-      cout << dust_grains_out[i].timestamp << endl;
-      cout << dust_grains_out[i].id << endl;
-      cout << dust_grains_out[i].x_dust << endl;
-      cout << dust_grains_out[i].kappa_dust << endl;
-   }
+   cout << "total " << total << endl;
+   //dust dust_grains_out[total];
+   vector <dust> dust_grains_out;
+    for(int i = 0; i < total; i++){
+       dust_grains_out.push_back(dust());
+       test_file.read((char *) &dust_grains_out[i], sizeof(dust));
+       //cout << dust_grains_out[i].timestamp << endl;
+       //cout << dust_grains_out[i].id << endl;
+       //cout << dust_grains_out[i].x_dust << endl;
+       //cout << dust_grains_out[i].kappa_dust << endl;
+    }
    test_file.close();
    
    /*
