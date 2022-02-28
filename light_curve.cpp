@@ -49,12 +49,16 @@ double* angles(double times[timesteps], double t0, double angle[timesteps]){
 
 void build_grid(double x_grid[x_cells], double y_grid[y_cells]){
    x_grid[0] = -1.0 *r_star;
-   y_grid[0] = -1.0 *r_star;
-   for (int i=1;i<=x_cells; i++){
+
+   for (unsigned int i=1;i<=x_cells; i++){
       x_grid[i] = x_grid[i-1] + dx;
+      
    }
-   for (int i=1;i<=y_cells+1; i++){
-      y_grid[i] = y_grid[i-1] + dy;
+   y_grid[0] = -1.0 *r_star;
+   for (unsigned int k=1;k<=y_cells; k++){
+      y_grid[k] = y_grid[k-1] + dy;
+      
+      cout << y_grid[k] << endl;
    }
 }
 
@@ -66,8 +70,10 @@ void grid_cells(double x_grid[x_cells], double y_grid[y_cells], double patches[x
    double h, a, b;
    for (int m=0; m<x_cells; m++){
       for (int n=0; n<y_cells; n++){
+            //cout <<  m << " " << n << " " << endl;
             check = 0;
             p1[0] = x_grid[m];
+            //cout << "x1 " << p1[0] << " y1 " << p1[1] << endl;
             p1[1] = y_grid[n];
             p2[0] = x_grid[m+1];
             p2[1] = y_grid[n];
@@ -86,7 +92,6 @@ void grid_cells(double x_grid[x_cells], double y_grid[y_cells], double patches[x
             //cell outside
             if ((r1 >=r_star) && (r2 >= r_star) && (r3 >=r_star) && (r4 >= r_star)){
                patches[m][n] = 0.0;
-               
             }
 
             //cell inside
@@ -101,12 +106,15 @@ void grid_cells(double x_grid[x_cells], double y_grid[y_cells], double patches[x
                   delta_x = pow(pow(r_star,2)-pow(p1[1],2), 0.5) - abs(p1[0]);
                   delta_y = pow(pow(r_star,2)-pow(p1[0],2), 0.5) - abs(p1[1]);
                   patches[m][n] = (delta_x * delta_y)/2.;
+                  cout << "t 1st" << endl;
+                  
                } 
                //1st quadrant, 3 in, 1 out
                else if ((r2 < r_star) && (r4 < r_star) && (r3 >=r_star)) {
                   delta_x = abs(p3[0]) - pow(pow(r_star,2)-pow(p3[1],2), 0.5);
                   delta_y = abs(p3[1]) - pow(pow(r_star,2)-pow(p3[0],2), 0.5);
                   patches[m][n] = (dx*dy) - 0.5*delta_x * delta_y;
+                
                }
             
                //2nd quadrant, 3 in, 1 out
@@ -114,32 +122,82 @@ void grid_cells(double x_grid[x_cells], double y_grid[y_cells], double patches[x
                   delta_x = abs(p4[0]) - pow(pow(r_star,2)-pow(p4[1],2), 0.5);
                   delta_y = abs(p4[1]) - pow(pow(r_star,2)-pow(p4[0],2), 0.5);
                   patches[m][n] = (dx*dy) - 0.5*delta_x * delta_y;
+                  
                }
                //4th quadrant, 3 in, 1 out
                else if ((r3 < r_star) && (r4 < r_star) && (r2 >= r_star)) {
                   delta_x = abs(p2[0]) - pow(pow(r_star,2)-pow(p2[1],2), 0.5);
                   delta_y = abs(p2[1]) - pow(pow(r_star,2)-pow(p2[0],2), 0.5);
                   patches[m][n] = (dx*dy) - 0.5*delta_x * delta_y;
+                  
                }
                //trapezium, height parallel to x axis, 1 and 2 in
                else if ((r2 < r_star) && (r4 >= r_star) && (r3 >= r_star)) {
-                  h = abs(p2[0]-p1[0]);
-                  a = pow(pow(r_star,2)-pow(p2[0],2), 0.5) - abs(p1[1]);
+                  h = abs(abs(p2[0])-abs(p1[0]));
+                  a = pow(pow(r_star,2)-pow(p2[0],2), 0.5) - abs(p2[1]);
                   b = pow(pow(r_star,2)-pow(p1[0],2), 0.5) - abs(p1[1]);
                   patches[m][n] = 0.5*h*(a+b);
+                  
                   
                }
                 //trapezium, height parallel to y axis, 1 and 4 in
                else if ((r4 < r_star) && (r2 >= r_star) && (r3 >= r_star)) {
-                  h = abs(p4[1]-p1[1]);
+                  h = abs(abs(p4[1])-abs(p1[1]));
                   a = pow(pow(r_star,2)-pow(p4[1],2), 0.5) - abs(p4[0]);
-                  b = pow(pow(r_star,2)-pow(p1[1],2), 0.5) - abs(p4[0]);
+                  b = pow(pow(r_star,2)-pow(p1[1],2), 0.5) - abs(p1[0]);
                   patches[m][n] = 0.5*h*(a+b);
+                  
+               }   
+            } 
+
+            else if (r3 < r_star) {
+               //triangle, 3 in
+               if ((r1 >=r_star) && (r2>= r_star) && (r4 >=r_star)) {
+                  delta_x = pow(pow(r_star,2)-pow(p3[1],2), 0.5) - abs(p3[0]);
+                  delta_y = pow(pow(r_star,2)-pow(p3[0],2), 0.5) - abs(p3[1]);
+                  patches[m][n] = delta_x * delta_y * 0.5;
+               }
+               //triangle, 3 2 and 4 in, 1 out
+               else if ((r2 < r_star) && (r4 < r_star) && (r1 >=r_star)) {
+                  delta_x = abs(p1[0]) - pow(pow(r_star,2)-pow(p1[1],2), 0.5);
+                  delta_y = abs(p1[1]) - pow(pow(r_star,2)-pow(p1[0],2), 0.5);
+                  patches[m][n] = (dx*dy) - 0.5*delta_x * delta_y;
                }
 
+               else if ((r2 < r_star) && (r1 >= r_star) && (r4 >= r_star)) {
+                  h = abs(abs(p3[1])-abs(p2[1]));
+                  a = pow(pow(r_star,2)-pow(p3[1],2), 0.5) - abs(p3[0]);
+                  b = pow(pow(r_star,2)-pow(p2[1],2), 0.5) - abs(p2[0]);
+                  patches[m][n] = 0.5*h*(a+b);
+               }
+               else if ((r4 <r_star) && (r1 >=r_star) && (r2> r_star)) {
+                  h = abs(abs(p3[0])-abs(p4[0]));
+                  a = pow(pow(r_star,2)-pow(p3[0],2), 0.5) - abs(p3[1]);
+                  b = pow(pow(r_star,2)-pow(p4[0],2), 0.5) - abs(p4[1]);
+                  patches[m][n] = 0.5*h*(a+b);
+               }
+            }
 
-               
-            } 
+            else if (r2 <r_star) {
+               if ((r1 >=r_star) && (r3>=r_star) && (r3>=r_star)){
+                  delta_x = pow(pow(r_star,2)-pow(p2[1],2), 0.5) - abs(p2[0]);
+                  delta_y = pow(pow(r_star,2)-pow(p2[0],2), 0.5) - abs(p2[1]);
+                  patches[m][n] = delta_x * delta_y * 0.5;
+               }
+            }
+
+            else if (r4 < r_star) {
+               if ((r1 >=r_star) && (r2>=r_star) && (r3>=r_star)){
+                  delta_x = pow(pow(r_star,2)-pow(p4[1],2), 0.5) - abs(p4[0]);
+                  delta_y = pow(pow(r_star,2)-pow(p4[0],2), 0.5) - abs(p4[1]);
+                  patches[m][n] = delta_x * delta_y * 0.5;
+               }
+            }
+            else {
+               cout << "something went wrong " << endl;
+               abort;
+            }
+            
 
 
 
