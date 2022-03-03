@@ -62,7 +62,7 @@ void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells]
 
         //double n_mini = 4.0e+23;
         double mbig = (mdot * T * 0.01) / 1000. ; // 0.01 dependent on when particles are being thrown out of planet
-        double n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(1.0e-4, 3));
+        double n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(s_0, 3));
         //cout <<  "Number of mini particles: " <<  n_mini << endl;
 
         vector <int> r_index, theta_index, phi_index;

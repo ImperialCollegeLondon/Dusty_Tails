@@ -139,9 +139,9 @@ double brent(double size, double x, double y, double z, double tau){
 
         if (cond1 || cond2 || cond3 || cond4 || cond5 ) {
           s = (Ac + Bc)/2.;
-          mflag == 1;
+          mflag = 1;
         } else {
-          mflag == 0;
+          mflag = 0;
         }
         fs = f_Tdust(size,x,y,z,tau,s);
         Dc = Cc;

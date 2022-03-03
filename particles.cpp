@@ -180,7 +180,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     auto start = high_resolution_clock::now();
     cout << "At time " << previous_t << endl;
     //cout << tau_constant << endl;
-    if ((tau_constant == false)) {
+    if (tau_constant == false) {
         memset(extinction, 0.0, sizeof(extinction));
         memset(optical_depth, 0.0, sizeof(optical_depth));
         calculation_ext(particles, extinction, t_global_min);
@@ -204,7 +204,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     double no_particles = particles.size();
     vector <double> pos_spherical;
     vector <double> pos_scaled;
-    if ((tau_constant == true)) {
+    if (tau_constant == true) {
             p.p_tau = 0.1;
     } else {
             pos_spherical = pos_to_spherical(p.position[0], p.position[1], p.position[2]);
@@ -262,7 +262,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     
     if (abs(t_next-plot_time) < 1.0e-8) { 
       long int total = particles.size();
-      cout << "total " << total << endl;
+      //cout << "total " << total << endl;
       
       //dust dust_grains_out[total]; 
       vector < dust > dust_grains_out;
