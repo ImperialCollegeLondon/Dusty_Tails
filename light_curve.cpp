@@ -92,6 +92,76 @@ vector <double> scaled_pos(double x, double y){
    return {x_scaled, y_scaled};
 }
 
+void idk(double xp, double yp, double patches[x_cells+1][y_cells+1], 
+         double x_grid[x_cells+1], double y_grid[y_cells+1]){
+
+         double rp;
+         vector <double> spos;
+         vector <double> x_deltas, y_deltas;
+         vector <int> x_index, y_index;
+         int xit, yit;
+
+         rp = pow(pow(xp, 2.0) + pow(yp, 2.0), 0.5);
+         if (rp < r_star) {
+            spos = scaled_pos(xp, yp);
+            xit = floor(spos[0]);
+            yit = floor(spos[1]);
+
+            if ((xit == 0) && (xp-(dx/2.) < x_grid[0])){
+                  x_index = {-1, 0};
+                  x_deltas[0] = 0.0;
+                  x_deltas[1] = abs(abs(xp+(dx/2.)) -abs(x_grid[0]));
+            }
+            else if ((xit == (x_cells -1)) && (xp+(dx/2.) > x_grid[x_cells])) {
+               x_index = {x_cells, -1};
+               x_deltas[0] = abs( abs(x_grid[x_cells]) - abs(xp-(dx/2.)));
+               x_deltas[1] = 0.0;
+            }
+
+            else if (xp > (x_grid[xit]+(dx/2.)) ) {
+               x_index = {xit, xit+1};
+               x_deltas[0] = abs( abs(x_grid[xit+1]) - abs(xp-(dx/2.)));
+               x_deltas[1] = abs( abs(xp+(dx/2.)) - abs(x_grid[xit+1]));
+
+            } 
+
+            else if (xp < (x_grid[xit]+(dx/2.))) {
+               x_index = {xit-1, xit};
+               x_deltas[0] = abs( abs(x_grid[xit]) - abs(xp - (dx/2.)));
+               x_deltas[1] = abs( abs(xp+(dx/2.)) - abs(x_grid[xit]));
+
+            }
+            
+            if ((yit == 0) && (yp-(dy/2.) < y_grid[0])){
+                  y_index = {-1, 0};
+                  y_deltas[0] = 0.0;
+                  y_deltas[1] = abs(abs(yp+(dy/2.)) -abs(y_grid[0]));
+            }
+            else if ((yit == (y_cells -1)) && (yp+(dy/2.) > y_grid[y_cells])) {
+               y_index = {y_cells, -1};
+               y_deltas[0] = abs( abs(y_grid[y_cells]) - abs(yp-(dy/2.)));
+               y_deltas[1] = 0.0;
+            }
+
+            else if (yp > (y_grid[yit]+(dy/2.)) ) {
+               y_index = {yit, yit+1};
+               y_deltas[0] = abs( abs(y_grid[yit+1]) - abs(yp-(dy/2.)));
+               y_deltas[1] = abs( abs(yp+(dy/2.)) - abs(y_grid[yit+1]));
+
+            } 
+
+            else if (yp < (y_grid[yit]+(dy/2.))) {
+               y_index = {yit-1, yit};
+               y_deltas[0] = abs( abs(y_grid[yit]) - abs(yp - (dy/2.)));
+               y_deltas[1] = abs( abs(yp+(dy/2.)) - abs(y_grid[yit]));
+
+            }
+            
+            }
+         }
+
+
+
 
 void grid_cells(double x_grid[x_cells+1], double y_grid[y_cells+1], double patches[x_cells+1][y_cells+1]){
    double p1[2], p2[2], p3[2], p4[2];
