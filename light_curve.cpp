@@ -3,6 +3,7 @@
 #include<fstream>
 #include<vector>
 #include <cmath>
+#include <algorithm>
 
 using namespace std;
 
@@ -82,6 +83,28 @@ void build_grid(double x_grid[x_cells+1], double y_grid[y_cells+1]){
    for (unsigned int k=1;k<=y_cells; k++){
       y_grid[k] = y_grid[k-1] + dy;
    }
+}
+
+vector <dust> read_data(){
+  std::fstream output;
+  output.open("./simulations/K222b_03micro_1mdot_day_3orb_tc.bin", std::fstream::in | std::fstream::binary);
+  output.seekg(0, ios::end);
+  int size=output.tellg();
+  output.seekg(0, ios::beg);
+  cout << "size " << size << endl;
+  long int total = size/sizeof(dust);
+  cout << "total " << total << endl;
+  vector <dust> dust_grains_out;
+  for(int i = 0; i < total; i++){
+       dust_grains_out.push_back(dust());
+       output.read((char *) &dust_grains_out[i], sizeof(dust));
+       //cout << dust_grains_out[i].timestamp << endl;
+       //cout << dust_grains_out[i].id << endl;
+       //cout << dust_grains_out[i].x_dust << endl;
+       //cout << dust_grains_out[i].kappa_dust << endl;
+    }
+   output.close();
+   return dust_grains_out;
 }
 
 vector <double> scaled_pos(double x, double y){
@@ -313,6 +336,17 @@ void grid_cells(double x_grid[x_cells+1], double y_grid[y_cells+1], double patch
 
 
 int main(){
+   vector <double> period_steps = {};
+   vector <dust> particles;
+   particles = read_data();
+    for( dust& p : particles) {
+       //cout << p.timestamp << endl;
+       if (std::find(period_steps.begin(), period_steps.end(), p.timestamp) == period_steps.end()) {
+        cout << p.timestamp << endl;
+        period_steps.push_back(p.timestamp);
+       } 
+       }
+       
    build_grid(x_grid, y_grid);
    grid_cells(x_grid, y_grid, patches);
    cout << dx << endl;

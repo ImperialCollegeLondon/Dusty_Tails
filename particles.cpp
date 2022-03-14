@@ -270,7 +270,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
       cout << "Writting data to file.." << endl;
       for( Particle& p : particles) {
         dust_grains_out.push_back(dust());
-        dust_grains_out[counter].timestamp = t_global_min;
+        dust_grains_out[counter].timestamp = t_next;
         dust_grains_out[counter].id = p.id;
         dust_grains_out[counter].x_dust = p.position[0];
         dust_grains_out[counter].y_dust = p.position[1];
