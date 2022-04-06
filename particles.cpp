@@ -43,6 +43,7 @@ struct dust {
 ofstream output("./data/output.bin", ios::out | ios::binary);
 //ofstream ray_tracer("./data/grid_test.bin", ios::out | ios::binary);
 ofstream output_lt("./data/output_struct.bin", ios::out | ios::binary);
+ofstream output_final("./data/output_final.bin", ios::out | ios::binary);
 
 //spacing of grid cells in scale of particle distribution
 double d_dr = (d_r_max - d_r_min)/ r_cells_d;
@@ -284,6 +285,9 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         dust_grains_out[counter].temp_dust = p.p_temp;
         dust_grains_out[counter].tau_dust = p.p_tau;
         dust_grains_out[counter].kappa_dust = p.p_opacity;
+        if (p.id == 0 ) {
+        cout << "id is zero " << endl;}
+
         
         //write file with particle data
         
@@ -302,6 +306,9 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
       
       for(int i = 0; i < total; i++){
       output_lt.write((char *) &dust_grains_out[i], sizeof(dust));
+      if (t_next >= end_t) {
+        output_final.write((char *) &dust_grains_out[i], sizeof(dust));
+      }
       }
       dust_grains_out.clear();
       //output_lt.close();

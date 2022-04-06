@@ -111,8 +111,8 @@ for t in df['time'].unique():
      plot_df = df[df.time == t]
      fig = plt.figure()
      ax = fig.add_subplot(111)
-     ax.set_xlim(-0.5, 0.5)
-     ax.set_ylim(-0.5, 0.5)
+     ax.set_xlim(-2.0, 2.0)
+     ax.set_ylim(-2.0, 2.0)
      ax.set_aspect('equal')
      #ax.set_facecolor('black')
      ax.get_xaxis().set_visible(False)
@@ -125,42 +125,46 @@ for t in df['time'].unique():
      z_behind = []
      y_front = []
      z_front = []
-     
-     for index in plot_df.index:
-         if (plot_df['xprime'][index] < 0.0):
+
+     front = 1
+     if (front == 0):
+        for index in plot_df.index:
+            if (plot_df['xprime'][index] < 0.0):
              y_behind.append(plot_df['yprime'][index])
              z_behind.append(plot_df['z_double_prime'][index])
-         else:
+            else:
              y_front.append(plot_df['yprime'][index])
              z_front.append(plot_df['z_double_prime'][index])
-
+    
      
-     if plot_df['x_planet'][plot_df.index[0]] <  0.0:
+        if plot_df['x_planet'][plot_df.index[0]] <  0.0:
        
-       dust1 = plt.scatter(y_behind, z_behind, s= 0.01,  alpha=0.1, c='#008080', zorder=1)
-       planet = plt.scatter(plot_df['y_planet'], plot_df['z_planet'], s=20.0 , c= '#C6492B', zorder=2)
-       #star = plt.scatter(0.0, 0.0, s=10000.0, c='#ffcc00')
-       star = plt.Circle((0.0,0.0), radius=0.36, linewidth=0, color='#ffcc00', zorder=3)
-       #c = matplotlib.collections.PatchCollection(circles)
-       ax.add_patch(star)
-       dust2 = plt.scatter(y_front, z_front, s=0.01, alpha = 0.1, c='#008080', zorder=4)
-
-       plt.savefig("./plots/KIC1255b_2orb_corundum/fig{0:01}.png".format(i))
-
-       plt.close()
+            dust1 = plt.scatter(y_behind, z_behind, s= 0.01,  alpha=0.1, c='#008080', zorder=1)
+            planet = plt.scatter(plot_df['y_planet'], plot_df['z_planet'], s=20.0 , c= '#C6492B', zorder=2)
+            #star = plt.scatter(0.0, 0.0, s=10000.0, c='#ffcc00')
+            star = plt.Circle((0.0,0.0), radius=0.36, linewidth=0, color='#ffcc00', zorder=3)
+            #c = matplotlib.collections.PatchCollection(circles)
+            ax.add_patch(star)
+            dust2 = plt.scatter(y_front, z_front, s=0.01, alpha = 0.1, c='#008080', zorder=4)
+            plt.savefig("./plots/KIC1255b_2orb_corundum/fig_flat{0:01}.png".format(i))
+            plt.close()
+        else:
+            dust1 = plt.scatter(y_behind, z_behind, s= 0.01, alpha=0.1, c='#008080', zorder=1)
+            #star = plt.scatter(0.0, 0.0, s=10000.0, c='#ffcc00')
+            star = plt.Circle((0.0,0.0), radius=0.36, linewidth=0, color='#ffcc00', zorder=2)
+            #c = matplotlib.collections.PatchCollection(circles)
+            ax.add_patch(star)
+            planet = plt.scatter(plot_df['y_planet'], plot_df['z_planet'], s= 20.0 , c= '#C6492B', zorder=3)
+            dust2 = plt.scatter(y_front, z_front, s=0.01, alpha = 0.1, c='#008080', zorder=4)
+            plt.savefig("./plots/KIC1255b_2orb_corundum/fig_flat{0:01}.png".format(i))
+            plt.close()
      else:
-       dust1 = plt.scatter(y_behind, z_behind, s= 0.01, alpha=0.1, c='#008080', zorder=1)
-       #star = plt.scatter(0.0, 0.0, s=10000.0, c='#ffcc00')
-       star = plt.Circle((0.0,0.0), radius=0.36, linewidth=0, color='#ffcc00', zorder=2)
-       #c = matplotlib.collections.PatchCollection(circles)
-       ax.add_patch(star)
-       planet = plt.scatter(plot_df['y_planet'], plot_df['z_planet'], s= 20.0 , c= '#C6492B', zorder=3)
-       dust2 = plt.scatter(y_front, z_front, s=0.01, alpha = 0.1, c='#008080', zorder=4)
-       
-
-       plt.savefig("./plots/KIC1255b_2orb_corundum/fig{0:01}.png".format(i))
-
-       plt.close()
+        star = plt.Circle((0.0,0.0), radius=0.36, linewidth=0, color='#ffcc00', alpha=0.2,zorder=1)
+        #c = matplotlib.collections.PatchCollection(circles)
+        ax.add_patch(star)
+        dust1 = plt.scatter(plot_df['x_double_prime'], plot_df['yprime'], s= 0.01,  alpha=0.1, c='#008080', zorder=2)
+        plt.savefig("./plots/KIC1255b_2orb_corundum/fig_flat{0:01}.png".format(i))
+        plt.close()
      
      
      

@@ -100,19 +100,29 @@ void build_grid(double h_grid[h_cells+1], double v_grid[v_cells+1]){
    }
 }
 
-vector <dust> read_data(){
+vector <dust_read> read_data(){
   std::fstream output;
-  output.open("./simulations/K222b_03micro_1mdot_day_3orb_tc.bin", std::fstream::in | std::fstream::binary);
+  output.open("./simulations/K222b_03micro_1mdot_day_05orb_tc.bin", std::fstream::in | std::fstream::binary);
   output.seekg(0, ios::end);
   int size=output.tellg();
   output.seekg(0, ios::beg);
   cout << "size " << size << endl;
   long int total = size/sizeof(dust);
   cout << "total " << total << endl;
-  vector <dust> dust_grains_out;
+  vector <dust_read> dust_grains_out;
   for(int i = 0; i < total; i++){
-       dust_grains_out.push_back(dust());
-       output.read((char *) &dust_grains_out[i], sizeof(dust));
+       dust_grains_out.push_back(dust_read());
+       output.read((char *) &dust_grains_out[i], sizeof(dust_read));
+       
+       if (dust_grains_out[i].id == 0) {
+          //cout << "id is zero " << endl;
+          //dust_grains_out.erase(dust_grains_out.end());
+          dust_grains_out.pop_back();
+          //cout << "going to break " << endl;
+          break;
+          
+       }
+       //cout << dust_grains_out[i].id << endl;
     }
    output.close();
    return dust_grains_out;
@@ -133,93 +143,97 @@ void idk( vector <dust> particles, double patches[h_cells+1][v_cells+1],
          for ( dust& p : particles) {
          double rp, hp, vp, dA, dA_cell, sigma, shadow;
          vector <double> spos;
-         vector <double> h_deltas, v_deltas;
+         vector <double> h_deltas(2);
+         vector <double> v_deltas(2);
          vector <int> h_index, v_index;
          
          int hit, vit;
          hp = p.y_dp;
          vp = p.z_dp;
          rp = pow(pow(hp, 2.0) + pow(vp, 2.0), 0.5);
-         cout << hp << endl;
-         cout << vp << endl;
-         cout << rp << endl;
-         cout << r_star << endl;
-         if (rp < r_star) { cout << "true " << endl;}
          if (rp < r_star) {
-            cout << "hp " << hp << endl;
-            cout << "vp " << vp << endl;
+            
             spos = scaled_pos(hp, vp);
-            cout << "hp s " << spos[0] << endl;
-            cout << "vp s " << spos[1] << endl;
+            
             hit = floor(spos[0]);
             vit = floor(spos[1]);
-
-            // if ((hit == 0) && (hp-(dh/2.) < h_grid[0])){
-            //       h_index = {-1, 0};
-            //       h_deltas[0] = 0.0;
-            //       h_deltas[1] = abs(abs(hp+(dh/2.)) -abs(h_grid[0]));
-            // }
-            // else if ((hit == (h_cells -1)) && (hp+(dh/2.) > h_grid[h_cells])) {
-            //    h_index = {h_cells, -1};
-            //    h_deltas[0] = abs( abs(h_grid[h_cells]) - abs(hp-(dh/2.)));
-            //    h_deltas[1] = 0.0;
-            // }
-
-            // else if (hp > (h_grid[hit]+(dh/2.)) ) {
-            //    h_index = {hit, hit+1};
-            //    h_deltas[0] = abs( abs(h_grid[hit+1]) - abs(hp-(dh/2.)));
-            //    h_deltas[1] = abs( abs(hp+(dh/2.)) - abs(h_grid[hit+1]));
-
-            // } 
-
-            // else if (hp < (h_grid[hit]+(dh/2.))) {
-            //    h_index = {hit-1, hit};
-            //    h_deltas[0] = abs( abs(h_grid[hit]) - abs(hp - (dh/2.)));
-            //    h_deltas[1] = abs( abs(hp+(dh/2.)) - abs(h_grid[hit]));
-
-            // }
+           
             
-            // if ((vit == 0) && (vp-(dv/2.) < v_grid[0])){
-            //       v_index = {-1, 0};
-            //       v_deltas[0] = 0.0;
-            //       v_deltas[1] = abs(abs(vp+(dv/2.)) -abs(v_grid[0]));
-            // }
-            // else if ((vit == (v_cells -1)) && (vp+(dv/2.) > v_grid[v_cells])) {
-            //    v_index = {v_cells, -1};
-            //    v_deltas[0] = abs( abs(v_grid[v_cells]) - abs(vp-(dv/2.)));
-            //    v_deltas[1] = 0.0;
-            // }
+            if ((hit == 0) && (hp-(dh/2.) < h_grid[0])){
+                  h_index = {-1, 0};
+                  h_deltas[0] = 0.0;
+                  h_deltas[1] = abs(abs(hp+(dh/2.)) -abs(h_grid[0]));
+            }
 
-            // else if (vp > (v_grid[vit]+(dv/2.)) ) {
-            //    v_index = {vit, vit+1};
-            //    v_deltas[0] = abs( abs(v_grid[vit+1]) - abs(vp-(dv/2.)));
-            //    v_deltas[1] = abs( abs(vp+(dv/2.)) - abs(v_grid[vit+1]));
+             else if ((hit == (h_cells -1)) && (hp+(dh/2.) > h_grid[h_cells])) {
+               h_index = {h_cells, -1};
+               h_deltas[0] = abs( abs(h_grid[h_cells]) - abs(hp-(dh/2.)));
+               h_deltas[1] = 0.0;
+            }
 
-            // } 
+             else if (hp > (h_grid[hit]+(dh/2.)) ) {
+                h_index = {hit, hit+1};
+                h_deltas[0] = abs( abs(h_grid[hit+1]) - abs(hp-(dh/2.)));
+                h_deltas[1] = abs( abs(hp+(dh/2.)) - abs(h_grid[hit+1]));
 
-            // else if (vp < (v_grid[vit]+(dv/2.))) {
-            //    v_index = {vit-1, vit};
-            //    v_deltas[0] = abs( abs(v_grid[vit]) - abs(vp - (dv/2.)));
-            //    v_deltas[1] = abs( abs(vp+(dv/2.)) - abs(v_grid[vit]));
+             } 
 
-            // }
+             else if (hp < (h_grid[hit]+(dh/2.))) {
+                
+               h_index = {hit-1, hit};
+               h_deltas[0] = abs( abs(h_grid[hit]) - abs(hp - (dh/2.)));
+               h_deltas[1] = abs( abs(hp+(dh/2.)) - abs(h_grid[hit]));
+
+             }
             
-            // for (unsigned int i=0; i<2; i++){
-            //    for (unsigned int j=0; j<2; j++){
-            //       if ((h_index[i]>0) && (v_index[j]>0)) {
-            //          dA = h_deltas[i]*v_deltas[j];
-            //          dA_cell = patches[h_index[i]][v_index[j]];
-            //          sigma = (p.kappa * p.m) / (pow(sm_to_cm, 2.0));
-            //          shadow = ((dA/(dh*dv)) * sigma*n_mini) / dA_cell;
-            //          taus[h_index[i]][v_index[j]] = taus[h_index[i]][v_index[j]] + shadow;
-            //       }
+            if ((vit == 0) && (vp-(dv/2.) < v_grid[0])){
+                  v_index = {-1, 0};
+                  v_deltas[0] = 0.0;
+                  v_deltas[1] = abs(abs(vp+(dv/2.)) -abs(v_grid[0]));
+            }
+            else if ((vit == (v_cells -1)) && (vp+(dv/2.) > v_grid[v_cells])) {
+               v_index = {v_cells, -1};
+               v_deltas[0] = abs( abs(v_grid[v_cells]) - abs(vp-(dv/2.)));
+               v_deltas[1] = 0.0;
+            }
 
-            //    }
-            //       }
-               }
+            else if (vp > (v_grid[vit]+(dv/2.)) ) {
+               v_index = {vit, vit+1};
+               v_deltas[0] = abs( abs(v_grid[vit+1]) - abs(vp-(dv/2.)));
+               v_deltas[1] = abs( abs(vp+(dv/2.)) - abs(v_grid[vit+1]));
+
+            } 
+
+            else if (vp < (v_grid[vit]+(dv/2.))) {
+               v_index = {vit-1, vit};
+               v_deltas[0] = abs( abs(v_grid[vit]) - abs(vp - (dv/2.)));
+               v_deltas[1] = abs( abs(vp+(dv/2.)) - abs(v_grid[vit]));
+
             }
             
+            for (unsigned int i=0; i<2; i++){
+               for (unsigned int j=0; j<2; j++){
+                  
+                     dA = h_deltas[i]*v_deltas[j];
+                     if (dA > 0.0) {
+                     dA_cell = patches[h_index[i]][v_index[j]];
+                     sigma = (p.kappa * p.m) / (pow(sm_to_cm, 2.0));
+                     
+                     shadow = ((dA/(dh*dv)) * sigma*n_mini) / dA_cell;
+                     taus[h_index[i]][v_index[j]] = taus[h_index[i]][v_index[j]] + shadow;
+                     // cout << "at cell h " << h_index[i] << " v " << v_index[j] << endl;
+                     // cout << "dA " << dA << endl;
+                     // cout << "dA_cell " << dA_cell << endl;
+                     // cout << "sigma " << sigma << endl;
+                     // cout << "shadow " << shadow << endl;
+                     // cout << "kappa " << p.kappa << endl;
+                     // cout << "mass " << p.m << endl;
+                     }
+               }
+            }
          }
+      }        
+   }
 
 
 
@@ -230,6 +244,7 @@ void grid_cells(double h_grid[h_cells+1], double v_grid[v_cells+1], double patch
    double check;
    double delta_x, delta_y;
    double h, a, b;
+   cout << "at grid cells " << endl;
    for (int m=0; m<h_cells; m++){
       for (int n=0; n<v_cells; n++){
             //cout <<  m << " " << n << " " << endl;
@@ -366,14 +381,24 @@ void grid_cells(double h_grid[h_cells+1], double v_grid[v_cells+1], double patch
    }
 }
 
+double flux(double taus[h_cells+1][v_cells+1], double patches[h_cells+1][v_cells+1]){
+   double f;
+   for (int m=0; m<=h_cells; m++){
+      for (int n=0; n<=v_cells; n++){
+         f = f + ((patches[m][n] * exp(-1.0*taus[m][n])) / (PI * pow(r_star,2.)));
+      }
+   }
+   return f;
+}
 
 int main(){
    vector <double> period_steps = {};
    vector <dust_read> particles_read;
    vector <dust> particles;
-   particles = read_data();
+   particles_read = read_data();
    double t0 = 0.0;
    int counter = 0;
+   vector <double> timestamps;
    for( dust_read& p : particles_read) {
        particles.push_back(dust());
        //cout << p.timestamp << endl;
@@ -382,6 +407,12 @@ int main(){
         //period_steps.push_back(p.timestamp);
        //} 
        particles[counter].timestamp = p.timestamp;
+       double key = p.timestamp;
+       if (find(timestamps.begin(), timestamps.end(), key) == timestamps.end()) {
+          timestamps.push_back(key);
+          cout << p.timestamp << endl;
+      }
+
        particles[counter].phi = 2.0*M_PI * (p.timestamp - t0);
        particles[counter].x_p = p.x_dust * cos(particles[counter].phi) - p.y_dust * sin(particles[counter].phi);
        particles[counter].y_p = p.x_dust * sin(particles[counter].phi) + p.y_dust * cos(particles[counter].phi);
@@ -391,12 +422,15 @@ int main(){
        particles[counter].z_dp = particles[counter].x_p * cos(inclination) + particles[counter].z_p * sin(inclination);
        particles[counter].m = p.m_dust;
        particles[counter].kappa = p.kappa_dust;
+       //cout << p.id << "  " << p.timestamp <<  endl;
        counter = counter + 1;
        }
-   cout << particles[2345].y_dp << endl;
+
    build_grid(h_grid, v_grid);
    grid_cells(h_grid, v_grid, patches);
-   idk(particles, patches,  h_grid, v_grid,taus);
+
+   
+   //idk(particles, patches,  h_grid, v_grid,taus);
    
    return 0;
 }

@@ -22,6 +22,7 @@ cd $TMPDIR
 
 ./executables/dusty_tails.exe
 
-mv ./data/output.bin  $CWD/simulations/output_test2.bin
+mv ./data/output_struct.bin  $CWD/simulations/K222b_03micro_1mdot_day_05orb_tc.bin
+mv ./data/output_final.bin  $CWD/simulations/K222b_03micro_1mdot_day_05orb_tc_final.bin
 
 rm -rf $TMPDIR
