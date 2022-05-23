@@ -51,19 +51,35 @@ void build_grids(double *r_a, double *r_b, double *theta_a, \
 }
 
 
-void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells][p_cells], double delta_t){
+double*** calculation_ext(vector <Particle>& particles, double delta_t){
+
+        cout << "at extinction calculation function " << endl;
         vector <double> sphere_pos(3, 0.0);
         vector <double> scaled_pos(3, 0.0);
+        double*** ext;
+        ext = new double**[r_cells];
         int r_it, theta_it, phi_it;
 
         double old_ext;
         double op;
         double pib = 0.;
+        for (int i = 0; i < r_cells; i++){
+            ext[i] = new double*[t_cells];
+            for (int j = 0; j < t_cells; j++){
+                ext[i][j] = new double[p_cells];
+                for (int k=0; k<p_cells; k++){
+                  ext[i][j][k] = 0.0;
+                }
+                }
+      }
 
+      cout << "extinction grid defined successfully " << endl;
+    
         //double n_mini = 4.0e+23;
         double mbig = (mdot * T * 0.01) / 1000. ; // 0.01 dependent on when particles are being thrown out of planet
         double n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(s_0, 3));
-        //cout <<  "Number of mini particles: " <<  n_mini << endl;
+     
+        cout <<  "Number of mini particles: " <<  n_mini << endl;
 
         vector <int> r_index, theta_index, phi_index;
 
@@ -86,7 +102,7 @@ void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells]
               phi_it = floor(scaled_pos[2]);
       
               //particles volume positions in "real" values
-
+              if (r_it != 0 && theta_it != 0 && phi_it !=0 && r_it != r_cells && theta_it!=t_cells && phi_it!=p_cells) {
               p_rs = { r_reverse(scaled_pos[0] - (dr/2.)), r_reverse(scaled_pos[0] + (dr/2.))};
               p_thetas = { theta_reverse(scaled_pos[1] - (dtheta/2.)), theta_reverse(scaled_pos[1] + (dtheta/2.))};
               p_phis= { phi_reverse(scaled_pos[2] - (dphi/2.)), phi_reverse(scaled_pos[2] + (dphi/2.))};
@@ -115,7 +131,7 @@ void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells]
                 phi_index = {phi_it - 1, phi_it};
                 phi_deltas = {(phi_reverse(phi_a [phi_it]) - p_phis[0]), p_phis[1] - phi_reverse(phi_a [phi_it]) };
               }
-
+              
               for (unsigned int i = 0; i < 2; i++){
                 for (unsigned int j = 0; j < 2; j++){
                   for (unsigned int k = 0; k < 2; k++){
@@ -124,17 +140,21 @@ void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells]
                                     + cos(p_thetas[0])) * (p_phis[1] - p_phis[0]));
                       
                       op = p.p_opacity*(pow(10.,-4)/pow(10.,-3)); //opacity in SI units
-                      
                       old_ext = ext [r_index[i]][theta_index[j]][phi_index[k]];
+                      
                       ext [r_index[i]][theta_index[j]][phi_index[k]] = old_ext + (partial_vol/ vol_element) * ((n_mini * p.p_mass*pow(10.,-3) * op) / (vol_element * pow(a, 3)));
-
+            
 
                   }
                 }
               }
+            }
+              
         }
-      }
 
+      }
+  cout << "extinction grid has been calculated successfully! " << endl;
+  return ext;
 
 }
 
@@ -153,13 +173,13 @@ vector <double> grid_scaling(vector <double> s_position){
 
 //verify if particle is within space where optical depth is relevant
 //CHANGE THE LIMITS TO THE LIMITS IN EACH VARIABLE
-  if ((r<0.) || (r>(r_cells_d - 1.))){
+  if ((r<=0.) || (r>=(r_cells_d - 1.))){
     scaled = {-1., -1., -1.};
 
-  } else if ((theta<0.) || (theta>(t_cells_d - 1.))){
+  } else if ((theta<=0.) || (theta>=(t_cells_d - 1.))){
     scaled = {-1., -1., -1.};
 
-  } else if ((phi<0.) || (phi>(p_cells_d - 1.))){
+  } else if ((phi<=0.) || (phi>=(p_cells_d - 1.))){
     scaled = {-1., -1., -1.};
   } else {
     scaled = {r, theta, phi};
@@ -169,15 +189,37 @@ vector <double> grid_scaling(vector <double> s_position){
 
 
 
-void optical_depth_calc(double ext [r_cells][t_cells][p_cells], double od [r_cells][t_cells][p_cells]){
-    for (unsigned int i = 1; i < r_cells; i++){
-        for (unsigned int j = 1; j < t_cells; j++){
-            for (unsigned int  k = 1; k < p_cells; k++){
+double*** optical_depth_calc(double*** ext){
+  double*** od;
+  double d_dr = (d_r_max - d_r_min)/ r_cells_d;
+  double d_dtheta = (d_t_max - d_t_min ) / t_cells_d;
+  double d_dphi = ( d_p_max - d_p_min) / p_cells_d;
+
+  cout << "At optical depth calculation " << endl;
+  cout << "semi major axis is " << a << " m " << endl;
+  cout << "dr " << d_dr << endl;
+  od = new double**[r_cells+1];
+  for (int i = 0; i <= r_cells; i++){
+    od[i] = new double*[t_cells];
+    for (int j = 0; j < t_cells; j++){
+      od[i][j] = new double[p_cells];
+      for (int k=0; k<p_cells; k++){
+                  od[i][j][k] = 0.0;
+      }
+    }
+  }
+    for (unsigned int i = 1; i <= r_cells; i++){
+        for (unsigned int j = 0; j < t_cells; j++){
+            for (unsigned int  k = 0; k < p_cells; k++){
               if (od[i-1][j][k] + ext[i-1][j][k] * d_dr * a > 1.0e-300) {
-                  od[i][j][k] = od[i-1][j][k] + ext[i-1][j][k] * d_dr * a ;}
+                  od[i][j][k] = od[i-1][j][k] + ext[i-1][j][k] * d_dr * a ;
+                 }
                 }
                 }
             }
+  cout << "optical depth calculated successfully " << endl;
+  return od;
+
 }
 //reverse function are from grid scale to "real" scale (in terms of semimajor)
 double r_reverse(double old_r){
@@ -201,10 +243,10 @@ double phi_reverse(double old_phi){
   return new_phi;
 }
 
-vector < vector < vector <double> > >  tau_to_vector(double tau[r_cells][t_cells][p_cells]) {
+vector < vector < vector <double> > >  tau_to_vector(double*** tau) {
   //cout << "inside tau to vector" << endl;
   vector < vector < vector <double> > > tauv ;
-  for (unsigned int i = 0; i < r_cells; i++){
+  for (unsigned int i = 0; i <= r_cells; i++){
         tauv.push_back({});
         for (unsigned int j = 0; j < t_cells; j++){
             tauv[i].push_back({});

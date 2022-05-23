@@ -19,12 +19,12 @@ using namespace std;
 #define Rearth 6.3781e+6 //Earth radius in meters
 
 //definition of the grid cell numbers for the optical depth grid
-const int r_cells = 100;
-const double r_cells_d = 100.;
-const int t_cells = 25;
-const double t_cells_d = 25.;
-const int p_cells =125;
-const double p_cells_d = 125.;
+const int r_cells = 120;
+const double r_cells_d = 120.;
+const int t_cells = 50;
+const double t_cells_d = 50.;
+const int p_cells =190;
+const double p_cells_d = 190.;
 
 //declaration of some external variables
 extern double star_x; //x position of the star, w.r.t CoM of system
@@ -50,11 +50,14 @@ extern  string comp, outflow_s, T_int_s, output_file;
 extern double mdot, v_esc, mdot_read;
 extern int outflow, tau_type;
 extern bool tau_constant;
-
+extern int cont;
 
 //Grid parameters:
 extern double d_r_min, d_r_max,  d_t_min, d_t_max, d_p_min, d_p_max;
 
+extern long int current_particles, total_particles; // number of current particles in simulation
+extern double dr, dtheta, dphi;
+extern double d_dr, d_dtheta, d_dphi;
 
 //Some dimensionless quantitites:
 extern double G_dim, c_dim;

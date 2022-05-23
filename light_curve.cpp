@@ -4,6 +4,7 @@
 #include<vector>
 #include <cmath>
 #include <algorithm>
+#include <cstring>
 
 using namespace std;
 
@@ -56,18 +57,18 @@ double mdot_read = 1.0; //mass loss rate of planet in Earth masses per Gyr
 double mdot = mdot_read*Mearth_cgs/gyr;
 double s_0 = 3e-4;
 double rho_d = 4.0;
-double T = 15.68*60.*60.; //planetary period in seconds
+double T = 9.146*60.*60.; //planetary period in seconds
 double mbig = (mdot * T * 0.01) / 1000. ; // 0.01 dependent on when particles are being thrown out of planet
 double n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(s_0, 3));
-double sm_to_cm = 1.93e+11; 
-double inclination = 1.43; //in radians
-const int h_cells = 100;
-const int v_cells = 100;
+double sm_to_cm = 1.30e+11; 
+double inclination = 1.36; //in radians
+const int h_cells = 46;
+const int v_cells = 46;
 
-double r_star = 0.24; //stellar radius in terms of the semimajor axis
+double r_star = 0.305; //stellar radius in terms of the semimajor axis
 
-double dh = (2.0*0.24)/h_cells;
-double dv = (2.0*0.24)/v_cells;
+double dh = (2.0*r_star)/h_cells;
+double dv = (2.0*r_star)/v_cells;
 
 
 
@@ -102,7 +103,7 @@ void build_grid(double h_grid[h_cells+1], double v_grid[v_cells+1]){
 
 vector <dust_read> read_data(){
   std::fstream output;
-  output.open("./simulations/K222b_03micro_1mdot_day_05orb_tc.bin", std::fstream::in | std::fstream::binary);
+  output.open("./simulations/K222b_03micro_1mdot_day_2orb_tc.bin", std::fstream::in | std::fstream::binary);
   output.seekg(0, ios::end);
   int size=output.tellg();
   output.seekg(0, ios::beg);
@@ -136,7 +137,7 @@ vector <double> scaled_pos(double x, double y){
    return {x_scaled, y_scaled};
 }
 
-void idk( vector <dust> particles, double patches[h_cells+1][v_cells+1], 
+void  idk( vector <dust> particles, double patches[h_cells+1][v_cells+1], 
          double h_grid[h_cells+1], double v_grid[v_cells+1],
          double taus[h_cells+1][v_cells+1]){
          cout << "at idk " << endl;
@@ -148,6 +149,7 @@ void idk( vector <dust> particles, double patches[h_cells+1][v_cells+1],
          vector <int> h_index, v_index;
          
          int hit, vit;
+         if (p.x_dp > 0.0) {
          hp = p.y_dp;
          vp = p.z_dp;
          rp = pow(pow(hp, 2.0) + pow(vp, 2.0), 0.5);
@@ -232,7 +234,8 @@ void idk( vector <dust> particles, double patches[h_cells+1][v_cells+1],
                }
             }
          }
-      }        
+      }  
+         }    
    }
 
 
@@ -383,34 +386,40 @@ void grid_cells(double h_grid[h_cells+1], double v_grid[v_cells+1], double patch
 
 double flux(double taus[h_cells+1][v_cells+1], double patches[h_cells+1][v_cells+1]){
    double f;
+   f = 0.0;
    for (int m=0; m<=h_cells; m++){
       for (int n=0; n<=v_cells; n++){
-         f = f + ((patches[m][n] * exp(-1.0*taus[m][n])) / (PI * pow(r_star,2.)));
+         //cout << "exponential " << exp(-1.0*taus[m][n]) << endl;
+        f = f + ((patches[m][n] * exp(-1.0*taus[m][n])) / (PI * pow(r_star,2.)));
+         //f = f+(patches[m][n]/ (PI * pow(r_star,2.)));
       }
    }
+   //
    return f;
 }
 
 int main(){
+
+using namespace std;
+#include <cstring>
    vector <double> period_steps = {};
    vector <dust_read> particles_read;
    vector <dust> particles;
    particles_read = read_data();
    double t0 = 0.0;
    int counter = 0;
+   double f_test_o = 1.0;
    vector <double> timestamps;
+   
+   build_grid(h_grid, v_grid);
+   grid_cells(h_grid, v_grid, patches);
    for( dust_read& p : particles_read) {
        particles.push_back(dust());
-       //cout << p.timestamp << endl;
-       //if (std::find(period_steps.begin(), period_steps.end(), p.timestamp) == period_steps.end()) {
-        //cout << p.timestamp << endl;
-        //period_steps.push_back(p.timestamp);
-       //} 
+      
        particles[counter].timestamp = p.timestamp;
        double key = p.timestamp;
        if (find(timestamps.begin(), timestamps.end(), key) == timestamps.end()) {
           timestamps.push_back(key);
-          cout << p.timestamp << endl;
       }
 
        particles[counter].phi = 2.0*M_PI * (p.timestamp - t0);
@@ -425,12 +434,29 @@ int main(){
        //cout << p.id << "  " << p.timestamp <<  endl;
        counter = counter + 1;
        }
-
-   build_grid(h_grid, v_grid);
-   grid_cells(h_grid, v_grid, patches);
-
-   
-   //idk(particles, patches,  h_grid, v_grid,taus);
+     // cout << timestamps.size() << endl;
+      vector <dust> particles_calc = {};
+      double taus[h_cells+1][v_cells+1];
+      memset(taus, 0, sizeof(taus));
+      for (unsigned int i=0; i<timestamps.size(); i++) {
+         for (dust& p : particles) {
+            if (p.timestamp == timestamps[i]) {
+               particles_calc.push_back(p);
+            }
+         }
+      cout << "at time " << timestamps[i] << endl;
+      idk(particles_calc, patches,  h_grid, v_grid,taus);
+      double f_test;
+      f_test = flux(taus, patches);
+      cout << "f_test " << f_test<< endl;
+      if (f_test<f_test_o) {
+         f_test_o = f_test;
+      } 
+      particles_calc.clear();
+      memset(taus, 0, sizeof(taus));
+      
+      }
+      cout<< "depth " << f_test_o << endl;
    
    return 0;
 }

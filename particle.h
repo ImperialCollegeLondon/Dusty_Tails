@@ -20,8 +20,7 @@ class Particle {
 
 };
 
-void add_particles(vector <Particle> &particles, long int current_particles,
-                   long int total_particles, double total_t);
+void add_particles(vector <Particle> &particles,long int &current_particles, long int &total_particles, double total_t);
 
 
 
@@ -30,7 +29,7 @@ void solve_particles(double total_t, double end_t, vector <Particle> &particles,
 
 void rm_particles(vector <Particle> &particles);
 
-void calculation_ext(vector <Particle>& particles, double ext [r_cells][t_cells][p_cells], double delta_t);
+double*** calculation_ext(vector <Particle>& particles,  double delta_t);
 
 extern vector <Particle> particles;
 extern bool tau_constant;

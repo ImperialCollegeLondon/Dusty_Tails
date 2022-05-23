@@ -41,6 +41,8 @@ struct dust {
 };
 //open files to write data for python plotting
 ofstream output("./data/output.bin", ios::out | ios::binary);
+ofstream output_tau("./data/tau_data.bin", ios::out | ios::binary);
+ofstream output_tau_test("./data/tau_test.bin", ios::out | ios::binary);
 //ofstream ray_tracer("./data/grid_test.bin", ios::out | ios::binary);
 ofstream output_lt("./data/output_struct.bin", ios::out | ios::binary);
 ofstream output_final("./data/output_final.bin", ios::out | ios::binary);
@@ -49,6 +51,7 @@ ofstream output_final("./data/output_final.bin", ios::out | ios::binary);
 double d_dr = (d_r_max - d_r_min)/ r_cells_d;
 double d_dtheta = (d_t_max - d_t_min ) / t_cells_d;
 double d_dphi = ( d_p_max - d_p_min) / p_cells_d;
+
 
 int no_particles[r_cells][t_cells][p_cells] = {};
 
@@ -61,17 +64,68 @@ uniform_real_distribution<double> uniform_theta_short(0.2, 0.8);
 uniform_real_distribution<double> uniform_phi(0.0, 1.0);
 uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 
+vector <dust_read> read_data(){
+  std::fstream output;
+  output.open("input.bin", std::fstream::in | std::fstream::binary);
+  output.seekg(0, ios::end);
+  int size=output.tellg();
+  output.seekg(0, ios::beg);
+  long int total = size/sizeof(dust);
+  vector <dust_read> dust_grains_in;
+  for(int i = 0; i < total; i++){
+       dust_grains_in.push_back(dust_read());
+       output.read((char *) &dust_grains_in[i], sizeof(dust_read));
+       
+       if (dust_grains_in[i].id == 0) {
+          //cout << "id is zero " << endl;
+          //dust_grains_out.erase(dust_grains_out.end());
+          dust_grains_in.pop_back();
+          //cout << "going to break " << endl;
+          break;
+          
+       }
+       //cout << dust_grains_out[i].id << endl;
+    }
+   output.close();
+   return dust_grains_in;
+}
+
 //function add particles adds more particles to the simulation at a given time
 //as arguments it takes the vector of particles, the current number of particles,
 //the total of particles we want to get and the current time in the simulation
-void add_particles(vector <Particle> &particles, long int current,
-                   long int total, double time){
+void add_particles(vector <Particle> &particles, long int &current_particles, long int &total_particles, double time){
 
     Particle grain;
     double kappa_init =  opac.stellar_abs(s_0) 
                      + opac.stellar_scat(s_0);
 
-
+    long int current, total;
+     //flag for continuing dust
+    vector <dust_read> particles_read;
+    cout << "cont inside add particles function " << cont << endl;
+    if (cont ==1) {
+        //total number of particles is the size of the dust_grains_in vector
+        particles_read = read_data();
+        current_particles = particles_read.size();
+        total_particles = current_particles + 1000;
+        
+        for (dust_read& p : particles_read) {
+            grain.id = p.id;
+            grain.position = {p.x_dust, p.y_dust, p.z_dust};
+            grain.velocity = {p.vx_dust, p.vy_dust, p.vz_dust};
+            grain.p_size = p.s_dust;
+            grain.h_updated = p.h_dust;
+            grain.p_mass = p.m_dust;
+            grain.p_opacity = p.kappa_dust;
+            grain.p_temp = p.temp_dust;
+            grain.pos_spherical = pos_to_spherical(grain.position[0], grain.position[1], grain.position[2]);
+            grain.p_tau = p.tau_dust;
+            particles.push_back(grain);
+        }
+        
+    }
+    current = current_particles;
+    total = total_particles;
     for ( unsigned long int i = current; i < total; i++){
         double phi,theta;
         grain.id = i+1; //number ID of particle
@@ -117,8 +171,13 @@ void add_particles(vector <Particle> &particles, long int current,
         //cout << grain.p_temp << endl;
         particles.push_back(grain); //add particle to the vector of particles
                  
-
     }
+    cont = 0;
+    
+    current_particles = current;
+    total_particles = total;
+    cout << "current in add " << current_particles << endl;
+    cout << "total in add " << total_particles << endl;
 
 }
 
@@ -160,7 +219,11 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
   double t_next = 0.00; 
   //vector which will take updated values of positons, velocitites, size and optimal time step for particle
   vector <double> updated_vector(8); 
+    double d_dr = (d_r_max - d_r_min)/ r_cells_d;
+    double d_dtheta = (d_t_max - d_t_min ) / t_cells_d;
+    double d_dphi = ( d_p_max - d_p_min) / p_cells_d;
 
+    cout << d_dr << endl;
   //variables related to the optical depth interpolation
   vector < vector <double> > s_phi_values;
   vector < tk:: spline > s_theta;
@@ -169,11 +232,10 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
   vector <double> radii_v, thetas_v, phis_v;
 
   //Intepolator needs grid in vector format.
-  if (tau_constant == false ) {
+  
     radii_v  = r_grid_to_vector(r_a);
     thetas_v = t_grid_to_vector(theta_a);
     phis_v   = p_grid_to_vector(phi_a);
-   }
 
 
   while (t_next <= end_t) {
@@ -182,10 +244,10 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     cout << "At time " << previous_t << endl;
     //cout << tau_constant << endl;
     if (tau_constant == false) {
-        memset(extinction, 0.0, sizeof(extinction));
-        memset(optical_depth, 0.0, sizeof(optical_depth));
-        calculation_ext(particles, extinction, t_global_min);
-        optical_depth_calc(extinction, optical_depth);
+        //memset(extinction, 0.0, sizeof(extinction));
+        //memset(optical_depth, 0.0, sizeof(optical_depth));
+        extinction = calculation_ext(particles, t_global_min);
+        optical_depth = optical_depth_calc(extinction);
         tau.clear();
         tau = tau_to_vector(optical_depth);
         s_phi.clear();
@@ -241,14 +303,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         p.velocity = {updated_vector[3],updated_vector[4], updated_vector[5]};
         p.p_size = updated_vector[6];
         p.p_opacity = opac.stellar_abs(p.p_size) + opac.stellar_scat(p.p_size);
-        if (p.id == 1) {
-            cout << "s " << p.p_size << endl;
-            cout << "tau " << p.p_tau << endl;
-            cout << "kappa " << p.p_opacity << endl;
-            double beta_test;
-            beta_test = beta_fn(p.p_opacity, p.p_tau, p.p_size);
-            cout << "beta " << beta_test << endl;
-        }
+        
         p.p_mass = dust_mass(p.p_size); 
         p.h_updated = updated_vector[9];    
         p.p_temp = brent( p.p_size, p.position[0], 
@@ -260,7 +315,74 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     //cout << "Number of optically thick particles " << tau_thick << endl;
     rm_particles(particles); //removes particles that are too small
     
-    
+    if ((t_next >= end_t) && (tau_constant == true)) {
+        
+        //memset(extinction, 0.0, sizeof(extinction));
+        //memset(optical_depth, 0.0, sizeof(optical_depth));
+        extinction = calculation_ext(particles, t_global_min);
+        optical_depth = optical_depth_calc(extinction);
+        for (unsigned long int i=1; i<=r_cells; i++) {
+            for (unsigned long int j=0; j<t_cells; j++) {
+                for (unsigned long int k=0; k<p_cells; k++) {
+                    if (extinction[i-1][j][k] != 0.0) {
+                        cout << "extinction " << extinction[i-1][j][k] << endl;
+                        cout << "optical depth " << optical_depth[i][j][k] << endl;}
+            }
+        }
+        
+        }
+        // optical_depth = optical_depth_calc(extinction);
+        tau.clear();
+        tau = tau_to_vector(optical_depth);
+        s_phi.clear();
+        //double integrated_tau = 0.0;
+        s_phi = splines_phi(tau, radii_v, thetas_v, phis_v);
+
+        for (unsigned long int i = 0; i <t_cells; i++){
+            for (unsigned long int j =0; j < p_cells; j++ ) {
+                output_tau.write((char*) &thetas_v[i], sizeof(double));
+                output_tau.write((char*) &phis_v[j], sizeof(double));
+                output_tau.write((char*) &optical_depth[r_cells][i][j], sizeof(double));
+            }
+        }
+        
+
+        for (Particle& p : particles) {
+            vector <double> pos_spherical, pos_scaled;
+            pos_spherical = pos_to_spherical(p.position[0], p.position[1], p.position[2]);
+            pos_scaled = grid_scaling(pos_spherical); //position of particle in optical depth grid
+            if (pos_scaled[0] == -1.0) {
+                //if particle sits outside the grid the optical depth is set to 1e-3
+                p.p_tau = 0.001;
+            } else {
+                //if particle sits inside the grid the optical depth of it is 
+                //calculated via a trilinear spline interpolation
+                s_phi_values = phi_spline_result(s_phi , radii_v, thetas_v, phis_v, pos_scaled[2]);
+                s_theta =  splines_theta ( s_phi_values, radii_v, thetas_v);
+                s_theta_values = theta_spline_result( s_theta, radii_v, thetas_v, phis_v , pos_scaled[1]);
+                p.p_tau =  tau_p (s_theta_values, radii_v, thetas_v, phis_v, pos_scaled[0]);
+                
+                if (p.p_tau <=0.001) {
+                    p.p_tau = 0.001;}
+            }
+            s_phi_values.clear();
+            s_theta.clear();
+            s_theta_values.clear();
+
+            output_tau_test.write((char*) &p.id, sizeof(long int));
+            output_tau_test.write((char*) &p.position[0], sizeof(double));
+            output_tau_test.write((char*) &p.position[1], sizeof(double));
+            output_tau_test.write((char*) &p.position[2], sizeof(double));
+            output_tau_test.write((char*) &p.p_size, sizeof(double));
+            output_tau_test.write((char*) &p.p_mass, sizeof(double));
+            output_tau_test.write((char*) &p.p_tau, sizeof(double));
+            output_tau_test.write((char*) &p.p_temp, sizeof(double));
+            output_tau_test.write((char*) &p.p_opacity, sizeof(double));
+        }
+        
+        
+        
+    }
     if (abs(t_next-plot_time) < 1.0e-8) { 
       long int total = particles.size();
       //cout << "total " << total << endl;

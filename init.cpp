@@ -33,6 +33,7 @@ vector <Particle> particles; //initiate vector of "Particle" (Object defined in 
 
 int in_c = 0;
 int tau_type, outflow;
+int cont = 0;
 string T_int_s;
 string outflow_s;
 string output_file;
@@ -95,8 +96,8 @@ double dr = (r_max - r_min)/ r_cells_d;
 double dtheta = (theta_max - theta_min ) / t_cells_d;
 double dphi = ( phi_max - phi_min) / p_cells_d;
 
-double extinction [r_cells][t_cells][p_cells];
-double optical_depth [r_cells][t_cells][p_cells];
+double*** extinction;
+double*** optical_depth;
 
 //**********************************************************************
 //**********************************************************************
@@ -169,6 +170,8 @@ int main() {
         cout << "DELTA T " << major_timestep << endl;
         no_orbits = stod(line.substr(25,28));
         nparticles = stoi(line.substr(38,41));
+        cont = stoi(line.substr(50,51));
+        cout << cont << endl;
       }
 
      
@@ -315,14 +318,16 @@ long int current_particles = 0; // number of current particles in simulation
 //PROGRAM INITIATION
 //grid built if optical depth is to be traced
   
-  if (tau_constant == false) {
+  cout << "dr " << dr << endl;
   build_grids(r_a, r_b, theta_a, theta_b, dr, dtheta, dphi, phi_a, phi_b, r_min, theta_min, phi_min); //grid for optical depth calculations
-  cout << "Built grid for optical depth tracing." << endl;
-  }
+  //cout << "Built grid for optical depth tracing." << endl;
+  
 
   //add first particles
   add_particles(particles, current_particles, total_particles, 0.0); // call function that adds particles to simulation (in particles.cpp file)
-  
+  cout << "cont " << cont << endl;
+  cout << "current "<< current_particles << endl;
+  cout << "total "<< total_particles << endl;
   //Solve particles is the main routine of the program. It is in particles.cpp.
   solve_particles(0.00, end_t, particles, total_particles,current_particles);
   //cout << planet_x << endl;

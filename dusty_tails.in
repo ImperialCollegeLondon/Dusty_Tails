@@ -1,6 +1,6 @@
-STAR:   T= 3830.0  M= 0.60   R= 0.57
-PLANET: P= 9.146   M= 0.05     R= 0.38
-DUST:   s0= 0.3    comp= Al2O3   
-GRID:   rmin= 0.90   rmax= 1.10   tmin= 1.55   tmax= 1.60   pmin= 0.24   pmax= 0.01     //note pmin is read as negative!
-OUTFLOW: sph= 0   mdot= 1.0    tau= 1        //sph=1, spherical, sph=0 dayside, tau=1 for constant optical depth, tau=0 for optical depth tracing
-RUN:   Dt= 0.01   orbits= 0.50  npart= 1000
+STAR:   T= 4550.0  M= 0.66   R= 0.66
+PLANET: P= 15.68   M= 0.03     R= 0.38
+DUST:   s0= 1.0    comp= Al2O3   
+GRID:   rmin= 0.98   rmax= 1.10   tmin= 1.55   tmax= 1.60   pmin= 0.18   pmax= 0.01     //note pmin is read as negative!
+OUTFLOW: sph= 1   mdot= 1.0    tau= 1        //sph=1, spherical, sph=0 dayside, tau=1 for constant optical depth, tau=0 for optical depth tracing
+RUN:   Dt= 0.01   orbits= 1.00  npart= 1000  cont=0
