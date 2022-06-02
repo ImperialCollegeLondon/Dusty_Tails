@@ -209,6 +209,7 @@ int main() {
 
 //Outflow parameters:
  mdot =  mdot_read*Mearth_cgs/gyr;
+ cout << "mdot " << mdot << endl;
  v_esc = (pow((2.0*G *planet_mass*Mearth)/(planet_radius*Rearth), 0.5)) * (T/a); //escape velocity
 
 //Some dimensionless quantitites:

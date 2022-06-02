@@ -166,7 +166,28 @@ struct dust_read {
    double m_dust;
    double temp_dust;
    double tau_dust;
-   double kappa_dust;
+   double kappa_dust_abs;
+   double kappa_dust_scat;
+   double kappa_planck;
+};
+
+struct dust {
+   double timestamp;
+   long int id;
+   double x_dust;
+   double y_dust;
+   double z_dust;
+   double vx_dust;
+   double vy_dust;
+   double vz_dust;
+   double s_dust;
+   double h_dust;
+   double m_dust;
+   double temp_dust;
+   double tau_dust;
+   double kappa_dust_abs;
+   double kappa_dust_scat;
+   double kappa_planck;
 };
 vector <dust_read> read_data();
 
