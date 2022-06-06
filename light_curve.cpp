@@ -79,32 +79,18 @@ double n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(s_0, 3));
 double m_star = 0.66; //stellar mass in solar masses
 double a_p = pow((G_cgs*m_star*Msun_cgs* pow(T, 2.0))/ (4.0*pow(PI, 2.0)), 1.0/3.0); //semi major axis in cgs
 double inclination = 1.425; //in radians
-const int h_cells = 193;
-const int v_cells = 25;
+int h_cells, v_cells;
 
 double r_star = 0.2415; //stellar radius in terms of the semimajor axis
 
-
-
-double z_min = 0.115;
-double z_max = 0.17;
-
-double y_min = -sqrt(pow(r_star,2)- pow(z_min,2));
-double y_max = -1.0*y_min;
-
-double dh = (y_max-y_min)/h_cells;
-double dv = (z_max-z_min)/v_cells;
-
-
-double h_grid[h_cells+1];
-double v_grid[v_cells+1];
-
-double patches[h_cells+1][v_cells+1];
-double taus[h_cells+1][v_cells+1];
+double z_min, z_max, y_min, y_max;
+double dh, dv; 
 
 const int timesteps = 100;
 
 double angle[timesteps];
+
+ofstream output("./light_curves/cellsize_vs_transitdepth.bin", ios::out | ios::binary); 
 
 double* angles(double times[timesteps], double t0, double angle[timesteps]){
    for (int i=0; i<=timesteps; i++){
@@ -113,7 +99,7 @@ double* angles(double times[timesteps], double t0, double angle[timesteps]){
    return angle;
 }
 
-void build_grid(double h_grid[h_cells+1], double v_grid[v_cells+1]){
+void build_grid(vector<double> &h_grid, vector<double> &v_grid, int h_cells, int v_cells){
    h_grid[0] = y_min;
    for (unsigned int i=1;i<=h_cells; i++){
       h_grid[i] = h_grid[i-1] + dh;  
@@ -123,17 +109,18 @@ void build_grid(double h_grid[h_cells+1], double v_grid[v_cells+1]){
    for (unsigned int k=1;k<=v_cells; k++){
       v_grid[k] = v_grid[k-1] + dv;
    }
+   //cout << "grid built " << endl;
 }
 
 vector <dust_read> read_data(){
   std::fstream output;
-  output.open("./simulations/K222b_03micro_1mdot_day_2orb_tc.bin", std::fstream::in | std::fstream::binary);
+  output.open("./simulations/KIC1255b_Al2O3_1micro_1mdot_sph_1orb/output_struct_format.bin", std::fstream::in | std::fstream::binary);
   output.seekg(0, ios::end);
   int size=output.tellg();
   output.seekg(0, ios::beg);
-  cout << "size " << size << endl;
+  //cout << "size " << size << endl;
   long int total = size/sizeof(dust);
-  cout << "total " << total << endl;
+ // cout << "total " << total << endl;
   vector <dust_read> dust_grains_out;
   for(int i = 0; i < total; i++){
        dust_grains_out.push_back(dust_read());
@@ -153,18 +140,21 @@ vector <dust_read> read_data(){
    return dust_grains_out;
 }
 
-vector <double> scaled_pos(double x, double y){
+vector <double> scaled_pos(double x, double y, int h_cells, int v_cells, 
+double z_max, double z_min, double y_max, double y_min){
    double x_scaled, y_scaled;
-   x_scaled = (h_cells/(2.0*r_star))*x + (h_cells/2.);
-   y_scaled = (v_cells/(2.0*r_star))*y + (v_cells/2.);
-
+   x_scaled = (h_cells/(y_max-y_min))*x - ((h_cells*y_min)/(y_max-y_min));
+   y_scaled = (v_cells/(z_max-z_min))*y - ((v_cells*z_min)/(z_max-z_min));
+   //cout << "x " << x << " x_scaled " << x_scaled << endl;
    return {x_scaled, y_scaled};
 }
 
-void  extinction( vector <dust> particles, double patches[h_cells+1][v_cells+1], 
-         double h_grid[h_cells+1], double v_grid[v_cells+1],
-         double taus[h_cells+1][v_cells+1]){
+void  extinction( vector <dust> particles, vector <vector <double>> &patches, 
+         vector<double> &h_grid, vector<double> &v_grid,
+         vector<vector <double>> &taus, int h_cells, int v_cells,
+         double z_max, double z_min, double y_max, double y_min){
          
+         //cout << "At extinction " << endl;
          for ( dust& p : particles) {
          double rp, hp, vp, dA, dA_cell, sigma, shadow;
          vector <double> spos;
@@ -178,12 +168,14 @@ void  extinction( vector <dust> particles, double patches[h_cells+1][v_cells+1],
          vp = p.z_dp;
          rp = pow(pow(hp, 2.0) + pow(vp, 2.0), 0.5);
          if (rp < r_star) {
-            
-            spos = scaled_pos(hp, vp);
+            spos = scaled_pos(hp, vp, h_cells, v_cells, z_max, z_min, y_max, y_min);
             
             hit = floor(spos[0]);
             vit = floor(spos[1]);
-           
+            if (hit < h_cells && hit >0  ) {
+               if (vit < v_cells && vit >0  ) {
+               
+            
             
             if ((hit == 0) && (hp-(dh/2.) < h_grid[0])){
                   h_index = {-1, 0};
@@ -246,26 +238,35 @@ void  extinction( vector <dust> particles, double patches[h_cells+1][v_cells+1],
                      sigma = (p.kappa * p.m) / (pow(a_p, 2.0));
                      
                      shadow = ((dA/(dh*dv)) * sigma*n_mini) / dA_cell;
+                     //cout << "h " << h_index[i] << endl;
+                     //cout << "v " << v_index[j] << endl;
                      taus[h_index[i]][v_index[j]] = taus[h_index[i]][v_index[j]] + shadow;
                     
                      }
                }
             }
+            } 
+            } 
          }
       }  
-         }    
+         }
+
    }
 
 
 
 
-void grid_cells(double h_grid[h_cells+1], double v_grid[v_cells+1], double patches[h_cells+1][v_cells+1]){
+void grid_cells(vector<double> &h_grid, vector<double> &v_grid, 
+               vector<vector<double>> &patches, 
+               int h_cells, int v_cells){
+                  
    double p1[2], p2[2], p3[2], p4[2];
    double r1, r2, r3, r4;
    double check;
    double delta_x, delta_y;
    double h, a, b;
-   cout << "at grid cells " << endl;
+   //cout << "at grid cells " << endl;
+   
    for (int m=0; m<h_cells; m++){
       for (int n=0; n<v_cells; n++){
             //cout <<  m << " " << n << " " << endl;
@@ -276,13 +277,13 @@ void grid_cells(double h_grid[h_cells+1], double v_grid[v_cells+1], double patch
             p2[0] = h_grid[m+1];
 
             p2[1] = v_grid[n];
-             //cout << "x2 " << p2[0] << " y2 " << p2[1] << endl;
+            //cout << "x2 " << p2[0] << " y2 " << p2[1] << endl;
             p3[0] = h_grid[m+1];
             p3[1] = v_grid[n+1];
              //cout << "x3 " << p3[0] << " y3 " << p3[1] << endl;
             p4[0] = h_grid[m];
             p4[1] = v_grid[n+1];
-             //cout << "x4 " << p4[0] << " y4 " << p4[1] << endl;
+            //cout << "x4 " << p4[0] << " y4 " << p4[1] << endl;
            
            
             r1 = pow(pow(p1[0],2) + pow(p1[1],2), 0.5);
@@ -290,9 +291,14 @@ void grid_cells(double h_grid[h_cells+1], double v_grid[v_cells+1], double patch
             r3 = pow(pow(p3[0],2) + pow(p3[1],2), 0.5);
             r4 = pow(pow(p4[0],2) + pow(p4[1],2), 0.5);
 
-            
             //cell outside
+            // cout << "r1 " << r1 << endl;
+            // cout << "r2 " << r2 << endl;
+            // cout << "r3 " << r3 << endl;
+            // cout << "r4 " << r4 << endl;
+            
             if ((r1 >=r_star) && (r2 >= r_star) && (r3 >=r_star) && (r4 >= r_star)){
+               // cout << "cell out" << endl;
                patches[m][n] = 0.0;
             }
 
@@ -400,19 +406,21 @@ void grid_cells(double h_grid[h_cells+1], double v_grid[v_cells+1], double patch
             }
       }
    }
+   
 }
 
-double flux(double taus[h_cells+1][v_cells+1], double patches[h_cells+1][v_cells+1]){
-   double f;
-   for (int m=0; m<=h_cells; m++){
-      for (int n=0; n<=v_cells; n++){
+double flux(vector <vector <double>> &taus, vector< vector <double>> &patches, int h_cells, int v_cells){
+   double f, total_grid_area;
+   total_grid_area = 0.;
+   for (int m=0; m<h_cells; m++){
+      for (int n=0; n<v_cells; n++){
          total_grid_area = total_grid_area + patches[m][n];
       }
    }
    f = 0.0;
-   for (int m=0; m<=h_cells; m++){
-      for (int n=0; n<=v_cells; n++){
-         //cout << "exponential " << exp(-1.0*taus[m][n]) << endl;
+   for (int m=0; m<h_cells; m++){
+      for (int n=0; n<v_cells; n++){
+
         f = f + ((patches[m][n] * exp(-1.0*taus[m][n])) / total_grid_area);
          //f = f+(patches[m][n]/ (PI * pow(r_star,2.)));
       }
@@ -433,61 +441,121 @@ using namespace std;
    int counter = 0;
    double f_test_o = 1.0;
    vector <double> timestamps;
-   cout << "dh " << dh << endl;
-   cout << "dv " << dv << endl;
-   build_grid(h_grid, v_grid);
-   grid_cells(h_grid, v_grid, patches);
-   double total_grid_area;
-   for (int m=0; m<=h_cells; m++){
-      for (int n=0; n<=v_cells; n++){
-         total_grid_area = total_grid_area + patches[m][n];
-      }
-   }
-   cout << "total grid area is " << total_grid_area << endl;
-   // for( dust_read& p : particles_read) {
-   //     particles.push_back(dust());
-      
-   //     particles[counter].timestamp = p.timestamp;
-   //     double key = p.timestamp;
-   //     if (find(timestamps.begin(), timestamps.end(), key) == timestamps.end()) {
-   //        timestamps.push_back(key);
-   //    }
+   vector <double> transit_depths = {};
+   vector <double> grid_cell_size = {};
 
-   //     particles[counter].phi = 2.0*M_PI * (p.timestamp - t0);
-   //     particles[counter].x_p = p.x_dust * cos(particles[counter].phi) - p.y_dust * sin(particles[counter].phi);
-   //     particles[counter].y_p = p.x_dust * sin(particles[counter].phi) + p.y_dust * cos(particles[counter].phi);
-   //     particles[counter].z_p = p.z_dust;
-   //     particles[counter].x_dp = particles[counter].x_p * sin(inclination) - particles[counter].z_p * cos(inclination);
-   //     particles[counter].y_dp = particles[counter].y_p;
-   //     particles[counter].z_dp = particles[counter].x_p * cos(inclination) + particles[counter].z_p * sin(inclination);
-   //     particles[counter].m = p.m_dust;
-   //     particles[counter].kappa = p.kappa_dust;
-   //     //cout << p.id << "  " << p.timestamp <<  endl;
-   //     counter = counter + 1;
-   //     }
-   //   // cout << timestamps.size() << endl;
-   //    vector <dust> particles_calc = {};
-   //    double taus[h_cells+1][v_cells+1];
-   //    memset(taus, 0, sizeof(taus));
-   //    for (unsigned int i=0; i<timestamps.size(); i++) {
-   //       for (dust& p : particles) {
-   //          if (p.timestamp == timestamps[i]) {
-   //             particles_calc.push_back(p);
-   //          }
-   //       }
-   //    cout << "at time " << timestamps[i] << endl;
-   //    extinction(particles_calc, patches,  h_grid, v_grid,taus);
-   //    double f_test;
-   //    f_test = flux(taus, patches);
-   //    cout << "f_test " << f_test<< endl;
-   //    if (f_test<f_test_o) {
-   //       f_test_o = f_test;
-   //    } 
-   //    particles_calc.clear();
-   //    memset(taus, 0, sizeof(taus));
+   for( dust_read& p : particles_read) {
+       particles.push_back(dust());
       
-   //    }
-   //    cout<< "depth " << f_test_o << endl;
-   
+       particles[counter].timestamp = p.timestamp;
+       double key = p.timestamp;
+       if (find(timestamps.begin(), timestamps.end(), key) == timestamps.end()) {
+          timestamps.push_back(key);
+      }
+
+       particles[counter].phi = 2.0*M_PI * (p.timestamp - t0);
+       particles[counter].x_p = p.x_dust * cos(particles[counter].phi) - p.y_dust * sin(particles[counter].phi);
+       particles[counter].y_p = p.x_dust * sin(particles[counter].phi) + p.y_dust * cos(particles[counter].phi);
+       particles[counter].z_p = p.z_dust;
+       particles[counter].x_dp = particles[counter].x_p * sin(inclination) - particles[counter].z_p * cos(inclination);
+       particles[counter].y_dp = particles[counter].y_p;
+       particles[counter].z_dp = particles[counter].x_p * cos(inclination) + particles[counter].z_p * sin(inclination);
+       particles[counter].m = p.m_dust;
+       particles[counter].kappa = p.kappa_planck;
+       
+       counter = counter + 1;
+       }
+     
+      
+   vector< double > h_grid;
+   vector<double> v_grid;
+   vector<vector<double>> patches;
+   vector<vector<double>> taus;
+   vector <dust> particles_calc;
+   //cout << "n_mini " << n_mini << endl;
+   for (int i=0; i<1; i++){
+      
+     // cout << "i " << i << endl;
+      //memset(taus, 0, sizeof(taus));
+      v_cells = i+5;
+
+      double f_test = 0.;
+      double f_test_o = 1.0;
+
+      for ( int m=0; m<timestamps.size(); m++) {
+      double theta;
+      double z_planet;
+      //cout << "timestamps[m] " << endl;
+      theta = 2.0*PI*timestamps[m];
+      //cout << "theta " << theta <<  endl;
+      z_planet = cos(theta) * cos(inclination);
+      //cout << "z_planet " << z_planet << endl;
+      z_min = z_planet - 0.02;
+      z_max = z_planet + 0.02;
+      y_min = -sqrt(pow(r_star,2)- pow(z_min,2));
+      y_max = -1.0*y_min;
+
+      h_cells = round((y_max-y_min) / ((z_max-z_min)/v_cells));
+      //cout << "h_cells " << h_cells << endl;
+      //cout << "v_cells " << v_cells << endl;
+      dh = (y_max-y_min)/h_cells;
+      dv = (z_max-z_min)/v_cells;
+      for (int j=0; j<=h_cells; j++) {
+         h_grid.push_back(0.0);
+      }
+      for (int j=0; j<=v_cells; j++) {
+         v_grid.push_back(0.0);
+      }
+      for (int m=0; m<h_cells; m++){
+         patches.push_back({});
+         for (int n=0; n<v_cells; n++){
+            patches[m].push_back(0.0);
+         }
+         //cout << "patches m" << patches[m].size() << endl;
+      }
+      //cout << "patches " << patches.size() << endl;
+      
+      build_grid(h_grid, v_grid, h_cells, v_cells);
+      grid_cells(h_grid, v_grid, patches, h_cells, v_cells);
+         particles_calc.clear();
+         for (int w=0; w<h_cells; w++){
+         taus.push_back({});
+         for (int y=0; y<v_cells; y++){
+            taus[w].push_back(0.0);
+         }
+         }
+         //cout << "taus " << taus.size() << endl;
+         for (dust& p : particles) {
+            if (p.timestamp == timestamps[m]) {
+               particles_calc.push_back(p);
+            }
+         }
+         extinction(particles_calc, patches,  h_grid, v_grid,taus, h_cells, v_cells, 
+         z_max, z_min, y_max, y_min);
+        
+         f_test = flux(taus, patches, h_cells, v_cells);
+         cout << f_test << endl;
+         if (f_test<f_test_o) {
+          f_test_o = f_test;
+         } 
+
+          taus.clear();
+          h_grid.clear();
+          v_grid.clear();
+          patches.clear();
+      
+    }
+
+    transit_depths.push_back(f_test_o);
+    cout << "depth " << f_test_o << endl;
+    grid_cell_size.push_back(dv);
+
+
+    }
+
+   for (int i =0; i<50; i++){
+       output.write((char*) &grid_cell_size[i], sizeof(double));
+       output.write((char*) &transit_depths[i], sizeof(double));
+   }
    return 0;
 }
