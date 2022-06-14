@@ -47,7 +47,7 @@ extern  string opac_data, opacity_dir;
 extern  string comp, outflow_s, T_int_s, output_file;
 
 //Outflow parameters:
-extern double mdot, v_esc, mdot_read;
+extern double mdot, v_esc, mdot_read, v_th, mu_gas;
 extern int outflow, tau_type;
 extern bool tau_constant;
 extern int cont;

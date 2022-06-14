@@ -5,6 +5,8 @@
 #include <cmath>
 #include <algorithm>
 #include <cstring>
+#include <string>
+#include "opacities.h"
 
 using namespace std;
 
@@ -16,6 +18,7 @@ using namespace std;
 #define c_cgs 2.99792458e+10 //speed of light
 #define Msun_cgs 1.9885e+33 // solar mass
 #define Mearth_cgs 5.972e+27 // earth mass grams
+#define Rearth_cgs 6.378e+8 // earth radius cm
 
 struct dust_read {
    double timestamp;
@@ -47,6 +50,8 @@ struct dust {
    double z_dp;
    double m;
    double kappa;
+   double kappa_scat;
+   double size;
 };
 
 
@@ -73,24 +78,19 @@ double mdot_read = 1.0; //mass loss rate of planet in Earth masses per Gyr
 double mdot = mdot_read*Mearth_cgs/gyr;
 double s_0 = 1e-4;
 double rho_d = 4.0;
-double T = 15.68*60.*60.; //planetary period in seconds
-double mbig = (mdot * T * 0.01) / 500. ; // 0.01 dependent on when particles are being thrown out of planet
-double n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(s_0, 3));
-double m_star = 0.66; //stellar mass in solar masses
-double a_p = pow((G_cgs*m_star*Msun_cgs* pow(T, 2.0))/ (4.0*pow(PI, 2.0)), 1.0/3.0); //semi major axis in cgs
-double inclination = 1.425; //in radians
 int h_cells, v_cells;
-
-double r_star = 0.2415; //stellar radius in terms of the semimajor axis
-
+double Temp, T , mbig,n_mini,m_star, a_p, inclination, r_star;
 double z_min, z_max, y_min, y_max;
 double dh, dv; 
 
 const int timesteps = 100;
 
 double angle[timesteps];
+string opacity_dir;
+string opac_data = "corundum_K95";
+Opacities opac;
 
-ofstream output("./light_curves/cellsize_vs_transitdepth.bin", ios::out | ios::binary); 
+ofstream output("./transit_depth_KIC1255b_3orb_sph.bin", ios::out | ios::binary); 
 
 double* angles(double times[timesteps], double t0, double angle[timesteps]){
    for (int i=0; i<=timesteps; i++){
@@ -109,23 +109,24 @@ void build_grid(vector<double> &h_grid, vector<double> &v_grid, int h_cells, int
    for (unsigned int k=1;k<=v_cells; k++){
       v_grid[k] = v_grid[k-1] + dv;
    }
-   //cout << "grid built " << endl;
+   cout << "grid built " << endl;
 }
 
 vector <dust_read> read_data(){
   std::fstream output;
-  output.open("./simulations/KIC1255b_Al2O3_1micro_1mdot_sph_1orb/output_struct_format.bin", std::fstream::in | std::fstream::binary);
+  output.open("../simulations/KIC1255b_Al2O3_1micro_1mdot_sph_3rd_orb/output_struct_format.bin", std::fstream::in | std::fstream::binary);
   output.seekg(0, ios::end);
   int size=output.tellg();
   output.seekg(0, ios::beg);
-  //cout << "size " << size << endl;
+  cout << "size " << size << endl;
   long int total = size/sizeof(dust);
- // cout << "total " << total << endl;
+  cout << "total " << total << endl;
   vector <dust_read> dust_grains_out;
   for(int i = 0; i < total; i++){
        dust_grains_out.push_back(dust_read());
        output.read((char *) &dust_grains_out[i], sizeof(dust_read));
        
+       //cout << dust_grains_out[i].id << endl;
        if (dust_grains_out[i].id == 0) {
           //cout << "id is zero " << endl;
           //dust_grains_out.erase(dust_grains_out.end());
@@ -137,6 +138,7 @@ vector <dust_read> read_data(){
        //cout << dust_grains_out[i].id << endl;
     }
    output.close();
+   cout << "successfully read the data" << endl;
    return dust_grains_out;
 }
 
@@ -250,6 +252,8 @@ void  extinction( vector <dust> particles, vector <vector <double>> &patches,
          }
       }  
          }
+
+         cout << "obtain extinction grid successfully" << endl;
 
    }
 
@@ -409,6 +413,20 @@ void grid_cells(vector<double> &h_grid, vector<double> &v_grid,
    
 }
 
+double forward_scat(double g, double scat_opac, double mass, double x, double y, double z){
+      double phase;
+      double d_obs_star = 1.911e+21;
+      double phase_angle;
+      phase_angle = sqrt(pow(y,2) + pow(z,2)) / (d_obs_star - x);
+      //cout << phase_angle << endl;
+      phase = (1./(4.*PI)) * ((1+pow(g,2))/pow(1+pow(g,2)-2*g*cos(phase_angle), 3/2));
+
+      // cout << " g " << g << endl;
+      // cout << " phase " << phase << endl;
+      // cout << "scat opac " << scat_opac << endl;
+      return phase * scat_opac * n_mini *mass / pow(a_p, 2.);
+}
+
 double flux(vector <vector <double>> &taus, vector< vector <double>> &patches, int h_cells, int v_cells){
    double f, total_grid_area;
    total_grid_area = 0.;
@@ -433,6 +451,31 @@ int main(){
 
 using namespace std;
 #include <cstring>
+   string planet;
+   planet = "KIC1255_b";
+   cout << planet << endl;
+   if (planet == "KIC1255_b") {
+      Temp = 4550.0;
+      T = 15.68*60.*60.; //planetary period in seconds
+      mbig = (mdot * T * 0.01) / 500. ; // 0.01 dependent on when particles are being thrown out of planet
+      n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(s_0, 3));
+      m_star = 0.66; //stellar mass in solar masses
+      a_p = pow((G_cgs*m_star*Msun_cgs* pow(T, 2.0))/ (4.0*pow(PI, 2.0)), 1.0/3.0); //semi major axis in cgs
+      inclination = 1.425; //in radians
+      r_star = 0.2415; //stellar radius in terms of the semimajor axis
+   } else if (planet=="K222_b"){
+      Temp = 3830.0;
+      T = 9.15*60.*60.; //planetary period in seconds
+      mbig = (mdot * T * 0.01) / 500. ; // 0.01 dependent on when particles are being thrown out of planet
+      n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(s_0, 3));
+      m_star = 0.60; //stellar mass in solar masses
+      a_p = pow((G_cgs*m_star*Msun_cgs* pow(T, 2.0))/ (4.0*pow(PI, 2.0)), 1.0/3.0); //semi major axis in cgs
+      inclination = acos((0.57*Rsun_cgs*0.68)/a_p); //in radians
+      cout << "i " << inclination << endl;
+      r_star = (0.57*Rsun_cgs)/a_p; //stellar radius in terms of the semimajor axis
+      cout << r_star << endl;
+   }
+ 
    vector <double> period_steps = {};
    vector <dust_read> particles_read;
    vector <dust> particles;
@@ -443,55 +486,80 @@ using namespace std;
    vector <double> timestamps;
    vector <double> transit_depths = {};
    vector <double> grid_cell_size = {};
-
-   for( dust_read& p : particles_read) {
-       particles.push_back(dust());
+   int T_int { static_cast<int> (Temp)};
+   string T_int_s = to_string(T_int);
+   cout << T_int_s << endl;
+   opacity_dir = "../opacs_jankovic/calc_dust_opac/"+opac_data+"/opac_";
+   cout << opacity_dir << endl;
+   opac.read_data((opacity_dir+"temp.dat").c_str(), (opacity_dir+"sizes.dat").c_str(),
+        (opacity_dir+"planck_abs_tstar"+T_int_s+".dat").c_str(), 
+        (opacity_dir+"planck_sca_tstar"+T_int_s+".dat").c_str(),
+        (opacity_dir+"planck_gsc_tstar"+T_int_s+".dat").c_str(),
+        (opacity_dir+"planck_abs.dat").c_str(), (opacity_dir+"planck_sca.dat").c_str(),
+        true);
+   cout << "opac data read " << endl;
+   double g_test;
+    counter = 0;
+    for( dust_read& p : particles_read) {
+        particles.push_back(dust());
       
-       particles[counter].timestamp = p.timestamp;
-       double key = p.timestamp;
-       if (find(timestamps.begin(), timestamps.end(), key) == timestamps.end()) {
-          timestamps.push_back(key);
-      }
-
-       particles[counter].phi = 2.0*M_PI * (p.timestamp - t0);
-       particles[counter].x_p = p.x_dust * cos(particles[counter].phi) - p.y_dust * sin(particles[counter].phi);
-       particles[counter].y_p = p.x_dust * sin(particles[counter].phi) + p.y_dust * cos(particles[counter].phi);
-       particles[counter].z_p = p.z_dust;
-       particles[counter].x_dp = particles[counter].x_p * sin(inclination) - particles[counter].z_p * cos(inclination);
-       particles[counter].y_dp = particles[counter].y_p;
-       particles[counter].z_dp = particles[counter].x_p * cos(inclination) + particles[counter].z_p * sin(inclination);
-       particles[counter].m = p.m_dust;
-       particles[counter].kappa = p.kappa_planck;
-       
-       counter = counter + 1;
+        particles[counter].timestamp = p.timestamp;
+        double key = p.timestamp;
+        if (find(timestamps.begin(), timestamps.end(), key) == timestamps.end()) {
+           timestamps.push_back(key);
        }
-     
-      
+        particles[counter].phi = 2.0*M_PI * (p.timestamp - t0);
+        particles[counter].x_p = p.x_dust * cos(particles[counter].phi) - p.y_dust * sin(particles[counter].phi);
+        particles[counter].y_p = p.x_dust * sin(particles[counter].phi) + p.y_dust * cos(particles[counter].phi);
+        particles[counter].z_p = p.z_dust;
+        particles[counter].x_dp = particles[counter].x_p * sin(inclination) - particles[counter].z_p * cos(inclination);
+        particles[counter].y_dp = particles[counter].y_p;
+        particles[counter].z_dp = particles[counter].x_p * cos(inclination) + particles[counter].z_p * sin(inclination);
+        particles[counter].m = p.m_dust;
+        particles[counter].kappa = p.kappa_planck;
+        particles[counter].kappa_scat = p.kappa_dust_scat;
+        particles[counter].size = p.s_dust;
+        //cout << p.s_dust << endl;
+        //cout << forward_scat(opac.stellar_gsc(p.s_dust), p.kappa_dust_scat, p.m_dust) << endl;;
+       
+        counter = counter + 1;
+        }
+
+   cout << "have put particles in particles_read" << endl;
    vector< double > h_grid;
    vector<double> v_grid;
    vector<vector<double>> patches;
    vector<vector<double>> taus;
-   vector <dust> particles_calc;
+    vector <dust> particles_calc;
    //cout << "n_mini " << n_mini << endl;
-   for (int i=0; i<1; i++){
+   for (int i=40; i<41; i++){
       
-     // cout << "i " << i << endl;
+      cout << "i " << i << endl;
       //memset(taus, 0, sizeof(taus));
-      v_cells = i+5;
+      v_cells = i;
 
       double f_test = 0.;
       double f_test_o = 1.0;
 
-      for ( int m=0; m<timestamps.size(); m++) {
+       for ( int m=0; m<timestamps.size(); m++) {
       double theta;
-      double z_planet;
-      //cout << "timestamps[m] " << endl;
+      double x_planet, y_planet, z_planet;
+      double planet_shadow = 0.;
+      cout << "timestamps[m] " << endl;
       theta = 2.0*PI*timestamps[m];
-      //cout << "theta " << theta <<  endl;
+      cout << "theta " << theta <<  endl;
       z_planet = cos(theta) * cos(inclination);
+      x_planet = cos(theta) * sin(inclination);
+      y_planet = sin(theta);
+      double r_planet;
+      r_planet = sqrt(pow(y_planet, 2.) + pow(z_planet, 2.));
+      if (x_planet > 0.0 && r_planet < r_star){
+         planet_shadow = pow(0.33*Rearth_cgs, 2.) / pow(r_star*a_p, 2.);
+      }
+      cout << planet_shadow << endl;
       //cout << "z_planet " << z_planet << endl;
-      z_min = z_planet - 0.02;
-      z_max = z_planet + 0.02;
+      z_min = z_planet - 0.015;
+      z_max = z_planet + 0.015;
       y_min = -sqrt(pow(r_star,2)- pow(z_min,2));
       y_max = -1.0*y_min;
 
@@ -517,7 +585,7 @@ using namespace std;
       
       build_grid(h_grid, v_grid, h_cells, v_cells);
       grid_cells(h_grid, v_grid, patches, h_cells, v_cells);
-         particles_calc.clear();
+          particles_calc.clear();
          for (int w=0; w<h_cells; w++){
          taus.push_back({});
          for (int y=0; y<v_cells; y++){
@@ -525,24 +593,39 @@ using namespace std;
          }
          }
          //cout << "taus " << taus.size() << endl;
-         for (dust& p : particles) {
-            if (p.timestamp == timestamps[m]) {
-               particles_calc.push_back(p);
-            }
-         }
+         double forward_flux = 0.;
+         
+          for (dust& p : particles) {
+             if (p.timestamp == timestamps[m]) {
+                particles_calc.push_back(p);
+                if (p.x_dp > 0.0) {
+                forward_flux = forward_flux + forward_scat(opac.stellar_gsc(p.size), 
+                opac.stellar_scat(p.size), p.m, p.x_dp*a_p, p.y_dp*a_p, p.z_dp*a_p); }
+             }
+          }
+          
          extinction(particles_calc, patches,  h_grid, v_grid,taus, h_cells, v_cells, 
          z_max, z_min, y_max, y_min);
         
+         //f_test = flux(taus, patches, h_cells, v_cells) + forward_flux - planet_shadow;
+         output.write((char*) &timestamps[m], sizeof(double));
          f_test = flux(taus, patches, h_cells, v_cells);
-         cout << f_test << endl;
+         output.write((char*) &f_test, sizeof(double));
+         output.write((char*) &forward_flux, sizeof(double));
+         f_test = f_test + forward_flux;
+         output.write((char*) &f_test, sizeof(double));
+         cout << "time " << timestamps[m] << endl;
+         cout << "flux " << f_test + forward_flux - planet_shadow<< endl;
          if (f_test<f_test_o) {
           f_test_o = f_test;
-         } 
+          } 
 
           taus.clear();
           h_grid.clear();
           v_grid.clear();
           patches.clear();
+
+           
       
     }
 
@@ -553,9 +636,9 @@ using namespace std;
 
     }
 
-   for (int i =0; i<50; i++){
-       output.write((char*) &grid_cell_size[i], sizeof(double));
-       output.write((char*) &transit_depths[i], sizeof(double));
-   }
+   // for (int i=0; i<180; i++){
+   //     output.write((char*) &grid_cell_size[i], sizeof(double));
+   //     output.write((char*) &transit_depths[i], sizeof(double));
+   // }
    return 0;
 }

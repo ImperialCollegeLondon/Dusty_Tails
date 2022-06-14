@@ -57,13 +57,13 @@ double ang_vel;
  double Mstar_kg, Mstar_sun, Rstar, Temp, lum;
 
 //Planetary parameters:
- double Period_days, T, a, m_planet, r_planet, r_start, r_planet_dim, r_h;
+ double Period_days, T, a, m_planet, r_planet, r_start, r_planet_dim, r_h, Temp_p;
 
 //Dust parameters:
  double A, Bp, rho_d, mu, alpha;
 
 //Outflow parameters:
- double mdot, v_esc;
+ double mdot, v_esc, v_th, mu_gas;
 
 //Some dimensionless quantitites:
  double G_dim, c_dim;
@@ -211,7 +211,20 @@ int main() {
  mdot =  mdot_read*Mearth_cgs/gyr;
  cout << "mdot " << mdot << endl;
  v_esc = (pow((2.0*G *planet_mass*Mearth)/(planet_radius*Rearth), 0.5)) * (T/a); //escape velocity
+ if (outflow == 1) {
+   //planet is not tidally locked
+   Temp_p = pow(Rstar*Rsun_cgs / (2.0*a*100.0), 0.5) * Temp;  
+ } else{
+   //planet tidally locked
+   Temp_p = pow((Rstar*Rsun_cgs) / (a*100.0), 0.5) * Temp;  
+ }
+ //gas is composed of a mixture of SiO, Mg, O, O2, Fe, SiO2 and MgO - with the fractions as indicated in Booth et al. 2022
+ mu_gas = 0.281*60.083 + 0.250*24.305 + 0.223*15.999 + 0.158*32.0 + 0.079*55.845 + 0.005*60.08 + 0.003*40.3044;
+ cout << "the planets temperature is " << Temp_p << endl;
+ cout << "thermal vel" << sqrt((kb*Temp_p)/(mu_gas*amu)) << " cm/s " << endl;
+ v_th = sqrt((kb*Temp_p)/(mu_gas*amu)) / (a*100);
 
+cout << "thermal velocity in a_ps is " << v_th << " ap/s" << endl;
 //Some dimensionless quantitites:
  G_dim = (G* pow(T, 2.0) * Mstar_kg) / pow(a, 3.0); //dimensionless gravitational constant
  c_dim = clight * (T / a); //dimensionless speed of light

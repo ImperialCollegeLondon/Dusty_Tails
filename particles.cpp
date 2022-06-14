@@ -135,9 +135,9 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
                         r_start*cos(theta)};
 
         //velocity of particle in cartesian
-        grain.velocity = {v_esc*sin(theta)*cos(phi), \
-                        v_esc*sin(theta)*sin(phi), \
-                        v_esc*cos(theta)};
+        grain.velocity = {v_th*sin(theta)*cos(phi), \
+                        v_th*sin(theta)*sin(phi), \
+                        v_th*cos(theta)};
 
         grain.size = s_0; //initial grain size
 

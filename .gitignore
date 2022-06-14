@@ -1,0 +1,13 @@
+*.o
+/plots
+/executables
+/data
+/simulations
+*.exe
+slurm*
+*.sh
+*.mp4
+*.in
+*.bin
+*.png
+*.dat
