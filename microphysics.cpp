@@ -77,8 +77,9 @@ double f_Tdust( double s, double x, double y, double z, double tau, double Tdust
   
   dl = scalar((x-star_pos[0]), y, z)*a*pow(10.0,2);
   //sa = 2.0*(1-pow(1-pow((Rstar*Rsun_cgs)/dl, 2.0), 0.5));
-  fTdust = opac.stellar_abs(s) *pow(Temp,4) * pow(Rstar*Rsun_cgs, 2)/(4.0*pow(dl,2)) - 
-            opac.particle_abs(s, Tdust) * pow(Tdust,4); 
+  fTdust = opac.stellar_abs(s) * exp(-tau)*pow(Temp,4) * pow(Rstar*Rsun_cgs, 2)/(4.0*pow(dl,2)) - 
+            opac.particle_abs(s, Tdust) * pow(Tdust,4) + opac.particle_abs(s, 100.0) * pow(100.0,4); 
+
   //cout << opac.particle_abs(Tdust,s) << endl;
   //cout << opac.stellar_abs(s) << endl;
   //fTdust = fTdust/(a*pow(10.0,2));
@@ -94,8 +95,8 @@ double brent(double size, double x, double y, double z, double tau){
   double p, q, r, s, tol1, xm;
   double fa, fb, fc, fs;
   double tol = 1.0e-5;
-  Ac = 100.0;
-  Bc = 4000.0;
+  Ac = 1.0;
+  Bc = 2500.0;
   fa = f_Tdust(size,x,y,z,tau, Ac);
   fb = f_Tdust(size,x,y,z,tau, Bc);
   

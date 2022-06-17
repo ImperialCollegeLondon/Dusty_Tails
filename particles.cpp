@@ -242,7 +242,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         s_phi.clear();
         s_phi = splines_phi(tau, radii_v, thetas_v, phis_v);
 
-        t_global_min = 0.5e-2;
+        t_global_min = 0.1e-2;
     } 
   //do bigger time steps in first orbit and smaller ones afterwards
   //to establish a primary population of dust particles
@@ -271,6 +271,11 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
                 s_theta =  splines_theta ( s_phi_values, radii_v, thetas_v);
                 s_theta_values = theta_spline_result( s_theta, radii_v, thetas_v, phis_v , pos_scaled[1]);
                 p.tau_d =  tau_p (s_theta_values, radii_v, thetas_v, phis_v, pos_scaled[0]);
+
+                // cout << "r " << pos_scaled[0] << endl;
+                // cout << "theta " << pos_scaled[1] << endl;
+                // cout << "phi " << pos_scaled[2] << endl;
+                // cout << "tau " << p.tau_d << endl;
                 
                 if (p.tau_d <0.001) {
                     p.tau_d = 0.001;}
@@ -303,7 +308,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     //cout << "Number of optically thick particles " << tau_thick << endl;
     rm_particles(particles); //removes particles that are too small
     
-    if ((t_next >= end_t) && (tau_constant == true)) {
+    if ((t_next >= end_t)) {
         
         //memset(extinction, 0.0, sizeof(extinction));
         //memset(optical_depth, 0.0, sizeof(optical_depth));
@@ -321,7 +326,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
             for (unsigned long int j =0; j < p_cells; j++ ) {
                 output_tau.write((char*) &thetas_v[i], sizeof(double));
                 output_tau.write((char*) &phis_v[j], sizeof(double));
-                output_tau.write((char*) &optical_depth[r_cells][i][j], sizeof(double));
+                output_tau.write((char*) &optical_depth[r_cells-(r_cells/2)][i][j], sizeof(double));
             }
         }
         
@@ -340,6 +345,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
                 s_theta =  splines_theta ( s_phi_values, radii_v, thetas_v);
                 s_theta_values = theta_spline_result( s_theta, radii_v, thetas_v, phis_v , pos_scaled[1]);
                 p.tau_d =  tau_p (s_theta_values, radii_v, thetas_v, phis_v, pos_scaled[0]);
+                
                 
                 if (p.tau_d < 0.001) {
                     p.tau_d = 0.001;}

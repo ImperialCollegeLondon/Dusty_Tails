@@ -44,7 +44,7 @@ double rmin, rmax, tmin, tmax, pmin,pmax;
 double mdot_read, major_timestep, no_orbits, nparticles;
 bool tau_constant;
 string line;
-ifstream input("dusty_tails.in", ios::out);
+ifstream input("dusty_tails.in", ios::in);
 Opacities opac;
 
 //**********************************************************************
@@ -167,7 +167,6 @@ int main() {
       }
       if (in_c == 5) {
         major_timestep = stod(line.substr(10,14));
-        cout << "DELTA T " << major_timestep << endl;
         no_orbits = stod(line.substr(25,28));
         nparticles = stoi(line.substr(38,41));
         cont = stoi(line.substr(50,51));
@@ -211,13 +210,9 @@ int main() {
  mdot =  mdot_read*Mearth_cgs/gyr;
  cout << "mdot " << mdot << endl;
  v_esc = (pow((2.0*G *planet_mass*Mearth)/(planet_radius*Rearth), 0.5)) * (T/a); //escape velocity
- if (outflow == 1) {
-   //planet is not tidally locked
-   Temp_p = pow(Rstar*Rsun_cgs / (2.0*a*100.0), 0.5) * Temp;  
- } else{
-   //planet tidally locked
-   Temp_p = pow((Rstar*Rsun_cgs) / (a*100.0), 0.5) * Temp;  
- }
+ //planet tidally locked
+ Temp_p = pow((Rstar*Rsun_cgs) / (a*100.0), 0.5) * Temp;  
+
  //gas is composed of a mixture of SiO, Mg, O, O2, Fe, SiO2 and MgO - with the fractions as indicated in Booth et al. 2022
  mu_gas = 0.281*60.083 + 0.250*24.305 + 0.223*15.999 + 0.158*32.0 + 0.079*55.845 + 0.005*60.08 + 0.003*40.3044;
  cout << "the planets temperature is " << Temp_p << endl;

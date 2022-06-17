@@ -30,26 +30,38 @@ def grid(r, t, p) :
 # data = np.fromfile("./simulations/KIC1255b_Al2O3_1micro_1mdot_sph_1orb/optical_depth.bin", dt)
 # df = pd.DataFrame(data)
 
-dt = np.dtype([('time', np.float64), ('extinction', np.float64), ('scattering', np.float64), ('transit_depth', np.float64)])
-data = np.fromfile("./transit_depth_KIC1255b_3orb_sph.bin", dt)
 
-df = pd.DataFrame(data)
+dt = np.dtype([('time', np.float64), ('extinction', np.float64), ('scattering', np.float64), ('transit_depth', np.float64)])
+
+data_1 = np.fromfile("./data/KIC1255b_Al2O3_day_1mdot_1micro_1orb_tau_lightcurve.bin", dt)
+data_2 = np.fromfile("./data/KIC1255b_Al2O3_day_1mdot_1micro_2orb_tau_lightcurve.bin", dt)
+
+df_1 = pd.DataFrame(data_1)
+df_2 = pd.DataFrame(data_2)
+c = 0
+
+for time in df_2['time']:
+    df_2['time'][c] = time + 1.0;
+    print(df_2['scattering'][c])
+    c +=1
+df = pd.concat([df_1, df_2])
 cm = 1/2.54
 plt.figure(figsize=(20.0*cm,18.0*cm))
-plt.xlabel('phase (radians)')
+plt.xlabel('phase')
 plt.ylabel('transit depth')
-plt.xlim(-0.8, 0.8)
+#plt.xlim(-0.5, 0.5)
 y_line = []
 for time in df['time']:
+    # print(time)
     y_line.append(1.0)
-plt.plot(2.0*math.pi*(df['time']-1.0), y_line, '--', linewidth = 1.0, alpha=0.7)
-plt.plot(2.0*math.pi*(df['time']-1.0), df['transit_depth'], '-', linewidth=3.0, label='total')
-plt.plot(2.0*math.pi*(df['time']-1.0), df['extinction'], '--', linewidth=1.5, label='extinction', alpha=0.7)
-plt.plot(2.0*math.pi*(df['time']-1.0), df['scattering']+1.0, '--', linewidth=1.5, label='scattering', alpha=0.7)
+plt.plot(df['time'], y_line, '--', linewidth = 1.0, alpha=0.7)
+plt.plot(df['time'], df['transit_depth'], '-', linewidth=2.0, label='total')
+plt.plot(df['time'], df['extinction'], '--', linewidth=1.5, label='extinction', alpha=0.7)
+plt.plot(df['time'], df['scattering']+1.0, '--', linewidth=1.5, label='scattering', alpha=0.7)
 #print(df['depth'].idxmin())
 #print(df['time'][df['transit_depth'].idxmin()])
 plt.legend()
-plt.savefig("light_curve_KIC1255b_3rd_orb_sph.png")
+plt.savefig("light_curve_KIC1255b_day_Al2O3_1micro.png")
 # #print(df)
 # # df = df.iloc[3125:,:]
 # #print(df)
