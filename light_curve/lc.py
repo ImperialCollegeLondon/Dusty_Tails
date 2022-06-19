@@ -33,35 +33,44 @@ def grid(r, t, p) :
 
 dt = np.dtype([('time', np.float64), ('extinction', np.float64), ('scattering', np.float64), ('transit_depth', np.float64)])
 
-data_1 = np.fromfile("./data/KIC1255b_Al2O3_day_1mdot_1micro_1orb_tau_lightcurve.bin", dt)
-data_2 = np.fromfile("./data/KIC1255b_Al2O3_day_1mdot_1micro_2orb_tau_lightcurve.bin", dt)
-
-df_1 = pd.DataFrame(data_1)
-df_2 = pd.DataFrame(data_2)
+# data_1k = np.fromfile("./data/KIC1255b_MgSiO3_day_1mdot_1micro_1st_tc_1000p_lightcurve.bin", dt)
+# data_500 = np.fromfile("./data/KIC1255b_MgSiO3_day_1mdot_1micro_1st_tc_500p_lightcurve.bin", dt)
+# data_750 = np.fromfile("./data/KIC1255b_MgSiO3_day_1mdot_1micro_1st_tc_750p_lightcurve.bin", dt)
+# df_1 = pd.DataFrame(data_1k)
+# df_2 = pd.DataFrame(data_750)
+# df_3 = pd.DataFrame(data_500)
+data = np.fromfile("./data/KIC1255b_Al2O3_sph_1mdot_03micro_1st_2nd_tc_lightcurve.bin", dt)
+data2 = np.fromfile("./data/KIC1255b_Al2O3_day_1mdot_03micro_1st_2nd_tc_lightcurve.bin", dt)
 c = 0
-
-for time in df_2['time']:
-    df_2['time'][c] = time + 1.0;
-    print(df_2['scattering'][c])
-    c +=1
-df = pd.concat([df_1, df_2])
+df = pd.DataFrame(data)
+df2 = pd.DataFrame(data2)
+# for time in df_2['time']:
+#     df_2['time'][c] = time + 1.0;
+#     print(df_2['scattering'][c])
+#     c +=1
+#df = pd.concat([df_1, df_2])
+#df = df_1
 cm = 1/2.54
 plt.figure(figsize=(20.0*cm,18.0*cm))
 plt.xlabel('phase')
 plt.ylabel('transit depth')
-#plt.xlim(-0.5, 0.5)
+plt.xlim(-0.1, 0.1)
 y_line = []
 for time in df['time']:
     # print(time)
     y_line.append(1.0)
-plt.plot(df['time'], y_line, '--', linewidth = 1.0, alpha=0.7)
-plt.plot(df['time'], df['transit_depth'], '-', linewidth=2.0, label='total')
-plt.plot(df['time'], df['extinction'], '--', linewidth=1.5, label='extinction', alpha=0.7)
-plt.plot(df['time'], df['scattering']+1.0, '--', linewidth=1.5, label='scattering', alpha=0.7)
+plt.plot(df['time']-1.0, y_line, '--', linewidth = 1.0, alpha=0.7)
+plt.plot(df['time']-1.0, df2['transit_depth'], '--', linewidth=2.0, label='dayside')
+# plt.plot(df_1['time'], df_1['transit_depth'], '-', linewidth=1.0, label='1000')
+# plt.plot(df_1['time'], df_2['transit_depth'], '-', linewidth=1.0, label='750')
+# plt.plot(df_1['time'], df_3['transit_depth'], '-', linewidth=1.0, label='500')
+# plt.plot(df['time']-1.0, df['extinction'], '--', linewidth=1.5, label='extinction', alpha=0.7)
+# plt.plot(df['time']-1.0, df['scattering']+1.0, '--', linewidth=1.5, label='scattering', alpha=0.7)
+plt.plot(df['time']-1.0, df['transit_depth'], '--', linewidth=2.0, label='spherical')
 #print(df['depth'].idxmin())
 #print(df['time'][df['transit_depth'].idxmin()])
 plt.legend()
-plt.savefig("light_curve_KIC1255b_day_Al2O3_1micro.png")
+plt.savefig("sph_vs_day.png")
 # #print(df)
 # # df = df.iloc[3125:,:]
 # #print(df)

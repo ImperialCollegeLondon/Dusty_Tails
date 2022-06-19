@@ -1,0 +1,158 @@
+[I 21:54:28.907 LabApp] The port 8888 is already in use, trying another port.
+[I 21:54:28.909 LabApp] The port 8889 is already in use, trying another port.
+[I 21:54:30.297 LabApp] JupyterLab extension loaded from /software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/jupyterlab
+[I 21:54:30.298 LabApp] JupyterLab application directory is /software/astro/anaconda/anaconda3-2019.10/share/jupyter/lab
+[I 21:54:35.265 LabApp] Serving notebooks from local directory: /lustre/hpc/astro/bmce/Dusty_Tails/opacs_jankovic/calc_dust_opac
+[I 21:54:35.265 LabApp] Jupyter Notebook 6.1.6 is running at:
+[I 21:54:35.265 LabApp] http://localhost:8890/?token=b84e19f95c214c6a570f5958551e6fc527755bb9b0635a6a
+[I 21:54:35.265 LabApp]  or http://127.0.0.1:8890/?token=b84e19f95c214c6a570f5958551e6fc527755bb9b0635a6a
+[I 21:54:35.265 LabApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 21:54:35.306 LabApp] 
+    
+    To access the notebook, open this file in a browser:
+        file:///lustre/hpc/astro/bmce/.local/share/jupyter/runtime/nbserver-61112-open.html
+    Or copy and paste one of these URLs:
+        http://localhost:8890/?token=b84e19f95c214c6a570f5958551e6fc527755bb9b0635a6a
+     or http://127.0.0.1:8890/?token=b84e19f95c214c6a570f5958551e6fc527755bb9b0635a6a
+[I 21:55:39.763 LabApp] 302 GET /?token=b84e19f95c214c6a570f5958551e6fc527755bb9b0635a6a (::1) 1.340000ms
+[W 21:56:01.618 LabApp] The extension "@ijmbarr/jupyterlab_spellchecker" is outdated.
+    
+[W 21:56:01.621 LabApp] The extension "@jupyterlab/latex" is outdated.
+    
+[W 21:56:01.622 LabApp] The extension "@aquirdturtle/collapsible_headings" is outdated.
+    
+[W 21:56:01.624 LabApp] The extension "@jupyterlab/toc" is outdated.
+    
+[W 21:56:01.626 LabApp] The extension "@jupyter-widgets/jupyterlab-manager" is outdated.
+    
+[E 21:56:05.591 LabApp] Uncaught exception GET /api/nbconvert?1655668559796 (::1)
+    HTTPServerRequest(protocol='http', host='localhost:8890', method='GET', uri='/api/nbconvert?1655668559796', version='HTTP/1.1', remote_ip='::1')
+    Traceback (most recent call last):
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/tornado/web.py", line 1702, in _execute
+        result = method(*self.path_args, **self.path_kwargs)
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/tornado/web.py", line 3173, in wrapper
+        return method(self, *args, **kwargs)
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/notebook/services/nbconvert/handlers.py", line 18, in get
+        exporters = base.get_export_names()
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/nbconvert/exporters/base.py", line 141, in get_export_names
+        e = get_exporter(exporter_name)(config=config)
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/nbconvert/exporters/base.py", line 102, in get_exporter
+        if getattr(exporter(config=config), 'enabled', True):
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/nbconvert/exporters/templateexporter.py", line 325, in __init__
+        super().__init__(config=config, **kw)
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/nbconvert/exporters/exporter.py", line 114, in __init__
+        self._init_preprocessors()
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/nbconvert/exporters/templateexporter.py", line 491, in _init_preprocessors
+        conf = self._get_conf()
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/nbconvert/exporters/templateexporter.py", line 509, in _get_conf
+        if conf_path.exists():
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/pathlib.py", line 1361, in exists
+        self.stat()
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/pathlib.py", line 1183, in stat
+        return self._accessor.stat(self)
+    PermissionError: [Errno 13] Permission denied: '/software/astro/anaconda/anaconda3-2019.10/share/jupyter/nbconvert/templates/html/conf.json'
+[W 21:56:05.828 LabApp] Unhandled error
+[E 21:56:05.829 LabApp] {
+      "Host": "localhost:8890",
+      "Connection": "keep-alive",
+      "Sec-Ch-Ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"102\", \"Google Chrome\";v=\"102\"",
+      "Dnt": "1",
+      "Sec-Ch-Ua-Mobile": "?0",
+      "Authorization": "token b84e19f95c214c6a570f5958551e6fc527755bb9b0635a6a",
+      "Content-Type": "application/json",
+      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.61 Safari/537.36",
+      "X-Xsrftoken": "2|2f234d52|fb0dcb4d4a34e470924737897971f17d|1655387042",
+      "Sec-Ch-Ua-Platform": "\"macOS\"",
+      "Accept": "*/*",
+      "Sec-Fetch-Site": "same-origin",
+      "Sec-Fetch-Mode": "cors",
+      "Sec-Fetch-Dest": "empty",
+      "Referer": "http://localhost:8890/lab",
+      "Accept-Encoding": "gzip, deflate, br",
+      "Accept-Language": "en-DK,en-US;q=0.9,en-GB;q=0.8,en;q=0.7,pt-PT;q=0.6,pt;q=0.5,da-DK;q=0.4,da;q=0.3",
+      "Cookie": "_xsrf=2|2f234d52|fb0dcb4d4a34e470924737897971f17d|1655387042; username-localhost-8891=\"2|1:0|10:1655479756|23:username-localhost-8891|44:M2U4NDAwZjMyZTk0NDNlN2JmYzM4NTJmOWJlOGUxNGY=|8655f6609358f964c2e6fcc0c2fda017344324fbce19101905582d4ce44fc9f7\"; username-localhost-8890=\"2|1:0|10:1655668559|23:username-localhost-8890|44:YmMzMDdiM2I3MTRiNDkwNWI0YzFlMDIxNTYwOGVjZjQ=|5a69a0da79399192fc014378aa70ab1481ea71d27408b4ce0fce8ecab4a7ae28\""
+    }
+[E 21:56:05.829 LabApp] 500 GET /api/nbconvert?1655668559796 (::1) 5962.800000ms referer=http://localhost:8890/lab
+[I 21:56:05.830 LabApp] Build is up to date
+[E 21:56:06.094 LabApp] Uncaught exception GET /api/nbconvert?1655668559813 (::1)
+    HTTPServerRequest(protocol='http', host='localhost:8890', method='GET', uri='/api/nbconvert?1655668559813', version='HTTP/1.1', remote_ip='::1')
+    Traceback (most recent call last):
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/tornado/web.py", line 1702, in _execute
+        result = method(*self.path_args, **self.path_kwargs)
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/tornado/web.py", line 3173, in wrapper
+        return method(self, *args, **kwargs)
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/notebook/services/nbconvert/handlers.py", line 18, in get
+        exporters = base.get_export_names()
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/nbconvert/exporters/base.py", line 141, in get_export_names
+        e = get_exporter(exporter_name)(config=config)
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/nbconvert/exporters/base.py", line 102, in get_exporter
+        if getattr(exporter(config=config), 'enabled', True):
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/nbconvert/exporters/templateexporter.py", line 325, in __init__
+        super().__init__(config=config, **kw)
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/nbconvert/exporters/exporter.py", line 114, in __init__
+        self._init_preprocessors()
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/nbconvert/exporters/templateexporter.py", line 491, in _init_preprocessors
+        conf = self._get_conf()
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/nbconvert/exporters/templateexporter.py", line 509, in _get_conf
+        if conf_path.exists():
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/pathlib.py", line 1361, in exists
+        self.stat()
+      File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/pathlib.py", line 1183, in stat
+        return self._accessor.stat(self)
+    PermissionError: [Errno 13] Permission denied: '/software/astro/anaconda/anaconda3-2019.10/share/jupyter/nbconvert/templates/html/conf.json'
+[W 21:56:06.095 LabApp] Unhandled error
+[E 21:56:06.096 LabApp] {
+      "Host": "localhost:8890",
+      "Connection": "keep-alive",
+      "Sec-Ch-Ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"102\", \"Google Chrome\";v=\"102\"",
+      "Dnt": "1",
+      "Sec-Ch-Ua-Mobile": "?0",
+      "Authorization": "token b84e19f95c214c6a570f5958551e6fc527755bb9b0635a6a",
+      "Content-Type": "application/json",
+      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.61 Safari/537.36",
+      "X-Xsrftoken": "2|2f234d52|fb0dcb4d4a34e470924737897971f17d|1655387042",
+      "Sec-Ch-Ua-Platform": "\"macOS\"",
+      "Accept": "*/*",
+      "Sec-Fetch-Site": "same-origin",
+      "Sec-Fetch-Mode": "cors",
+      "Sec-Fetch-Dest": "empty",
+      "Referer": "http://localhost:8890/lab",
+      "Accept-Encoding": "gzip, deflate, br",
+      "Accept-Language": "en-DK,en-US;q=0.9,en-GB;q=0.8,en;q=0.7,pt-PT;q=0.6,pt;q=0.5,da-DK;q=0.4,da;q=0.3",
+      "Cookie": "_xsrf=2|2f234d52|fb0dcb4d4a34e470924737897971f17d|1655387042; username-localhost-8891=\"2|1:0|10:1655479756|23:username-localhost-8891|44:M2U4NDAwZjMyZTk0NDNlN2JmYzM4NTJmOWJlOGUxNGY=|8655f6609358f964c2e6fcc0c2fda017344324fbce19101905582d4ce44fc9f7\"; username-localhost-8890=\"2|1:0|10:1655668559|23:username-localhost-8890|44:YmMzMDdiM2I3MTRiNDkwNWI0YzFlMDIxNTYwOGVjZjQ=|5a69a0da79399192fc014378aa70ab1481ea71d27408b4ce0fce8ecab4a7ae28\""
+    }
+[E 21:56:06.096 LabApp] 500 GET /api/nbconvert?1655668559813 (::1) 264.320000ms referer=http://localhost:8890/lab
+[W 21:56:09.431 LabApp] Notebook calc_planck_opac.ipynb is not trusted
+[I 21:56:14.542 LabApp] Kernel started: fe9e6506-ee5e-43b8-afec-9ef2040b5e46, name: python3
+-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|[W 21:56:29.456 LabApp] Notebook format_opt_const.ipynb is not trusted
+/-\|/-\|/-[I 21:56:30.403 LabApp] Kernel started: 5c5890d3-7360-4fa8-b482-37c5117270c2, name: python3
+\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-[I 21:57:54.776 LabApp] Creating new directory in /
+[I 21:58:30.574 LabApp] Saving file at /format_opt_const.ipynb
+[W 21:58:30.575 LabApp] Notebook format_opt_const.ipynb is not trusted
+[I 22:00:30.896 LabApp] Saving file at /format_opt_const.ipynb
+[W 22:00:30.897 LabApp] Notebook format_opt_const.ipynb is not trusted
+[I 22:01:10.246 LabApp] Saving file at /format_opt_const.ipynb
+[W 22:01:10.247 LabApp] Notebook format_opt_const.ipynb is not trusted
+[I 22:01:47.254 LabApp] Saving file at /format_opt_const.ipynb
+[W 22:01:47.255 LabApp] Notebook format_opt_const.ipynb is not trusted
+[I 22:07:46.704 LabApp] Saving file at /format_opt_const.ipynb
+[W 22:07:46.706 LabApp] Notebook format_opt_const.ipynb is not trusted
+[I 22:09:37.743 LabApp] Saving file at /format_opt_const.ipynb
+[W 22:09:37.744 LabApp] Notebook format_opt_const.ipynb is not trusted
+[I 22:11:38.130 LabApp] Saving file at /format_opt_const.ipynb
+[W 22:11:38.131 LabApp] Notebook format_opt_const.ipynb is not trusted
+[I 22:12:38.456 LabApp] Saving file at /format_opt_const.ipynb
+[W 22:12:38.458 LabApp] Notebook format_opt_const.ipynb is not trusted
+[I 22:12:41.520 LabApp] Kernel restarted: 5c5890d3-7360-4fa8-b482-37c5117270c2
+[I 22:14:38.724 LabApp] Saving file at /format_opt_const.ipynb
+[W 22:14:38.725 LabApp] Notebook format_opt_const.ipynb is not trusted
+[I 22:15:24.676 LabApp] Kernel restarted: 5c5890d3-7360-4fa8-b482-37c5117270c2
+[I 22:16:39.176 LabApp] Saving file at /format_opt_const.ipynb
+[W 22:16:39.178 LabApp] Notebook format_opt_const.ipynb is not trusted
+[I 22:18:18.118 LabApp] Saving file at /calc_planck_opac.ipynb
+[W 22:18:18.119 LabApp] Notebook calc_planck_opac.ipynb is not trusted
+[I 22:18:39.948 LabApp] Saving file at /format_opt_const.ipynb
+[W 22:18:39.949 LabApp] Notebook format_opt_const.ipynb is not trusted
+[I 22:34:28.462 LabApp] Saving file at /calc_planck_opac.ipynb
+[W 22:34:28.462 LabApp] Notebook calc_planck_opac.ipynb is not trusted
+[I 23:00:23.523 LabApp] Saving file at /calc_dust_opac.py

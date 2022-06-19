@@ -242,7 +242,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         s_phi.clear();
         s_phi = splines_phi(tau, radii_v, thetas_v, phis_v);
 
-        t_global_min = 0.1e-2;
+        t_global_min = 0.5e-2;
     } 
   //do bigger time steps in first orbit and smaller ones afterwards
   //to establish a primary population of dust particles

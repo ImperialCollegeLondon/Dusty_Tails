@@ -111,7 +111,7 @@ const int timesteps = 100;
 
 double angle[timesteps];
 string opacity_dir;
-string opac_data = "corundum_K95";
+string opac_data;
 Opacities opac;
 
 ofstream output("./output.bin", ios::out | ios::binary); 
@@ -479,6 +479,7 @@ using namespace std;
 #include <cstring>
    string planet, composition;
    string opac_data, line;
+   double no_p;
   
    int in_c = 0;
    fstream input_dust;
@@ -498,6 +499,9 @@ using namespace std;
       if (in_c == 2) {
          s_0 = stod(line.substr(0,5)) * 1.0e-4;
          cout << "s_0" << s_0 << endl;
+      }
+      if (in_c == 3) {
+         no_p =  stod(line.substr(0,5));
       }
       in_c = in_c + 1;
       
@@ -532,7 +536,7 @@ using namespace std;
    if (planet.substr(0,9) == "KIC1255_b") {
       Temp = 4550.0;
       T = 15.68*60.*60.; //planetary period in seconds
-      mbig = (mdot * T * 0.01) / 500. ; // 0.01 dependent on when particles are being thrown out of planet
+      mbig = (mdot * T * 0.01) / no_p ; // 0.01 dependent on when particles are being thrown out of planet
 
       n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(s_0, 3));
       cout << "n_mini " << n_mini << endl;
@@ -543,7 +547,7 @@ using namespace std;
    } else {
       Temp = 3830.0;
       T = 9.15*60.*60.; //planetary period in seconds
-      mbig = (mdot * T * 0.01) / 500. ; // 0.01 dependent on when particles are being thrown out of planet
+      mbig = (mdot * T * 0.01) / no_p ; // 0.01 dependent on when particles are being thrown out of planet
       n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(s_0, 3));
       m_star = 0.60; //stellar mass in solar masses
       a_p = pow((G_cgs*m_star*Msun_cgs* pow(T, 2.0))/ (4.0*pow(PI, 2.0)), 1.0/3.0); //semi major axis in cgs
@@ -633,8 +637,8 @@ using namespace std;
       }
     
       //cout << "z_planet " << z_planet << endl;
-      z_min = z_planet - 0.015;
-      z_max = z_planet + 0.015;
+      z_min = z_planet - 0.020;
+      z_max = z_planet + 0.020;
       y_min = -sqrt(pow(r_star,2)- pow(z_min,2));
 
       y_max = -1.0*y_min;
@@ -689,6 +693,7 @@ using namespace std;
          output.write((char*) &f_test, sizeof(double));
          output.write((char*) &forward_flux, sizeof(double));
          f_test = f_test + forward_flux;
+         cout << f_test << endl;
          output.write((char*) &f_test, sizeof(double));
 
          if (f_test<f_test_o) {
