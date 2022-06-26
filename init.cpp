@@ -114,7 +114,7 @@ int main() {
         t_star = stod(line.substr(10,16));
         m_star = stod(line.substr(21,24));
         r_star = stod(line.substr(31,34));
-        cout << "Tstar= " << t_star << "K, Mstar= " << m_star << " Msun, Rstar= "<< r_star << " Rsun." << endl;
+        cout << "Tstar= " << t_star << " K, Mstar= " << m_star << " Msun, Rstar= "<< r_star << " Rsun." << endl;
         cout << "\n" ;
       }
       if (in_c == 1) {
@@ -122,7 +122,7 @@ int main() {
         period = stod(line.substr(11,15));
         planet_mass = stod(line.substr(22,25));
         planet_radius = stod(line.substr(35,38));
-         cout << "Period= " << period << "hours, Mplanet= " << planet_mass << " Mearth, Rplanet= "<< planet_radius << " Rearth." << endl;
+         cout << "Period= " << period << " hours, Mplanet= " << planet_mass << " Mearth, Rplanet= "<< planet_radius << " Rearth." << endl;
          cout << "\n" ;
       }
       if (in_c == 2) {
@@ -170,7 +170,7 @@ int main() {
         no_orbits = stod(line.substr(25,28));
         nparticles = stoi(line.substr(38,41));
         cont = stoi(line.substr(50,51));
-        cout << cont << endl;
+      
       }
 
      
@@ -190,7 +190,7 @@ int main() {
  Mstar_sun = m_star; //mass of star in terms of mass of the sun
  Rstar = r_star; //stellar radius in sun radii
  Temp = t_star; //stars temperature
- cout << Temp << endl;
+
  lum = sigma*4.0*PI* pow(Rstar*Rsun_cgs, 2.0) * pow(Temp, 4.0); //stellar luminosity
 
 //Planetary parameters:
@@ -208,18 +208,18 @@ int main() {
 
 //Outflow parameters:
  mdot =  mdot_read*Mearth_cgs/gyr;
- cout << "mdot " << mdot << endl;
+
  v_esc = (pow((2.0*G *planet_mass*Mearth)/(planet_radius*Rearth), 0.5)) * (T/a); //escape velocity
  //planet tidally locked
  Temp_p = pow((Rstar*Rsun_cgs) / (a*100.0), 0.5) * Temp;  
 
  //gas is composed of a mixture of SiO, Mg, O, O2, Fe, SiO2 and MgO - with the fractions as indicated in Booth et al. 2022
  mu_gas = 0.281*60.083 + 0.250*24.305 + 0.223*15.999 + 0.158*32.0 + 0.079*55.845 + 0.005*60.08 + 0.003*40.3044;
- cout << "the planets temperature is " << Temp_p << endl;
- cout << "thermal vel" << sqrt((kb*Temp_p)/(mu_gas*amu)) << " cm/s " << endl;
+ cout << "The planets temperature is " << Temp_p << " K " << endl;
+ cout << "Thermal velocity is " << sqrt((kb*Temp_p)/(mu_gas*amu)) << " cm/s " << endl;
+ cout << "Gas mean molecular weight is " << mu_gas << " u " << endl;
  v_th = sqrt((kb*Temp_p)/(mu_gas*amu)) / (a*100);
 
-cout << "thermal velocity in a_ps is " << v_th << " ap/s" << endl;
 //Some dimensionless quantitites:
  G_dim = (G* pow(T, 2.0) * Mstar_kg) / pow(a, 3.0); //dimensionless gravitational constant
  c_dim = clight * (T / a); //dimensionless speed of light
@@ -299,8 +299,8 @@ if (composition.substr(0,5) == "Al2O3") {
   abort();
 }
 
-cout << "rho= " << rho_d << " g/cm3, initial size= " << s_0 << " cm." << endl;
-cout << "Clausius-Claperyon parameters, A= " << A << "K, B= " << Bp << endl;
+cout << "Dust density is " << rho_d << " g/cm3. Initial dust grain size is " << s_0*1.0e+4 << " micron." << endl;
+cout << "Clausius-Claperyon parameters are A = " << A << " K, B = " << Bp << endl;
 cout << "\n" ;
 
 opacity_dir = "./opacs_jankovic/calc_dust_opac/"+opac_data+"/opac_";
@@ -326,17 +326,14 @@ long int current_particles = 0; // number of current particles in simulation
 
 //PROGRAM INITIATION
 //grid built if optical depth is to be traced
-  
-  cout << "dr " << dr << endl;
+
   build_grids(r_a, r_b, theta_a, theta_b, dr, dtheta, dphi, phi_a, phi_b, r_min, theta_min, phi_min); //grid for optical depth calculations
   //cout << "Built grid for optical depth tracing." << endl;
   
 
   //add first particles
   add_particles(particles, current_particles, total_particles, 0.0); // call function that adds particles to simulation (in particles.cpp file)
-  cout << "cont " << cont << endl;
-  cout << "current "<< current_particles << endl;
-  cout << "total "<< total_particles << endl;
+
   //Solve particles is the main routine of the program. It is in particles.cpp.
   solve_particles(0.00, end_t, particles, total_particles,current_particles);
   //cout << planet_x << endl;

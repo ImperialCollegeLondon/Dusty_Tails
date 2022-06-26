@@ -87,12 +87,12 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
     long int current, total;
      //flag for continuing dust
     vector <dust_read> particles_read;
-    cout << "cont inside add particles function " << cont << endl;
+
     if (cont ==1) {
         //total number of particles is the size of the dust_grains_in vector
         particles_read = read_data();
         current_particles = particles_read.size();
-        total_particles = current_particles + 500;
+        total_particles = current_particles + nparticles;
         
         for (dust_read& p : particles_read) {
             grain.id = p.id;
@@ -165,8 +165,8 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
     
     current_particles = current;
     total_particles = total;
-    cout << "current in add " << current_particles << endl;
-    cout << "total in add " << total_particles << endl;
+    //cout << "current in add " << current_particles << endl;
+    cout << "Total number of particles " << total_particles << endl;
 
 }
 
@@ -204,7 +204,7 @@ void rm_particles(vector <Particle>& particles){
 void solve_particles(double total_t, double end_t, vector <Particle>& particles, \
                      long int total_particles, long int current_particles){
   double previous_t = 0.00;
-  double plot_time = 0.01;
+  double plot_time = major_timestep;
   double t_next = 0.00; 
   //vector which will take updated values of positons, velocitites, size and optimal time step for particle
   vector <double> updated_vector(8); 
@@ -212,7 +212,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     double d_dtheta = (d_t_max - d_t_min ) / t_cells_d;
     double d_dphi = ( d_p_max - d_p_min) / p_cells_d;
 
-    cout << d_dr << endl;
+
   //variables related to the optical depth interpolation
   vector < vector <double> > s_phi_values;
   vector < tk:: spline > s_theta;
@@ -228,7 +228,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
 
   while (t_next <= end_t) {
-    double t_global_min = 0.01;
+    double t_global_min = major_timestep;
     auto start = high_resolution_clock::now();
     cout << "At time " << previous_t << endl;
     //cout << tau_constant << endl;
@@ -242,7 +242,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         s_phi.clear();
         s_phi = splines_phi(tau, radii_v, thetas_v, phis_v);
 
-        t_global_min = 0.5e-2;
+        t_global_min = major_timestep/2.;
     } 
   //do bigger time steps in first orbit and smaller ones afterwards
   //to establish a primary population of dust particles
@@ -433,11 +433,11 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
       //cout << "lines in output " << counter << endl;
       current_particles = total_particles;
       //cout << "current " << current_particles << endl;
-      total_particles = total_particles + 500;
+      total_particles = total_particles + nparticles;
       //cout << "total next " << total_particles << endl;
       //add particles every 100th of an orbit
       add_particles(particles, current_particles, total_particles, t_next);
-      plot_time = plot_time + 0.01;
+      plot_time = plot_time + major_timestep;
      }
      auto stop = high_resolution_clock::now();
      auto duration = duration_cast<seconds>(stop - start);

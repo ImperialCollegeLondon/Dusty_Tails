@@ -96,7 +96,7 @@ double brent(double size, double x, double y, double z, double tau){
   double fa, fb, fc, fs;
   double tol = 1.0e-5;
   Ac = 1.0;
-  Bc = 2500.0;
+  Bc = 5000.0;
   fa = f_Tdust(size,x,y,z,tau, Ac);
   fb = f_Tdust(size,x,y,z,tau, Bc);
   

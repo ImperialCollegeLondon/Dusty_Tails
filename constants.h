@@ -23,8 +23,8 @@ const int r_cells = 96;
 const double r_cells_d = 96.;
 const int t_cells = 40;
 const double t_cells_d = 40.;
-const int p_cells =120;
-const double p_cells_d = 120.;
+const int p_cells =177;
+const double p_cells_d = 177.;
 
 //declaration of some external variables
 extern double star_x; //x position of the star, w.r.t CoM of system
@@ -51,7 +51,7 @@ extern double mdot, v_esc, mdot_read, v_th, mu_gas;
 extern int outflow, tau_type;
 extern bool tau_constant;
 extern int cont;
-
+extern double nparticles, major_timestep;
 //Grid parameters:
 extern double d_r_min, d_r_max,  d_t_min, d_t_max, d_p_min, d_p_max;
 

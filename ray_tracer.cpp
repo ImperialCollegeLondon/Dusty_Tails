@@ -53,7 +53,7 @@ void build_grids(double *r_a, double *r_b, double *theta_a, \
 
 double*** calculation_ext(vector <Particle>& particles, double delta_t){
 
-        cout << "at extinction calculation function " << endl;
+        //cout << "at extinction calculation function " << endl;
         vector <double> sphere_pos(3, 0.0);
         vector <double> scaled_pos(3, 0.0);
         double*** ext;
@@ -73,14 +73,14 @@ double*** calculation_ext(vector <Particle>& particles, double delta_t){
                 }
       }
 
-      cout << "extinction grid defined successfully " << endl;
+      //cout << "extinction grid defined successfully " << endl;
     
         //double n_mini = 4.0e+23;
-        double mbig = (mdot * T * 0.01) / 500. ; // 0.01 dependent on when particles are being thrown out of planet
+        double mbig = (mdot * T * 0.01) / nparticles; // 0.01 dependent on when particles are being thrown out of planet
         double n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(s_0, 3));
      
-        cout <<  "Number of mini particles: " <<  n_mini << endl;
-        cout << "mbig " << mbig << endl;
+        //cout <<  "Number of mini particles: " <<  n_mini << endl;
+        //cout << "mbig " << mbig << endl;
 
         vector <int> r_index, theta_index, phi_index;
 
@@ -154,7 +154,7 @@ double*** calculation_ext(vector <Particle>& particles, double delta_t){
         }
 
       }
-  cout << "extinction grid has been calculated successfully! " << endl;
+  //cout << "extinction grid has been calculated successfully! " << endl;
   return ext;
 
 }
@@ -196,9 +196,9 @@ double*** optical_depth_calc(double*** ext){
   double d_dtheta = (d_t_max - d_t_min ) / t_cells_d;
   double d_dphi = ( d_p_max - d_p_min) / p_cells_d;
 
-  cout << "At optical depth calculation " << endl;
-  cout << "semi major axis is " << a << " m " << endl;
-  cout << "dr " << d_dr << endl;
+  // cout << "At optical depth calculation " << endl;
+  // cout << "semi major axis is " << a << " m " << endl;
+  // cout << "dr " << d_dr << endl;
   od = new double**[r_cells+1];
   for (int i = 0; i <= r_cells; i++){
     od[i] = new double*[t_cells];
@@ -218,7 +218,7 @@ double*** optical_depth_calc(double*** ext){
                 }
                 }
             }
-  cout << "optical depth calculated successfully " << endl;
+  //cout << "optical depth calculated successfully " << endl;
   return od;
 
 }

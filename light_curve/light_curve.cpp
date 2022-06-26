@@ -99,8 +99,8 @@ class Particle {
 };
 #define PI 3.14159
 const double gyr = pow(10.,9) * 365. * 24. * 60. * 60.;
-double mdot_read = 1.0; //mass loss rate of planet in Earth masses per Gyr
-double mdot = mdot_read*Mearth_cgs/gyr;
+double mdot_read; //mass loss rate of planet in Earth masses per Gyr
+
 double s_0, rho_d;
 int h_cells, v_cells;
 double Temp, T , mbig,n_mini,m_star, a_p, inclination, r_star;
@@ -440,6 +440,7 @@ double forward_scat(double g, double scat_opac, double mass, double x, double y,
       phase_angle = acos((1/r_dust) * (x*d_obs_star - pow(r_dust,2)) 
                      / sqrt(pow(d_obs_star, 2.) - 2.0*d_obs_star*x + pow(r_dust,2.)));
       phase = (1./(4.*PI)) * ((1-pow(g,2))/pow(1+pow(g,2)-2*g*cos(phase_angle), 3./2.));
+      //cout << phase << endl;
        //cout << n_mini << endl;
       //cout << "size " << s << endl;
        //cout << "mass " << mass << endl;
@@ -449,7 +450,7 @@ double forward_scat(double g, double scat_opac, double mass, double x, double y,
       s_big = pow((3.*mass*n_mini)/(4*PI*rho_d), 1./3.);
       //cout << "s " << s <<endl;
       //cout << phase * scat_opac*mass*n_mini/ (4.0*PI*pow(x,2)+pow(y,2)+pow(z,2)) << endl;
-      return phase * scat_opac*mass*n_mini/ (PI*pow(x,2.)+pow(y,2.)+pow(z,2.));
+      return phase * scat_opac*mass*n_mini/ (pow(x,2.)+pow(y,2.)+pow(z,2.));
 }
 
 double flux(vector <vector <double>> &taus, vector< vector <double>> &patches, int h_cells, int v_cells){
@@ -480,6 +481,7 @@ using namespace std;
    string planet, composition;
    string opac_data, line;
    double no_p;
+   
   
    int in_c = 0;
    fstream input_dust;
@@ -503,6 +505,9 @@ using namespace std;
       if (in_c == 3) {
          no_p =  stod(line.substr(0,5));
       }
+      if (in_c ==4) {
+         mdot_read = stod(line.substr(0,5));
+      }
       in_c = in_c + 1;
       
     }
@@ -511,7 +516,7 @@ using namespace std;
      cout << "oops" << endl;
   }
 
-  
+   double mdot = mdot_read*Mearth_cgs/gyr;
    if (composition.substr(0,5) == "Al2O3") {
       cout << "Dust is composed of Corundum." << endl;
       opac_data = "corundum_K95";
@@ -612,7 +617,7 @@ using namespace std;
    vector <dust> particles_calc;
    double planet_shadow;
 
-   for (int i=40; i<41; i++){
+   for (int i=80; i<81; i++){
 
       //memset(taus, 0, sizeof(taus));
       v_cells = i;
@@ -622,10 +627,11 @@ using namespace std;
       double x_planet, y_planet, z_planet;
       for ( int it=0; it<timestamps.size(); it++) {
       //for ( int it=0; it<1; it++) {
+      if (timestamps[it]<=1.0) {
       double theta;
       
       planet_shadow=0.;
-      theta = 2.0*PI*timestamps[it];
+      theta = 2.0*PI*(timestamps[it]);
       //cout << "theta " << theta <<  endl;
       z_planet = cos(theta) * cos(inclination);
       x_planet = cos(theta) * sin(inclination);
@@ -637,8 +643,8 @@ using namespace std;
       }
     
       //cout << "z_planet " << z_planet << endl;
-      z_min = z_planet - 0.020;
-      z_max = z_planet + 0.020;
+      z_min = z_planet - 0.02;
+      z_max = z_planet + 0.02;
       y_min = -sqrt(pow(r_star,2)- pow(z_min,2));
 
       y_max = -1.0*y_min;
@@ -722,5 +728,6 @@ using namespace std;
    //     output.write((char*) &grid_cell_size[i], sizeof(double));
    //     output.write((char*) &transit_depths[i], sizeof(double));
    // }
+   }
    return 0;
 }
