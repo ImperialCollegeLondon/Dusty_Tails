@@ -19,12 +19,12 @@ using namespace std;
 #define Rearth 6.3781e+6 //Earth radius in meters
 
 //definition of the grid cell numbers for the optical depth grid
-const int r_cells = 96;
-const double r_cells_d = 96.;
-const int t_cells = 40;
-const double t_cells_d = 40.;
-const int p_cells =177;
-const double p_cells_d = 177.;
+const int r_cells = 120;
+const double r_cells_d = 120.;
+const int t_cells = 50;
+const double t_cells_d = 50.;
+const int p_cells =300;
+const double p_cells_d = 300.;
 
 //declaration of some external variables
 extern double star_x; //x position of the star, w.r.t CoM of system
