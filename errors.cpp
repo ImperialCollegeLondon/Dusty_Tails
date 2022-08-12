@@ -22,6 +22,11 @@ double error( double value1, double value2){
     err = fabs(value1 - value2)/(1.e-9 + max(abs(value1), abs(value2))*1.e-9);
     //cout <<"delta " << fabs(value1 - value2) << endl;
     //cout << "scale " << (1.e-7 + max(abs(value1), abs(value2))*1.e-7) << endl;
+    if (isnan(err)) {
+      cout << "error calculation is nan " << endl;
+      cout << "1: " << value1 << endl;
+      cout << "2: " << value2 << endl;
+    }
     return err;
 }
 
