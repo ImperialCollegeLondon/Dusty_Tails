@@ -52,6 +52,7 @@ struct dust {
    double kappa;
    double kappa_scat;
    double size;
+   double tau;
 };
 template<typename T>
 vector<double> linspace(T start_in, T end_in, int num_in){
@@ -150,7 +151,7 @@ vector <dust_read> read_data(){
        
 
        if (dust_grains_out[i].id == 0) {
-
+         //cout << "here " << endl;
           //dust_grains_out.erase(dust_grains_out.end());
           dust_grains_out.pop_back();
 
@@ -263,7 +264,9 @@ void  extinction( vector <dust> particles, vector <vector <double>> &patches,
                      sigma = (p.kappa * p.m) / (pow(a_p, 2.0));
                      
                      shadow = ((dA/(dh*dv)) * sigma*n_mini) / dA_cell;
-
+                     if (shadow < 1.0e-20) {
+                        shadow = 0.0;
+                     }
                      taus[h_index[i]][v_index[j]] = taus[h_index[i]][v_index[j]] + shadow;
                     
                      }
@@ -432,28 +435,29 @@ void grid_cells(vector<double> &h_grid, vector<double> &v_grid,
    
 }
 
-double forward_scat(double g, double scat_opac, double mass, double x, double y, double z, double s){
+double forward_scat(double g, double scat_opac, double mass, double x, double y, double z, double s, double tau){
       double phase;
       double d_obs_star = 1.911e+21;
       double phase_angle;
       double r_dust = sqrt(pow(x,2)+pow(y,2)+pow(z,2));
+      
       phase_angle = acos((1/r_dust) * (x*d_obs_star - pow(r_dust,2)) 
                      / sqrt(pow(d_obs_star, 2.) - 2.0*d_obs_star*x + pow(r_dust,2.)));
-      phase = (1./(4.*PI)) * ((1-pow(g,2))/pow(1+pow(g,2)-2*g*cos(phase_angle), 3./2.));
-      //cout << phase << endl;
-       //cout << n_mini << endl;
-      //cout << "size " << s << endl;
-       //cout << "mass " << mass << endl;
-      //cout << "scat " << opac.stellar_scat(s) << endl;
-      
+      phase = ((1-pow(g,2))/pow(1+pow(g,2)-2*g*cos(phase_angle), 3./2.));
+
       double s_big;
       s_big = pow((3.*mass*n_mini)/(4*PI*rho_d), 1./3.);
-      //cout << "s " << s <<endl;
-      //cout << phase * scat_opac*mass*n_mini/ (4.0*PI*pow(x,2)+pow(y,2)+pow(z,2)) << endl;
-      return phase * scat_opac*mass*n_mini/ (pow(x,2.)+pow(y,2.)+pow(z,2.));
+      // cout << "g " << g << endl;
+      // cout << "scat opac " << scat_opac << endl;
+      // cout << "size " << s << endl;
+      // cout << "mass " << mass << endl;
+      // cout << "phase angle "<< phase_angle << endl;
+      // cout << "phase " << phase << endl;
+      // cout << "flux " << exp(-tau)*phase * scat_opac*mass*n_mini/ (4.0*PI*pow(x,2.)+pow(y,2.)+pow(z,2.)) << endl;
+      return exp(-tau)* phase * scat_opac*mass*n_mini/ (4.0*PI*pow(x,2.)+pow(y,2.)+pow(z,2.));
 }
 
-double flux(vector <vector <double>> &taus, vector< vector <double>> &patches, int h_cells, int v_cells){
+double flux(vector <vector <double>> &taus, vector< vector <double>> &patches, int h_cells, int v_cells, double p_shadow){
    double f, total_grid_area;
    total_grid_area = 0.;
    for (int m=0; m<h_cells; m++){
@@ -462,12 +466,12 @@ double flux(vector <vector <double>> &taus, vector< vector <double>> &patches, i
       }
    }
 
-   f = 0.0;
+   f = (PI*pow(r_star,2) - total_grid_area)/(PI*pow(r_star,2));
    for (int m=0; m<h_cells; m++){
       for (int n=0; n<v_cells; n++){
-
-        f = f + ((patches[m][n] * exp(-1.0*taus[m][n])) / total_grid_area);
-
+         
+         f = f + patches[m][n] * exp(-1.0*taus[m][n]) * (1/(PI*pow(r_star,2)));
+         
       }
    }
    //
@@ -495,7 +499,7 @@ using namespace std;
         cout << planet << endl;
       }
       if (in_c == 1) {
-        composition = line.substr(0,10);
+        composition = line.substr(0,15);
         cout << composition << endl;
       }
       if (in_c == 2) {
@@ -504,6 +508,7 @@ using namespace std;
       }
       if (in_c == 3) {
          no_p =  stod(line.substr(0,5));
+         cout << no_p << endl;
       }
       if (in_c ==4) {
          mdot_read = stod(line.substr(0,5));
@@ -534,7 +539,25 @@ using namespace std;
       double mu = 100.389;
       double alpha = 0.1;
 
-   }  else{
+   }  else if (composition.substr(0,8)=="MgFeSiO4") {
+  cout << "Dust is composed of Olivine [MgFe]2SiO4" << endl;
+  opac_data = "MgFeSiO4_D95";
+  //A and B are the same values as for Forsterite (Perez-Becker+ 2013)
+  double A = 6.53e+4; 
+  double Bp = 34.3;
+  rho_d = 3.8;
+  double mu = 172.23;
+  double alpha = 0.1;
+
+} else if (composition.substr(0,12)=="Mg08Fe12SiO4") {
+  cout << "Dust is composed of Olivine (Mg08,Fe12)" << endl;
+  opac_data = "Mg08Fe12SiO4_D95";
+  double A = 6.53e+4; 
+  double Bp = 34.3;
+  rho_d = 3.80;
+  double mu = 178.538;
+  double alpha = 0.1;
+}  else{
    cout << "Composition unknown, stopping.";
    abort();
    }
@@ -557,7 +580,7 @@ using namespace std;
       m_star = 0.60; //stellar mass in solar masses
       a_p = pow((G_cgs*m_star*Msun_cgs* pow(T, 2.0))/ (4.0*pow(PI, 2.0)), 1.0/3.0); //semi major axis in cgs
       inclination = acos((0.57*Rsun_cgs*0.68)/a_p); //in radians
-      //cout << "i " << inclination << endl;
+      cout << "i " << inclination << endl;
       r_star = (0.57*Rsun_cgs)/a_p; //stellar radius in terms of the semimajor axis
       //cout << r_star << endl;
    }
@@ -590,6 +613,7 @@ using namespace std;
         particles[counter].timestamp = p.timestamp;
         double key = p.timestamp;
         if (find(timestamps.begin(), timestamps.end(), key) == timestamps.end()) {
+           //cout << key << endl;
            timestamps.push_back(key);
        }
         particles[counter].phi = 2.0*M_PI * (p.timestamp - t0);
@@ -603,7 +627,10 @@ using namespace std;
         particles[counter].kappa = p.kappa_planck;
         particles[counter].kappa_scat = p.kappa_dust_scat;
         particles[counter].size = p.s_dust;
+        particles[counter].tau = p.tau_dust;
+
         //cout << p.s_dust << endl;
+        //cout << p.kappa_planck << endl;
         //cout << forward_scat(opac.stellar_gsc(p.s_dust), p.kappa_dust_scat, p.m_dust) << endl;;
        
         counter = counter + 1;
@@ -615,23 +642,23 @@ using namespace std;
    vector<vector<double>> patches;
    vector<vector<double>> taus;
    vector <dust> particles_calc;
-   double planet_shadow;
+   double planet_shadow, test;
 
-   for (int i=80; i<81; i++){
+   for (int i=120; i<121; i++){
 
       //memset(taus, 0, sizeof(taus));
       v_cells = i;
-      //cout << i << " cells in z " << endl;
       double f_test = 0.;
       double f_test_o = 1.0;
       double x_planet, y_planet, z_planet;
       for ( int it=0; it<timestamps.size(); it++) {
       //for ( int it=0; it<1; it++) {
-      if (timestamps[it]<=1.0) {
+        // cout << timestamps[it] << endl;
+      
       double theta;
       
       planet_shadow=0.;
-      theta = 2.0*PI*(timestamps[it]);
+      theta = 2.0*PI*(timestamps[it]-t0);
       //cout << "theta " << theta <<  endl;
       z_planet = cos(theta) * cos(inclination);
       x_planet = cos(theta) * sin(inclination);
@@ -639,20 +666,21 @@ using namespace std;
       double r_planet;
       r_planet = sqrt(pow(y_planet, 2.) + pow(z_planet, 2.));
       if (x_planet > 0.0 && r_planet <= r_star){
-         planet_shadow = pow(0.33*Rearth_cgs, 2.) / pow(r_star*a_p, 2.);
+         planet_shadow = pow(0.33*Rearth_cgs, 2.);
       }
     
       //cout << "z_planet " << z_planet << endl;
-      z_min = z_planet - 0.02;
-      z_max = z_planet + 0.02;
-      y_min = -sqrt(pow(r_star,2)- pow(z_min,2));
+      z_min = z_planet - 0.04;
+      z_max = z_planet + 0.04;
+      y_min = -r_star;
 
-      y_max = -1.0*y_min;
+      y_max = r_star;
 
       h_cells = round((y_max-y_min) / ((z_max-z_min)/v_cells));
-
       dh = (y_max-y_min)/h_cells;
       dv = (z_max-z_min)/v_cells;
+      //cout << "dh " << dh << endl;
+      //cout << "dv " << dv << endl;
 
       for (int j=0; j<=h_cells; j++) {
          h_grid.push_back(0.0);
@@ -686,7 +714,7 @@ using namespace std;
                 particles_calc.push_back(p);
                 if (p.x_dp > 0.0) {
                 forward_flux = forward_flux + forward_scat(opac.stellar_gsc(p.size), 
-                opac.stellar_scat(p.size), p.m, p.x_dp*a_p, p.y_dp*a_p, p.z_dp*a_p, p.size); }
+                opac.stellar_scat(p.size), p.m, p.x_dp*a_p, p.y_dp*a_p, p.z_dp*a_p, p.size, p.tau); }
              }
           }
           
@@ -695,11 +723,16 @@ using namespace std;
         
          //f_test = flux(taus, patches, h_cells, v_cells) + forward_flux - planet_shadow;
          output.write((char*) &timestamps[it], sizeof(double));
-         f_test = flux(taus, patches, h_cells, v_cells)-planet_shadow;
+         
+         f_test = flux(taus, patches, h_cells, v_cells, planet_shadow);
+         //cout << "extinction " << f_test << endl;
+         //cout << "scattering " << forward_flux << endl;
          output.write((char*) &f_test, sizeof(double));
          output.write((char*) &forward_flux, sizeof(double));
          f_test = f_test + forward_flux;
-         cout << f_test << endl;
+        // cout << "total " << f_test << endl;
+        //cout << forward_flux << endl;
+         
          output.write((char*) &f_test, sizeof(double));
 
          if (f_test<f_test_o) {
@@ -716,18 +749,11 @@ using namespace std;
     }
 
     transit_depths.push_back(f_test_o);
-    //cout << "transit depth " << f_test_o << endl;
+    cout << "transit depth " << f_test_o << endl;
     grid_cell_size.push_back(dv);
 
 
     }
 
-   // for (int i=0; i<70; i++){
-   //     int no_cells = i+10;
-   //     output.write((char*) &no_cells, sizeof(int));
-   //     output.write((char*) &grid_cell_size[i], sizeof(double));
-   //     output.write((char*) &transit_depths[i], sizeof(double));
-   // }
-   }
    return 0;
 }
