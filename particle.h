@@ -31,7 +31,7 @@ void solve_particles(double total_t, double end_t, vector <Particle> &particles,
 
 void rm_particles(vector <Particle> &particles);
 
-double*** calculation_ext(vector <Particle>& particles,  double delta_t);
+void calculation_ext(vector <Particle>& particles, double (&ext)[r_cells][t_cells][p_cells],  double delta_t);
 
 extern vector <Particle> particles;
 extern bool tau_constant;

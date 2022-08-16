@@ -19,8 +19,8 @@ extern double phi_a [p_cells + 1];
 extern double phi_b [p_cells];
 
 extern vector < vector < tk:: spline > > s_phi;
-extern double*** extinction;
-extern double*** optical_depth;
+extern double extinction[r_cells][t_cells][p_cells];
+extern double optical_depth[r_cells][t_cells][p_cells];
 
 
 extern double r_min, r_max, theta_min, theta_max, phi_min, phi_max;
@@ -110,7 +110,7 @@ double gauss(double var, double var_c, double std);
 vector <double> grid_scaling(vector <double> s_position);
 
 
-double*** optical_depth_calc(double*** ext);
+void optical_depth_calc(double (&ext)[r_cells][t_cells][p_cells], double (&od)[r_cells][t_cells][p_cells]);
 
 void od_analytic(double ods[r_cells][t_cells][p_cells]);
 
@@ -128,7 +128,7 @@ double theta_reverse(double old_theta);
 
 double phi_reverse(double old_phi);
 
-vector < vector < vector <double> > >  tau_to_vector(double*** tau);
+vector < vector < vector <double> > >  tau_to_vector(double tau[r_cells][t_cells][p_cells]);
 
 double cubicInterpolate ( vector <double> p, vector <double> s1, double x);
 

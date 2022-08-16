@@ -20,6 +20,7 @@
 #include <time.h>
 #include <cstring>
 #include "opacities.h"
+#include <omp.h>
 
 using namespace std;
 using std::fill;
@@ -40,6 +41,7 @@ string output_file;
 double t_star, m_star, r_star;
 double period, planet_mass, planet_radius;
 double s_0;
+double t_init;
 double rmin, rmax, tmin, tmax, pmin,pmax;
 double mdot_read, major_timestep, no_orbits, nparticles;
 bool tau_constant;
@@ -96,8 +98,8 @@ double dr = (r_max - r_min)/ r_cells_d;
 double dtheta = (theta_max - theta_min ) / t_cells_d;
 double dphi = ( phi_max - phi_min) / p_cells_d;
 
-double*** extinction;
-double*** optical_depth;
+double extinction[r_cells][t_cells][p_cells];
+double optical_depth[r_cells][t_cells][p_cells];
 
 //**********************************************************************
 //**********************************************************************
@@ -170,6 +172,8 @@ int main() {
         no_orbits = stod(line.substr(25,28));
         nparticles = stoi(line.substr(38,41));
         cont = stoi(line.substr(50,51));
+        t_init = stod(line.substr(62,68));
+        cout << "t_init " << t_init << endl;
       
       }
 
@@ -292,7 +296,15 @@ if (composition.substr(0,5) == "Al2O3") {
   rho_d = 3.22;
   mu = 44.085;
   alpha = 0.04;
-
+} else if (composition.substr(0,12)=="Mg08Fe12SiO4") {
+  cout << "Dust is composed of Olivine (Mg08,Fe12)" << endl;
+  opac_data = "Mg08Fe12SiO4_D95";
+  comp = "Mg08Fe12SiO4";
+  A = 6.53e+4; 
+  Bp = 34.3;
+  rho_d = 3.80;
+  mu = 178.538;
+  alpha = 0.1;
 
 } else{
   cout << "Composition unknown, stopping.";
@@ -321,7 +333,7 @@ long int total_particles = nparticles; //initial number of particles to start si
 double t_common = major_timestep;
 double big_step = major_timestep; //big time step (in terms of planetary orbits)
 double end_t = no_orbits; // end time of simulation
-double total_t = 0.0; // total time that has passed, so 0 in the beginning
+double total_t = t_init; // total time that has passed, so 0 in the beginning
 long int current_particles = 0; // number of current particles in simulation
 
 //PROGRAM INITIATION

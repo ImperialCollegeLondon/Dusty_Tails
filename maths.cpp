@@ -7,6 +7,7 @@
 #include "butcher.h"
 #include "particle.h"
 #include "functions.h"
+#include <omp.h>
 
 
 using namespace std;

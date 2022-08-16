@@ -9,6 +9,7 @@
 #include "functions.h"
 #include "particle.h"
 #include <iostream>
+#include <omp.h>
 
 #include "opacities.h"
 

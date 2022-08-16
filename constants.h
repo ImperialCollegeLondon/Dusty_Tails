@@ -26,6 +26,7 @@ const double t_cells_d = 50.;
 const int p_cells =300;
 const double p_cells_d = 300.;
 
+extern double t_init;
 //declaration of some external variables
 extern double star_x; //x position of the star, w.r.t CoM of system
 extern double planet_x; //x position of the planet, w.r.t CoM of system

@@ -12,6 +12,7 @@
 #include <random>
 #include <chrono>
 #include "spline.h"
+#include <omp.h>
 
 using namespace std;
 
@@ -50,28 +51,19 @@ void build_grids(double *r_a, double *r_b, double *theta_a, \
 
 }
 
-
-double*** calculation_ext(vector <Particle>& particles, double delta_t){
+void calculation_ext(vector <Particle>& particles, double (&ext)[r_cells][t_cells][p_cells], double delta_t){
 
         //cout << "at extinction calculation function " << endl;
         vector <double> sphere_pos(3, 0.0);
         vector <double> scaled_pos(3, 0.0);
-        double*** ext;
-        ext = new double**[r_cells];
+        //double*** ext;
+        //ext = new double**[r_cells];
         int r_it, theta_it, phi_it;
 
         double old_ext;
         double op;
         double pib = 0.;
-        for (int i = 0; i < r_cells; i++){
-            ext[i] = new double*[t_cells];
-            for (int j = 0; j < t_cells; j++){
-                ext[i][j] = new double[p_cells];
-                for (int k=0; k<p_cells; k++){
-                  ext[i][j][k] = 0.0;
-                }
-                }
-      }
+
 
       //cout << "extinction grid defined successfully " << endl;
     
@@ -154,8 +146,7 @@ double*** calculation_ext(vector <Particle>& particles, double delta_t){
         }
 
       }
-  //cout << "extinction grid has been calculated successfully! " << endl;
-  return ext;
+
 
 }
 
@@ -190,8 +181,8 @@ vector <double> grid_scaling(vector <double> s_position){
 
 
 
-double*** optical_depth_calc(double*** ext){
-  double*** od;
+void optical_depth_calc(double (&ext)[r_cells][t_cells][p_cells], double (&od)[r_cells][t_cells][p_cells]){
+
   double d_dr = (d_r_max - d_r_min)/ r_cells_d;
   double d_dtheta = (d_t_max - d_t_min ) / t_cells_d;
   double d_dphi = ( d_p_max - d_p_min) / p_cells_d;
@@ -199,16 +190,7 @@ double*** optical_depth_calc(double*** ext){
   // cout << "At optical depth calculation " << endl;
   // cout << "semi major axis is " << a << " m " << endl;
   // cout << "dr " << d_dr << endl;
-  od = new double**[r_cells+1];
-  for (int i = 0; i <= r_cells; i++){
-    od[i] = new double*[t_cells];
-    for (int j = 0; j < t_cells; j++){
-      od[i][j] = new double[p_cells];
-      for (int k=0; k<p_cells; k++){
-                  od[i][j][k] = 0.0;
-      }
-    }
-  }
+
     for (unsigned int i = 1; i <= r_cells; i++){
         for (unsigned int j = 0; j < t_cells; j++){
             for (unsigned int  k = 0; k < p_cells; k++){
@@ -218,8 +200,6 @@ double*** optical_depth_calc(double*** ext){
                 }
                 }
             }
-  //cout << "optical depth calculated successfully " << endl;
-  return od;
 
 }
 //reverse function are from grid scale to "real" scale (in terms of semimajor)
@@ -244,7 +224,7 @@ double phi_reverse(double old_phi){
   return new_phi;
 }
 
-vector < vector < vector <double> > >  tau_to_vector(double*** tau) {
+vector < vector < vector <double> > >  tau_to_vector(double tau[r_cells][t_cells][p_cells]) {
   //cout << "inside tau to vector" << endl;
   vector < vector < vector <double> > > tauv ;
   for (unsigned int i = 0; i <= r_cells; i++){

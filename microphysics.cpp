@@ -9,6 +9,8 @@
 #include "functions.h"
 #include "particle.h"
 #include "opacities.h"
+#include <omp.h>
+#define SIGN(a,b) ((b) >= 0.0 ? fabs(a) : -fabs(a))
 
 using namespace std;
 //initialisation for tables for opacity calculations
@@ -36,7 +38,7 @@ double clausius_clap(double s, double x, double y, double z, double tau, double 
   //cout << (exp((-A/Td) + Bp) * pow(amu/(2.0*PI*kb*Td), 0.5) ) << endl;
   //cout << Td << endl;
   double c1 = -alpha*exp((-A/Td) + Bp)/rho_d;
-  double c2 = pow((mu*amu)/(2.0*PI*kb*Td), 0.5);
+  double c2 = pow((mu*amu)/(2.0*PI*kb*Td), 0.5)*T;
   //cout << Td << endl;
   //cout << "ds1 " << c1 << endl;
   //cout << "ds2 " << c2 << endl;
@@ -88,85 +90,94 @@ double f_Tdust( double s, double x, double y, double z, double tau, double Tdust
 
 double brent(double size, double x, double y, double z, double tau){
   const int itmax=100;
-  const double eps = std::numeric_limits<double>::epsilon();
+  const double eps = 1.0e-8;
   bool cond1, cond2, cond3, cond4, cond5;
-  int mflag=0;
-  double Ac, Bc, Cc, Dc;
+  int mflag=0, iter;
+  double Ac, Bc, Cc, Dc, Ec;
   double p, q, r, s, tol1, xm;
   double fa, fb, fc, fs;
   double tol = 1.0e-5;
-  Ac = 1.0;
-  Bc = 5000.0;
+  double min1, min2;
+  Ac = 800.0;
+  Bc = 3500.0;
+  Cc=Bc;
   fa = f_Tdust(size,x,y,z,tau, Ac);
   fb = f_Tdust(size,x,y,z,tau, Bc);
   
 
-  if (fa*fb >= 0.0) {
+  if ((fa > 0.0 && fb > 0.0) || (fa < 0.0 && fb < 0.0)) {
     cout << "root must be bracketed in zbrent" << endl;
-    cout << "size " << size << endl;
-    cout << "tau " << tau << endl;
-    cout << "x " << x << " y " << y << " z " << z << endl;
-    cout << "fa " << fa << endl;
-    cout << "fb " << fb << endl;
     abort();
   }
-  if (abs(fa)<abs(fb)) {
-    swap(Ac,Bc);
-    swap(fa,fb);
+  fc = fb;
+  for (iter=1;iter<=itmax;iter++){
+  if ((fb > 0.0  && fc > 0.0) || (fb < 0.0 && fc < 0.0)){
+    Cc=Ac;
+    fc=fa;
+    Ec = Dc = Bc-Ac;
   }
-  Cc=Ac;
-  fc = fa;
-  mflag = 1;
-  int iter = 0;
-  
-  while (abs(Bc-Ac) > tol) {
-        if (iter > 100){
-          cout << "more than 100 iterations in brent " << endl;
-          abort();
-        }
-        //cout << abs(Bc-Ac) << endl;
-        if ((fa != fc) && (fb != fc)) {
-          s = ((Ac*fb*fc) / ((fa-fb)*(fa-fc))) +
-              ((Bc*fa*fc) / ((fb-fa)*(fb-fc))) +
-              ((Cc*fa*fb) / ((fc-fa)*(fc-fb)));
-        } else {
-          s = Bc - fb*(Bc-Ac)/(fb-fa);
-        }
-        cond1 = (s < (3.0*Ac + Bc)/4.) || (s > Bc) ;
-        cond2 = (mflag==1) && (abs(s-Bc) >= abs(Bc-Cc)/2.);
-        cond3 = (mflag==0) && (abs(s-Bc) >= abs(Cc-Dc)/2.);
-        cond4 = (mflag==1) && (abs(Bc-Cc) < tol);
-        cond5 = (mflag==0) && (abs(Cc-Dc) < tol);
 
-        if (cond1 || cond2 || cond3 || cond4 || cond5 ) {
-          s = (Ac + Bc)/2.;
-          mflag = 1;
-        } else {
-          mflag = 0;
-        }
-        fs = f_Tdust(size,x,y,z,tau,s);
-        Dc = Cc;
-        Cc = Bc;
-
-        if (fa*fs < 0.0) {
-          Bc = s;
-        } else {
-          Ac = s;
-        }
-
-        if (abs(fa)<abs(fb)) {
-          swap(Ac, Bc);
-          swap(fa, fb);
-        }
-
-    iter +=1;
+  if (abs(fc)<abs(fb)) {
+    Ac = Bc;
+    Bc = Cc;
+    Cc = Ac;
+    fa = fb;
+    fb = fc;
+    fc = fa;
+  }
+  tol1 = 2.0*eps*abs(Bc)+0.5*tol;
+  //cout << "tolerance " << tol1 << endl;
+  xm = 0.5*(Cc-Bc);
+  //cout << "xm " << xm << endl;
+  if (abs(xm) <= tol1 || fb == 0.0){
+    return Bc;
+  }
+  if (abs(Ec) >= tol1 && abs(fa)>abs(fb)) {
+    //attempt inverse quadratic interpolation
+    s = fb/fa;
+    if (Ac == Cc) {
+      p = 2.0*xm*s;
+      q = 1.0-s;
+    } else{
+      q = fa/fc;
+      r = fb/fc;
+      p = s*(2.0*xm*q*(q-r)-(Bc-Ac)*(r-1.0));
+      q = (q-1.0)*(r-1.0)*(s-1.0);
     }
-    if (fb == 0.0) {
-      return Bc;
-    } else {
-      return s;
+    if (p>0.0) {
+      q = -1.0*q;
     }
-  
+    p = abs(p);
+    min1 = 3.0*xm*q-abs(tol1*q);
+    min2 = abs(Ec*q);
+
+    if (2.0*p < (min1 < min2 ? min1 : min2)) {
+      //accept interpolation
+      Ec = Dc;
+      Dc = p/q;
+    } else{
+      //interpolation failed, use bisection.
+      Dc = xm;
+      Ec = Dc;
+    }
+  } else {
+    //bounds decreasing too slowly, use bisection.
+    Dc = xm;
+    Ec = Dc;
+  }
+  Ac = Bc;
+  fa = fb;
+  if (abs(Dc)>tol1) {
+    Bc += Dc;
+  } else{
+    Bc += SIGN(tol1, xm);
+  }
+  fb = f_Tdust(size,x,y,z,tau, Bc);
+  }
+  cout << "Maximum number of iterations reached." << endl;
+  //cout << "size " << size << endl;
+  //cout << "x " << x << " y " << y << " z " << z << endl;
+  abort();
   }
 
 

@@ -9,6 +9,7 @@
 #include "particle.h"
 #include "opacities.h"
 #include <tuple>
+#include <omp.h>
 
 
 //calculates errors on numerical solver to accept,increase 

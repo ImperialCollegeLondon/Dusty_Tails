@@ -8,6 +8,7 @@
 #include "functions.h"
 #include "particle.h"
 #include "opacities.h"
+#include <omp.h>
 
 
 
