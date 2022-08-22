@@ -23,8 +23,8 @@ const int r_cells = 120;
 const double r_cells_d = 120.;
 const int t_cells = 50;
 const double t_cells_d = 50.;
-const int p_cells =300;
-const double p_cells_d = 300.;
+const int p_cells =350;
+const double p_cells_d = 350.;
 
 extern double t_init;
 //declaration of some external variables

@@ -37,5 +37,9 @@ void rm_particles(vector <Particle> &particles);
 
 void calculation_ext(vector <Particle>& particles, double (&ext)[r_cells][t_cells][p_cells],  double delta_t);
 
+//light curve
+
+void light_curve(vector<Particle>& particles, double current_t);
+
 extern vector <Particle> particles;
 extern bool tau_constant;

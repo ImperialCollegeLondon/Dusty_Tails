@@ -333,7 +333,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
       vector < dust > dust_grains_out;
       counter = 0;
       cout << "Obtaining light curve..." << endl;
-
+      light_curve(particles, current_t);
       if (t_next >= end_t) {
       for( Particle& p : particles) {
         dust_grains_out.push_back(dust());

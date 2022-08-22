@@ -202,7 +202,7 @@ int main() {
  Mstar_sun = m_star; //mass of star in terms of mass of the sun
  Rstar = r_star; //stellar radius in sun radii
  Temp = t_star; //stars temperature
- lum = sigma*4.0*PI* pow(Rstar*Rsun_cgs, 2.0) * pow(Temp, 4.0); //stellar luminosity
+ lum = sigma*4.0*PI* pow(Rstar*Rsun_cgs, 2.0) * pow(Temp, 4.0); //stellar luminosity cgs
 
 //Planetary parameters:
  Period_days = period/24.0; //period of planet in days
@@ -306,15 +306,26 @@ if (composition.substr(0,5) == "Al2O3") {
   alpha = 0.04;
 } else if (composition.substr(0,12)=="Mg08Fe12SiO4") {
   cout << "Dust is composed of Olivine (Mg08,Fe12)" << endl;
-  opac_data = "Mg08Fe12SiO4_D95";
+  opac_data = "Mg08Fe12SiO4_J94_D95";
   comp = "Mg08Fe12SiO4";
   A = 6.53e+4; 
   Bp = 34.3;
   rho_d = 3.80;
-  mu = 178.538;
+  mu = 178.54;
   alpha = 0.1;
 
-} else{
+} else if (composition.substr(0,12)=="MgFeSiO4") {
+  cout << "Dust is composed of Olivine (Mg1.0,Fe1.0)" << endl;
+  opac_data = "MgFeSiO4_J94_D95";
+  comp = "Mg08Fe12SiO4";
+  A = 6.53e+4; 
+  Bp = 34.3;
+  rho_d = 3.71;
+  mu = 172.23;
+  alpha = 0.1;
+
+}
+ else{
   cout << "Composition unknown, stopping.";
   abort();
 }
