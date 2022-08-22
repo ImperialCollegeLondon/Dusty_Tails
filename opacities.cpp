@@ -4,12 +4,8 @@
 #include <vector>
 #include <fstream>
 #include <algorithm>
-#include "constants.h"
-#include "butcher.h"
-#include "functions.h"
-#include "particle.h"
+
 #include <iostream>
-#include <omp.h>
 
 #include "opacities.h"
 
@@ -17,6 +13,7 @@ using namespace std;
 
 void Opacities::read_data(const char *s_temp_table, const char *s_size_table,
                      const char *s_stellar_abs_table, const char *s_stellar_scat_table,
+                     const char *s_stellar_gsc_table,
                      const char *s_particle_abs_table, const char *s_particle_scat_table,
                      bool log_tables_n)
 {
@@ -26,6 +23,7 @@ void Opacities::read_data(const char *s_temp_table, const char *s_size_table,
     FILE *f_size_table = fopen(s_size_table, "r");
     FILE *f_stellar_abs_table = fopen(s_stellar_abs_table, "r");
     FILE *f_stellar_scat_table = fopen(s_stellar_scat_table, "r");
+    FILE *f_stellar_gsc_table = fopen(s_stellar_gsc_table, "r");
     FILE *f_particle_abs_table = fopen(s_particle_abs_table, "r");
     FILE *f_particle_scat_table = fopen(s_particle_scat_table, "r");
 
@@ -64,6 +62,12 @@ void Opacities::read_data(const char *s_temp_table, const char *s_size_table,
         stellar_scat_table.push_back(x);
     }
     
+    stellar_gsc_table = {};
+    for (int i=0; i<size_table_length; i++)
+    {
+        fscanf(f_stellar_gsc_table, "%lf", &x);
+        stellar_gsc_table.push_back(x);
+    }
     // read absorption and scattering coefficients to particle own radiation
     particle_abs_table = {};
     for (int i=0; i<size_table_length; i++)
@@ -97,6 +101,7 @@ void Opacities::read_data(const char *s_temp_table, const char *s_size_table,
     fclose(f_size_table);
     fclose(f_stellar_abs_table);
     fclose(f_stellar_scat_table);
+    fclose(f_stellar_gsc_table);
     fclose(f_particle_abs_table);
     fclose(f_particle_scat_table);
 }
@@ -109,6 +114,10 @@ double Opacities::stellar_abs(double A) const
 double Opacities::stellar_scat(double A) const
 {
     return interpolate_1d(stellar_scat_table, A);
+}
+double Opacities::stellar_gsc(double A) const
+{
+    return interpolate_1d(stellar_gsc_table, A);
 }
 
 double Opacities::particle_abs(double A, double T) const

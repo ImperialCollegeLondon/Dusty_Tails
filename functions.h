@@ -63,7 +63,7 @@ double qfactor(double s, double x, double y, double z);
 double clausius_clap(double s, double x, double y, double z, double tau, double Td);
 //double luminosity(double R_star);
 double radial_vel(vector <double> vel, vector <double> s_vector);
-double temp_dust( double s,  double x, double y, double z, double tau);
+double temp_dust( double s,  double dl, double tau);
 double dust_mass( double s);
 
 vector <double> drag_vel(vector <double> V);

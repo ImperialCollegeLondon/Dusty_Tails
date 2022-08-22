@@ -26,11 +26,10 @@ mt19937 generator (seed); //set the seed for the distrubutions of particle posit
 long int counter = 0;
 
 //open files to write data for python plotting
-ofstream output("./data/output.bin", ios::out | ios::binary);
+//ofstream output("./data/output.bin", ios::out | ios::binary);
 ofstream output_tau("./data/tau_data.bin", ios::out | ios::binary);
 //ofstream output_tau_test("./data/tau_test.bin", ios::out | ios::binary);
 //ofstream ray_tracer("./data/grid_test.bin", ios::out | ios::binary);
-ofstream output_lt("./data/output_struct.bin", ios::out | ios::binary);
 ofstream output_final("./data/output_final.bin", ios::out | ios::binary);
 
 //spacing of grid cells in scale of particle distribution
@@ -54,7 +53,6 @@ vector <dust_read> read_data(){
   int size=output.tellg();
   output.seekg(0, ios::beg);
   long int total = size/sizeof(dust);
-  cout << "total " << total << endl;
   vector <dust_read> dust_grains_in;
   for(int i = 0; i < total; i++){
        dust_grains_in.push_back(dust_read());
@@ -83,6 +81,7 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
     double opac_abs_init = opac.stellar_abs(s_0);
     double opac_scat_init = opac.stellar_scat(s_0);
     double kappa_planck_init =  opac_abs_init + opac_scat_init;
+    double gsca_init = opac.stellar_gsc(s_0);
 
     long int current, total;
      //flag for continuing dust
@@ -92,15 +91,9 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
         cout << "calling read_data " << endl;
         particles_read = read_data();
         
-        double previous_tstamp = 0.0;
+        //double previous_tstamp = 0.0;
         for (dust_read& p : particles_read) {
-            if (p.timestamp != previous_tstamp) {
-                previous_tstamp = p.timestamp;
-            }
-            //cout << "timestamp " << p.timestamp << endl;
-            if (p.timestamp >= time - 0.01) {
             grain.id = p.id;
-
             grain.position = {p.x_dust, p.y_dust, p.z_dust};
             grain.velocity = {p.vx_dust, p.vy_dust, p.vz_dust};
             grain.size = p.s_dust;
@@ -109,11 +102,12 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
             grain.opac_planck = p.kappa_planck;
             grain.opac_abs = p.kappa_dust_abs;
             grain.opac_scat = p.kappa_dust_scat;
+            grain.gsca = opac.stellar_gsc(grain.size);
             grain.temp_d = p.temp_dust;
             grain.pos_spherical = pos_to_spherical(grain.position[0], grain.position[1], grain.position[2]);
             grain.tau_d = p.tau_dust;
             particles.push_back(grain);
-            }
+            
         }
         
     }
@@ -153,7 +147,7 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
             grain.tau_d = 0.001;
         }
         
-        grain.h_updated = 1.0e-3; //initial time step for numerical integrator
+        grain.h_updated = 1.0e-4; //initial time step for numerical integrator
         grain.mass = dust_mass(grain.size); //initial particle mass
         grain.opac_planck = kappa_planck_init; //initial rad pressure efficiency
         //initial particle temperature
@@ -162,6 +156,7 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
         grain.pos_spherical = pos_to_spherical(grain.position[0], grain.position[1], grain.position[2]);
         grain.opac_abs = opac_abs_init;
         grain.opac_scat = opac_scat_init;
+        grain.gsca = gsca_init;
         
         particles.push_back(grain); //add particle to the vector of particles
                  
@@ -176,32 +171,38 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
 //The function below removes particles that have become too small 
 //for it to be worth tracking
 //Argument is the vector of particles
+bool _predicate(Particle& element) {
+    return (element.size <= 1.0e-6); 
+    }
 void rm_particles(vector <Particle>& particles){
     for (unsigned long int i = 0; i < particles.size(); i++){
-      if (particles[i].id == 10){
+      if (particles[i].id == 432){
         cout << "size is " << particles[i].size << endl;
         cout << "tau is " << particles[i].tau_d << endl;
         cout << "opac is " << particles[i].opac_planck << endl;
         cout << "temp is " << particles[i].temp_d << endl;
       }
-      if (particles[i].size <= 1.0e-6 ) {
+
+    particles.erase(std::remove_if(particles.begin(), 
+    particles.end(), _predicate), particles.end());
+      // if (particles[i].size <= 1.0e-6 ) {
         
-        particles.erase(particles.begin() + i);
-        if (i!=0) {
-        i--; }
-      } else if (particles[i].pos_spherical[0]>2.0){
+      //   particles.erase(particles.begin() + i);
+      //   if (i!=0) {
+      //   i--; }
+      // } else if (particles[i].pos_spherical[0]>2.0){
 
-          particles.erase(particles.begin() + i);
-          if (i !=0) i--;
+      //     particles.erase(particles.begin() + i);
+      //     if (i !=0) i--;
 
-      }
+      // }
       
-      if (isnan(particles[i].size)  ) {
-        cout << "Size of particle is NaN, something has gone wrong " << endl;
-        particles.erase(particles.begin() + i);
-        i--;
-      }
-    }
+      // if (isnan(particles[i].size)  ) {
+      //   cout << "Size of particle is NaN, something has gone wrong " << endl;
+      //   particles.erase(particles.begin() + i);
+      //   i--;
+      // }
+   }
 
     particles.shrink_to_fit();
     cout << "There are " << particles.size() << " super-particles in the tail" << endl;
@@ -268,7 +269,6 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 //   }
   //int tau_thick = 0; //counter for particles with a thick optical depth
   #pragma omp parallel for private( s_phi_values, s_theta, s_theta_values)
-  
   for( Particle& p : particles) {
 
     vector <double> pos_spherical;
@@ -276,8 +276,8 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     if (tau_constant == true) {
             p.tau_d = 0.1;
     } else {
-            pos_spherical = pos_to_spherical(p.position[0], p.position[1], p.position[2]);
-            pos_scaled = grid_scaling(pos_spherical); //position of particle in optical depth grid
+            //pos_spherical = pos_to_spherical(p.position[0], p.position[1], p.position[2]);
+            pos_scaled = grid_scaling(p.pos_spherical); //position of particle in optical depth grid
             if (pos_scaled[0] == -1.0) {
                 //if particle sits outside the grid the optical depth is set to 1e-3
                 p.tau_d = 0.001;
@@ -311,11 +311,10 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         p.position = {updated_vector[0],updated_vector[1], updated_vector[2]};
         p.velocity = {updated_vector[3],updated_vector[4], updated_vector[5]};
         p.size = updated_vector[6];
-        p.opac_planck = opac.stellar_abs(p.size) + opac.stellar_scat(p.size);
         p.opac_abs = opac.stellar_abs(p.size);
         p.opac_scat = opac.stellar_scat(p.size);
         p.opac_planck = p.opac_abs + p.opac_scat;
-        
+        p.gsca = opac.stellar_gsc(p.size);
         p.mass = dust_mass(p.size); 
         p.h_updated = updated_vector[9];    
         p.temp_d = brent( p.size, p.position[0], 
@@ -325,7 +324,6 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         //cout << p.id << endl;
     }
 
-    //cout << "Number of optically thick particles " << tau_thick << endl;
     rm_particles(particles); //removes particles that are too small
     
     
@@ -334,7 +332,9 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
       vector < dust > dust_grains_out;
       counter = 0;
-      cout << "Writting data to file.." << endl;
+      cout << "Obtaining light curve..." << endl;
+
+      if (t_next >= end_t) {
       for( Particle& p : particles) {
         dust_grains_out.push_back(dust());
         dust_grains_out[counter].timestamp = current_t;
@@ -353,39 +353,16 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         dust_grains_out[counter].kappa_dust_abs = p.opac_abs;
         dust_grains_out[counter].kappa_dust_scat = p.opac_scat;
         dust_grains_out[counter].kappa_planck = p.opac_planck;
+        output_final.write((char *) &dust_grains_out[counter], sizeof(dust));
+        counter +=1;
+      }
 
-        output.write((char*) &current_t, sizeof(double));
-        output.write((char*) &p.id, sizeof(long int));
-        output.write((char*) &p.position[0], sizeof(double));
-        output.write((char*) &p.position[1], sizeof(double));
-        output.write((char*) &p.position[2], sizeof(double));
-        output.write((char*) &p.size, sizeof(double));
-        output.write((char*) &p.mass, sizeof(double));
-        output.write((char*) &p.tau_d, sizeof(double));
-        output.write((char*) &p.temp_d, sizeof(double));
-        output.write((char*) &p.opac_planck, sizeof(double));
-        output.write((char*) &p.opac_abs, sizeof(double));
-        output.write((char*) &p.opac_scat, sizeof(double));
-        counter = counter +1;
-      }
-      
-      for(int i = 0; i < total; i++){
-      output_lt.write((char *) &dust_grains_out[i], sizeof(dust));
-      if (t_next >= end_t) {
-        output_final.write((char *) &dust_grains_out[i], sizeof(dust));
-      }
-      }
-      if (t_next >= end_t) {
-        cout << "t_next " << t_next << endl;
-        cout << "end_t " << end_t << endl;
       if (tau_constant == true){
       
         memset(extinction, 0.0, sizeof(extinction));
         memset(optical_depth, 0.0, sizeof(optical_depth));
         calculation_ext(particles, extinction, t_global_min);
         optical_depth_calc(extinction, optical_depth);
-         
-        cout << "Obtained optical depth grid successfully" << endl;
 
         for (unsigned long int i = 0; i <t_cells; i++){
             for (unsigned long int j =0; j < p_cells; j++ ) {
@@ -396,12 +373,8 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         }
       }
       }
-      dust_grains_out.clear();
-      dust_grains_out.shrink_to_fit();
       current_particles = total_particles;
-      //cout << "current " << current_particles << endl;
       total_particles = total_particles + nparticles;
-      //cout << "total next " << total_particles << endl;
       //add particles every 100th of an orbit
       if (current_t > 0.0){
       add_particles(particles, current_particles, total_particles, t_next);

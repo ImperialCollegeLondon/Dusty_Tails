@@ -11,14 +11,18 @@ class Particle {
     vector <double> velocity; //current velocity of the particle
     vector <double> pos_spherical; // current position in spherical coordinates
     vector <double> v_spherical; //curretn velocity in spherical coordinates
+    vector <double> pos_p; //firt projection for lc calculation
+    vector <double> pos_dp; //second projection for lc calculation
     double size; //size of the particle
     double opac_abs;
     double opac_scat; 
     double opac_planck;
+    double gsca;
     double h_updated; //current optimal time step for particle
     double mass; //mass of particle
     double tau_d; //optical depth
     double temp_d; //particle temperature
+    double f_scat;
 
 };
 

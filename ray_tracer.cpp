@@ -53,21 +53,15 @@ void build_grids(double *r_a, double *r_b, double *theta_a, \
 
 void calculation_ext(vector <Particle>& particles, double (&ext)[r_cells][t_cells][p_cells], double delta_t){
 
-        //cout << "at extinction calculation function " << endl;
         vector <double> sphere_pos(3, 0.0);
         vector <double> scaled_pos(3, 0.0);
-        //double*** ext;
-        //ext = new double**[r_cells];
+
         int r_it, theta_it, phi_it;
 
         double old_ext;
         double op;
         double pib = 0.;
 
-
-      //cout << "extinction grid defined successfully " << endl;
-    
-        //double n_mini = 4.0e+23;
         double mbig = (mdot * T * 0.01) / nparticles; // 0.01 dependent on when particles are being thrown out of planet
         double n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(s_0, 3));
      

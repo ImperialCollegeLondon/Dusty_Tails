@@ -74,13 +74,13 @@ vector <double> sunit_vector(vector <double> V){
 	return s_unit;
 }
 
-double f_Tdust( double s, double x, double y, double z, double tau, double Tdust){
-  double fTdust, dl, sa;
+double f_Tdust( double s, double dl, double tau, double Tdust){
+  double fTdust, sa;
   
-  dl = scalar((x-star_pos[0]), y, z)*a*pow(10.0,2);
+  //dl = scalar((x-star_pos[0]), y, z)*a*pow(10.0,2);
   //sa = 2.0*(1-pow(1-pow((Rstar*Rsun_cgs)/dl, 2.0), 0.5));
-  fTdust = opac.stellar_abs(s) * exp(-tau)*pow(Temp,4) * pow(Rstar*Rsun_cgs, 2)/(4.0*pow(dl,2)) - 
-            opac.particle_abs(s, Tdust) * pow(Tdust,4) + opac.particle_abs(s, 100.0) * pow(100.0,4); 
+  fTdust = opac.stellar_abs(s) * exp(-tau)*pow(Temp,4.) * pow(Rstar*Rsun_cgs, 2.)/(4.0*pow(dl,2.)) - 
+            opac.particle_abs(s, Tdust) * pow(Tdust,4.) + opac.particle_abs(s, 100.0) * pow(100.0,4.); 
 
   //cout << opac.particle_abs(Tdust,s) << endl;
   //cout << opac.stellar_abs(s) << endl;
@@ -93,16 +93,25 @@ double brent(double size, double x, double y, double z, double tau){
   const double eps = 1.0e-8;
   bool cond1, cond2, cond3, cond4, cond5;
   int mflag=0, iter;
+  double T_d_guess, dl;
   double Ac, Bc, Cc, Dc, Ec;
   double p, q, r, s, tol1, xm;
   double fa, fb, fc, fs;
   double tol = 1.0e-5;
   double min1, min2;
-  Ac = 800.0;
-  Bc = 3500.0;
+  dl = scalar((x-star_pos[0]), y, z)*a*pow(10.0,2);
+  //cout << "2dl " << 2.0*dl << endl;
+  //cout << "R  " << Rstar*Rsun_cgs << endl;
+  //cout << "Rsun_cgs " << Rsun_cgs << endl;
+  //cout << pow(Rstar*Rsun_cgs, 0.5)/pow(2.0*dl, 0.5) << endl;
+  //cout << pow(exp(-tau), 0.25) << endl;
+  T_d_guess = Temp * pow(exp(-tau), 0.25) * pow(Rstar*Rsun_cgs, 0.5)/pow(2.0*dl, 0.5);
+  //cout << T_d_guess << endl;
+  Ac = 100.0;
+  Bc = 5000.0;
   Cc=Bc;
-  fa = f_Tdust(size,x,y,z,tau, Ac);
-  fb = f_Tdust(size,x,y,z,tau, Bc);
+  fa = f_Tdust(size,dl,tau, Ac);
+  fb = f_Tdust(size,dl,tau, Bc);
   
 
   if ((fa > 0.0 && fb > 0.0) || (fa < 0.0 && fb < 0.0)) {
@@ -172,7 +181,7 @@ double brent(double size, double x, double y, double z, double tau){
   } else{
     Bc += SIGN(tol1, xm);
   }
-  fb = f_Tdust(size,x,y,z,tau, Bc);
+  fb = f_Tdust(size,dl,tau, Bc);
   }
   cout << "Maximum number of iterations reached." << endl;
   //cout << "size " << size << endl;

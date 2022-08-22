@@ -38,9 +38,9 @@ extern double ang_vel;
 
 //Stellar parameters:
 extern  double Mstar_kg, Mstar_sun, Rstar, Temp, lum; 
-
+extern double r_star_a;
 //Planetary parameters:
-extern  double Period_days, T, a, m_planet, r_planet, r_start, r_planet_dim, r_h;
+extern  double Period_days, T, a, m_planet, r_planet, r_start, r_planet_dim, r_h, b_p;
 
 //Dust parameters:
 extern  double A, Bp, rho_d, s_0,alpha, mu;
@@ -53,6 +53,8 @@ extern int outflow, tau_type;
 extern bool tau_constant;
 extern int cont;
 extern double nparticles, major_timestep;
+extern double n_mini, m_big;
+extern double t0;
 //Grid parameters:
 extern double d_r_min, d_r_max,  d_t_min, d_t_max, d_p_min, d_p_max;
 
@@ -69,7 +71,6 @@ const double tol = 1.0e-7; //error tolerance
 
 //GYR in seconds
 const double gyr = pow(10.,9) * 365. * 24. * 60. * 60. ;// 1Gyr in seconds
-
 
 //constants in cgs units for beta calculation
 #define amu 1.661e-24

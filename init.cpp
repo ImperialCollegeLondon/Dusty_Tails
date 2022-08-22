@@ -39,11 +39,13 @@ string T_int_s;
 string outflow_s;
 string output_file;
 double t_star, m_star, r_star;
-double period, planet_mass, planet_radius;
+double period, planet_mass, planet_radius, b_p;
 double s_0;
 double t_init;
 double rmin, rmax, tmin, tmax, pmin,pmax;
 double mdot_read, major_timestep, no_orbits, nparticles;
+double t0;
+double n_mini, mbig;
 bool tau_constant;
 string line;
 ifstream input("dusty_tails.in", ios::in);
@@ -121,10 +123,12 @@ int main() {
       }
       if (in_c == 1) {
         cout << "Reading planetary parameters... " << endl;
-        period = stod(line.substr(11,15));
-        planet_mass = stod(line.substr(22,25));
-        planet_radius = stod(line.substr(35,38));
+        period = stod(line.substr(11,18));
+        planet_mass = stod(line.substr(22,28));
+        planet_radius = stod(line.substr(32,38));
+        b_p = stod(line.substr(42,48));
          cout << "Period= " << period << " hours, Mplanet= " << planet_mass << " Mearth, Rplanet= "<< planet_radius << " Rearth." << endl;
+         cout << "Impact parameter= " << b_p << endl;
          cout << "\n" ;
       }
       if (in_c == 2) {
@@ -173,8 +177,12 @@ int main() {
         nparticles = stoi(line.substr(38,41));
         cont = stoi(line.substr(50,51));
         t_init = stod(line.substr(62,68));
-        cout << "t_init " << t_init << endl;
+        cout << "Initial time=  " << t_init << endl;
       
+      }
+      if (in_c == 6) {
+        t0 = stof(line.substr(10,14));
+        cout << "t0 for light curve is " << t0 << endl;
       }
 
      
@@ -194,7 +202,6 @@ int main() {
  Mstar_sun = m_star; //mass of star in terms of mass of the sun
  Rstar = r_star; //stellar radius in sun radii
  Temp = t_star; //stars temperature
-
  lum = sigma*4.0*PI* pow(Rstar*Rsun_cgs, 2.0) * pow(Temp, 4.0); //stellar luminosity
 
 //Planetary parameters:
@@ -223,7 +230,8 @@ int main() {
  cout << "Thermal velocity is " << sqrt((kb*Temp_p)/(mu_gas*amu)) << " cm/s " << endl;
  cout << "Gas mean molecular weight is " << mu_gas << " u " << endl;
  v_th = sqrt((kb*Temp_p)/(mu_gas*amu)) / (a*100);
-
+ mbig = (mdot * T * major_timestep) / nparticles; // 0.01 dependent on when particles are being thrown out of planet
+ 
 //Some dimensionless quantitites:
  G_dim = (G* pow(T, 2.0) * Mstar_kg) / pow(a, 3.0); //dimensionless gravitational constant
  c_dim = clight * (T / a); //dimensionless speed of light
@@ -314,9 +322,11 @@ if (composition.substr(0,5) == "Al2O3") {
 cout << "Dust density is " << rho_d << " g/cm3. Initial dust grain size is " << s_0*1.0e+4 << " micron." << endl;
 cout << "Clausius-Claperyon parameters are A = " << A << " K, B = " << Bp << endl;
 cout << "\n" ;
+n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(s_0, 3));
+cout << n_mini << " particles inside superparticle" << endl;
+
 
 opacity_dir = "./opacs_jankovic/calc_dust_opac/"+opac_data+"/opac_";
-
 
 int T_int { static_cast<int> (Temp)};
 T_int_s = to_string(T_int);
@@ -324,6 +334,7 @@ T_int_s = to_string(T_int);
 opac.read_data((opacity_dir+"temp.dat").c_str(), (opacity_dir+"sizes.dat").c_str(),
         (opacity_dir+"planck_abs_tstar"+T_int_s+".dat").c_str(), 
         (opacity_dir+"planck_sca_tstar"+T_int_s+".dat").c_str(),
+        (opacity_dir+"planck_gsc_tstar"+T_int_s+".dat").c_str(),
         (opacity_dir+"planck_abs.dat").c_str(), (opacity_dir+"planck_sca.dat").c_str(),
         true);
 
