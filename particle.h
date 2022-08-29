@@ -40,6 +40,11 @@ void calculation_ext(vector <Particle>& particles, double (&ext)[r_cells][t_cell
 //light curve
 
 void light_curve(vector<Particle>& particles, double current_t);
+void  extinction_lc( vector <Particle>& particles, vector <vector <double>> &patches, 
+         vector<double> &h_grid, vector<double> &v_grid,
+         vector<vector <double>> &taus, int h_cells, int v_cells,
+         double z_max, double z_min, double y_max, double y_min, double r_star_a);
+
 
 extern vector <Particle> particles;
 extern bool tau_constant;

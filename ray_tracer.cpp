@@ -62,9 +62,6 @@ void calculation_ext(vector <Particle>& particles, double (&ext)[r_cells][t_cell
         double op;
         double pib = 0.;
 
-        double mbig = (mdot * T * 0.01) / nparticles; // 0.01 dependent on when particles are being thrown out of planet
-        double n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(s_0, 3));
-     
         //cout <<  "Number of mini particles: " <<  n_mini << endl;
         //cout << "mbig " << mbig << endl;
 
@@ -126,10 +123,9 @@ void calculation_ext(vector <Particle>& particles, double (&ext)[r_cells][t_cell
                       vol_element = 1./3. * abs((pow(p_rs[1], 3.) - pow(p_rs[0], 3.)) * (-cos(p_thetas[1]) 
                                     + cos(p_thetas[0])) * (p_phis[1] - p_phis[0]));
                       
-                      op = (p.opac_planck)*(pow(10.,-4)/pow(10.,-3)); //opacity in SI units
                       old_ext = ext [r_index[i]][theta_index[j]][phi_index[k]];
                       
-                      ext [r_index[i]][theta_index[j]][phi_index[k]] = old_ext + (partial_vol/ vol_element) * ((n_mini * p.mass*pow(10.,-3) * op) / (vol_element * pow(a, 3)));
+                      ext [r_index[i]][theta_index[j]][phi_index[k]] = old_ext + (partial_vol/ vol_element) * ((n_mini * p.mass * p.opac_planck) / (vol_element * pow(a, 3)));
             
 
                   }

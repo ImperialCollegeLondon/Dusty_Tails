@@ -129,9 +129,9 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
         }
 
         //initial position of particle in cartesian
-        grain.position = {1.1*r_h*sin(theta)*cos(phi) + planet_x, \
-                        1.1*r_h*sin(theta)*sin(phi), \
-                        1.1*r_h*cos(theta)};
+        grain.position = {(1.1*r_h)*sin(theta)*cos(phi) + planet_x, \
+                        (1.1*r_h)*sin(theta)*sin(phi), \
+                        (1.1*r_h)*cos(theta)};
 
         //velocity of particle in cartesian
         grain.velocity = {v_th*sin(theta)*cos(phi), \
@@ -175,14 +175,15 @@ bool _predicate(Particle& element) {
     return (element.size <= 1.0e-6); 
     }
 void rm_particles(vector <Particle>& particles){
-    for (unsigned long int i = 0; i < particles.size(); i++){
-      if (particles[i].id == 432){
-        cout << "size is " << particles[i].size << endl;
-        cout << "tau is " << particles[i].tau_d << endl;
-        cout << "opac is " << particles[i].opac_planck << endl;
-        cout << "temp is " << particles[i].temp_d << endl;
-      }
-
+    for (Particle& p : particles) {
+        if (p.id == 100){
+            cout << "size " << p.size << endl;
+            cout << "tau " << p.tau_d << endl;
+            cout << "temp " << p.temp_d << endl;
+            cout << "x " << p.position[0] << endl;
+            break;
+        }
+    }
     particles.erase(std::remove_if(particles.begin(), 
     particles.end(), _predicate), particles.end());
       // if (particles[i].size <= 1.0e-6 ) {
@@ -202,7 +203,6 @@ void rm_particles(vector <Particle>& particles){
       //   particles.erase(particles.begin() + i);
       //   i--;
       // }
-   }
 
     particles.shrink_to_fit();
     cout << "There are " << particles.size() << " super-particles in the tail" << endl;
@@ -220,9 +220,9 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
   double t_next = total_t; 
   //vector which will take updated values of positons, velocitites, size and optimal time step for particle
   vector <double> updated_vector(8); 
-    double d_dr = (d_r_max - d_r_min)/ r_cells_d;
-    double d_dtheta = (d_t_max - d_t_min ) / t_cells_d;
-    double d_dphi = ( d_p_max - d_p_min) / p_cells_d;
+  double d_dr = (d_r_max - d_r_min)/ r_cells_d;
+  double d_dtheta = (d_t_max - d_t_min ) / t_cells_d;
+  double d_dphi = ( d_p_max - d_p_min) / p_cells_d;
 
 
   //variables related to the optical depth interpolation
@@ -238,7 +238,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     thetas_v = t_grid_to_vector(theta_a);
     phis_v   = p_grid_to_vector(phi_a);
 
-  //cout << "current_t " << current_t << endl;
+
   while (current_t < end_t) {
     double t_global_min = major_timestep;
     auto start = high_resolution_clock::now();
@@ -258,16 +258,13 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         s_phi.shrink_to_fit();
         s_phi = splines_phi(tau, radii_v, thetas_v, phis_v);
 
-        t_global_min = 5.0e-3;
+        t_global_min = 2.5e-3;
        
     } 
-  //do bigger time steps in first orbit and smaller ones afterwards
-  //to establish a primary population of dust particles
+
+
   t_next = t_global_min + current_t;
-//   if (t_next >= plot_time) {
-//            t_next = plot_time;
-//   }
-  //int tau_thick = 0; //counter for particles with a thick optical depth
+
   #pragma omp parallel for private( s_phi_values, s_theta, s_theta_values)
   for( Particle& p : particles) {
 
@@ -301,7 +298,6 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         }
   }
   #pragma omp barrier
-
   for( Particle& p : particles) {
         //update all relevant particle components
         //function RK solver calls the numerical solver to obtain the new particle
@@ -323,7 +319,6 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         p.pos_spherical = pos_to_spherical(p.position[0], p.position[1], p.position[2]);
         //cout << p.id << endl;
     }
-
     rm_particles(particles); //removes particles that are too small
     
     
@@ -402,9 +397,11 @@ double cubicInterpolate ( vector <double> p, vector <double> s1, double x) {
 double bicubicInterpolate (vector< vector <double> > p, vector <double> s1, 
                                     vector <double> s2, double x, double y) {
     vector <double> arr(s1.size());
+    #pragma omp parallel for
      for (int i = 0; i < s1.size(); i++) {
          arr[i] = cubicInterpolate(p[i], s2, y);
      }
+     #pragma omp barrier
     return cubicInterpolate(arr, s1, x);
 }
 
@@ -413,9 +410,11 @@ double tricubicInterpolate (vector <vector< vector <double> > > p,
                      double x, double y, double z) {
 
     vector <double> arr(s1.size());
+    #pragma omp parallel for
      for (int i = 0; i < s1.size(); i++) {
          arr[i] = bicubicInterpolate(p[i], s2, s3, y, z);
      }
+    #pragma omp barrier
     double tri = cubicInterpolate(arr, s1, x);
     if (tri < 1.0e-20) {
         return 0.0;

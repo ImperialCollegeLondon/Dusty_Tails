@@ -44,8 +44,6 @@ vector <double> rad_pressure(vector <double> V){
   kappa =opac.stellar_abs(V[6]) + opac.stellar_scat(V[6]);
   //cout << kappa << endl;
   beta = beta_fn(kappa, V[7], V[6]);
-  //cout << "previous kappa " << (3.0/4.0) / (rho_d * 1.e-4) << endl ;
-  //cout << "current kappa " << kappa << endl;
 
   constant = (beta*G_dim)/(pow(scalar(V[0]- star_pos[0], V[1], V[2]), 3.0));
   

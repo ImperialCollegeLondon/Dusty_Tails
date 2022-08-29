@@ -49,6 +49,7 @@ double n_mini, mbig;
 bool tau_constant;
 string line;
 ifstream input("dusty_tails.in", ios::in);
+ifstream input_2("input.txt", ios::in);
 Opacities opac;
 
 //**********************************************************************
@@ -58,7 +59,7 @@ Opacities opac;
 //frame of reference parameters:
 double ang_vel;
 //Stellar parameters:
- double Mstar_kg, Mstar_sun, Rstar, Temp, lum;
+ double Mstar_cgs, Mstar_sun, Rstar, Temp, lum;
 
 //Planetary parameters:
  double Period_days, T, a, m_planet, r_planet, r_start, r_planet_dim, r_h, Temp_p;
@@ -133,7 +134,7 @@ int main() {
       }
       if (in_c == 2) {
         cout << "Reading dust parameters... " << endl;
-        s_0 = stod(line.substr(12,18)) * 1.0e-4;
+        //s_0 = stod(line.substr(12,18)) * 1.0e-4;
         composition = line.substr(25,36);
         //cout << "Dust is composed of " << composition << endl;
         //cout << "initial dust grains size " << s_0 << " micron" << endl;
@@ -149,19 +150,10 @@ int main() {
 
       }
       if (in_c == 4) {
-        outflow = stoi(line.substr(14));
-        mdot_read = stod(line.substr(23,26));
+        //outflow = stoi(line.substr(14));
+        //mdot_read = stod(line.substr(23,26));
         tau_type = stoi(line.substr(36));
-        if (outflow==1)  {
-          cout << "Outflow is radially outwards from the whole planetary surface." << endl;
-          outflow_s = "sph";
-        } else {
-          cout <<  "Outflow is from the planet's dayside." << endl;
-          outflow_s = "dayside";
-        }
-        cout << "\n" ;
-        cout << "The planetary mass loss rate is " << mdot_read << " Mearth/Gyr." << endl;
-        cout << "\n" ;
+       
         if (tau_type ==0) {
           cout << "Optical depth of dust is traced." << endl;
           tau_constant = false;
@@ -192,13 +184,45 @@ int main() {
     }
     input.close();
   }
+  in_c = 0;
+  if (input_2.is_open()) {
+     while ( getline (input_2,line) ){ 
+      if (in_c == 0) {
+        s_0 = stod(line.substr(0,5)) * 1.0e-4;
+      }
+      if (in_c == 1) {
+        mdot_read = stod(line.substr(0,5));
+
+      }
+      if (in_c ==2) {
+        outflow = outflow = stoi(line.substr(0,2));
+
+         if (outflow==1)  {
+          cout << "Outflow is radially outwards from the whole planetary surface." << endl;
+          outflow_s = "sph";
+        } else {
+          cout <<  "Outflow is from the planet's dayside." << endl;
+          outflow_s = "dayside";
+        }
+        cout << "\n" ;
+        cout << "The planetary mass loss rate is " << mdot_read << " Mearth/Gyr." << endl;
+        cout << "\n" ;
+      }
+      in_c = in_c + 1;
+    }
+    input_2.close();
+   }
+   
+
+
+
 
 //**********************************************************************
 //**********************************************************************
 // variables defined
 
 //Stellar parameters:
- Mstar_kg = m_star*Msun; //mass of star in kg
+ Mstar_cgs = m_star*Msun_cgs; //mass of star in cgs
  Mstar_sun = m_star; //mass of star in terms of mass of the sun
  Rstar = r_star; //stellar radius in sun radii
  Temp = t_star; //stars temperature
@@ -207,34 +231,37 @@ int main() {
 //Planetary parameters:
  Period_days = period/24.0; //period of planet in days
  T = period*60.0*60.0; //period of planet in seconds
- a = pow((G*Mstar_kg* pow(T, 2.0))/ (4.0*pow(PI, 2.0)), 1.0/3.0); //semi major axis in meters
- m_planet = (planet_mass*Mearth)/Mstar_kg; //planetary mass in solar masses
- r_planet = planet_radius*Rearth; //planetary radius in meters
+ a = pow((G_cgs*Mstar_cgs* pow(T, 2.0))/ (4.0*pow(PI, 2.0)), 1.0/3.0); //semi major axis in cgs
+ m_planet = (planet_mass*Mearth_cgs)/Mstar_cgs; //planetary mass in solar masses
+ r_planet = planet_radius*Rearth_cgs; //planetary radius in meters
  r_start = (2.*r_planet)/a; //start position for particles
  r_planet_dim = r_planet/a; //planetary radius in terms of semi major axis
  r_h = pow(m_planet/3.0, 1.0/3.0); //hill radius
 
+cout << "hill radius in semi-major axis " << r_h << endl;
 // Frame of reference parameters:
 
 
 //Outflow parameters:
  mdot =  mdot_read*Mearth_cgs/gyr;
 
- v_esc = (pow((2.0*G *planet_mass*Mearth)/(planet_radius*Rearth), 0.5)) * (T/a); //escape velocity
+ v_esc = (pow((2.0*G_cgs *planet_mass*Mearth_cgs)/(planet_radius*Rearth_cgs), 0.5)) * (T/a); //escape velocity in code units
+ cout << "escape vel " << v_esc << endl;
  //planet tidally locked
- Temp_p = pow((Rstar*Rsun_cgs) / (a*100.0), 0.5) * Temp;  
+ Temp_p = pow((Rstar*Rsun_cgs) / a, 0.5) * Temp;  
 
  //gas is composed of a mixture of SiO, Mg, O, O2, Fe, SiO2 and MgO - with the fractions as indicated in Booth et al. 2022
  mu_gas = 0.281*60.083 + 0.250*24.305 + 0.223*15.999 + 0.158*32.0 + 0.079*55.845 + 0.005*60.08 + 0.003*40.3044;
  cout << "The planets temperature is " << Temp_p << " K " << endl;
  cout << "Thermal velocity is " << sqrt((kb*Temp_p)/(mu_gas*amu)) << " cm/s " << endl;
  cout << "Gas mean molecular weight is " << mu_gas << " u " << endl;
- v_th = sqrt((kb*Temp_p)/(mu_gas*amu)) / (a*100);
+ v_th = sqrt((kb*Temp_p)/(mu_gas*amu)) * (T/ a);
+ cout << "Thermal velocity " << v_th << endl;
  mbig = (mdot * T * major_timestep) / nparticles; // 0.01 dependent on when particles are being thrown out of planet
  
 //Some dimensionless quantitites:
- G_dim = (G* pow(T, 2.0) * Mstar_kg) / pow(a, 3.0); //dimensionless gravitational constant
- c_dim = clight * (T / a); //dimensionless speed of light
+ G_dim = (G_cgs* pow(T, 2.0) * Mstar_cgs) / pow(a, 3.0); //dimensionless gravitational constant
+ c_dim = clight_cgs * (T / a); //dimensionless speed of light
  ang_vel = pow((G_dim *(m_planet + 1.0)), 0.5);
 //Grid parameters:
 d_r_min = rmin;
@@ -276,7 +303,7 @@ if (composition.substr(0,5) == "Al2O3") {
   alpha = 0.1;
 
 } else if (composition.substr(0,6)=="MgSiO3"){
-  cout << "Dust is composed of Enstatite." << endl;
+  cout << "Dust is composed of Enstatite (MgSiO3)" << endl;
   opac_data = "enstatite_J98_J94_D95";
   comp = "MgSiO3";
   A = 6.89e+4;
@@ -286,7 +313,7 @@ if (composition.substr(0,5) == "Al2O3") {
   alpha = 0.1;
 
 } else if (composition.substr(0,7)=="Mg2SiO4") {
-  cout << "Dust is composed of Olivine." << endl;
+  cout << "Dust is composed of Forsterite (Mg2SiO4)." << endl;
   opac_data = "olivine_F01";
   comp = "Mg2SiO4";
   A = 6.53e+4;
@@ -324,8 +351,17 @@ if (composition.substr(0,5) == "Al2O3") {
   mu = 172.23;
   alpha = 0.1;
 
-}
- else{
+} else if (composition.substr(0,12)=="OlSL") {
+  cout << "Dust is composed of Sri Lanka Olivine (Mg1.56 Fe0.4 Si0.91 O4)" << endl;
+  opac_data = "OlivineSL_Z11";
+  comp = "Mg1.56Fe0.4Si0.91O4";
+  A = 6.53e+4; 
+  Bp = 34.3;
+  rho_d = 3.3;
+  mu = 149.81;
+  alpha = 0.1;
+
+} else{
   cout << "Composition unknown, stopping.";
   abort();
 }

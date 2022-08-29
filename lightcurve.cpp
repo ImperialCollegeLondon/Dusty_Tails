@@ -24,16 +24,19 @@ int h_cells, v_cells;
 double z_min, z_max, y_min, y_max;
 double dh, dv; 
 
+vector< double > h_grid;
+vector<double> v_grid;
+vector<vector<double>> patches;
+vector<vector<double>> taus;
+
 void build_lc_grid(vector<double> &h_grid, vector<double> &v_grid, int h_cells, int v_cells, 
                   double y_min, double z_min, double dh, double dv){
 
-   cout << "y min " << y_min  << endl;
-   cout << "z min " << z_min << endl;
+
    h_grid[0] = y_min;
    for (unsigned int i=1;i<=h_cells; i++){
       h_grid[i] = h_grid[i-1] + dh;  
-      cout << "i " << i << endl;
-      cout << h_grid[i] << endl;
+
      
    }
    v_grid[0] = z_min;
@@ -67,14 +70,17 @@ void  extinction_lc( vector <Particle>& particles, vector <vector <double>> &pat
          
          int hit, vit;
          if (p.pos_dp[0] > 0.0) {
+         
          hp = p.pos_dp[1];
          vp = p.pos_dp[2];
          rp = pow(pow(hp, 2.0) + pow(vp, 2.0), 0.5);
+         
          if (rp < r_star_a) {
             spos = scaled_pos_lc(hp, vp, h_cells, v_cells, z_max, z_min, y_max, y_min);
             
             hit = floor(spos[0]);
             vit = floor(spos[1]);
+            
             if (hit < h_cells && hit >0  ) {
                if (vit < v_cells && vit >0  ) {
                
@@ -147,7 +153,7 @@ void  extinction_lc( vector <Particle>& particles, vector <vector <double>> &pat
                      }
                      
                      taus[h_index[i]][v_index[j]] = taus[h_index[i]][v_index[j]] + shadow;
-                    
+                     
                      }
                }
             }
@@ -352,16 +358,15 @@ std::cout << std::scientific << endl;
 using namespace std;
 double inclination, Rstar_a;
 
-inclination = acos((Rstar*Rsun*b_p)/a); //in radians
-cout << "inclination " << inclination  << endl;
-Rstar_a = (Rstar*Rsun)/a; //stellar radius in terms of the semimajor axis
-cout << "Rstar_a " << Rstar_a << endl;
-double t0 = 0.0;
+inclination = acos((Rstar*Rsun_cgs*b_p)/a); //in radians
+
+Rstar_a = (Rstar*Rsun_cgs)/a; //stellar radius in terms of the semimajor axis
+
 double f_test_o = 1.0;
 double phi;
 double forward_flux = 0.0;
 phi = 2.0*PI*(current_t - t0);
-cout << " phi " << phi << " rad " << endl;
+
 for( Particle& p : particles) {
       //first projection
         p.pos_p = {p.position[0] * cos(phi) - p.position[1]*sin(phi),
@@ -369,44 +374,44 @@ for( Particle& p : particles) {
                    p.position[2]};
         
       //second projection
-        p.pos_dp = {p.pos_p[0]*sin(inclination) - p.pos_p[2]*cos(inclination),
+        p.pos_dp = {p.pos_p[0]*sin(inclination) + p.pos_p[2]*cos(inclination),
                    p.pos_p[1],
-                  p.pos_p[1]*cos(inclination) + p.pos_p[2]*sin(inclination)};
+                  -1.0*p.pos_p[0]*cos(inclination) + p.pos_p[2]*sin(inclination)};
         
       //forward scattering
         if (p.pos_dp[0]>0.0) {
         p.f_scat = forward_scat(p.gsca, 
-                 p.opac_scat, p.mass, p.pos_dp[0]*a*1.0e+2, p.pos_dp[1]*a*1.0e+2, 
-                 p.pos_dp[2]*a*1.0e+2, p.size, p.tau_d);
+                 p.opac_scat, p.mass, p.pos_dp[0]*a, p.pos_dp[1]*a, 
+                 p.pos_dp[2]*a, p.size, p.tau_d);
         forward_flux = forward_flux + p.f_scat;
         } else {
          p.f_scat = 0.0;
         }
 }
-   cout << "projections obtained " << endl;
 
-   vector< double > h_grid;
-   vector<double> v_grid;
-   vector<vector<double>> patches;
-   vector<vector<double>> taus;
-
-   v_cells = 120;
+   v_cells = 80;
    double f_ext = 0.;
    double f_total = 0.;
-   double x_planet, y_planet, z_planet;
-   double theta;
-
-   theta = 2.0*PI*(current_t-t0);
-   z_planet = cos(theta) * cos(inclination);
-   x_planet = cos(theta) * sin(inclination);
-   y_planet = sin(theta);
-   z_min = z_planet - 0.04;
-   z_max = z_planet + 0.04;
+   double xp_planet, yp_planet, zp_planet;
+   double xdp_planet, ydp_planet, zdp_planet;
+   xp_planet = cos(phi);
+   yp_planet = sin(phi);
+   zp_planet = 0.0;
+   xdp_planet = xp_planet*sin(inclination);
+   ydp_planet = yp_planet;
+   zdp_planet = -xp_planet*cos(inclination);
+    cout << "z_planet " << zdp_planet << endl;
+   // cout << "x_planet " << xdp_planet << endl;
+   // cout << "y_planet " << ydp_planet << endl;
+   z_min = zdp_planet - 0.04;
+   z_max = zdp_planet + 0.04;
    y_min = -Rstar_a;
    y_max = Rstar_a;
-
+   // cout << "z min " << z_min << endl;
+   // cout << "z max " << z_max << endl;
+   // cout << "y min " << y_min << endl;
+   // cout << "y max " << y_max << endl;
    h_cells = round((y_max-y_min) / ((z_max-z_min)/v_cells));
-   cout << "h cells " << h_cells << endl;
    dh = (y_max-y_min)/h_cells;
    dv = (z_max-z_min)/v_cells;
 
@@ -423,12 +428,9 @@ for( Particle& p : particles) {
       }
 
    }
-   cout << "before build grid " << endl;
-   build_lc_grid(h_grid, v_grid, h_cells, v_cells, y_min, z_min, dh, dv);
-   cout << "grid built " << endl;
+   
+   build_lc_grid(h_grid, v_grid, h_cells, v_cells, y_min, z_min, dh, dv); 
    grid_cells_lc(h_grid, v_grid, patches, h_cells, v_cells, Rstar_a);
-
-   cout << "grid cells areas obtained " << endl;
 
    for (int w=0; w<h_cells; w++){
          taus.push_back({});

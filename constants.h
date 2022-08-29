@@ -37,7 +37,7 @@ extern vector <double> planet_pos; //vector of the planets position
 extern double ang_vel;
 
 //Stellar parameters:
-extern  double Mstar_kg, Mstar_sun, Rstar, Temp, lum; 
+extern  double Mstar_cgs, Mstar_sun, Rstar, Temp, lum; 
 extern double r_star_a;
 //Planetary parameters:
 extern  double Period_days, T, a, m_planet, r_planet, r_start, r_planet_dim, r_h, b_p;
@@ -81,3 +81,6 @@ const double gyr = pow(10.,9) * 365. * 24. * 60. * 60. ;// 1Gyr in seconds
 #define c_cgs 2.99792458e+10 //speed of light
 #define Msun_cgs 1.9885e+33 // solar mass
 #define Mearth_cgs 5.972e+27 // earth mass grams
+#define Rearth_cgs 6.378e+8 // earth radius cm
+#define clight_cgs 2.9979245e+10 //speed of light in cgs
+#define pc 3.086e+18 //parsec in cm
