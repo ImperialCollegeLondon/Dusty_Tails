@@ -258,7 +258,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         s_phi.shrink_to_fit();
         s_phi = splines_phi(tau, radii_v, thetas_v, phis_v);
 
-        t_global_min = 2.5e-3;
+        t_global_min = 5.0e-3;
        
     } 
 
@@ -321,15 +321,28 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     }
     rm_particles(particles); //removes particles that are too small
     
-    
+    cout << "current_t " << current_t << endl;
+    cout << "plot_time " << plot_time << endl;
+    cout << "end_t " << end_t << endl;
+    cout << "t_next " << t_next << endl;
     if (abs(current_t-plot_time) < 1.0e-8) { 
       long int total = particles.size();
-
-      vector < dust > dust_grains_out;
-      counter = 0;
       cout << "Obtaining light curve..." << endl;
       light_curve(particles, current_t);
-      if (t_next >= end_t) {
+
+      current_particles = total_particles;
+      total_particles = total_particles + nparticles;
+      //add particles every 100th of an orbit
+      if ((current_t > 0.0) && (abs(current_t-end_t)>1.0e-8) ){
+      add_particles(particles, current_particles, total_particles, t_next);
+      }
+      plot_time = plot_time + major_timestep;
+     }
+
+     if (abs(t_next-end_t) < 1.0e-8) {
+      cout << "FINAL " << endl;
+      vector < dust > dust_grains_out;
+      counter = 0;
       for( Particle& p : particles) {
         dust_grains_out.push_back(dust());
         dust_grains_out[counter].timestamp = current_t;
@@ -368,14 +381,6 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         }
       }
       }
-      current_particles = total_particles;
-      total_particles = total_particles + nparticles;
-      //add particles every 100th of an orbit
-      if (current_t > 0.0){
-      add_particles(particles, current_particles, total_particles, t_next);
-      }
-      plot_time = plot_time + major_timestep;
-     }
      auto stop = high_resolution_clock::now();
      auto duration = duration_cast<seconds>(stop - start);
      cout << "Iteration took " << duration.count() << " seconds." << endl;

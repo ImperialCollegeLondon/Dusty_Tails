@@ -1,32 +1,31 @@
-[I 21:54:28.907 LabApp] The port 8888 is already in use, trying another port.
-[I 21:54:28.909 LabApp] The port 8889 is already in use, trying another port.
-[I 21:54:30.297 LabApp] JupyterLab extension loaded from /software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/jupyterlab
-[I 21:54:30.298 LabApp] JupyterLab application directory is /software/astro/anaconda/anaconda3-2019.10/share/jupyter/lab
-[I 21:54:35.265 LabApp] Serving notebooks from local directory: /lustre/hpc/astro/bmce/Dusty_Tails/opacs_jankovic/calc_dust_opac
-[I 21:54:35.265 LabApp] Jupyter Notebook 6.1.6 is running at:
-[I 21:54:35.265 LabApp] http://localhost:8890/?token=b84e19f95c214c6a570f5958551e6fc527755bb9b0635a6a
-[I 21:54:35.265 LabApp]  or http://127.0.0.1:8890/?token=b84e19f95c214c6a570f5958551e6fc527755bb9b0635a6a
-[I 21:54:35.265 LabApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
-[C 21:54:35.306 LabApp] 
+[I 00:35:04.450 LabApp] The port 8888 is already in use, trying another port.
+[I 00:35:05.804 LabApp] JupyterLab extension loaded from /software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/jupyterlab
+[I 00:35:05.804 LabApp] JupyterLab application directory is /software/astro/anaconda/anaconda3-2019.10/share/jupyter/lab
+[I 00:35:11.990 LabApp] Serving notebooks from local directory: /lustre/hpc/astro/bmce/Dusty_Tails/opacs_jankovic/calc_dust_opac
+[I 00:35:11.990 LabApp] Jupyter Notebook 6.1.6 is running at:
+[I 00:35:11.990 LabApp] http://localhost:8889/?token=43b22270af6c3e8073f999098a4645493785a209f9cacbbb
+[I 00:35:11.990 LabApp]  or http://127.0.0.1:8889/?token=43b22270af6c3e8073f999098a4645493785a209f9cacbbb
+[I 00:35:11.991 LabApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 00:35:12.140 LabApp] 
     
     To access the notebook, open this file in a browser:
-        file:///lustre/hpc/astro/bmce/.local/share/jupyter/runtime/nbserver-61112-open.html
+        file:///lustre/hpc/astro/bmce/.local/share/jupyter/runtime/nbserver-95886-open.html
     Or copy and paste one of these URLs:
-        http://localhost:8890/?token=b84e19f95c214c6a570f5958551e6fc527755bb9b0635a6a
-     or http://127.0.0.1:8890/?token=b84e19f95c214c6a570f5958551e6fc527755bb9b0635a6a
-[I 21:55:39.763 LabApp] 302 GET /?token=b84e19f95c214c6a570f5958551e6fc527755bb9b0635a6a (::1) 1.340000ms
-[W 21:56:01.618 LabApp] The extension "@ijmbarr/jupyterlab_spellchecker" is outdated.
+        http://localhost:8889/?token=43b22270af6c3e8073f999098a4645493785a209f9cacbbb
+     or http://127.0.0.1:8889/?token=43b22270af6c3e8073f999098a4645493785a209f9cacbbb
+[I 00:37:53.405 LabApp] 302 GET /?token=43b22270af6c3e8073f999098a4645493785a209f9cacbbb (::1) 1.200000ms
+[W 00:38:09.362 LabApp] The extension "@ijmbarr/jupyterlab_spellchecker" is outdated.
     
-[W 21:56:01.621 LabApp] The extension "@jupyterlab/latex" is outdated.
+[W 00:38:09.364 LabApp] The extension "@jupyterlab/latex" is outdated.
     
-[W 21:56:01.622 LabApp] The extension "@aquirdturtle/collapsible_headings" is outdated.
+[W 00:38:09.365 LabApp] The extension "@aquirdturtle/collapsible_headings" is outdated.
     
-[W 21:56:01.624 LabApp] The extension "@jupyterlab/toc" is outdated.
+[W 00:38:09.368 LabApp] The extension "@jupyterlab/toc" is outdated.
     
-[W 21:56:01.626 LabApp] The extension "@jupyter-widgets/jupyterlab-manager" is outdated.
+[W 00:38:09.370 LabApp] The extension "@jupyter-widgets/jupyterlab-manager" is outdated.
     
-[E 21:56:05.591 LabApp] Uncaught exception GET /api/nbconvert?1655668559796 (::1)
-    HTTPServerRequest(protocol='http', host='localhost:8890', method='GET', uri='/api/nbconvert?1655668559796', version='HTTP/1.1', remote_ip='::1')
+[E 00:38:16.195 LabApp] Uncaught exception GET /api/nbconvert?1656887887564 (::1)
+    HTTPServerRequest(protocol='http', host='localhost:8889', method='GET', uri='/api/nbconvert?1656887887564', version='HTTP/1.1', remote_ip='::1')
     Traceback (most recent call last):
       File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/tornado/web.py", line 1702, in _execute
         result = method(*self.path_args, **self.path_kwargs)
@@ -51,31 +50,30 @@
       File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/pathlib.py", line 1183, in stat
         return self._accessor.stat(self)
     PermissionError: [Errno 13] Permission denied: '/software/astro/anaconda/anaconda3-2019.10/share/jupyter/nbconvert/templates/html/conf.json'
-[W 21:56:05.828 LabApp] Unhandled error
-[E 21:56:05.829 LabApp] {
-      "Host": "localhost:8890",
+[W 00:38:16.344 LabApp] Unhandled error
+[E 00:38:16.345 LabApp] {
+      "Host": "localhost:8889",
       "Connection": "keep-alive",
-      "Sec-Ch-Ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"102\", \"Google Chrome\";v=\"102\"",
+      "Sec-Ch-Ua": "\".Not/A)Brand\";v=\"99\", \"Google Chrome\";v=\"103\", \"Chromium\";v=\"103\"",
       "Dnt": "1",
       "Sec-Ch-Ua-Mobile": "?0",
-      "Authorization": "token b84e19f95c214c6a570f5958551e6fc527755bb9b0635a6a",
+      "Authorization": "token 43b22270af6c3e8073f999098a4645493785a209f9cacbbb",
       "Content-Type": "application/json",
-      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.61 Safari/537.36",
-      "X-Xsrftoken": "2|2f234d52|fb0dcb4d4a34e470924737897971f17d|1655387042",
+      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
+      "X-Xsrftoken": "2|28a038a3|13e80ed357817dfc404a5ca12ae33a3b|1656887873",
       "Sec-Ch-Ua-Platform": "\"macOS\"",
       "Accept": "*/*",
       "Sec-Fetch-Site": "same-origin",
       "Sec-Fetch-Mode": "cors",
       "Sec-Fetch-Dest": "empty",
-      "Referer": "http://localhost:8890/lab",
+      "Referer": "http://localhost:8889/lab",
       "Accept-Encoding": "gzip, deflate, br",
       "Accept-Language": "en-DK,en-US;q=0.9,en-GB;q=0.8,en;q=0.7,pt-PT;q=0.6,pt;q=0.5,da-DK;q=0.4,da;q=0.3",
-      "Cookie": "_xsrf=2|2f234d52|fb0dcb4d4a34e470924737897971f17d|1655387042; username-localhost-8891=\"2|1:0|10:1655479756|23:username-localhost-8891|44:M2U4NDAwZjMyZTk0NDNlN2JmYzM4NTJmOWJlOGUxNGY=|8655f6609358f964c2e6fcc0c2fda017344324fbce19101905582d4ce44fc9f7\"; username-localhost-8890=\"2|1:0|10:1655668559|23:username-localhost-8890|44:YmMzMDdiM2I3MTRiNDkwNWI0YzFlMDIxNTYwOGVjZjQ=|5a69a0da79399192fc014378aa70ab1481ea71d27408b4ce0fce8ecab4a7ae28\""
+      "Cookie": "_xsrf=2|28a038a3|13e80ed357817dfc404a5ca12ae33a3b|1656887873; username-localhost-8889=\"2|1:0|10:1656887885|23:username-localhost-8889|44:YWJkNzBjMmU2OWY0NGMyY2IzMjNlODA5YWMwZWMxM2M=|0885c19e78123667989575757576394c463941e3ce62e342a3400e6820635496\""
     }
-[E 21:56:05.829 LabApp] 500 GET /api/nbconvert?1655668559796 (::1) 5962.800000ms referer=http://localhost:8890/lab
-[I 21:56:05.830 LabApp] Build is up to date
-[E 21:56:06.094 LabApp] Uncaught exception GET /api/nbconvert?1655668559813 (::1)
-    HTTPServerRequest(protocol='http', host='localhost:8890', method='GET', uri='/api/nbconvert?1655668559813', version='HTTP/1.1', remote_ip='::1')
+[E 00:38:16.346 LabApp] 500 GET /api/nbconvert?1656887887564 (::1) 8335.460000ms referer=http://localhost:8889/lab
+[E 00:38:16.504 LabApp] Uncaught exception GET /api/nbconvert?1656887887539 (::1)
+    HTTPServerRequest(protocol='http', host='localhost:8889', method='GET', uri='/api/nbconvert?1656887887539', version='HTTP/1.1', remote_ip='::1')
     Traceback (most recent call last):
       File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/site-packages/tornado/web.py", line 1702, in _execute
         result = method(*self.path_args, **self.path_kwargs)
@@ -100,59 +98,61 @@
       File "/software/astro/anaconda/anaconda3-2019.10/lib/python3.7/pathlib.py", line 1183, in stat
         return self._accessor.stat(self)
     PermissionError: [Errno 13] Permission denied: '/software/astro/anaconda/anaconda3-2019.10/share/jupyter/nbconvert/templates/html/conf.json'
-[W 21:56:06.095 LabApp] Unhandled error
-[E 21:56:06.096 LabApp] {
-      "Host": "localhost:8890",
+[W 00:38:16.505 LabApp] Unhandled error
+[E 00:38:16.505 LabApp] {
+      "Host": "localhost:8889",
       "Connection": "keep-alive",
-      "Sec-Ch-Ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"102\", \"Google Chrome\";v=\"102\"",
+      "Sec-Ch-Ua": "\".Not/A)Brand\";v=\"99\", \"Google Chrome\";v=\"103\", \"Chromium\";v=\"103\"",
       "Dnt": "1",
       "Sec-Ch-Ua-Mobile": "?0",
-      "Authorization": "token b84e19f95c214c6a570f5958551e6fc527755bb9b0635a6a",
+      "Authorization": "token 43b22270af6c3e8073f999098a4645493785a209f9cacbbb",
       "Content-Type": "application/json",
-      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.61 Safari/537.36",
-      "X-Xsrftoken": "2|2f234d52|fb0dcb4d4a34e470924737897971f17d|1655387042",
+      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
+      "X-Xsrftoken": "2|28a038a3|13e80ed357817dfc404a5ca12ae33a3b|1656887873",
       "Sec-Ch-Ua-Platform": "\"macOS\"",
       "Accept": "*/*",
       "Sec-Fetch-Site": "same-origin",
       "Sec-Fetch-Mode": "cors",
       "Sec-Fetch-Dest": "empty",
-      "Referer": "http://localhost:8890/lab",
+      "Referer": "http://localhost:8889/lab",
       "Accept-Encoding": "gzip, deflate, br",
       "Accept-Language": "en-DK,en-US;q=0.9,en-GB;q=0.8,en;q=0.7,pt-PT;q=0.6,pt;q=0.5,da-DK;q=0.4,da;q=0.3",
-      "Cookie": "_xsrf=2|2f234d52|fb0dcb4d4a34e470924737897971f17d|1655387042; username-localhost-8891=\"2|1:0|10:1655479756|23:username-localhost-8891|44:M2U4NDAwZjMyZTk0NDNlN2JmYzM4NTJmOWJlOGUxNGY=|8655f6609358f964c2e6fcc0c2fda017344324fbce19101905582d4ce44fc9f7\"; username-localhost-8890=\"2|1:0|10:1655668559|23:username-localhost-8890|44:YmMzMDdiM2I3MTRiNDkwNWI0YzFlMDIxNTYwOGVjZjQ=|5a69a0da79399192fc014378aa70ab1481ea71d27408b4ce0fce8ecab4a7ae28\""
+      "Cookie": "_xsrf=2|28a038a3|13e80ed357817dfc404a5ca12ae33a3b|1656887873; username-localhost-8889=\"2|1:0|10:1656887885|23:username-localhost-8889|44:YWJkNzBjMmU2OWY0NGMyY2IzMjNlODA5YWMwZWMxM2M=|0885c19e78123667989575757576394c463941e3ce62e342a3400e6820635496\""
     }
-[E 21:56:06.096 LabApp] 500 GET /api/nbconvert?1655668559813 (::1) 264.320000ms referer=http://localhost:8890/lab
-[W 21:56:09.431 LabApp] Notebook calc_planck_opac.ipynb is not trusted
-[I 21:56:14.542 LabApp] Kernel started: fe9e6506-ee5e-43b8-afec-9ef2040b5e46, name: python3
--\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|[W 21:56:29.456 LabApp] Notebook format_opt_const.ipynb is not trusted
-/-\|/-\|/-[I 21:56:30.403 LabApp] Kernel started: 5c5890d3-7360-4fa8-b482-37c5117270c2, name: python3
-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-[I 21:57:54.776 LabApp] Creating new directory in /
-[I 21:58:30.574 LabApp] Saving file at /format_opt_const.ipynb
-[W 21:58:30.575 LabApp] Notebook format_opt_const.ipynb is not trusted
-[I 22:00:30.896 LabApp] Saving file at /format_opt_const.ipynb
-[W 22:00:30.897 LabApp] Notebook format_opt_const.ipynb is not trusted
-[I 22:01:10.246 LabApp] Saving file at /format_opt_const.ipynb
-[W 22:01:10.247 LabApp] Notebook format_opt_const.ipynb is not trusted
-[I 22:01:47.254 LabApp] Saving file at /format_opt_const.ipynb
-[W 22:01:47.255 LabApp] Notebook format_opt_const.ipynb is not trusted
-[I 22:07:46.704 LabApp] Saving file at /format_opt_const.ipynb
-[W 22:07:46.706 LabApp] Notebook format_opt_const.ipynb is not trusted
-[I 22:09:37.743 LabApp] Saving file at /format_opt_const.ipynb
-[W 22:09:37.744 LabApp] Notebook format_opt_const.ipynb is not trusted
-[I 22:11:38.130 LabApp] Saving file at /format_opt_const.ipynb
-[W 22:11:38.131 LabApp] Notebook format_opt_const.ipynb is not trusted
-[I 22:12:38.456 LabApp] Saving file at /format_opt_const.ipynb
-[W 22:12:38.458 LabApp] Notebook format_opt_const.ipynb is not trusted
-[I 22:12:41.520 LabApp] Kernel restarted: 5c5890d3-7360-4fa8-b482-37c5117270c2
-[I 22:14:38.724 LabApp] Saving file at /format_opt_const.ipynb
-[W 22:14:38.725 LabApp] Notebook format_opt_const.ipynb is not trusted
-[I 22:15:24.676 LabApp] Kernel restarted: 5c5890d3-7360-4fa8-b482-37c5117270c2
-[I 22:16:39.176 LabApp] Saving file at /format_opt_const.ipynb
-[W 22:16:39.178 LabApp] Notebook format_opt_const.ipynb is not trusted
-[I 22:18:18.118 LabApp] Saving file at /calc_planck_opac.ipynb
-[W 22:18:18.119 LabApp] Notebook calc_planck_opac.ipynb is not trusted
-[I 22:18:39.948 LabApp] Saving file at /format_opt_const.ipynb
-[W 22:18:39.949 LabApp] Notebook format_opt_const.ipynb is not trusted
-[I 22:34:28.462 LabApp] Saving file at /calc_planck_opac.ipynb
-[W 22:34:28.462 LabApp] Notebook calc_planck_opac.ipynb is not trusted
-[I 23:00:23.523 LabApp] Saving file at /calc_dust_opac.py
+[E 00:38:16.506 LabApp] 500 GET /api/nbconvert?1656887887539 (::1) 159.220000ms referer=http://localhost:8889/lab
+[I 00:38:16.506 LabApp] Build is up to date
+[W 00:38:19.411 LabApp] 404 GET /api/contents/opacs_jankovic/calc_dust_opac/calc_planck_opac.ipynb?content=0&1656887896665 (::1): No such file or directory: opacs_jankovic/calc_dust_opac/calc_planck_opac.ipynb
+[W 00:38:19.411 LabApp] No such file or directory: opacs_jankovic/calc_dust_opac/calc_planck_opac.ipynb
+[W 00:38:19.412 LabApp] 404 GET /api/contents/opacs_jankovic/calc_dust_opac/calc_planck_opac.ipynb?content=0&1656887896665 (::1) 2.120000ms referer=http://localhost:8889/lab
+[W 00:38:19.550 LabApp] 404 GET /api/contents/opacs_jankovic/calc_dust_opac/corundum_K95?1656887899265 (::1): No such file or directory: opacs_jankovic/calc_dust_opac/corundum_K95
+[W 00:38:19.550 LabApp] No such file or directory: opacs_jankovic/calc_dust_opac/corundum_K95
+[W 00:38:19.551 LabApp] 404 GET /api/contents/opacs_jankovic/calc_dust_opac/corundum_K95?1656887899265 (::1) 1.040000ms referer=http://localhost:8889/lab
+[W 00:38:31.420 LabApp] Notebook format_opt_const.ipynb is not trusted
+[I 00:38:33.115 LabApp] Kernel started: e16d7323-78e0-482f-b65a-81c6d2ed0b36, name: python3
+-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-[I 00:39:41.855 LabApp] Saving file at /format_opt_const.ipynb
+[W 00:39:41.856 LabApp] Notebook format_opt_const.ipynb is not trusted
+[I 00:40:34.502 LabApp] Saving file at /format_opt_const.ipynb
+[W 00:40:34.503 LabApp] Notebook format_opt_const.ipynb is not trusted
+[W 00:41:28.604 LabApp] Notebook calc_planck_opac.ipynb is not trusted
+[I 00:41:29.468 LabApp] Kernel started: c8c1d48d-60a3-45bc-a937-b42a79c3d2e9, name: python3
+[I 00:42:36.067 LabApp] Saving file at /format_opt_const.ipynb
+[W 00:42:36.068 LabApp] Notebook format_opt_const.ipynb is not trusted
+[I 01:05:28.584 LabApp] Saving file at /calc_planck_opac.ipynb
+[W 01:05:28.585 LabApp] Notebook calc_planck_opac.ipynb is not trusted
+[I 01:07:30.029 LabApp] Saving file at /calc_planck_opac.ipynb
+[W 01:07:30.030 LabApp] Notebook calc_planck_opac.ipynb is not trusted
+[I 01:07:45.226 LabApp] Kernel restarted: c8c1d48d-60a3-45bc-a937-b42a79c3d2e9
+[I 01:09:33.770 LabApp] Saving file at /calc_planck_opac.ipynb
+[W 01:09:33.771 LabApp] Notebook calc_planck_opac.ipynb is not trusted
+[I 01:27:05.132 LabApp] Saving file at /calc_planck_opac.ipynb
+[W 01:27:05.132 LabApp] Notebook calc_planck_opac.ipynb is not trusted
+[I 01:29:57.577 LabApp] Starting buffering for c8c1d48d-60a3-45bc-a937-b42a79c3d2e9:8a414e34-7977-4f08-aabd-31d8ddada5b7
+[I 01:29:57.578 LabApp] Starting buffering for e16d7323-78e0-482f-b65a-81c6d2ed0b36:799cd5d6-d9ab-4046-a2c8-8ba514b5cf50
+[I 01:29:58.295 LabApp] Restoring connection for c8c1d48d-60a3-45bc-a937-b42a79c3d2e9:8a414e34-7977-4f08-aabd-31d8ddada5b7
+[W 01:31:28.153 LabApp] WebSocket ping timeout after 90001 ms.
+[W 01:31:28.227 LabApp] WebSocket ping timeout after 90001 ms.
+[W 01:31:28.295 LabApp] WebSocket ping timeout after 90000 ms.
+[I 01:31:33.228 LabApp] Starting buffering for e16d7323-78e0-482f-b65a-81c6d2ed0b36:799cd5d6-d9ab-4046-a2c8-8ba514b5cf50
+[I 01:31:33.297 LabApp] Starting buffering for c8c1d48d-60a3-45bc-a937-b42a79c3d2e9:8a414e34-7977-4f08-aabd-31d8ddada5b7
+[IPKernelApp] WARNING | Parent appears to have exited, shutting down.
+[IPKernelApp] WARNING | Parent appears to have exited, shutting down.

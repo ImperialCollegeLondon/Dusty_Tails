@@ -167,9 +167,9 @@ int main() {
         major_timestep = stod(line.substr(10,14));
         no_orbits = stod(line.substr(25,28));
         nparticles = stoi(line.substr(38,41));
-        cont = stoi(line.substr(50,51));
-        t_init = stod(line.substr(62,68));
-        cout << "Initial time=  " << t_init << endl;
+        //cont = stoi(line.substr(50,51));
+        //t_init = stod(line.substr(62,68));
+       // cout << "Initial time=  " << t_init << endl;
       
       }
       if (in_c == 6) {
@@ -207,6 +207,16 @@ int main() {
         cout << "\n" ;
         cout << "The planetary mass loss rate is " << mdot_read << " Mearth/Gyr." << endl;
         cout << "\n" ;
+      }
+      if (in_c ==3) {
+        cont = stoi(line.substr(0,2));
+        if (cont==1) {
+          cout << "Run is continued from previous output." << endl;
+        }
+      }
+      if (in_c ==4){
+        t_init = stod(line.substr(0,5));
+        cout << "Initial time=  " << t_init << endl;
       }
       in_c = in_c + 1;
     }
@@ -373,7 +383,7 @@ n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(s_0, 3));
 cout << n_mini << " particles inside superparticle" << endl;
 
 
-opacity_dir = "./opacs_jankovic/calc_dust_opac/"+opac_data+"/opac_";
+opacity_dir = "../../opacs_jankovic/calc_dust_opac/"+opac_data+"/opac_";
 
 int T_int { static_cast<int> (Temp)};
 T_int_s = to_string(T_int);
@@ -405,7 +415,7 @@ long int current_particles = 0; // number of current particles in simulation
   add_particles(particles, current_particles, total_particles, 0.0); // call function that adds particles to simulation (in particles.cpp file)
 
   //Solve particles is the main routine of the program. It is in particles.cpp.
-  solve_particles(0.00, end_t, particles, total_particles,current_particles);
+  solve_particles(total_t, end_t, particles, total_particles,current_particles);
   //cout << planet_x << endl;
   
   //cout << opac.stellar_abs(0.2e-4) + opac.stellar_scat(0.2e-4) << endl;

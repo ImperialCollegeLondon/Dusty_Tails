@@ -5,8 +5,8 @@ import datetime
 now = datetime.datetime.now()
 print(now.isoformat())
 
-directory = 'MgFeSiO4_D95'
-grain_density = 3.8
+directory = 'MgFeSiO4_J94_D95'
+grain_density = 3.71
 #directory = 'fayalite_F01'
 #grain_density = 4.39
 #directory = 'enstatite_J98_J94_D95'
@@ -46,9 +46,9 @@ np.savetxt(directory+'/opac_wavelength.dat', wavelength_grid)
 np.savetxt(directory+'/opac_sizes.dat', grain_size_grid)
 
 opt_const_data = np.loadtxt(opt_const_file)
-output_file_abs = open(directory+'/opac_mie_abs'+str_logawidth+'.dat', 'wb')
-output_file_sca = open(directory+'/opac_mie_sca'+str_logawidth+'.dat', 'wb')
-output_file_gsc = open(directory+'/opac_mie_gsc'+str_logawidth+'.dat', 'wb')
+output_file_abs = open(directory+'/opac_mie_abs'+str_logawidth+'.dat', 'w')
+output_file_sca = open(directory+'/opac_mie_sca'+str_logawidth+'.dat', 'w')
+output_file_gsc = open(directory+'/opac_mie_gsc'+str_logawidth+'.dat', 'w')
 for i in range(0, len(grain_size_grid)):
     grain_size = grain_size_grid[i]
     opacities = radmc3dPy.miescat.compute_opac_mie(

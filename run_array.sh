@@ -1,15 +1,22 @@
 #!/bin/bash -l
 # SLURM resource specifications
-#SBATCH --job-name=test         # shows up in the output of ‘squeue’
-#SBATCH --time=12:00:00       # specify the requested wall-time
-#SBATCH --partition=astro_short # specify the partition to run on
+#SBATCH --job-name=MgSiO3        # shows up in the output of ‘squeue’
+#SBATCH --time=10-00:00:00       # specify the requested wall-time
+#SBATCH --partition=astro_verylong # specify the partition to run on
 #SBATCH --nodes=1              # number of nodes allocated for this job
 #SBATCH --ntasks-per-node=1    # number of MPI ranks per node
 #SBATCH --cpus-per-task=5      # number of OpenMP threads per MPI rank
 #SBATCH --mail-type=ALL
 
-#SBATCH --array=0-1
+#SBATCH --array=0-179
 echo "now processing task id:: " ${SLURM_ARRAY_TASK_ID}
+
+#is the run continuing? 0 - no, 1- yes
+cont=0
+#initial time of the run
+tinit=0.0
+#previous output time
+tprevious=0.0
 # define and create a unique scratch directory
 SCRATCH_DIRECTORY=scratch/${SLURM_JOBID}
 mkdir -p ${SCRATCH_DIRECTORY}
@@ -17,9 +24,9 @@ cd ${SCRATCH_DIRECTORY}
 echo ${SCRATCH_DIRECTORY}
 echo ${SLURM_SUBMIT_DIR}
 echo ${SLURM_ARRAY_TASK_ID} > 'id.txt'
-
+echo ${cont} > 'cont.txt'
+echo ${tinit} > 'tinit.txt'
 cp -r ${SLURM_SUBMIT_DIR}/executables ./
-cp -r ${SLURM_SUBMIT_DIR}/opacs_jankovic ./
 cp ${SLURM_SUBMIT_DIR}/*.o ./
 cp ${SLURM_SUBMIT_DIR}/*.in ./
 cp ${SLURM_SUBMIT_DIR}/input.py ./
@@ -31,7 +38,6 @@ export OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK}
 
 cp dusty_tails_KIC1255b.in dusty_tails.in
 
-time ./executables/dusty_tails.exe > test.out
 
 input_file='input.txt'
 n=1
@@ -64,7 +70,16 @@ geom_s='sph'
 fi
 echo $geom_s
 
-id_dir=${SLURM_SUBMIT_DIR}/simulations/Mg08Fe12SiO4/KIC1255b/s${s_0}_mdot${mdot}_${geom_s}
+if [ $cont == 1 ] 
+then
+input_dir=${SLURM_SUBMIT_DIR}/simulations/MgSiO3/KIC1255b/s${s_0}_mdot${mdot}_${geom_s}_t${tprevious}
+echo ${input_dir}
+cp ${input_dir}/output_final_struct.bin input.bin
+fi
+
+time ./executables/dusty_tails.exe > test.out
+
+id_dir=${SLURM_SUBMIT_DIR}/simulations/MgSiO3/KIC1255b/s${s_0}_mdot${mdot}_${geom_s}_t${tinit}
 echo ${id_dir}
 mkdir -p ${id_dir}
 
@@ -75,5 +90,5 @@ mv id.txt                   ${id_dir}/id.txt
 mv test.out                 ${id_dir}/runlog.out
 
 cd ${SLURM_SUBMIT_DIR}
-
+rm -rf ${SCRATCH_DIRECTORY}
 exit 0
