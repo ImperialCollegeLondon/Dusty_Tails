@@ -154,19 +154,6 @@ vector <dust_read> read_data(){
        
        if (dust_grains_out[i].s_dust < 0.0) {
          dust_grains_out.pop_back();
-         // cout << "                         " << endl;
-         // cout << "ID  " << dust_grains_out[i].id << endl;
-         // cout << "size " << dust_grains_out[i].s_dust << endl;
-         // cout << "x " << dust_grains_out[i].x_dust << endl;
-         // cout << "y " << dust_grains_out[i].y_dust << endl;
-         // cout << "z " << dust_grains_out[i].z_dust << endl;
-         // cout << "vx " << dust_grains_out[i].vx_dust << endl;
-         // cout << "vy " << dust_grains_out[i].vy_dust << endl;
-         // cout << "vz " << dust_grains_out[i].vz_dust << endl;
-         // cout << "h " << dust_grains_out[i].h_dust << endl;
-         // cout << "m " << dust_grains_out[i].m_dust << endl;
-         // cout << "T " << dust_grains_out[i].temp_dust << endl;
-         // cout << "tau " << dust_grains_out[i].tau_dust << endl;
          
        }
        
@@ -467,7 +454,7 @@ double forward_scat(double g, double scat_opac, double mass, double x, double y,
       return  exp(-tau)*phase * scat_opac*mass*n_mini/ (4.0*PI*pow(x,2.)+pow(y,2.)+pow(z,2.));
 }
 
-double flux(vector <vector <double>> &taus, vector< vector <double>> &patches, int h_cells, int v_cells, double p_shadow){
+double flux(vector <vector <double>> &taus, vector< vector <double>> &patches, int h_cells, int v_cells){
    double f, total_grid_area;
    total_grid_area = 0.;
    for (int m=0; m<h_cells; m++){
@@ -605,7 +592,7 @@ using namespace std;
    vector <dust_read> particles_read;
    vector <dust> particles;
    particles_read = read_data();
-   double t0 = 0.0;
+   double t0 = 0.5;
    int counter = 0;
    double f_test_o = 1.0;
    vector <double> timestamps;
@@ -624,19 +611,6 @@ using namespace std;
    cout << "read opacity data successfully " << endl;
    double g_test;
    counter = 0;
-   //  particles.push_back(dust());
-   //  particles[counter].timestamp = 0.0;
-   //  particles[counter].phi = 2.0*PI * (0.0 - t0);
-   //  particles[counter].x_p = 1.0 * cos(particles[counter].phi) - 0.0 * sin(particles[counter].phi);
-   //  particles[counter].y_p = 1.0 * sin(particles[counter].phi) + 0.0 * cos(particles[counter].phi);
-   //  particles[counter].z_p = 0.0;
-   //  particles[counter].x_dp = particles[counter].x_p * sin(inclination) - particles[counter].z_p * cos(inclination);
-   //  particles[counter].y_dp = particles[counter].y_p;
-   //  particles[counter].z_dp = particles[counter].x_p * cos(inclination) + particles[counter].z_p * sin(inclination);
-   //  particles[counter].m = rho_d * (4./3.) * PI * pow(2.0e-4, 3);
-   //  particles[counter].kappa = opac.stellar_scat(2.0e-4) + opac.stellar_abs(2.0e-4);
-   //  particles[counter].size = 2.0e-4;
-   //  particles[counter].tau = 0.0;
 
     for( dust_read& p : particles_read) {
         particles.push_back(dust());
@@ -651,9 +625,9 @@ using namespace std;
         particles[counter].x_p = p.x_dust * cos(particles[counter].phi) - p.y_dust * sin(particles[counter].phi);
         particles[counter].y_p = p.x_dust * sin(particles[counter].phi) + p.y_dust * cos(particles[counter].phi);
         particles[counter].z_p = p.z_dust;
-        particles[counter].x_dp = particles[counter].x_p * sin(inclination) - particles[counter].z_p * cos(inclination);
+        particles[counter].x_dp = particles[counter].x_p * sin(inclination) + particles[counter].z_p * cos(inclination);
         particles[counter].y_dp = particles[counter].y_p;
-        particles[counter].z_dp = particles[counter].x_p * cos(inclination) + particles[counter].z_p * sin(inclination);
+        particles[counter].z_dp = -particles[counter].x_p * cos(inclination) + particles[counter].z_p * sin(inclination);
         particles[counter].m = p.m_dust;
         particles[counter].kappa = p.kappa_planck;
         particles[counter].kappa_scat = p.kappa_dust_scat;
@@ -673,7 +647,6 @@ using namespace std;
    vector<vector<double>> patches;
    vector<vector<double>> taus;
    vector <dust> particles_calc;
-   double planet_shadow, test;
 
    for (int i=120; i<121; i++){
 
@@ -684,26 +657,26 @@ using namespace std;
       double x_planet, y_planet, z_planet;
       for ( int it=0; it<timestamps.size(); it++) {
       //for ( int it=0; it<1; it++) {
-         //cout << timestamps[it] << endl;
+         cout << timestamps[it] << endl;
       
       double theta;
       
-      planet_shadow=0.;
       theta = 2.0*PI*(timestamps[it]-t0);
-      //theta = 2.0*PI*(0.0-t0);
-      //cout << "theta " << theta <<  endl;
-      z_planet = cos(theta) * cos(inclination);
-      x_planet = cos(theta) * sin(inclination);
-      y_planet = sin(theta);
-      double r_planet;
-      r_planet = sqrt(pow(y_planet, 2.) + pow(z_planet, 2.));
-      if (x_planet > 0.0 && r_planet <= r_star){
-         planet_shadow = pow(0.33*Rearth_cgs, 2.);
-      }
-    
+      double xp_planet, yp_planet, zp_planet;
+      double xdp_planet, ydp_planet, zdp_planet;
+      xp_planet = cos(theta);
+      yp_planet = sin(theta);
+      zp_planet = 0.0;
+      xdp_planet = xp_planet*sin(inclination);
+      ydp_planet = yp_planet;
+      zdp_planet = -xp_planet*cos(inclination);
+
+      z_min = zdp_planet - 0.04;
+      z_max = zdp_planet + 0.04;
+
       //cout << "z_planet " << z_planet << endl;
-      z_min = z_planet - 0.04;
-      z_max = z_planet + 0.04;
+      z_min = zdp_planet - 0.04;
+      z_max = zdp_planet + 0.04;
       y_min = -r_star;
 
       y_max = r_star;
@@ -756,10 +729,9 @@ using namespace std;
          extinction(particles_calc, patches,  h_grid, v_grid,taus, h_cells, v_cells, 
          z_max, z_min, y_max, y_min);
         
-         //f_test = flux(taus, patches, h_cells, v_cells) + forward_flux - planet_shadow;
          output.write((char*) &timestamps[it], sizeof(double));
          
-         f_test = flux(taus, patches, h_cells, v_cells, planet_shadow);
+         f_test = flux(taus, patches, h_cells, v_cells);
          cout << "extinction " << f_test << endl;
          cout << "scattering " << forward_flux << endl;
          output.write((char*) &f_test, sizeof(double));
