@@ -10,3 +10,5 @@ slurm*
 *.bin
 *.png
 *.dat
+.ipynb_checkpoints
+.vscode
