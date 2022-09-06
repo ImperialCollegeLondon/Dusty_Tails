@@ -1,0 +1,24 @@
+#!/bin/csh
+#makeinput
+#/dev/shm/uffegj
+
+#KOPIER MARCS TIL $TMPDIR
+# cp ..... $TMPDIR/
+# cd $TMPDIR
+# ...koer marcs...
+# mv mxmodel.dat $CWD/...
+# cd $CWD
+# rm -rf $TMPDIR 
+#
+#
+
+setenv CWD `pwd`
+
+cp ./simulations/Mg08Fe12SiO4/noparticles/500/output_final_struct.bin input.bin
+
+./spectra/spectra
+
+cp output.bin ./spectra/500.bin
+
+rm input.bin
+rm output.bin

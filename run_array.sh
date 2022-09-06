@@ -36,7 +36,7 @@ mkdir data
 python3 input.py > python.out
 export OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK}
 
-cp dusty_tails_KIC1255b.in dusty_tails.in
+cp ./input/dusty_tails_KIC1255b.in dusty_tails.in
 
 
 input_file='input.txt'

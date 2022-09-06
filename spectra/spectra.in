@@ -1,0 +1,6 @@
+KIC1255_b          //planet name
+Mg08Fe12SiO4       //Dust composition
+2.0                //Initial dust grain size
+500                //Particles thrown out every 100th of an orbit
+1.0                //Planetary mass loss rate in earth masses per Gyr
+0.0               //t0 for light curve

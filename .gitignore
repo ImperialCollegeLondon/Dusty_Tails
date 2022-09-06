@@ -1,13 +1,12 @@
 *.o
-/plots
-/executables
+*.out
+/scratch
 /data
 /simulations
+/dust_opac_booth
 *.exe
 slurm*
-*.sh
 *.mp4
-*.in
 *.bin
 *.png
 *.dat

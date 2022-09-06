@@ -1,0 +1,24 @@
+#!/bin/csh
+#makeinput
+#/dev/shm/uffegj
+
+#KOPIER MARCS TIL $TMPDIR
+# cp ..... $TMPDIR/
+# cd $TMPDIR
+# ...koer marcs...
+# mv mxmodel.dat $CWD/...
+# cd $CWD
+# rm -rf $TMPDIR 
+#
+#
+
+setenv CWD `pwd`
+
+cp ./simulations/DEBUG/KIC1255b_1mdot_2micro_SPH_DEBUG_2/output_struct_format.bin input.bin
+
+./light_curve/lightcurve
+
+cp output.bin ./light_curve/data/DEBUG_500_000250.bin
+
+rm input.bin
+rm output.bin
