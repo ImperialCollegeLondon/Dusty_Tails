@@ -1,14 +1,14 @@
 #!/bin/bash -l
 # SLURM resource specifications
-#SBATCH --job-name=test        # shows up in the output of ‘squeue’
-#SBATCH --time=5-00:00:00       # specify the requested wall-time
-#SBATCH --partition=astro2_long # specify the partition to run on
+#SBATCH --job-name=MgFeSiO4       # shows up in the output of ‘squeue’
+#SBATCH --time=10-00:00:00       # specify the requested wall-time
+#SBATCH --partition=astro_long # specify the partition to run on
 #SBATCH --nodes=1              # number of nodes allocated for this job
 #SBATCH --ntasks-per-node=1    # number of MPI ranks per node
 #SBATCH --cpus-per-task=5      # number of OpenMP threads per MPI rank
 #SBATCH --mail-type=ALL
 
-#SBATCH --array=0-1
+#SBATCH --array=0-179
 echo "now processing task id:: " ${SLURM_ARRAY_TASK_ID}
 
 #is the run continuing? 0 - no, 1- yes
@@ -72,22 +72,22 @@ echo $geom_s
 
 if [ $cont == 1 ] 
 then
-input_dir=${SLURM_SUBMIT_DIR}/simulations/MgSiO3/KIC1255b/s${s_0}_mdot${mdot}_${geom_s}_t${tprevious}
+input_dir=${SLURM_SUBMIT_DIR}/simulations/MgFeSiO4/KIC1255b/s${s_0}_mdot${mdot}_${geom_s}_t${tprevious}
 echo ${input_dir}
 cp ${input_dir}/output_final_struct.bin input.bin
 fi
 
 time ./executables/dusty_tails.exe > test.out
 
-id_dir=${SLURM_SUBMIT_DIR}/simulations/MgSiO3/KIC1255b/s${s_0}_mdot${mdot}_${geom_s}_t${tinit}
-# echo ${id_dir}
-# mkdir -p ${id_dir}
+id_dir=${SLURM_SUBMIT_DIR}/simulations/MgFeSiO4/KIC1255b/s${s_0}_mdot${mdot}_${geom_s}_t${tinit}
+echo ${id_dir}
+mkdir -p ${id_dir}
 
-# mv ./data/output_final.bin  ${id_dir}/output_final_struct.bin
-# mv ./data/light_curve.bin   ${id_dir}/light_curve.bin
-# mv gmon.out                 ${id_dir}/gmon.out
-# mv id.txt                   ${id_dir}/id.txt
-# mv test.out                 ${id_dir}/runlog.out
+mv ./data/output_final.bin  ${id_dir}/output_final_struct.bin
+mv ./data/light_curve.bin   ${id_dir}/light_curve.bin
+mv gmon.out                 ${id_dir}/gmon.out
+mv id.txt                   ${id_dir}/id.txt
+mv test.out                 ${id_dir}/runlog.out
 
 cd ${SLURM_SUBMIT_DIR}
 rm -rf ${SCRATCH_DIRECTORY}

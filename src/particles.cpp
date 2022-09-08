@@ -264,9 +264,18 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
 
   t_next = t_global_min + current_t;
+  std::vector<Particle>::iterator it;
+  for ( it = particles.begin(); it != particles.end(); ++it){
+    // cout << it->id << endl;
+    // cout << it->size << endl;
+
+    // cout << it->size << endl;
+  }
 
   #pragma omp parallel for private( s_phi_values, s_theta, s_theta_values)
   for( Particle& p : particles) {
+
+   
 
     vector <double> pos_spherical;
     vector <double> pos_scaled;

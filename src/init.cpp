@@ -354,7 +354,7 @@ if (composition.substr(0,5) == "Al2O3") {
 } else if (composition.substr(0,12)=="MgFeSiO4") {
   cout << "Dust is composed of Olivine (Mg1.0,Fe1.0)" << endl;
   opac_data = "MgFeSiO4_J94_D95";
-  comp = "Mg08Fe12SiO4";
+  comp = "MgFeSiO4";
   A = 6.53e+4; 
   Bp = 34.3;
   rho_d = 3.71;
@@ -365,6 +365,16 @@ if (composition.substr(0,5) == "Al2O3") {
   cout << "Dust is composed of Sri Lanka Olivine (Mg1.56 Fe0.4 Si0.91 O4)" << endl;
   opac_data = "OlivineSL_Z11";
   comp = "Mg1.56Fe0.4Si0.91O4";
+  A = 6.53e+4; 
+  Bp = 34.3;
+  rho_d = 3.3;
+  mu = 149.81;
+  alpha = 0.1;
+
+}  else if (composition.substr(0,12)=="OlSC") {
+  cout << "Dust is composed of San Carlos Olivine (Mg1.72 Fe0.21 SiO4)" << endl;
+  opac_data = "OlivineSC_F01_Z11";
+  comp = "OlSC";
   A = 6.53e+4; 
   Bp = 34.3;
   rho_d = 3.3;

@@ -9,6 +9,5 @@ slurm*
 *.mp4
 *.bin
 *.png
-*.dat
 .ipynb_checkpoints
 .vscode
