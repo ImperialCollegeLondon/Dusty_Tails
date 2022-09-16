@@ -218,6 +218,10 @@ int main() {
         t_init = stod(line.substr(0,5));
         cout << "Initial time=  " << t_init << endl;
       }
+      if (in_c ==5){
+        no_orbits = stod(line.substr(0,5));
+        cout << "End time =  " << no_orbits << endl;
+      }
       in_c = in_c + 1;
     }
     input_2.close();
@@ -297,7 +301,7 @@ if (composition.substr(0,5) == "Al2O3") {
   opac_data = "fayalite_F01";
   comp = "Fe2SiO4";
   A = 6.04e+4;
-  Bp = 38.1;
+  Bp = 37.7;
   rho_d = 4.39;
   mu =  203.774;
   alpha = 0.1;
@@ -307,7 +311,7 @@ if (composition.substr(0,5) == "Al2O3") {
   opac_data = "graphite_D84";
   comp = "C";
   A = 9.36e+4;
-  Bp = 36.2;
+  Bp = 36.7;
   rho_d = 2.16;
   mu =  12.011;
   alpha = 0.1;
@@ -317,7 +321,7 @@ if (composition.substr(0,5) == "Al2O3") {
   opac_data = "enstatite_J98_J94_D95";
   comp = "MgSiO3";
   A = 6.89e+4;
-  Bp = 37.8;
+  Bp = 38.1;
   rho_d = 3.20;
   mu = 100.389;
   alpha = 0.1;
@@ -327,7 +331,7 @@ if (composition.substr(0,5) == "Al2O3") {
   opac_data = "olivine_F01";
   comp = "Mg2SiO4";
   A = 6.53e+4;
-  Bp = 34.3;
+  Bp = 34.1;
   rho_d = 3.27;
   mu = 140.694;
   alpha = 0.1;
@@ -337,7 +341,7 @@ if (composition.substr(0,5) == "Al2O3") {
   opac_data = "silicon_carbide_L93";
   comp = "SiC";
   A= 7.85e+4;
-  Bp = 37.4;
+  Bp = 37.8;
   rho_d = 3.22;
   mu = 44.085;
   alpha = 0.04;
@@ -346,7 +350,7 @@ if (composition.substr(0,5) == "Al2O3") {
   opac_data = "Mg08Fe12SiO4_J94_D95";
   comp = "Mg08Fe12SiO4";
   A = 6.53e+4; 
-  Bp = 34.3;
+  Bp = 34.1;
   rho_d = 3.80;
   mu = 178.54;
   alpha = 0.1;
@@ -356,7 +360,7 @@ if (composition.substr(0,5) == "Al2O3") {
   opac_data = "MgFeSiO4_J94_D95";
   comp = "MgFeSiO4";
   A = 6.53e+4; 
-  Bp = 34.3;
+  Bp = 34.1;
   rho_d = 3.71;
   mu = 172.23;
   alpha = 0.1;
@@ -366,7 +370,7 @@ if (composition.substr(0,5) == "Al2O3") {
   opac_data = "OlivineSL_Z11";
   comp = "Mg1.56Fe0.4Si0.91O4";
   A = 6.53e+4; 
-  Bp = 34.3;
+  Bp = 34.1;
   rho_d = 3.3;
   mu = 149.81;
   alpha = 0.1;
@@ -376,9 +380,9 @@ if (composition.substr(0,5) == "Al2O3") {
   opac_data = "OlivineSC_F01_Z11";
   comp = "OlSC";
   A = 6.53e+4; 
-  Bp = 34.3;
+  Bp = 34.1;
   rho_d = 3.3;
-  mu = 149.81;
+  mu = 145.61;
   alpha = 0.1;
 
 } else{

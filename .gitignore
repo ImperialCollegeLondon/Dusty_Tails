@@ -11,3 +11,4 @@ slurm*
 *.png
 .ipynb_checkpoints
 .vscode
+*.pdf

@@ -17,6 +17,12 @@ with open('tinit.txt') as f:
 
 tinit = float(lines[0])
 
+
+with open('tend.txt') as f:
+    lines = f.readlines()
+
+tend = float(lines[0])
+
 with open('input.txt', 'w') as f:
         f.write(str(df.iloc[id,0]))
         f.write('\n')
@@ -27,4 +33,6 @@ with open('input.txt', 'w') as f:
         f.write(str(cont))
         f.write('\n')
         f.write(str(tinit))
+        f.write('\n')
+        f.write(str(tend))
         f.write('\n')
