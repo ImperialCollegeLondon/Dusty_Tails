@@ -1,14 +1,14 @@
 #!/bin/bash -l
 # SLURM resource specifications
-#SBATCH --job-name=Al2O3       # shows up in the output of ‘squeue’
-#SBATCH --time=5-00:00:00       # specify the requested wall-time
-#SBATCH --partition=astro2_long # specify the partition to run on
+#SBATCH --job-name=test       # shows up in the output of ‘squeue’
+#SBATCH --time=10-00:00:00       # specify the requested wall-time
+#SBATCH --partition=astro_long # specify the partition to run on
 #SBATCH --nodes=1              # number of nodes allocated for this job
 #SBATCH --ntasks-per-node=1    # number of MPI ranks per node
-#SBATCH --cpus-per-task=5      # number of OpenMP threads per MPI rank
+#SBATCH --cpus-per-task=4      # number of OpenMP threads per MPI rank
 #SBATCH --mail-type=ALL
 
-#SBATCH --array=0-179
+#SBATCH --array=0-1
 echo "now processing task id:: " ${SLURM_ARRAY_TASK_ID}
 
 #is the run continuing? 0 - no, 1- yes
@@ -19,6 +19,9 @@ tinit=0.0
 tprevious=0.0
 #end time of run
 tend=1.0
+#dust composition
+composition='Mg05Fe05SiO3'
+
 # define and create a unique scratch directory
 SCRATCH_DIRECTORY=scratch/${SLURM_JOBID}
 mkdir -p ${SCRATCH_DIRECTORY}
@@ -29,18 +32,18 @@ echo ${SLURM_ARRAY_TASK_ID} > 'id.txt'
 echo ${cont} > 'cont.txt'
 echo ${tinit} > 'tinit.txt'
 echo ${tend} > 'tend.txt'
+echo ${composition} > 'comp.txt'
 cp -r ${SLURM_SUBMIT_DIR}/executables ./
 cp ${SLURM_SUBMIT_DIR}/src/*.o ./
 cp ${SLURM_SUBMIT_DIR}/input/*.in ./
 cp ${SLURM_SUBMIT_DIR}/input.py ./
-cp ${SLURM_SUBMIT_DIR}/input_grid.csv ./
+cp ${SLURM_SUBMIT_DIR}/input_grid.csv ./input_grid.csv
 
 mkdir data
 python3 input.py > python.out
 export OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK}
 
 cp ./dusty_tails_KIC1255b.in dusty_tails.in
-
 
 input_file='input.txt'
 n=1
@@ -75,14 +78,15 @@ echo $geom_s
 
 if [ $cont == 1 ] 
 then
-input_dir=${SLURM_SUBMIT_DIR}/simulations/Al2O3/KIC1255b/s${s_0}_mdot${mdot}_${geom_s}_t${tprevious}
+input_dir=${SLURM_SUBMIT_DIR}/simulations/Mg05Fe05SiO3/KIC1255b/s${s_0}_mdot${mdot}_${geom_s}_t${tprevious}
 echo ${input_dir}
 cp ${input_dir}/output_final_struct.bin input.bin
 fi
 
 time ./executables/dusty_tails.exe > test.out
 
-id_dir=${SLURM_SUBMIT_DIR}/simulations/Al2O3/KIC1255b/s${s_0}_mdot${mdot}_${geom_s}_t${tinit}
+#id_dir=${SLURM_SUBMIT_DIR}/simulations/Mg05Fe05SiO3/KIC1255b/s${s_0}_mdot${mdot}_${geom_s}_t${tinit}
+id_dir=${SLURM_SUBMIT_DIR}/simulations/test/s${s_0}_mdot${mdot}_${geom_s}_t${tinit}
 echo ${id_dir}
 mkdir -p ${id_dir}
 

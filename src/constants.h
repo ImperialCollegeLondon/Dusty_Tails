@@ -54,7 +54,7 @@ extern bool tau_constant;
 extern int cont;
 extern double nparticles, major_timestep;
 extern double n_mini, m_big;
-extern double t0;
+extern double t0, earth_star;
 //Grid parameters:
 extern double d_r_min, d_r_max,  d_t_min, d_t_max, d_p_min, d_p_max;
 

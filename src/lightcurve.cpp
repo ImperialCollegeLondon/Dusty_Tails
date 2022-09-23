@@ -317,7 +317,7 @@ void grid_cells_lc(vector<double> &h_grid, vector<double> &v_grid,
 
 double forward_scat(double g, double scat_opac, double mass, double x, double y, double z, double s, double tau){
       double phase;
-      double d_obs_star = 1.911e+21;
+      double d_obs_star = earth_star*pc;
       double phase_angle;
       double r_dust = sqrt(pow(x,2)+pow(y,2)+pow(z,2));
       phase_angle = acos((1/r_dust) * (x*d_obs_star - pow(r_dust,2)) 

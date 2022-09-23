@@ -23,6 +23,11 @@ with open('tend.txt') as f:
 
 tend = float(lines[0])
 
+with open('comp.txt') as f:
+    lines = f.readlines()
+
+composition = lines[0]
+
 with open('input.txt', 'w') as f:
         f.write(str(df.iloc[id,0]))
         f.write('\n')
@@ -35,4 +40,6 @@ with open('input.txt', 'w') as f:
         f.write(str(tinit))
         f.write('\n')
         f.write(str(tend))
+        f.write('\n')
+        f.write(composition)
         f.write('\n')

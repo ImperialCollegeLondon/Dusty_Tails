@@ -44,7 +44,7 @@ double s_0;
 double t_init;
 double rmin, rmax, tmin, tmax, pmin,pmax;
 double mdot_read, major_timestep, no_orbits, nparticles;
-double t0;
+double t0, earth_star;
 double n_mini, mbig;
 bool tau_constant;
 string line;
@@ -133,14 +133,6 @@ int main() {
          cout << "\n" ;
       }
       if (in_c == 2) {
-        cout << "Reading dust parameters... " << endl;
-        //s_0 = stod(line.substr(12,18)) * 1.0e-4;
-        composition = line.substr(25,36);
-        //cout << "Dust is composed of " << composition << endl;
-        //cout << "initial dust grains size " << s_0 << " micron" << endl;
-        
-      }
-      if (in_c == 3) {
         rmin = stod(line.substr(14,18));
         rmax = stod(line.substr(27,31));
         tmin = stod(line.substr(40,44));
@@ -149,10 +141,8 @@ int main() {
         pmax = stod(line.substr(78,82));
 
       }
-      if (in_c == 4) {
-        //outflow = stoi(line.substr(14));
-        //mdot_read = stod(line.substr(23,26));
-        tau_type = stoi(line.substr(36));
+      if (in_c == 3) {
+        tau_type = stoi(line.substr(14));
        
         if (tau_type ==0) {
           cout << "Optical depth of dust is traced." << endl;
@@ -161,24 +151,19 @@ int main() {
           cout << "Optical depth of dust is constant and thin (0.1)." << endl;
           tau_constant = true;
         }
-        cout << "\n" ;
+      }
+      if (in_c == 4) {
+        major_timestep = stod(line.substr(10,14));
+        nparticles = stoi(line.substr(25,28));
+      
       }
       if (in_c == 5) {
-        major_timestep = stod(line.substr(10,14));
-        no_orbits = stod(line.substr(25,28));
-        nparticles = stoi(line.substr(38,41));
-        //cont = stoi(line.substr(50,51));
-        //t_init = stod(line.substr(62,68));
-       // cout << "Initial time=  " << t_init << endl;
-      
-      }
-      if (in_c == 6) {
-        t0 = stof(line.substr(10,14));
+        t0 = stod(line.substr(10,14));
         cout << "t0 for light curve is " << t0 << endl;
+        earth_star = stod(line.substr(30,40));
+        cout << "Star is " << earth_star << " parsec away." << endl;
       }
 
-     
-      
       in_c = in_c + 1;
       
     }
@@ -221,6 +206,9 @@ int main() {
       if (in_c ==5){
         no_orbits = stod(line.substr(0,5));
         cout << "End time =  " << no_orbits << endl;
+      }
+      if (in_c == 6){
+        composition = line.substr(0,12);
       }
       in_c = in_c + 1;
     }
@@ -328,7 +316,7 @@ if (composition.substr(0,5) == "Al2O3") {
 
 } else if (composition.substr(0,7)=="Mg2SiO4") {
   cout << "Dust is composed of Forsterite (Mg2SiO4)." << endl;
-  opac_data = "olivine_F01";
+  opac_data = "Forsterite_F01";
   comp = "Mg2SiO4";
   A = 6.53e+4;
   Bp = 34.1;
@@ -385,7 +373,28 @@ if (composition.substr(0,5) == "Al2O3") {
   mu = 145.61;
   alpha = 0.1;
 
-} else{
+} else if (composition.substr(0,12)=="Mg05Fe05SiO3") {
+  cout << "Dust is composed of Orthopyroxene (Mg0.5 Fe0.5 SiO3)" << endl;
+  opac_data = "Mg05Fe05SiO3_J94_D95";
+  comp = "Mg05Fe05SiO3";
+  A = 6.89e+4; 
+  Bp = 37.8;
+  rho_d = 3.2;
+  mu = 116.1565;
+  alpha = 0.1;
+
+
+}  else if (composition.substr(0,12)=="Mg07Fe03SiO3") {
+  cout << "Dust is composed of Orthopyroxene (Mg0.7 Fe0.3 SiO3)" << endl;
+  opac_data = "Mg07Fe03SiO3_J94_D95";
+  comp = "Mg07Fe03SiO3";
+  A = 6.89e+4; 
+  Bp = 37.8;
+  rho_d = 3.01;
+  mu = 109.85;
+  alpha = 0.1;
+}
+ else{
   cout << "Composition unknown, stopping.";
   abort();
 }

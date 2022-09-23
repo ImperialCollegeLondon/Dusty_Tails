@@ -111,12 +111,15 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
         }
         
     }
+    
+
     current = particles.size();
+    int current_id = (time/0.01) *250;
     total = current + nparticles;
     for ( unsigned long int i = current; i < total; i++){
         double phi,theta;
-        grain.id = i+1; //number ID of particle
-       
+        //grain.id = i+1; //number ID of particle
+        grain.id = current_id;
         //generate particles initial position
         if (outflow==1) {
         //spherical
@@ -159,7 +162,8 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
         grain.gsca = gsca_init;
         
         particles.push_back(grain); //add particle to the vector of particles
-                 
+
+        current_id = current_id +1;        
     }
     cont = 0;
     
@@ -172,6 +176,7 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
 //for it to be worth tracking
 //Argument is the vector of particles
 bool _predicate(Particle& element) {
+    
     return (element.size <= 1.0e-6); 
     }
 void rm_particles(vector <Particle>& particles){
@@ -343,7 +348,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
       total_particles = total_particles + nparticles;
       //add particles every 100th of an orbit
       if ((current_t > 0.0) && (abs(current_t-end_t)>1.0e-8) ){
-      add_particles(particles, current_particles, total_particles, t_next);
+      add_particles(particles, current_particles, total_particles, current_t);
       }
       plot_time = plot_time + major_timestep;
      }
