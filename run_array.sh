@@ -1,6 +1,6 @@
 #!/bin/bash -l
 # SLURM resource specifications
-#SBATCH --job-name=test       # shows up in the output of ‘squeue’
+#SBATCH --job-name=MgFeSiO4      # shows up in the output of ‘squeue’
 #SBATCH --time=10-00:00:00       # specify the requested wall-time
 #SBATCH --partition=astro_long # specify the partition to run on
 #SBATCH --nodes=1              # number of nodes allocated for this job
@@ -8,19 +8,19 @@
 #SBATCH --cpus-per-task=4      # number of OpenMP threads per MPI rank
 #SBATCH --mail-type=ALL
 
-#SBATCH --array=0-1
+#SBATCH --array=0-179
 echo "now processing task id:: " ${SLURM_ARRAY_TASK_ID}
 
 #is the run continuing? 0 - no, 1- yes
-cont=0
+cont=1
 #initial time of the run
-tinit=0.0
+tinit=3.0
 #previous output time
-tprevious=0.0
+tprevious=2.0
 #end time of run
-tend=1.0
+tend=4.0
 #dust composition
-composition='Mg05Fe05SiO3'
+composition='MgFeSiO4'
 
 # define and create a unique scratch directory
 SCRATCH_DIRECTORY=scratch/${SLURM_JOBID}
@@ -78,15 +78,15 @@ echo $geom_s
 
 if [ $cont == 1 ] 
 then
-input_dir=${SLURM_SUBMIT_DIR}/simulations/Mg05Fe05SiO3/KIC1255b/s${s_0}_mdot${mdot}_${geom_s}_t${tprevious}
+input_dir=${SLURM_SUBMIT_DIR}/simulations/MgFeSiO4/KIC1255b/s${s_0}_mdot${mdot}_${geom_s}_t${tprevious}
 echo ${input_dir}
 cp ${input_dir}/output_final_struct.bin input.bin
 fi
 
 time ./executables/dusty_tails.exe > test.out
 
-#id_dir=${SLURM_SUBMIT_DIR}/simulations/Mg05Fe05SiO3/KIC1255b/s${s_0}_mdot${mdot}_${geom_s}_t${tinit}
-id_dir=${SLURM_SUBMIT_DIR}/simulations/test/s${s_0}_mdot${mdot}_${geom_s}_t${tinit}
+id_dir=${SLURM_SUBMIT_DIR}/simulations/MgFeSiO4/KIC1255b/s${s_0}_mdot${mdot}_${geom_s}_t${tinit}
+#id_dir=${SLURM_SUBMIT_DIR}/simulations/test/s${s_0}_mdot${mdot}_${geom_s}_t${tinit}
 echo ${id_dir}
 mkdir -p ${id_dir}
 
