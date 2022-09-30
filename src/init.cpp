@@ -208,7 +208,7 @@ int main() {
         cout << "End time =  " << no_orbits << endl;
       }
       if (in_c == 6){
-        composition = line.substr(0,12);
+        composition = line.substr(0,18);
       }
       in_c = in_c + 1;
     }
@@ -273,6 +273,7 @@ d_t_max = tmax;
 d_p_min = pmin;
 d_p_max = pmax;
 
+cout << "comp " << composition.substr(0,15) << endl;
 //Dust parameters
 if (composition.substr(0,5) == "Al2O3") {
   cout << "Dust is composed of Corundum." << endl;
@@ -393,8 +394,18 @@ if (composition.substr(0,5) == "Al2O3") {
   rho_d = 3.01;
   mu = 109.85;
   alpha = 0.1;
-}
- else{
+
+} else if (composition.substr(0,16)=="Mg095Fe005SiO3") {
+  cout << "Dust is composed of Orthopyroxene (Mg 0.95 Fe 0.05 SiO3) " << endl;
+  opac_data = "Mg095Fe005SiO3_J94_D95";
+  comp = "Mg095Fe005SiO3";
+  A = 6.89e+4; 
+  Bp = 37.8;
+  rho_d = 2.74;
+  mu = 101.97;
+  alpha = 0.1;
+
+} else{
   cout << "Composition unknown, stopping.";
   abort();
 }
