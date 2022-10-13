@@ -58,14 +58,15 @@ vector <dust_read> read_data(){
        dust_grains_in.push_back(dust_read());
        output.read((char *) &dust_grains_in[i], sizeof(dust_read));
        
-       if (dust_grains_in[i].id == 0) {
-          //cout << "id is zero " << endl;
-          //dust_grains_out.erase(dust_grains_out.end());
+        if (dust_grains_in[i].s_dust <= 1.0e-6) {
+          cout << "particle is too small " << endl;
+    //       cout << "previous grain ID was " << dust_grains_in[i-1].id << endl;
+    //       //dust_grains_out.erase(dust_grains_out.end());
           dust_grains_in.pop_back();
-          //cout << "going to break " << endl;
-          break;
+    //       //cout << "going to break " << endl;
+    //       break;
           
-       }
+        }
        //cout << dust_grains_out[i].id << endl;
     }
    output.close();
@@ -94,9 +95,11 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
         //double previous_tstamp = 0.0;
         for (dust_read& p : particles_read) {
             grain.id = p.id;
+            cout << "p.id " << grain.id << endl;
             grain.position = {p.x_dust, p.y_dust, p.z_dust};
             grain.velocity = {p.vx_dust, p.vy_dust, p.vz_dust};
             grain.size = p.s_dust;
+            cout << "p size " << grain.size << endl;
             grain.h_updated = p.h_dust;
             grain.mass = p.m_dust;
             grain.opac_planck = p.kappa_planck;
@@ -114,6 +117,7 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
     
 
     current = particles.size();
+    cout << "TAIL HAS " << current << " PARTICLES FROM PREVIOUS RUN " << endl;
     int current_id = (time/0.01) *250;
     total = current + nparticles;
     for ( unsigned long int i = current; i < total; i++){

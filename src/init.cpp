@@ -405,6 +405,16 @@ if (composition.substr(0,5) == "Al2O3") {
   mu = 101.97;
   alpha = 0.1;
 
+} else if (composition.substr(0,16)=="Mg08Fe02SiO3") {
+  cout << "Dust is composed of Orthopyroxene (Mg 0.80 Fe 0.20 SiO3) " << endl;
+  opac_data = "Mg08Fe02SiO3_J94_D95";
+  comp = "Mg08Fe02SiO3";
+  A = 6.89e+4; 
+  Bp = 37.8;
+  rho_d = 3.00;
+  mu = 106.696;
+  alpha = 0.1;
+
 } else{
   cout << "Composition unknown, stopping.";
   abort();
