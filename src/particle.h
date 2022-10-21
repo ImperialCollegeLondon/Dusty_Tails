@@ -14,6 +14,7 @@ class Particle {
     vector <double> pos_p; //firt projection for lc calculation
     vector <double> pos_dp; //second projection for lc calculation
     double size; //size of the particle
+    double n_mini; //number of grains inside superparticle
     double opac_abs;
     double opac_scat; 
     double opac_planck;

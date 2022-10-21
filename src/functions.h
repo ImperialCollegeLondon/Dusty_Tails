@@ -162,6 +162,7 @@ struct dust_read {
    double vy_dust;
    double vz_dust;
    double s_dust;
+   double nmini;
    double h_dust;
    double m_dust;
    double temp_dust;
@@ -181,6 +182,7 @@ struct dust {
    double vy_dust;
    double vz_dust;
    double s_dust;
+   double nmini;
    double h_dust;
    double m_dust;
    double temp_dust;

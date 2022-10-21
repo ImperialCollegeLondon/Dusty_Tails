@@ -33,7 +33,7 @@ vector <Particle> particles; //initiate vector of "Particle" (Object defined in 
 //variable declaration for input file reading
 
 int in_c = 0;
-int tau_type, outflow;
+int tau_type, outflow, s_dist;
 int cont = 0;
 string T_int_s;
 string outflow_s;
@@ -45,7 +45,7 @@ double t_init;
 double rmin, rmax, tmin, tmax, pmin,pmax;
 double mdot_read, major_timestep, no_orbits, nparticles;
 double t0, earth_star;
-double n_mini, mbig;
+double mbig;
 bool tau_constant;
 string line;
 ifstream input("dusty_tails.in", ios::in);
@@ -208,6 +208,15 @@ int main() {
         cout << "End time =  " << no_orbits << endl;
       }
       if (in_c == 6){
+        s_dist = stoi(line.substr(0,2));
+
+        if (s_dist ==0) {
+          cout << "All particles have the same initial size." << endl;
+        } else {
+          cout << "Particles size is normally distrubuted, centered at 1.75micron." << endl;
+        }
+      }
+      if (in_c == 7){
         composition = line.substr(0,18);
       }
       in_c = in_c + 1;
@@ -420,11 +429,15 @@ if (composition.substr(0,5) == "Al2O3") {
   abort();
 }
 
-cout << "Dust density is " << rho_d << " g/cm3. Initial dust grain size is " << s_0*1.0e+4 << " micron." << endl;
+cout << "Dust density is " << rho_d << " g/cm3 " << endl;
+
+if (s_dist==0) {
+cout<<" Initial dust grain size is " << s_0*1.0e+4 << " micron." << endl;
+} 
+
 cout << "Clausius-Claperyon parameters are A = " << A << " K, B = " << Bp << endl;
 cout << "\n" ;
-n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(s_0, 3));
-cout << n_mini << " particles inside superparticle" << endl;
+
 
 
 opacity_dir = "../../opacs_jankovic/calc_dust_opac/"+opac_data+"/opac_";

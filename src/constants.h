@@ -49,11 +49,11 @@ extern  string comp, outflow_s, T_int_s, output_file;
 
 //Outflow parameters:
 extern double mdot, v_esc, mdot_read, v_th, mu_gas;
-extern int outflow, tau_type;
+extern int outflow, tau_type, s_dist;
 extern bool tau_constant;
 extern int cont;
 extern double nparticles, major_timestep;
-extern double n_mini, m_big;
+extern double  mbig;
 extern double t0, earth_star;
 //Grid parameters:
 extern double d_r_min, d_r_max,  d_t_min, d_t_max, d_p_min, d_p_max;

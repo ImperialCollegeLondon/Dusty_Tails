@@ -1,6 +1,6 @@
 #!/bin/bash -l
 # SLURM resource specifications
-#SBATCH --job-name=MgFeSiO4      # shows up in the output of ‘squeue’
+#SBATCH --job-name=Mg08dist     # shows up in the output of ‘squeue’
 #SBATCH --time=10-00:00:00       # specify the requested wall-time
 #SBATCH --partition=astro_long # specify the partition to run on
 #SBATCH --nodes=1              # number of nodes allocated for this job
@@ -8,19 +8,21 @@
 #SBATCH --cpus-per-task=4      # number of OpenMP threads per MPI rank
 #SBATCH --mail-type=ALL
 
-#SBATCH --array=0-179
+#SBATCH --array=0
 echo "now processing task id:: " ${SLURM_ARRAY_TASK_ID}
 
 #is the run continuing? 0 - no, 1- yes
-cont=1
+cont=0
 #initial time of the run
-tinit=3.0
+tinit=0.0
 #previous output time
-tprevious=2.0
+tprevious=0.0
 #end time of run
-tend=4.0
+tend=1.0
 #dust composition
-composition='MgFeSiO4'
+composition='Mg08Fe12SiO4'
+#particle size distribution
+s_dist=1
 
 # define and create a unique scratch directory
 SCRATCH_DIRECTORY=scratch/${SLURM_JOBID}
@@ -33,11 +35,13 @@ echo ${cont} > 'cont.txt'
 echo ${tinit} > 'tinit.txt'
 echo ${tend} > 'tend.txt'
 echo ${composition} > 'comp.txt'
+echo ${s_dist} > 'sdist.txt'
+
 cp -r ${SLURM_SUBMIT_DIR}/executables ./
 cp ${SLURM_SUBMIT_DIR}/src/*.o ./
 cp ${SLURM_SUBMIT_DIR}/input/*.in ./
 cp ${SLURM_SUBMIT_DIR}/input.py ./
-cp ${SLURM_SUBMIT_DIR}/input_grid.csv ./input_grid.csv
+cp ${SLURM_SUBMIT_DIR}/input_grid_short.csv ./input_grid.csv
 
 mkdir data
 python3 input.py > python.out
@@ -78,18 +82,20 @@ echo $geom_s
 
 if [ $cont == 1 ] 
 then
-input_dir=${SLURM_SUBMIT_DIR}/simulations/MgFeSiO4/KIC1255b/s${s_0}_mdot${mdot}_${geom_s}_t${tprevious}
+input_dir=${SLURM_SUBMIT_DIR}/simulations/Mg08Fe12SiO4/KIC1255b/sdist_1.75_mdot${mdot}_${geom_s}_t${tprevious}
 echo ${input_dir}
 cp ${input_dir}/output_final_struct.bin input.bin
 fi
 
 time ./executables/dusty_tails.exe > test.out
 
-id_dir=${SLURM_SUBMIT_DIR}/simulations/MgFeSiO4/KIC1255b/s${s_0}_mdot${mdot}_${geom_s}_t${tinit}
-#id_dir=${SLURM_SUBMIT_DIR}/simulations/test/s${s_0}_mdot${mdot}_${geom_s}_t${tinit}
+id_dir=${SLURM_SUBMIT_DIR}/simulations/Mg08Fe12SiO4/KIC1255b/sdist_1.75_mdot${mdot}_${geom_s}_t${tprevious}
+#id_dir=${SLURM_SUBMIT_DIR}/simulations/Mg08Fe12SiO4/KIC1255b/sdist_1.75_mdot${mdot}_${geom_s}_t${tprevious}
+
 echo ${id_dir}
 mkdir -p ${id_dir}
 
+mv ./data/output.bin        ${id_dir}/output_struct.bin
 mv ./data/output_final.bin  ${id_dir}/output_final_struct.bin
 mv ./data/light_curve.bin   ${id_dir}/light_curve.bin
 mv gmon.out                 ${id_dir}/gmon.out

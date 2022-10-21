@@ -125,7 +125,7 @@ void calculation_ext(vector <Particle>& particles, double (&ext)[r_cells][t_cell
                       
                       old_ext = ext [r_index[i]][theta_index[j]][phi_index[k]];
                       
-                      ext [r_index[i]][theta_index[j]][phi_index[k]] = old_ext + (partial_vol/ vol_element) * ((n_mini * p.mass * p.opac_planck) / (vol_element * pow(a, 3)));
+                      ext [r_index[i]][theta_index[j]][phi_index[k]] = old_ext + (partial_vol/ vol_element) * ((p.n_mini * p.mass * p.opac_planck) / (vol_element * pow(a, 3)));
             
 
                   }

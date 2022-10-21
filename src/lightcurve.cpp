@@ -147,7 +147,7 @@ void  extinction_lc( vector <Particle>& particles, vector <vector <double>> &pat
                      dA_cell = patches[h_index[i]][v_index[j]];
                      cross_sec = (p.opac_planck * p.mass) / (pow(a, 2.0));
                      
-                     shadow = ((dA/(dh*dv)) * cross_sec *n_mini) / dA_cell;
+                     shadow = ((dA/(dh*dv)) * cross_sec *p.n_mini) / dA_cell;
                      if (shadow < 1.0e-20) {
                         shadow = 0.0;
                      }
@@ -315,7 +315,7 @@ void grid_cells_lc(vector<double> &h_grid, vector<double> &v_grid,
    
 }
 
-double forward_scat(double g, double scat_opac, double mass, double x, double y, double z, double s, double tau){
+double forward_scat(double g, double scat_opac, double mass, double x, double y, double z, double s, double tau, double n_mini){
       double phase;
       double d_obs_star = earth_star*pc;
       double phase_angle;
@@ -382,7 +382,7 @@ for( Particle& p : particles) {
         if (p.pos_dp[0]>0.0) {
         p.f_scat = forward_scat(p.gsca, 
                  p.opac_scat, p.mass, p.pos_dp[0]*a, p.pos_dp[1]*a, 
-                 p.pos_dp[2]*a, p.size, p.tau_d);
+                 p.pos_dp[2]*a, p.size, p.tau_d, p.n_mini);
         forward_flux = forward_flux + p.f_scat;
         } else {
          p.f_scat = 0.0;
@@ -400,17 +400,12 @@ for( Particle& p : particles) {
    xdp_planet = xp_planet*sin(inclination);
    ydp_planet = yp_planet;
    zdp_planet = -xp_planet*cos(inclination);
-    cout << "z_planet " << zdp_planet << endl;
-   // cout << "x_planet " << xdp_planet << endl;
-   // cout << "y_planet " << ydp_planet << endl;
+
    z_min = zdp_planet - 0.04;
    z_max = zdp_planet + 0.04;
    y_min = -Rstar_a;
    y_max = Rstar_a;
-   // cout << "z min " << z_min << endl;
-   // cout << "z max " << z_max << endl;
-   // cout << "y min " << y_min << endl;
-   // cout << "y max " << y_max << endl;
+
    h_cells = round((y_max-y_min) / ((z_max-z_min)/v_cells));
    dh = (y_max-y_min)/h_cells;
    dv = (z_max-z_min)/v_cells;
@@ -446,13 +441,13 @@ for( Particle& p : particles) {
    output_lc.write((char*) &current_t, sizeof(double));
          
    f_ext = flux(taus, patches, h_cells, v_cells, Rstar_a);
-   cout << "Time = " << current_t << endl;
-   cout << "Extinction = " << f_ext << endl;
-   cout << "Scattering = " << forward_flux << endl;
+
+   cout << "Extinction is " << f_ext << endl;
+   cout << "Scattering is " << forward_flux << endl;
    output_lc.write((char*) &f_ext, sizeof(double));
    output_lc.write((char*) &forward_flux, sizeof(double));
    f_total = f_ext + forward_flux;
-   cout << "Total = " << f_total << endl;
+   cout << "Transit depth is " << f_total << endl;
    output_lc.write((char*) &f_total, sizeof(double));
 
    taus.clear();
