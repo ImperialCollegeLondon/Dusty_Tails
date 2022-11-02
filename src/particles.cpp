@@ -97,6 +97,7 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
             grain.opac_planck = p.kappa_planck;
             grain.opac_abs = p.kappa_dust_abs;
             grain.opac_scat = p.kappa_dust_scat;
+            grain.n_mini = p.nmini;
             grain.gsca = opac.stellar_gsc(grain.size);
             grain.temp_d = p.temp_dust;
             grain.pos_spherical = pos_to_spherical(grain.position[0], grain.position[1], grain.position[2]);
@@ -108,7 +109,6 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
     cout << "Tail has " << current << " super-particles from previous run. " << endl;    
     }
     
-
     current = particles.size();
     int current_id = (time/0.01) *250;
     total = current + nparticles;
@@ -143,7 +143,7 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
         } else if (s_dist ==1) {
             double size_temp;
             size_temp = ndist(generator)* 1.0e-4;
-            while (size_temp < (0.01* 1.0e-4)) {
+            while (size_temp <= (0.01* 1.0e-4)) {
                 size_temp = ndist(generator)* 1.0e-4;
             }
             grain.size = size_temp;
@@ -258,8 +258,6 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
   #pragma omp parallel for private( s_phi_values, s_theta, s_theta_values)
   for( Particle& p : particles) {
 
-   
-
     vector <double> pos_spherical;
     vector <double> pos_scaled;
     if (tau_constant == true) {
@@ -314,32 +312,26 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     rm_particles(particles); //removes particles that are too small
     
     if (abs(current_t-plot_time) < 1.0e-8) { 
-      vector < dust > dust_grains;
       long int total = particles.size();
       cout << "Obtaining light curve..." << endl;
       light_curve(particles, current_t);
-      counter= 0;
       for( Particle& p : particles) {
-        dust_grains.push_back(dust());
-        dust_grains[counter].timestamp = current_t;
-        dust_grains[counter].id = p.id;
-        dust_grains[counter].x_dust = p.position[0];
-        dust_grains[counter].y_dust = p.position[1];
-        dust_grains[counter].z_dust = p.position[2];
-        dust_grains[counter].vx_dust = p.velocity[0];
-        dust_grains[counter].vy_dust = p.velocity[1];
-        dust_grains[counter].vz_dust = p.velocity[2];
-        dust_grains[counter].s_dust = p.size;
-        dust_grains[counter].nmini = p.n_mini;
-        dust_grains[counter].h_dust = p.h_updated;
-        dust_grains[counter].m_dust = p.mass;
-        dust_grains[counter].temp_dust = p.temp_d;
-        dust_grains[counter].tau_dust = p.tau_d;
-        dust_grains[counter].kappa_dust_abs = p.opac_abs;
-        dust_grains[counter].kappa_dust_scat = p.opac_scat;
-        dust_grains[counter].kappa_planck = p.opac_planck;
-        output.write((char *) &dust_grains[counter], sizeof(dust));
-        counter +=1;
+        output.write((char*) &current_t, sizeof(double));
+        output.write((char*) &p.id, sizeof(long int));
+        output.write((char*) &p.position[0], sizeof(double));
+        output.write((char*) &p.position[1], sizeof(double));
+        output.write((char*) &p.position[2], sizeof(double));
+        output.write((char*) &p.velocity[0], sizeof(double));
+        output.write((char*) &p.velocity[1], sizeof(double));
+        output.write((char*) &p.velocity[2], sizeof(double));
+        output.write((char*) &p.n_mini, sizeof(double));
+        output.write((char*) &p.size, sizeof(double));
+        output.write((char*) &p.mass, sizeof(double));
+        output.write((char*) &p.tau_d, sizeof(double));
+        output.write((char*) &p.temp_d, sizeof(double));
+        output.write((char*) &p.opac_planck, sizeof(double));
+        output.write((char*) &p.opac_abs, sizeof(double));
+        output.write((char*) &p.opac_scat, sizeof(double));
       }
       current_particles = total_particles;
       total_particles = total_particles + nparticles;
