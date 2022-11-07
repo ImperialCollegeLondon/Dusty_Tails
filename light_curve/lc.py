@@ -37,8 +37,9 @@ dt = np.dtype([('time', np.float64), ('extinction', np.float64), ('scattering', 
 dt2 = np.dtype([('lambda', np.float64), ('absorption', np.float64)])
 
 df_obs = pd.read_csv('KIC1255b_observed.csv', header=None)
-orb = ['0th', '1st', '2nd', 
-        '3rd'
+orb = ['0th', '1st', 
+        #'2nd', 
+        #'3rd'
         #, '4th' 
         #,'5th'
         ]
@@ -47,17 +48,19 @@ orb = ['0th', '1st', '2nd',
 # t0s = [0.5, 1.5, 2.5, 3.5, 4.5, 5.5]
 # directory = '../simulations/Olivine_SL/KIC1255b/'
 orb_l = ['$\\rm{0^{th}}$', '$\\rm{1^{st}}$', '$\\rm{2^{nd}}$', '$\\rm{3^{rd}}$', '$\\rm{4^{th}}$','$\\rm{5^{th}}$']
-orb_t = ['0.0', '1.0', '2.0', 
-        '3.0'
+orb_t = ['0.0', '1.0', 
+        #'2.0', 
+        #'3.0'
         #, '4.0'
         #, '5.0'
         ]
-t0s = [0.5, 1.5, 2.5
-        , 3.5
+t0s = [0.5, 1.5, 
+        #2.5
+        #, 3.5
         #, 4.5
        #, 5.5
         ]
-directory = '../simulations/Al2O3/KIC1255b/'
+directory = '../simulations/Mg08Fe12SiO4/KIC1255b/'
 
 lc_file = 'light_curve.bin'
 df = pd.read_csv('../input_grid.csv', header=None)
@@ -70,7 +73,11 @@ plt.xlabel(r'Orbital phase')
 plt.ylabel(r'Transit depth (%)')
 cs = ['tab:blue', 'tab:green', 'tab:red', 'tab:purple', 'tab:pink', 'tab:orange']
 i = 0
-for s in df[0]:
+
+sdist = 1
+
+if (sdist==0):
+  for s in df[0]:
     mdot = df[1][i]
     geom = df[2][i]
     if geom == 0:
@@ -83,6 +90,7 @@ for s in df[0]:
     plt.ylabel('Transit depth (%)')
     plt.xlim(-0.15,0.30)
     plt.minorticks_on()
+
     for o in orb:
         file = directory+o+'_orb/s'+str(s)+'_mdot'+str(mdot)+'_'+g+'_t'+orb_t[n]+'/'+lc_file
         print(file)
@@ -99,9 +107,39 @@ for s in df[0]:
         n+=1
     plt.legend(loc='lower right')
     plt.gca().invert_yaxis()
-    plt.savefig('../plots/Al2O3/orbits_'+str(mdot)+'mdot_'+str(s)+'micron_'+g+'.png')
+    plt.savefig('../plots/Mg08Fe12SiO4/sdist_1.75_mdot5.0_sph.png')
     plt.close()
     i+=1
+
+elif (sdist==1):
+
+    plt.figure(figsize=(26.0*cm,20.0*cm))
+    plt.xlabel('Orbital phase')
+    plt.ylabel('Transit depth (%)')
+    plt.xlim(-0.15,0.30)
+    plt.minorticks_on()
+    n = 0
+    for o in orb:
+        file = directory+'sdist_1.75_mdot5.0_sph_t'+orb_t[n]+'/'+lc_file
+        print(file)
+        data = np.fromfile(file, dt)
+        df_plot = pd.DataFrame(data)
+
+        if (o=='0th'):
+            y_line =[]
+            for t in df_plot['time']:
+                y_line.append(0.0)
+            plt.plot(df_plot['time']-t0s[n], y_line,'--', linewidth=0.6, c='tab:gray', alpha=1.0)
+            plt.plot(df_obs[0], -1.0*(df_obs[1]-1.0)*100, 'x', label='$\t{Kepler}$ data', ms=8.0, c='black') 
+   
+        plt.plot(df_plot['time']-t0s[n], -1.0*(df_plot['transit_depth']-1.0)*100,'-',label = orb_l[n]+' orbit', linewidth=1.5, ms=8.0, alpha=1.0, c = cs[n])
+        n+=1
+    plt.legend(loc='lower right')
+    plt.gca().invert_yaxis()
+    plt.savefig('../plots/Mg08Fe12SiO4/sdist_1.75_mdot5.0_sph.png')
+    plt.close()
+
+
 
 
 # files = [directory+'125/'+lc_file,
