@@ -124,8 +124,8 @@ void calculation_ext(vector <Particle>& particles, double (&ext)[r_cells][t_cell
                                     + cos(p_thetas[0])) * (p_phis[1] - p_phis[0]));
                       
                       old_ext = ext [r_index[i]][theta_index[j]][phi_index[k]];
-                      
-                      ext [r_index[i]][theta_index[j]][phi_index[k]] = old_ext + (partial_vol/ vol_element) * ((p.n_mini * p.mass * p.opac_planck) / (vol_element * pow(a, 3)));
+                      double opac_star = p.opac_abs + (p.opac_scat/(1.-p.gsca));
+                      ext [r_index[i]][theta_index[j]][phi_index[k]] = old_ext + (partial_vol/ vol_element) * ((p.n_mini * p.mass * opac_star) / (vol_element * pow(a, 3)));
             
 
                   }

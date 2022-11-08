@@ -46,7 +46,7 @@ uniform_real_distribution<double> uniform_theta_short(0.2, 0.8);
 uniform_real_distribution<double> uniform_phi(0.0, 1.0);
 uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 
-std::normal_distribution<double> ndist{1.75,0.60};
+std::normal_distribution<double> ndist{1.75,0.80};
 
 vector <dust_read> read_data(){
   std::fstream output;
@@ -73,10 +73,13 @@ vector <dust_read> read_data(){
 void add_particles(vector <Particle> &particles, long int &current_particles, long int &total_particles, double time){
 
     Particle grain;
+    double opac_abs_init, opac_scat_init, kappa_planck_init, gsca_init;
+    if (s_dist == 0) {
     double opac_abs_init = opac.stellar_abs(s_0);
     double opac_scat_init = opac.stellar_scat(s_0);
     double kappa_planck_init =  opac_abs_init + opac_scat_init;
     double gsca_init = opac.stellar_gsc(s_0);
+    } 
 
     long int current, total;
      //flag for continuing dust
@@ -159,6 +162,12 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
         
         grain.h_updated = 1.0e-4; //initial time step for numerical integrator
         grain.mass = dust_mass(grain.size); //initial particle mass
+        if (s_dist == 1) {
+        double opac_abs_init = opac.stellar_abs(grain.size);
+        double opac_scat_init = opac.stellar_scat(grain.size);
+        double kappa_planck_init =  opac_abs_init + opac_scat_init;
+        double gsca_init = opac.stellar_gsc(grain.size);
+        } 
         grain.opac_planck = kappa_planck_init; //initial rad pressure efficiency
         //initial particle temperature
         grain.temp_d = brent( grain.size, grain.position[0], 
