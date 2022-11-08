@@ -145,10 +145,11 @@ void  extinction_lc( vector <Particle>& particles, vector <vector <double>> &pat
                     
                      if (dA > 0.0) {
                      dA_cell = patches[h_index[i]][v_index[j]];
-                     cross_sec = (p.opac_planck * p.mass) / (pow(a, 2.0));
+                     double opac_star = p.opac_abs + (p.opac_scat/(1.-p.gsca));
+                     cross_sec = (opac_star * p.mass) / (pow(a, 2.0));
                      if (isnan(cross_sec)) {
                         cout << "OOPS: Cross section is NAN" << endl;
-                        cout << "planck opacity " << p.opac_planck << endl;
+                        cout << "opacity " << opac_star<< endl;
                         cout << "mass " << p.mass << endl;
                         cout << "semimajor axis " << a << endl;
                         cout << "area of cell " << dA_cell << endl; 
