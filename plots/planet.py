@@ -23,7 +23,7 @@ dt = np.dtype([('time', np.float64), ('id', np.int64), ('x', np.float64),
 # ('y', np.float64), ('z', np.float64), ('size', np.float64), ('mass', np.float64), ('tau', np.float64),
 # ('temp', np.float64), ('kappa', np.float64)])
 
-data = np.fromfile("../simulations/Mg08Fe12SiO4/KIC1255b/sdist_1.75_mdot5.0_sph_t0.0/output_struct.bin", dt)
+data = np.fromfile("/lustre/astro/bmce/Dusty_Tails/simulations/Mg08Fe12SiO4/KIC1255b/sdist_1.75_mdot5.0_sph_t1.0/output_struct.bin", dt)
 df = pd.DataFrame(data)
 print(df)
 
@@ -31,7 +31,7 @@ p_yprime = []
 p_xprime = []
 p_z = []
 
-t_0 = 0.5
+t_0 = 1.5
 
 # theta = []
 # """
@@ -119,15 +119,15 @@ for t in df['time'].unique():
      plot_df = df[df.time == t]
      fig = plt.figure()
      ax = fig.add_subplot(111)
-     ax.set_xlim(-2.0, 2.0)
-     ax.set_ylim(-2.0, 2.0)
+     ax.set_xlim(-1.0, 1.0)
+     ax.set_ylim(-1.0, 1.0)
      ax.set_aspect('equal')
      #ax.set_facecolor('black')
      ax.get_xaxis().set_visible(False)
      ax.get_yaxis().set_visible(False)
 
-     t_hours = 15.68* t
-     plt.title("time: %.2f hours" % t_hours)
+     #t_hours = 15.68* t
+     #plt.title("time: %.2f hours" % t_hours)
 
      y_behind = []
      z_behind = []
@@ -147,18 +147,18 @@ for t in df['time'].unique():
      
         if plot_df['x_planet'][plot_df.index[0]] <  0.0:
        
-            dust1 = plt.scatter(y_behind, z_behind, s= 0.01,  alpha=0.05, c='#008080', zorder=1)
+            dust1 = plt.scatter(y_behind, z_behind, s= 0.01,  alpha=0.05, c='#89604F', zorder=1)
             planet = plt.Circle((plot_df['y_planet'].iloc[0],plot_df['z_planet'].iloc[0]), 
             radius=0.01, linewidth=0,color='#010000',alpha=1.0, zorder=2)
             ax.add_patch(planet)
             star = plt.Circle((0.0,0.0), radius=0.36, linewidth=0, color='#ffcc00', zorder=3)
             ax.add_patch(star)
             
-            dust2 = plt.scatter(y_front, z_front, s=0.01, alpha = 0.05, c='#008080', zorder=4)
+            dust2 = plt.scatter(y_front, z_front, s=0.01, alpha = 0.05, c='#89604F', zorder=4)
             plt.savefig("./Mg08Fe12SiO4/cartoon/frontal/front_{0:01}.png".format(i))
             plt.close()
         else:
-            dust1 = plt.scatter(y_behind, z_behind, s= 0.01, alpha=0.05, c='#008080', zorder=1)
+            dust1 = plt.scatter(y_behind, z_behind, s= 0.01, alpha=0.05, c='#89604F', zorder=1)
             #star = plt.scatter(0.0, 0.0, s=10000.0, c='#ffcc00')
             star = plt.Circle((0.0,0.0), radius=0.36, linewidth=0, color='#ffcc00', zorder=2)
             #c = matplotlib.collections.PatchCollection(circles)
@@ -166,7 +166,7 @@ for t in df['time'].unique():
             planet = plt.Circle((plot_df['y_planet'].iloc[0],plot_df['z_planet'].iloc[0]), 
             radius=0.01, linewidth=0,color='#010000',alpha=1.0, zorder=3)
             ax.add_patch(planet)
-            dust2 = plt.scatter(y_front, z_front, s=0.01, alpha = 0.05, c='#008080', zorder=4)
+            dust2 = plt.scatter(y_front, z_front, s=0.01, alpha = 0.05, c='#89604F', zorder=4)
             plt.savefig("./Mg08Fe12SiO4/cartoon/frontal/front_{0:01}.png".format(i))
             plt.close()
      else:

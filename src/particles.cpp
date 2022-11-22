@@ -46,7 +46,7 @@ uniform_real_distribution<double> uniform_theta_short(0.2, 0.8);
 uniform_real_distribution<double> uniform_phi(0.0, 1.0);
 uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 
-std::normal_distribution<double> ndist{1.75,0.80};
+std::normal_distribution<double> ndist{1.75,0.60};
 
 vector <dust_read> read_data(){
   std::fstream output;
@@ -324,6 +324,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
       long int total = particles.size();
       cout << "Obtaining light curve..." << endl;
       light_curve(particles, current_t);
+      if (s_dist == 1) {
       for( Particle& p : particles) {
         output.write((char*) &current_t, sizeof(double));
         output.write((char*) &p.id, sizeof(long int));
@@ -341,6 +342,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         output.write((char*) &p.opac_planck, sizeof(double));
         output.write((char*) &p.opac_abs, sizeof(double));
         output.write((char*) &p.opac_scat, sizeof(double));
+      }
       }
       current_particles = total_particles;
       total_particles = total_particles + nparticles;
