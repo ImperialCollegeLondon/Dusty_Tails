@@ -37,7 +37,8 @@ dt = np.dtype([('time', np.float64), ('extinction', np.float64), ('scattering', 
 dt2 = np.dtype([('lambda', np.float64), ('absorption', np.float64)])
 
 df_obs = pd.read_csv('KIC1255b_observed.csv', header=None)
-orb = ['0th', '1st', 
+orb = [#'0th', 
+        '1st', 
         #'2nd', 
         #'3rd'
         #, '4th' 
@@ -48,19 +49,22 @@ orb = ['0th', '1st',
 # t0s = [0.5, 1.5, 2.5, 3.5, 4.5, 5.5]
 # directory = '../simulations/Olivine_SL/KIC1255b/'
 orb_l = ['$\\rm{0^{th}}$', '$\\rm{1^{st}}$', '$\\rm{2^{nd}}$', '$\\rm{3^{rd}}$', '$\\rm{4^{th}}$','$\\rm{5^{th}}$']
-orb_t = ['0.0', '1.0', 
+orb_t = [#'0.0', 
+        '1.0', 
         #'2.0', 
         #'3.0'
         #, '4.0'
         #, '5.0'
         ]
-t0s = [0.5, 1.5, 
+t0s = [#0.5, 
+        1.5, 
         #2.5
         #, 3.5
         #, 4.5
        #, 5.5
         ]
-directory = '../simulations/Mg08Fe12SiO4/KIC1255b/'
+        
+directory = '/lustre/astro/bmce/Dusty_Tails/simulations/Mg08Fe12SiO4/nov22/KIC1255b/'
 
 lc_file = 'light_curve.bin'
 df = pd.read_csv('../input_grid.csv', header=None)
@@ -68,13 +72,14 @@ files = []
 labels = []
 cm = 1/2.54
 
-
+dust = ['Mg08Fe12SiO4','MgFeSiO4', 'Olivine_SL','Olivine_SC']
+dust_l = ['$\\rm{Mg_{0.80}Fe_{1.20}SiO_{4}}$','$\\rm{Mg_{1.00}Fe_{1.00}SiO_{4}}$', '$\\rm{Mg_{1.56}Fe_{0.40}Si_{0.91}O_{4}}$', '$\\rm{Mg_{1.72}Fe_{0.21}SiO_4}$' ]
 plt.xlabel(r'Orbital phase')
 plt.ylabel(r'Transit depth (%)')
 cs = ['tab:blue', 'tab:green', 'tab:red', 'tab:purple', 'tab:pink', 'tab:orange']
 i = 0
 
-sdist = 1
+sdist = 0
 
 if (sdist==0):
   for s in df[0]:
@@ -85,30 +90,34 @@ if (sdist==0):
     else:
         g = 'sph'
     n=0
-    plt.figure(figsize=(26.0*cm,20.0*cm))
-    plt.xlabel('Orbital phase')
-    plt.ylabel('Transit depth (%)')
-    plt.xlim(-0.15,0.30)
-    plt.minorticks_on()
+    if ((s==2.5) and (mdot==2.0) and (geom==1)):
 
-    for o in orb:
-        file = directory+o+'_orb/s'+str(s)+'_mdot'+str(mdot)+'_'+g+'_t'+orb_t[n]+'/'+lc_file
-        print(file)
-        data = np.fromfile(file, dt)
-        df_plot = pd.DataFrame(data)
-        if (o=='0th'):
-            y_line =[]
-            for t in df_plot['time']:
-                y_line.append(0.0)
-            plt.plot(df_plot['time']-t0s[n], y_line,'--', linewidth=0.6, c='tab:gray', alpha=1.0)
-            plt.plot(df_obs[0], -1.0*(df_obs[1]-1.0)*100, 'x', label='$\t{Kepler}$ data', ms=8.0, c='black') 
-   
-        plt.plot(df_plot['time']-t0s[n], -1.0*(df_plot['transit_depth']-1.0)*100,'-',label = orb_l[n]+' orbit', linewidth=1.5, ms=8.0, alpha=1.0, c = cs[n])
-        n+=1
-    plt.legend(loc='lower right')
-    plt.gca().invert_yaxis()
-    plt.savefig('../plots/Mg08Fe12SiO4/sdist_1.75_mdot5.0_sph.png')
-    plt.close()
+        plt.figure(figsize=(26.0*cm,20.0*cm))
+        plt.xlabel('Orbital phase')
+        plt.ylabel('Transit depth (%)')
+        plt.xlim(-0.15,0.30)
+        plt.minorticks_on()
+
+        for d in dust:
+            directory = '/lustre/astro/bmce/Dusty_Tails/simulations/'+d+'/nov22/KIC1255b/'
+            file = directory+orb[0]+'_orb/s'+str(s)+'_mdot'+str(mdot)+'_'+g+'_t'+orb_t[0]+'/'+lc_file
+            print(file)
+            data = np.fromfile(file, dt)
+            df_plot = pd.DataFrame(data)
+            if (n==0):
+                y_line =[]
+                for t in df_plot['time']:
+                    y_line.append(0.0)
+                plt.plot(df_plot['time']-t0s[n], y_line,'--', linewidth=0.6, c='tab:gray', alpha=1.0)
+                plt.plot(df_obs[0], -1.0*(df_obs[1]-1.0)*100, 'x', label='$\t{Kepler}$ data', ms=8.0, c='black') 
+    
+            plt.plot(df_plot['time']-t0s[0], -1.0*(df_plot['transit_depth']-1.0)*100,'-',label = dust_l[n], linewidth=1.5, ms=8.0, alpha=1.0, c = cs[n])
+            n+=1
+
+        plt.legend(loc='lower right')
+        plt.gca().invert_yaxis()
+        plt.savefig('../plots/various_lcs.png')
+        plt.close()
     i+=1
 
 elif (sdist==1):
@@ -139,6 +148,65 @@ elif (sdist==1):
     plt.savefig('../plots/Mg08Fe12SiO4/sdist_1.75_mdot5.0_sph.png')
     plt.close()
 
+
+
+
+# if (sdist==0):
+#   for s in df[0]:
+#     mdot = df[1][i]
+#     geom = df[2][i]
+#     if geom == 0:
+#         g = 'day'
+#     else:
+#         g = 'sph'
+#     n=0
+#     if ((s==2.0) and (mdot==2.0) and (geom==1)):
+
+#         plt.figure(figsize=(26.0*cm,20.0*cm))
+#         plt.xlabel('Orbital phase')
+#         plt.ylabel('Transit depth (%)')
+#         plt.xlim(-0.15,0.30)
+#         plt.minorticks_on()
+
+#         file = directory+orb[0]+'_orb/s'+str(s)+'_mdot'+str(mdot)+'_'+g+'_t'+orb_t[n]+'/'+lc_file
+#         print(file)
+#         data = np.fromfile(file, dt)
+#         df_plot = pd.DataFrame(data)
+#         times = np.arange(0,df_plot['time'].size,1)
+#         y_line =[]
+#         for t in df_plot['time']:
+#                  y_line.append(0.0)
+#         for t in times:
+#             plt.figure(figsize=(26.0*cm,20.0*cm))
+#             plt.xlabel('Orbital phase')
+#             plt.ylabel('Transit depth (%)')
+#             plt.xlim(-0.15,0.30)
+#             plt.minorticks_on()
+#             print(df_plot['time'].iloc[:t])
+#             plt.plot(df_plot['time']-t0s[n], y_line,'--', linewidth=0.6, c='tab:gray', alpha=1.0)
+#             #plt.plot(df_obs[0], -1.0*(df_obs[1]-1.0)*100, 'x', label='$\t{Kepler}$ data', ms=8.0, c='black')
+#             plt.plot(df_plot['time'].iloc[:t]-t0s[n], -1.0*(df_plot['transit_depth'].iloc[:t]-1.0)*100,'-', linewidth=1.5, ms=8.0, alpha=1.0, c = cs[n])
+#             #plt.legend(loc='lower right')
+#             plt.gca().invert_yaxis()
+#             plt.ylim(0.55,-0.02)
+#             plt.savefig('../plots/Mg08Fe12SiO4/light_curves/lc_'+str(t)+'.png')
+#             plt.close()
+#     i+=1
+#     #     if (o=='0th'):
+#     #         y_line =[]
+#     #         for t in df_plot['time']:
+#     #             y_line.append(0.0)
+#     #         plt.plot(df_plot['time']-t0s[n], y_line,'--', linewidth=0.6, c='tab:gray', alpha=1.0)
+#     #         plt.plot(df_obs[0], -1.0*(df_obs[1]-1.0)*100, 'x', label='$\t{Kepler}$ data', ms=8.0, c='black') 
+   
+#     #     plt.plot(df_plot['time']-t0s[n], -1.0*(df_plot['transit_depth']-1.0)*100,'-',label = orb_l[n]+' orbit', linewidth=1.5, ms=8.0, alpha=1.0, c = cs[n])
+#     #     n+=1
+
+#     # plt.legend(loc='lower right')
+#     # plt.gca().invert_yaxis()
+#     # plt.savefig('../plots/Mg08Fe12SiO4/light_curves/s'+str(s)+'_mdot'+str(mdot)+'_'+g+'.png')
+#     # plt.close()
+#     # i+=1
 
 
 
