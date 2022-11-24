@@ -113,7 +113,7 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
     }
     
     current = particles.size();
-    int current_id = (time/0.01) *250;
+    int current_id = (time/major_timestep) *nparticles;
     total = current + nparticles;
     for ( unsigned long int i = current; i < total; i++){
         double phi,theta;
@@ -255,7 +255,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         s_phi.shrink_to_fit();
         s_phi = splines_phi(tau, radii_v, thetas_v, phis_v);
 
-        t_global_min = 5.0e-3;
+        t_global_min = 2.5e-3;
        
     } 
 
