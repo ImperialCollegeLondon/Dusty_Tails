@@ -232,8 +232,8 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
   //Intepolator needs grid in vector format.
   
     radii_v  = r_grid_to_vector(r_a);
-    thetas_v = t_grid_to_vector(theta_a);
-    phis_v   = p_grid_to_vector(phi_a);
+    thetas_v = t_grid_to_vector(theta_b);
+    phis_v   = p_grid_to_vector(phi_b);
 
 
   while (current_t < end_t) {
@@ -255,7 +255,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         s_phi.shrink_to_fit();
         s_phi = splines_phi(tau, radii_v, thetas_v, phis_v);
 
-        t_global_min = 2.5e-3;
+        t_global_min = 5.0e-3;
        
     } 
 
