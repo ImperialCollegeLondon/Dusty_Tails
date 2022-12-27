@@ -391,7 +391,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
             for (unsigned long int j =0; j < p_cells; j++ ) {
                 output_tau.write((char*) &thetas_v[i], sizeof(double));
                 output_tau.write((char*) &phis_v[j], sizeof(double));
-                output_tau.write((char*) &optical_depth[r_cells-1][i][j], sizeof(double));
+                output_tau.write((char*) &optical_depth[r_cells][i][j], sizeof(double));
             }
         }
       }
