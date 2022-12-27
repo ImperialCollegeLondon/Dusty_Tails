@@ -398,7 +398,7 @@ for( Particle& p : particles) {
       //forward scattering
         if (p.pos_dp[0]>0.0) {
         p.f_scat = forward_scat(p.gsca, 
-                 p.opac_scat, p.mass, p.pos_dp[0]*a, p.pos_dp[1]*a, 
+                 p.opac_scat/(1.-p.gsca), p.mass, p.pos_dp[0]*a, p.pos_dp[1]*a, 
                  p.pos_dp[2]*a, p.size, p.tau_d, p.n_mini);
         forward_flux = forward_flux + p.f_scat;
         } else {
