@@ -46,7 +46,7 @@ uniform_real_distribution<double> uniform_theta_short(0.2, 0.8);
 uniform_real_distribution<double> uniform_phi(0.0, 1.0);
 uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 
-std::normal_distribution<double> ndist{1.75,0.60};
+std::normal_distribution<double> ndist{2.00,1.00};
 
 vector <dust_read> read_data(){
   std::fstream output;
@@ -380,7 +380,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         counter +=1;
       }
 
-      if (tau_constant == true){
+      
       
         memset(extinction, 0.0, sizeof(extinction));
         memset(optical_depth, 0.0, sizeof(optical_depth));
@@ -394,7 +394,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
                 output_tau.write((char*) &optical_depth[r_cells][i][j], sizeof(double));
             }
         }
-      }
+      
       }
      auto stop = high_resolution_clock::now();
      auto duration = duration_cast<seconds>(stop - start);
