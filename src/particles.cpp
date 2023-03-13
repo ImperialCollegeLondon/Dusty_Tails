@@ -44,8 +44,6 @@ uniform_real_distribution<double> uniform_theta_short(0.2, 0.8);
 uniform_real_distribution<double> uniform_phi(0.0, 1.0);
 uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 
-std::normal_distribution<double> ndist{mu_size,std_size};
-std::lognormal_distribution<double> lognormdist(log(mu_size), log(std_size));
 
 vector <dust_read> read_data(){
   std::fstream output;
@@ -70,7 +68,8 @@ vector <dust_read> read_data(){
 //as arguments it takes the vector of particles, the current number of particles,
 //the total of particles we want to get and the current time in the simulation
 void add_particles(vector <Particle> &particles, long int &current_particles, long int &total_particles, double time){
-    cout << "at add particles " << endl;
+    std::normal_distribution<double> ndist{mu_size, std_size};
+    std::lognormal_distribution<double> lognormdist(log(mu_size), log(std_size));
     Particle grain;
     double opac_abs_init, opac_scat_init, kappa_planck_init, gsca_init;
     if (s_dist == 0) {
@@ -220,7 +219,6 @@ void rm_particles(vector <Particle>& particles){
 void solve_particles(double total_t, double end_t, vector <Particle>& particles, \
                      long int total_particles, long int current_particles){
 
-  cout << "at particle solver " << endl;
   double current_t = total_t;
   double plot_time = total_t;
   double t_next = total_t; 
