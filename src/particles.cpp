@@ -28,8 +28,6 @@ long int counter = 0;
 //open files to write data for python plotting
 ofstream output("./data/output.bin", ios::out | ios::binary);
 ofstream output_tau("./data/tau_data.bin", ios::out | ios::binary);
-//ofstream output_tau_test("./data/tau_test.bin", ios::out | ios::binary);
-//ofstream ray_tracer("./data/grid_test.bin", ios::out | ios::binary);
 ofstream output_final("./data/output_final.bin", ios::out | ios::binary);
 
 //spacing of grid cells in scale of particle distribution
@@ -46,7 +44,8 @@ uniform_real_distribution<double> uniform_theta_short(0.2, 0.8);
 uniform_real_distribution<double> uniform_phi(0.0, 1.0);
 uniform_real_distribution<double> uniform_theta(0.0, 1.0);
 
-std::normal_distribution<double> ndist{2.00,1.00};
+std::normal_distribution<double> ndist{mu_size,std_size};
+std::lognormal_distribution<double> lognormdist(log(mu_size), log(std_size));
 
 vector <dust_read> read_data(){
   std::fstream output;
@@ -71,7 +70,7 @@ vector <dust_read> read_data(){
 //as arguments it takes the vector of particles, the current number of particles,
 //the total of particles we want to get and the current time in the simulation
 void add_particles(vector <Particle> &particles, long int &current_particles, long int &total_particles, double time){
-
+    cout << "at add particles " << endl;
     Particle grain;
     double opac_abs_init, opac_scat_init, kappa_planck_init, gsca_init;
     if (s_dist == 0) {
@@ -143,11 +142,19 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
         if (s_dist == 0) {
         grain.size = s_0; //initial grain size
         grain.n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(s_0, 3));
-        } else if (s_dist ==1) {
+        } 
+        else if (s_dist ==1) {
             double size_temp;
-            size_temp = ndist(generator)* 1.0e-4;
-            while (size_temp <= (0.01* 1.0e-4)) {
+            if (normal_dist == 0) {
                 size_temp = ndist(generator)* 1.0e-4;
+                while (size_temp <= (0.01* 1.0e-4)) {
+                    size_temp = ndist(generator)* 1.0e-4; 
+                }
+            } else {
+                size_temp = lognormdist(generator)*1.0e-4;
+                while (size_temp <= (0.01 * 1.0e-4)){
+                    size_temp = lognormdist(generator)*1.0e-4;
+                }
             }
             grain.size = size_temp;
             grain.n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(grain.size, 3));
@@ -193,7 +200,7 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
 //Argument is the vector of particles
 bool _predicate(Particle& element) {
     
-    return (element.size <= 1.0e-6); 
+    return (element.size <= 1.0e-5); 
     }
 void rm_particles(vector <Particle>& particles){
 
@@ -212,6 +219,8 @@ void rm_particles(vector <Particle>& particles){
 
 void solve_particles(double total_t, double end_t, vector <Particle>& particles, \
                      long int total_particles, long int current_particles){
+
+  cout << "at particle solver " << endl;
   double current_t = total_t;
   double plot_time = total_t;
   double t_next = total_t; 

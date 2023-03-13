@@ -33,7 +33,7 @@ vector <Particle> particles; //initiate vector of "Particle" (Object defined in 
 //variable declaration for input file reading
 
 int in_c = 0;
-int tau_type, outflow, s_dist;
+int tau_type, outflow, s_dist, normal_dist;
 int cont = 0;
 string T_int_s;
 string outflow_s;
@@ -65,7 +65,7 @@ double ang_vel;
  double Period_days, T, a, m_planet, r_planet, r_start, r_planet_dim, r_h, Temp_p;
 
 //Dust parameters:
- double A, Bp, rho_d, mu, alpha;
+ double A, Bp, rho_d, mu, alpha, mu_size, std_size;
 
 //Outflow parameters:
  double mdot, v_esc, v_th, mu_gas;
@@ -180,7 +180,7 @@ int main() {
 
       }
       if (in_c ==2) {
-        outflow = outflow = stoi(line.substr(0,2));
+        outflow = stoi(line.substr(0,2));
 
          if (outflow==1)  {
           cout << "Outflow is radially outwards from the whole planetary surface." << endl;
@@ -213,10 +213,26 @@ int main() {
         if (s_dist ==0) {
           cout << "All particles have the same initial size." << endl;
         } else {
-          cout << "Particles size is normally distrubuted, centered at 1.75micron." << endl;
+          cout << "Particles sizes are distributed." << endl;
         }
       }
-      if (in_c == 7){
+      if (in_c ==7 and s_dist ==1){
+        normal_dist = stoi(line.substr(0,2));
+        if (normal_dist == 0) {
+        cout << "Sizes are normally distributed." << endl;
+        } else {
+          cout << "Sizes are log-normally distributed." << endl;
+        }
+      }
+      if (in_c == 8 and s_dist == 1){
+        mu_size = stod(line.substr(0,4));
+        cout << "Particle mean size is " << mu_size << " microns." << endl;
+      }
+      if (in_c == 9 and s_dist == 1){
+        std_size = stod(line.substr(0,4));
+        cout << "Standard deviation of particle size is " << std_size << " microns." << endl;
+      }
+      if (in_c == 10){
         composition = line.substr(0,18);
       }
       in_c = in_c + 1;
@@ -440,7 +456,7 @@ cout << "\n" ;
 
 
 
-opacity_dir = "../../opacs_jankovic/calc_dust_opac/"+opac_data+"/opac_";
+opacity_dir = "./opacs_jankovic/calc_dust_opac/"+opac_data+"/opac_";
 
 int T_int { static_cast<int> (Temp)};
 T_int_s = to_string(T_int);
@@ -451,7 +467,7 @@ opac.read_data((opacity_dir+"temp.dat").c_str(), (opacity_dir+"sizes.dat").c_str
         (opacity_dir+"planck_gsc_tstar"+T_int_s+".dat").c_str(),
         (opacity_dir+"planck_abs.dat").c_str(), (opacity_dir+"planck_sca.dat").c_str(),
         true);
-
+cout << "Read opacity data." << endl;
         
 //initiation parameters
 long int total_particles = nparticles; //initial number of particles to start simulation with
@@ -465,7 +481,7 @@ long int current_particles = 0; // number of current particles in simulation
 //grid built if optical depth is to be traced
 
   build_grids(r_a, r_b, theta_a, theta_b, dr, dtheta, dphi, phi_a, phi_b, r_min, theta_min, phi_min); //grid for optical depth calculations
-  //cout << "Built grid for optical depth tracing." << endl;
+  cout << "Built grid for optical depth tracing." << endl;
   
 
   //add first particles

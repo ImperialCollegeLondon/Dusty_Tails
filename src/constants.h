@@ -43,13 +43,13 @@ extern double r_star_a;
 extern  double Period_days, T, a, m_planet, r_planet, r_start, r_planet_dim, r_h, b_p;
 
 //Dust parameters:
-extern  double A, Bp, rho_d, s_0,alpha, mu;
+extern  double A, Bp, rho_d, s_0,alpha, mu, mu_size, std_size;
 extern  string opac_data, opacity_dir;
 extern  string comp, outflow_s, T_int_s, output_file;
 
 //Outflow parameters:
 extern double mdot, v_esc, mdot_read, v_th, mu_gas;
-extern int outflow, tau_type, s_dist;
+extern int outflow, tau_type, s_dist, normal_dist;
 extern bool tau_constant;
 extern int cont;
 extern double nparticles, major_timestep;
