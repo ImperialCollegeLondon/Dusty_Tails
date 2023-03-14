@@ -69,7 +69,7 @@ vector <dust_read> read_data(){
 //the total of particles we want to get and the current time in the simulation
 void add_particles(vector <Particle> &particles, long int &current_particles, long int &total_particles, double time){
     std::normal_distribution<double> ndist{mu_size, std_size};
-    std::lognormal_distribution<double> lognormdist(log(mu_size), log(std_size));
+    std::lognormal_distribution<double> lognormdist(mu_size, std_size);
     Particle grain;
     double opac_abs_init, opac_scat_init, kappa_planck_init, gsca_init;
     if (s_dist == 0) {
