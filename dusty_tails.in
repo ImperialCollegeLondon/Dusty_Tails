@@ -1,7 +1,0 @@
-STAR:   T= 4550.0  M= 0.67   R= 0.66
-PLANET: P= 15.68   M= 0.03   R= 0.33   b= 0.6    
-DUST:   s0= 2.0    comp= Mg08Fe12SiO4
-GRID:   rmin= 0.98   rmax= 1.10   tmin= 1.55   tmax= 1.60   pmin= 0.30   pmax= 0.05     //note pmin is read as negative!
-OUTFLOW: sph= 1   mdot= 1.0    tau= 1        //sph=1, spherical, sph=0 dayside, tau=1 for constant optical depth, tau=0 for optical depth tracing
-RUN:   Dt= 5e-3   orbits=0.10  npart= 250    cont=0   tinit=0.0
-LC:    t0= 0.50   earth_star= 607.917         //t0 is time to star lc, and earth_star is the star to observer distance in parsec

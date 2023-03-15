@@ -30,26 +30,28 @@ double Temp , T, mbig,n_mini,m_star, a_p, inclination, r_star;
 string opacity_dir;
 string opac_data;
 Opacities opac;
-ofstream output("./output.bin", ios::out | ios::binary); 
+ofstream output_miri("./output_miri.bin", ios::out | ios::binary);
+ofstream output_prism("./output_prism.bin", ios::out | ios::binary);
 
-struct dust_read {
-   double timestamp;
-   long int id;
-   double x_dust;
-   double y_dust;
-   double z_dust;
-   double vx_dust;
-   double vy_dust;
-   double vz_dust;
-   double s_dust;
-   double h_dust;
-   double m_dust;
-   double temp_dust;
-   double tau_dust;
-   double kappa_dust_abs;
-   double kappa_dust_scat;
-   double kappa_planck;
-};
+// struct dust_read{
+//     double timestamp;
+//     long int id;
+//     double x_dust;
+//     double y_dust;
+//     double z_dust;
+//     double vx_dust;
+//     double vy_dust;
+//     double vz_dust;
+//     double nmini;
+//     double s_dust;
+//     double m_dust;
+//     double tau_dust;
+//     double temp_dust;
+//     double kappa_planck;
+//     double kappa_dust_abs;
+//     double kappa_dust_scat;
+    
+// };
 
 struct dust {
    double timestamp;
@@ -61,9 +63,31 @@ struct dust {
    double y_dp;
    double z_dp;
    double m;
+   double nmini;
    double kappa;
    double kappa_scat;
    double size;
+};
+
+struct dust_read
+{
+   double timestamp;
+   long int id;
+   double x_dust;
+   double y_dust;
+   double z_dust;
+   double vx_dust;
+   double vy_dust;
+   double vz_dust;
+   double s_dust;
+   double nmini;
+   double h_dust;
+   double m_dust;
+   double temp_dust;
+   double tau_dust;
+   double kappa_dust_abs;
+   double kappa_dust_scat;
+   double kappa_planck;
 };
 
 template<typename T>
@@ -94,94 +118,93 @@ vector<double> linspace(T start_in, T end_in, int num_in){
 }
 
 void Opacities::read_data(const char *s_lambda_table, const char *s_size_table,
-                     const char *s_stellar_abs_table, const char *s_stellar_scat_table,
-                     const char *s_particle_abs_table, const char *s_particle_scat_table,
-                     bool log_tables_n)
+                          const char *s_stellar_abs_table, const char *s_stellar_scat_table,
+                          const char *s_particle_abs_table, const char *s_particle_scat_table,
+                          bool log_tables_n)
 {
-    // open files
-    
-    FILE *f_lambda_table = fopen(s_lambda_table, "r");
-    FILE *f_size_table = fopen(s_size_table, "r");
-    FILE *f_stellar_abs_table = fopen(s_stellar_abs_table, "r");
-    FILE *f_stellar_scat_table = fopen(s_stellar_scat_table, "r");
-    FILE *f_particle_abs_table = fopen(s_particle_abs_table, "r");
-    FILE *f_particle_scat_table = fopen(s_particle_scat_table, "r");
+  // open files
 
-    
-    // declare variables
-    double x;
+  FILE *f_lambda_table = fopen(s_lambda_table, "r");
+  FILE *f_size_table = fopen(s_size_table, "r");
+  FILE *f_stellar_abs_table = fopen(s_stellar_abs_table, "r");
+  FILE *f_stellar_scat_table = fopen(s_stellar_scat_table, "r");
+  FILE *f_particle_abs_table = fopen(s_particle_abs_table, "r");
+  FILE *f_particle_scat_table = fopen(s_particle_scat_table, "r");
 
-    // read wavelength and size tables from files
-    lambda_table = {};
-    while (fscanf(f_lambda_table, "%lf ", &x) != EOF) {
-        lambda_table.push_back(x);
-    }
-        
-    size_table = {};
-    while (fscanf(f_size_table, "%lf ", &x) != EOF){
-        size_table.push_back(x);}
-       
+  // declare variables
+  double x;
 
-    // keep table dimensions
-    lambda_table_length = lambda_table.size();
-    size_table_length = size_table.size();
-    cout << "Read lambda and size tables " << endl;
-    cout << "lambda length " << lambda_table_length << endl;
-    // read absorption and scattering coefficients to stellar radiation
-    stellar_abs_table = {};
-    for (int i=0; i<size_table_length; i++)
-    {   
-       
-        fscanf(f_stellar_abs_table, "%lf", &x);
-        stellar_abs_table.push_back(x);
-        
-    }
-    
-    stellar_scat_table = {};
-    for (int i=0; i<size_table_length; i++)
-    {
-        fscanf(f_stellar_scat_table, "%lf", &x);
-        stellar_scat_table.push_back(x);
-    }
-    cout << "read stellar abs and scat tables " << endl;
-    // read absorption and scattering coefficients to particle own radiation
-    particle_abs_table = {};
-    for (int i=0; i<size_table_length; i++)
-    {
-        vector<double> opac_line = {};
-        for (int j=0; j<lambda_table_length; j++)
-        {
-            
-            fscanf(f_particle_abs_table, "%lf", &x);
-            
-            opac_line.push_back(x);
+  // read wavelength and size tables from files
+  lambda_table = {};
+  while (fscanf(f_lambda_table, "%lf ", &x) != EOF)
+  {
+      lambda_table.push_back(x);
+  }
 
-        }
-        particle_abs_table.push_back(opac_line);
-    }
+  size_table = {};
+  while (fscanf(f_size_table, "%lf ", &x) != EOF)
+  {
+      size_table.push_back(x);
+  }
 
-    particle_scat_table = {};
-    for (int i=0; i<size_table_length; i++)
-    {
-        vector<double> opac_line = {};
-        for (int j=0; j<lambda_table_length; j++)
-        {
-            fscanf(f_particle_scat_table, "%lf", &x);
-            opac_line.push_back(x);
-        }
-        particle_scat_table.push_back(opac_line);
-    }
-   
-    // set whether the temperature and size tables are log-spaced
-    log_tables = log_tables_n;
+  // keep table dimensions
+  lambda_table_length = lambda_table.size();
+  size_table_length = size_table.size();
+  cout << "Read lambda and size tables " << endl;
+  cout << "lambda length " << lambda_table_length << endl;
+  // read absorption and scattering coefficients to stellar radiation
+  stellar_abs_table = {};
+  for (int i = 0; i < size_table_length; i++)
+  {
 
-    // close files
-    fclose(f_lambda_table);
-    fclose(f_size_table);
-    fclose(f_stellar_abs_table);
-    fclose(f_stellar_scat_table);
-    fclose(f_particle_abs_table);
-    fclose(f_particle_scat_table);
+      fscanf(f_stellar_abs_table, "%lf", &x);
+      stellar_abs_table.push_back(x);
+  }
+
+  stellar_scat_table = {};
+  for (int i = 0; i < size_table_length; i++)
+  {
+      fscanf(f_stellar_scat_table, "%lf", &x);
+      stellar_scat_table.push_back(x);
+  }
+  cout << "read stellar abs and scat tables " << endl;
+  // read absorption and scattering coefficients to particle own radiation
+  particle_abs_table = {};
+  for (int i = 0; i < size_table_length; i++)
+  {
+      vector<double> opac_line = {};
+      for (int j = 0; j < lambda_table_length; j++)
+      {
+
+          fscanf(f_particle_abs_table, "%lf", &x);
+
+          opac_line.push_back(x);
+      }
+      particle_abs_table.push_back(opac_line);
+  }
+
+  particle_scat_table = {};
+  for (int i = 0; i < size_table_length; i++)
+  {
+      vector<double> opac_line = {};
+      for (int j = 0; j < lambda_table_length; j++)
+      {
+          fscanf(f_particle_scat_table, "%lf", &x);
+          opac_line.push_back(x);
+      }
+      particle_scat_table.push_back(opac_line);
+  }
+
+  // set whether the temperature and size tables are log-spaced
+  log_tables = log_tables_n;
+
+  // close files
+  fclose(f_lambda_table);
+  fclose(f_size_table);
+  fclose(f_stellar_abs_table);
+  fclose(f_stellar_scat_table);
+  fclose(f_particle_abs_table);
+  fclose(f_particle_scat_table);
 }
 
 vector <dust_read> read_data(){
@@ -195,17 +218,10 @@ vector <dust_read> read_data(){
   for(int i = 0; i < total; i++){
        dust_grains_out.push_back(dust_read());
        input.read((char *) &dust_grains_out[i], sizeof(dust_read));
-       
-
-       if (dust_grains_out[i].id == 0) {
-
-          //dust_grains_out.erase(dust_grains_out.end());
-          dust_grains_out.pop_back();
-
-          break;
-          
+       if (dust_grains_out[i].timestamp == 0) {
+        dust_grains_out.pop_back();
+        break;
        }
-
     }
    input.close();
    cout << "successfully read the data" << endl;
@@ -358,7 +374,7 @@ using namespace std;
          mdot_read = stod(line.substr(0,5));
       }
       if (in_c ==5){
-        t0 = stod(line.substr(0,4));
+        t0 = stod(line.substr(0,5));
         cout << "t0 " << t0 << endl;
       }
       in_c = in_c + 1;
@@ -406,18 +422,17 @@ using namespace std;
       mbig = (mdot * T * 0.01) / no_p ; // 0.01 dependent on when particles are being thrown out of planet
       n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(s_0, 3));
       cout << "n_mini " << n_mini << endl;
-      m_star = 0.66; //stellar mass in solar masses
-      double Rstar = 0.67; //stellar radius in solar radii
+      m_star = 0.67; //stellar mass in solar masses
+      double Rstar = 0.66; //stellar radius in solar radii
       double b_p = 0.6; //planetary impact parameter
       a_p = pow((G_cgs*m_star*Msun_cgs* pow(T, 2.0))/ (4.0*pow(PI, 2.0)), 1.0/3.0); //semi major axis in cgs
       inclination = acos((Rstar*Rsun_cgs*b_p)/a_p); //in radians
+      cout << "inclination " << inclination << endl;
       r_star = (Rstar*Rsun_cgs)/a_p; //stellar radius in terms of the semimajor axis
    } else {
       Temp = 3879.0;
       T = 9.146*60.*60.; //planetary period in seconds
       mbig = (mdot * T * 0.01) / no_p ; // 0.01 dependent on when particles are being thrown out of planet
-      n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(s_0, 3));
-      cout << "n_mini " << n_mini << endl;
       m_star = 0.60; //stellar mass in solar masses
       double Rstar = 0.58; //stellar radius in solar radii
       double b_p = 0.65;
@@ -427,7 +442,8 @@ using namespace std;
       
    }
    vector <double> period_steps = {};
-   vector <double> miri_lambda = {};
+   vector <double> miri_mrs_lambda = {};
+   vector <double> nirspec_prism_lambda = {};
    vector <dust_read> particles_read;
    vector <dust> particles;
    particles_read = read_data();
@@ -440,8 +456,8 @@ using namespace std;
    string T_int_s = to_string(T_int);
 
 
-   miri_lambda = linspace(5.0e-4, 28.0e-4, 230);
-
+   miri_mrs_lambda = linspace(5.0e-4, 28.3e-4, 6000); //using R~3000
+   nirspec_prism_lambda = linspace(0.6e-4, 5.3e-4, 156); //R~100
    opacity_dir = "./opacs_jankovic/calc_dust_opac/"+opac_data+"/opac_";
    
    opac.read_data((opacity_dir+"wavelength.dat").c_str(), (opacity_dir+"sizes.dat").c_str(),
@@ -458,7 +474,7 @@ using namespace std;
         double key = p.timestamp;
         if (find(timestamps.begin(), timestamps.end(), key) == timestamps.end()) {
            timestamps.push_back(key);
-           cout << key << endl;
+           cout << "timestamp is " << key << endl;
        }
         particles[counter].phi = 2.0*PI * (p.timestamp - t0);
         particles[counter].x_p = p.x_dust * cos(particles[counter].phi) - p.y_dust * sin(particles[counter].phi);
@@ -471,24 +487,54 @@ using namespace std;
         particles[counter].kappa = p.kappa_planck;
         particles[counter].kappa_scat = p.kappa_dust_scat;
         particles[counter].size = p.s_dust;
+        particles[counter].nmini = p.nmini;
 
         counter = counter + 1;
         }
+      for (int m=0; m<timestamps.size(); m++){
+      //if (timestamps[m]>1.295 && timestamps[m]<1.305) {
 
-      for (int i=0; i<miri_lambda.size(); i++){
+      for (int i=0; i<miri_mrs_lambda.size(); i++){
         double abs = 0.0;
+        
       for (dust& p : particles) {
-        if (p.x_dp > 0.0) {
-            abs = abs + opac.particle_abs(p.size, miri_lambda[i]) * p.m * n_mini / 
-            (4.0*pow(p.x_dp*a_p,2.)+pow(p.y_dp*a_p,2.)+pow(p.z_dp*a_p,2.));
+        
+        if (p.x_dp > 0.0 && p.timestamp==timestamps[m]) {
+            abs = abs + (opac.particle_abs(p.size, miri_mrs_lambda[i]) * p.m * p.nmini / 
+            (4.0*pow(p.x_dp*a_p,2.)+pow(p.y_dp*a_p,2.)+pow(p.z_dp*a_p,2.)));
+            
         }
         }
       
-      output.write((char*) &miri_lambda[i], sizeof(double));
-      output.write((char*) &abs, sizeof(double));
-      cout << "lambda " << miri_lambda[i] << endl;
-      cout << "abs " << abs << endl;
+      output_miri.write((char*) &miri_mrs_lambda[i], sizeof(double));
+      output_miri.write((char*) &abs, sizeof(double));
+      //cout << "lambda " << miri_mrs_lambda[i] << endl;
+      //cout << "abs " << abs << endl;
+      
 
+
+      }
+
+      for (int i = 0; i < nirspec_prism_lambda.size(); i++)
+      {
+      double abs = 0.0;
+
+      for (dust &p : particles)
+      {
+
+        if (p.x_dp > 0.0 && p.timestamp == timestamps[m])
+        {
+            abs = abs + (opac.particle_abs(p.size, nirspec_prism_lambda[i]) * p.m * p.nmini /
+                         (4.0 * pow(p.x_dp * a_p, 2.) + pow(p.y_dp * a_p, 2.) + pow(p.z_dp * a_p, 2.)));
+        }
+      }
+
+      output_prism.write((char *)&nirspec_prism_lambda[i], sizeof(double));
+      output_prism.write((char *)&abs, sizeof(double));
+      // cout << "lambda " << miri_mrs_lambda[i] << endl;
+      // cout << "abs " << abs << endl;
+      }
+      //}
       }
       
           
