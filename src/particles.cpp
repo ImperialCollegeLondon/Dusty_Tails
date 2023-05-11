@@ -21,7 +21,9 @@ using namespace std::chrono;
 
 
 using namespace std;
-unsigned seed = 123;
+//unsigned seed = 123;
+//unsigned seed=4297;
+//unsigned seed=51298;
 mt19937 generator (seed); //set the seed for the distrubutions of particle positions
 long int counter = 0;
 
@@ -40,6 +42,7 @@ vector < vector < tk:: spline > > s_phi;
 //Use something of the sort below to have particles starting on the day side of the planet
 uniform_real_distribution<double> uniform_phi_short(0.375, 0.625);
 uniform_real_distribution<double> uniform_theta_short(0.2, 0.8);
+uniform_real_distribution<double> uniform_s(0.0,1.0);
 //Use distrubutions below to have particles coming out of the whole planetary surface
 uniform_real_distribution<double> uniform_phi(0.0, 1.0);
 uniform_real_distribution<double> uniform_theta(0.0, 1.0);
@@ -64,6 +67,13 @@ vector <dust_read> read_data(){
    return dust_grains_in;
 }
 
+double s_power(double s_uniform, double n) {
+    double power, a ,s;
+    power = 1.0/(1.0+n);
+    a = pow(4.0, (1.0+n)) - pow(1.0,(1.0+n));
+    s = pow( a*s_uniform + pow(1.0, n+1.0) ,power);
+    return s;
+}
 //function add particles adds more particles to the simulation at a given time
 //as arguments it takes the vector of particles, the current number of particles,
 //the total of particles we want to get and the current time in the simulation
@@ -115,45 +125,56 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
     total = current + nparticles;
     for ( unsigned long int i = current; i < total; i++){
         double phi,theta;
+        double vxp, vyp, vzp;
+        double c_temp, xp, yp, zp;
+        double r_temp;
         //grain.id = i+1; //number ID of particle
         grain.id = current_id;
         //generate particles initial position
         if (outflow==1) {
         //spherical
         phi = 2.0*PI * uniform_phi(generator); //phi coordinate
-        theta = acos(1- 2.0* uniform_theta(generator)); //theta coordinate
+        theta = acos(1.0-2.0* uniform_theta(generator)); //theta coordinate
         } else {
         //dayside
         phi = 2.0*PI * uniform_phi_short(generator); //phi coordinate
-        theta = acos(1- 2.0* uniform_theta_short(generator)); //theta coordinate
+        theta = acos(1.0-2.0* uniform_theta_short(generator)); //theta coordinate
         }
+        xp = sin(theta) * cos(phi);
+        yp = sin(theta) * sin(phi);
+        zp = cos(theta);
+        r_temp = pow(pow(xp, 2.) + pow(yp, 2.) + pow(zp, 2.),0.5);
+        c_temp = (1.1 * r_h)/ r_temp;
 
-        //initial position of particle in cartesian
-        grain.position = {(1.1*r_h)*sin(theta)*cos(phi) + planet_x, \
-                        (1.1*r_h)*sin(theta)*sin(phi), \
-                        (1.1*r_h)*cos(theta)};
+        // initial position of particle in cartesian
+        grain.position = {xp*c_temp + planet_x,
+                        c_temp*yp,
+                        c_temp*zp};
+        
+        // velocity of particle in cartesian
 
-        //velocity of particle in cartesian
-        grain.velocity = {v_th*sin(theta)*cos(phi), \
-                        v_th*sin(theta)*sin(phi), \
-                        v_th*cos(theta)};
+        grain.velocity = {xp * (v_th / r_temp), (v_th/ r_temp) * yp, (v_th / r_temp)* zp};
+        //cout << pow(pow(grain.velocity[0], 2.) + pow(grain.velocity[1], 2.) + pow(grain.velocity[2], 2.), 0.5) << endl;
 
         if (s_dist == 0) {
         grain.size = s_0; //initial grain size
         grain.n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(s_0, 3));
         } 
         else if (s_dist ==1) {
-            double size_temp;
-            if (normal_dist == 0) {
+            double size_temp, size_temp2;
+            if (dist_type == 0) {
                 size_temp = ndist(generator)* 1.0e-4;
                 while (size_temp <= (0.01* 1.0e-4)) {
                     size_temp = ndist(generator)* 1.0e-4; 
                 }
-            } else {
+            } else if (dist_type == 1) {
                 size_temp = lognormdist(generator)*1.0e-4;
                 while (size_temp <= (0.01 * 1.0e-4)){
                     size_temp = lognormdist(generator)*1.0e-4;
                 }
+            } else if (dist_type == 2){
+                size_temp2 = uniform_s(generator);
+                size_temp = s_power(size_temp2, mu_size)*1.0e-4;
             }
             grain.size = size_temp;
             grain.n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(grain.size, 3));
@@ -304,6 +325,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         }
   }
   #pragma omp barrier
+  if (current_t>0.0) {
   for( Particle& p : particles) {
         //update all relevant particle components
         //function RK solver calls the numerical solver to obtain the new particle
@@ -326,7 +348,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         //cout << p.id << endl;
     }
     rm_particles(particles); //removes particles that are too small
-    
+  }
     if (abs(current_t-plot_time) < 1.0e-8) { 
       long int total = particles.size();
       cout << "Obtaining light curve..." << endl;

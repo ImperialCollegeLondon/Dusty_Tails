@@ -50,7 +50,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     for (unsigned int i = 0; i < 3; i++){
         //cout << "k1 " << endl;
         k1d[i] = h* acceleration(i, V0[i]- star_pos[i], \
-                   V0[i] - planet_pos[i] + r_planet_dim, V, \
+                   V0[i] - planet_pos[i], V, \
                    centri[i], coriol[i], radiation[i]);
         
 
@@ -79,7 +79,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     for (unsigned int i = 0; i < 3; i++){
         //cout << "k2 " << endl;
         k2d[i] = h* acceleration(i, Vtemp[i] - star_pos[i], \
-                   Vtemp[i] - planet_pos[i] + r_planet_dim, {Vtemp[0], Vtemp[1], Vtemp[2], \
+                   Vtemp[i] - planet_pos[i], {Vtemp[0], Vtemp[1], Vtemp[2], \
                        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp}, \
                      centri[i], coriol[i], radiation[i]);
 
@@ -108,7 +108,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     for (unsigned int i = 0; i < 3; i++) {
         //cout << "k3" << endl;
         k3d[i] = h*acceleration(i, Vtemp[i] - star_pos[i], \
-                  Vtemp[i] - planet_pos[i] + r_planet_dim, {Vtemp[0], Vtemp[1], Vtemp[2], \
+                  Vtemp[i] - planet_pos[i], {Vtemp[0], Vtemp[1], Vtemp[2], \
                       Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp}, \
                     centri[i], coriol[i], radiation[i]);
 
@@ -135,7 +135,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     for (unsigned int i = 0; i < 3; i++) {
         //cout << "k4" << endl;
         k4d[i] = h* acceleration(i, Vtemp[i] - star_pos[i], \
-                   Vtemp[i] - planet_pos[i] + r_planet_dim, {Vtemp[0], Vtemp[1], Vtemp[2], \
+                   Vtemp[i] - planet_pos[i], {Vtemp[0], Vtemp[1], Vtemp[2], \
                        Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp}, \
                      centri[i], coriol[i], radiation[i]);
 
@@ -162,7 +162,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     for (unsigned int i = 0; i < 3; i++) {
         //cout << "k5" << endl;
         k5d[i] = h* acceleration(i, Vtemp[i] - star_pos[i], \
-            Vtemp[i] - planet_pos[i] + r_planet_dim, {Vtemp[0], Vtemp[1], Vtemp[2], \
+            Vtemp[i] - planet_pos[i], {Vtemp[0], Vtemp[1], Vtemp[2], \
                 Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp}, \
               centri[i], coriol[i], radiation[i]);
 
@@ -190,7 +190,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     for (unsigned int i = 0; i < 3; i++) {
         //cout << "k6" << endl;
         k6d[i] = h* acceleration(i, Vtemp[i] - star_pos[i], \
-                    Vtemp[i] - planet_pos[i] + r_planet_dim, {Vtemp[0], Vtemp[1], Vtemp[2], \
+                    Vtemp[i] - planet_pos[i], {Vtemp[0], Vtemp[1], Vtemp[2], \
                         Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp}, \
                       centri[i], coriol[i], radiation[i]);
 
@@ -219,7 +219,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
       for (unsigned int i = 0; i<3; i++) {
         //cout << "k7" << endl;
         k7d[i] = h* acceleration(i, Vtemp[i] - star_pos[i], \
-                    Vtemp[i] - planet_pos[i] + r_planet_dim, {Vtemp[0], Vtemp[1], Vtemp[2], \
+                    Vtemp[i] - planet_pos[i], {Vtemp[0], Vtemp[1], Vtemp[2], \
                         Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp}, \
                       centri[i], coriol[i], radiation[i]);
 

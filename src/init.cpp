@@ -33,7 +33,7 @@ vector <Particle> particles; //initiate vector of "Particle" (Object defined in 
 //variable declaration for input file reading
 
 int in_c = 0;
-int tau_type, outflow, s_dist, normal_dist;
+int tau_type, outflow, s_dist, dist_type;
 int cont = 0;
 string T_int_s;
 string outflow_s;
@@ -217,20 +217,22 @@ int main() {
         }
       }
       if (in_c ==7 and s_dist ==1){
-        normal_dist = stoi(line.substr(0,2));
-        if (normal_dist == 0) {
+        dist_type = stoi(line.substr(0,2));
+        if (dist_type == 0) {
         cout << "Sizes are normally distributed." << endl;
-        } else {
+        } else if (dist_type ==1 ) {
           cout << "Sizes are log-normally distributed." << endl;
+        } else if (dist_type == 2){
+          cout << "Sizes are power-law distributed." << endl;
         }
       }
       if (in_c == 8 and s_dist == 1){
-        mu_size = stod(line.substr(0,4));
-        cout << "Particle mean size is " << mu_size << " microns." << endl;
+        mu_size = stod(line.substr(0,6));
+        //cout << "Particle mean size is " << mu_size << " microns." << endl;
       }
       if (in_c == 9 and s_dist == 1){
         std_size = stod(line.substr(0,4));
-        cout << "Standard deviation of particle size is " << std_size << " microns." << endl;
+        //cout << "Standard deviation of particle size is " << std_size << " microns." << endl;
       }
       if (in_c == 10){
         composition = line.substr(0,18);

@@ -31,11 +31,11 @@ double acceleration( int i, double pos_star, double pos_planet, vector <double> 
   grav_star = (-G_dim * pos_star ) / pow( scalar(V[0] - star_pos[0], V[1] , V[2]), 3.0);
 
   //gravitational acceleration from planet
-  grav_planet = (-G_dim * m_planet* pos_planet ) / pow( scalar(V[0] - planet_pos[0]  + r_planet_dim, V[1] , V[2]), 3.0 );
+  grav_planet = (-G_dim * m_planet* pos_planet ) / pow( scalar(V[0] - planet_pos[0], V[1] , V[2]), 3.0 );
 
   vel_dot = grav_star - centrif - 2.0*coriolis  + rad_press  + grav_planet;
-  
-  
+  //vel_dot = grav_star - centrif - 2.0 * coriolis + rad_press;
+
   return vel_dot;
 }
 

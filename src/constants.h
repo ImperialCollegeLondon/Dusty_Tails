@@ -49,7 +49,7 @@ extern  string comp, outflow_s, T_int_s, output_file;
 
 //Outflow parameters:
 extern double mdot, v_esc, mdot_read, v_th, mu_gas;
-extern int outflow, tau_type, s_dist, normal_dist;
+extern int outflow, tau_type, s_dist, dist_type;
 extern bool tau_constant;
 extern int cont;
 extern double nparticles, major_timestep;
