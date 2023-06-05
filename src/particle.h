@@ -24,6 +24,7 @@ class Particle {
     double tau_d; //optical depth
     double temp_d; //particle temperature
     double f_scat;
+    double err;
 
 };
 

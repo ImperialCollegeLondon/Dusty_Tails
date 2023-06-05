@@ -22,7 +22,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     vector <double> &k2, vector <double> &k3, vector <double> &k4, vector <double> &k5, \
     vector <double> &k6, vector <double> &k7, vector <double> &k1d, \
     vector <double> &k2d, vector <double> &k3d, vector <double> &k4d, vector <double> &k5d, \
-    vector <double> &k6d, vector <double> &k7d){
+    vector <double> &k6d, vector <double> &k7d, bool debug){
 
     vector <double> Vtemp(3);
     vector <double> Vtempdot(3);
@@ -38,7 +38,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     //function to obtain several k values of RK-DP method
     //k1 values
 
-    ks1 = h* clausius_clap(V[6], V[0], V[1], V[2], tau_particle, temp_p);
+    ks1 = h* clausius_clap(V[6], V[0], V[1], V[2], tau_particle, temp_p, debug);
 
     coriol = coriolis(V); //coriolis function is in forces.cpp
     //centrifugal acceleration
@@ -46,7 +46,20 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     //radiation pressure acceleration and PR drag
     radiation = rad_pressure(V); //rad pressure function is in forces.cpp
     
+    if (debug) {
+        for (unsigned int i = 0; i < 3; i++){
+        cout << "i " << i << endl;
+        cout << "coriol " << coriol[i] << endl;
+        cout << "centri " << centri[i] << endl;
+        cout << "rad p " << radiation[i] << endl;
+        }
+        cout << "ks1 " << ks1 << endl;
+        cout << "h " << h << endl;
+        cout << "size " << V[6] << endl;
+        cout << "tau " << tau_particle << endl;
+        cout << "temp " << temp_p << endl;
 
+    }
     for (unsigned int i = 0; i < 3; i++){
         //cout << "k1 " << endl;
         k1d[i] = h* acceleration(i, V0[i]- star_pos[i], \
@@ -64,7 +77,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     s_temp = s0 + a21*ks1;
 
   //k2 values
-    ks2 = h* clausius_clap(s_temp, Vtemp[0], Vtemp[1], Vtemp[2], tau_particle, temp_p);
+    ks2 = h* clausius_clap(s_temp, Vtemp[0], Vtemp[1], Vtemp[2], tau_particle, temp_p, debug);
 
     coriol = coriolis({Vtemp[0], Vtemp[1], Vtemp[2], \
         Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
@@ -93,7 +106,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     s_temp = s0 + a31*ks1 + a32*ks2;
 
 
-    ks3 = h* clausius_clap(s_temp, Vtemp[0], Vtemp[1], Vtemp[2], tau_particle, temp_p);
+    ks3 = h* clausius_clap(s_temp, Vtemp[0], Vtemp[1], Vtemp[2], tau_particle, temp_p, debug);
 
     coriol = coriolis({Vtemp[0], Vtemp[1], Vtemp[2], \
         Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
@@ -120,7 +133,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     }
     s_temp = s0 + a41*ks1 + a42*ks2 + a43*ks3;
 
-    ks4 = h* clausius_clap(s_temp, Vtemp[0], Vtemp[1], Vtemp[2], tau_particle, temp_p);
+    ks4 = h* clausius_clap(s_temp, Vtemp[0], Vtemp[1], Vtemp[2], tau_particle, temp_p, debug);
 
     coriol = coriolis({Vtemp[0], Vtemp[1], Vtemp[2], \
         Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
@@ -148,7 +161,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 
     s_temp = s0 + a51*ks1 + a52*ks2 + a53*ks3 + a54*ks4;
 
-    ks5 = h * clausius_clap(s_temp, Vtemp[0], Vtemp[1], Vtemp[2], tau_particle, temp_p);
+    ks5 = h * clausius_clap(s_temp, Vtemp[0], Vtemp[1], Vtemp[2], tau_particle, temp_p, debug);
 
     coriol = coriolis({Vtemp[0], Vtemp[1], Vtemp[2], \
         Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
@@ -176,7 +189,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 
     s_temp = s0 + a61*ks1 + a62*ks2 + a63*ks3 + a64*ks4 + a65*ks5;
 
-    ks6 = h * clausius_clap(s_temp, Vtemp[0], Vtemp[1], Vtemp[2], tau_particle, temp_p);
+    ks6 = h * clausius_clap(s_temp, Vtemp[0], Vtemp[1], Vtemp[2], tau_particle, temp_p, debug);
 
     coriol = coriolis({Vtemp[0], Vtemp[1], Vtemp[2], \
         Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});
@@ -204,7 +217,7 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 
 
     if (order5 == true) {
-      ks7 = h * clausius_clap(s_temp, Vtemp[0], Vtemp[1], Vtemp[2], tau_particle, temp_p);
+      ks7 = h * clausius_clap(s_temp, Vtemp[0], Vtemp[1], Vtemp[2], tau_particle, temp_p, debug);
 
       coriol = coriolis({Vtemp[0], Vtemp[1], Vtemp[2], \
           Vtempdot[0], Vtempdot[1], Vtempdot[2], s_temp});

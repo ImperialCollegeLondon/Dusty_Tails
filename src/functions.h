@@ -60,7 +60,7 @@ double omega(double mplanet, double mstar);
 double beta_fn(double q, double tau, double s);
 double opacity(double s, double x, double y, double z);
 double qfactor(double s, double x, double y, double z);
-double clausius_clap(double s, double x, double y, double z, double tau, double Td);
+double clausius_clap(double s, double x, double y, double z, double tau, double Td, bool debug);
 //double luminosity(double R_star);
 double radial_vel(vector <double> vel, vector <double> s_vector);
 double temp_dust( double s,  double dl, double tau);
@@ -75,13 +75,14 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
     vector <double> &k2, vector <double> &k3, vector <double> &k4, vector <double> &k5, \
     vector <double> &k6, vector <double> &k7, vector <double> &k1d, \
     vector <double> &k2d, vector <double> &k3d, vector <double> &k4d, vector <double> &k5d, \
-    vector <double> &k6d, vector <double> &k7d);
+    vector <double> &k6d, vector <double> &k7d, bool debug);
 
 //errors
 
 double error( double value1, double value2);
 tuple<double, int> error_max(double h, vector <double> V);
-vector <double> new_step_size(tuple<double,int> errors, double h_old, int fail_status, vector <double> V);
+vector <double> new_step_size(tuple<double,int> errors, double h_old, 
+bool reject, vector <double> V, double err);
 
 
 
@@ -92,10 +93,10 @@ double acceleration( int i, double pos_star, double pos_planet, vector <double> 
                       double centrif, double coriolis, double rad_press);
 double sublimation(double s, double x, double y, double z, double tau);
 
-vector <double> new_variables(double h, vector <double> V, bool order5);
+vector <double> new_variables(double h, vector <double> V, bool order5, bool debug);
 
 vector <double> RK_solver(vector <double> V_0, double t_0, double del_t, \
-  double h_p);
+  double h_p, double err);
 
 //ray tracer
 

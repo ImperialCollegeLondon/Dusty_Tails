@@ -21,7 +21,7 @@ using namespace std::chrono;
 
 
 using namespace std;
-//unsigned seed = 123;
+unsigned seed = 123;
 //unsigned seed=4297;
 //unsigned seed=51298;
 mt19937 generator (seed); //set the seed for the distrubutions of particle positions
@@ -69,9 +69,12 @@ vector <dust_read> read_data(){
 
 double s_power(double s_uniform, double n) {
     double power, a ,s;
+    double s0, s1;
+    s0 = 0.5;
+    s1 = 4.0;
     power = 1.0/(1.0+n);
-    a = pow(4.0, (1.0+n)) - pow(1.0,(1.0+n));
-    s = pow( a*s_uniform + pow(1.0, n+1.0) ,power);
+    a = pow(s1, (1.0+n)) - pow(s0,(1.0+n));
+    s = pow( a*s_uniform + pow(s0, n+1.0) ,power);
     return s;
 }
 //function add particles adds more particles to the simulation at a given time
@@ -113,7 +116,9 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
             grain.temp_d = p.temp_dust;
             grain.pos_spherical = pos_to_spherical(grain.position[0], grain.position[1], grain.position[2]);
             grain.tau_d = p.tau_dust;
+            grain.err = 1.0e-4;
             particles.push_back(grain);
+        
             
         }
     current = particles.size();
@@ -155,7 +160,7 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
 
         grain.velocity = {xp * (v_th / r_temp), (v_th/ r_temp) * yp, (v_th / r_temp)* zp};
         //cout << pow(pow(grain.velocity[0], 2.) + pow(grain.velocity[1], 2.) + pow(grain.velocity[2], 2.), 0.5) << endl;
-
+        //cout << "y vel " << (v_th/ r_temp) * yp << endl;
         if (s_dist == 0) {
         grain.size = s_0; //initial grain size
         grain.n_mini = (mbig*3.0) / (rho_d*4.0*PI*pow(s_0, 3));
@@ -187,7 +192,7 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
             grain.tau_d = 0.001;
         }
         
-        grain.h_updated = 1.0e-4; //initial time step for numerical integrator
+        grain.h_updated = 1.0e-6; //initial time step for numerical integrator
         grain.mass = dust_mass(grain.size); //initial particle mass
         if (s_dist == 1) {
         double opac_abs_init = opac.stellar_abs(grain.size);
@@ -203,7 +208,7 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
         grain.opac_abs = opac_abs_init;
         grain.opac_scat = opac_scat_init;
         grain.gsca = gsca_init;
-        
+        grain.err = 1.0e-4;
         particles.push_back(grain); //add particle to the vector of particles
 
         current_id = current_id +1;        
@@ -331,7 +336,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         //function RK solver calls the numerical solver to obtain the new particle
         //positions, velocities, size (and mass - consequence of the size change)
         updated_vector = RK_solver({p.position[0], p.position[1], p.position[2], \
-        p.velocity[0], p.velocity[1], p.velocity[2], p.size, p.tau_d, p.temp_d}, current_t, t_next, p.h_updated);
+        p.velocity[0], p.velocity[1], p.velocity[2], p.size, p.tau_d, p.temp_d}, current_t, t_next, p.h_updated, p.err);
         p.position = {updated_vector[0],updated_vector[1], updated_vector[2]};
         p.velocity = {updated_vector[3],updated_vector[4], updated_vector[5]};
         p.size = updated_vector[6];
@@ -345,6 +350,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
                                 p.position[1], p.position[2], p.tau_d); 
         
         p.pos_spherical = pos_to_spherical(p.position[0], p.position[1], p.position[2]);
+        p.err = updated_vector[10];
         //cout << p.id << endl;
     }
     rm_particles(particles); //removes particles that are too small

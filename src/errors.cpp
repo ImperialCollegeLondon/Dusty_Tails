@@ -15,103 +15,115 @@
 //calculates errors on numerical solver to accept,increase 
 //or decrease current "small" timestep
 using namespace std;
-
-double error( double value1, double value2){
-    //evaluate relative error
-    double err;
-    
-    err = fabs(value1 - value2)/(1.e-9 + max(abs(value1), abs(value2))*1.e-9);
-    //cout <<"delta " << fabs(value1 - value2) << endl;
-    //cout << "scale " << (1.e-7 + max(abs(value1), abs(value2))*1.e-7) << endl;
-    if (isnan(err)) {
-      cout << "error calculation is nan " << endl;
-      cout << "1: " << value1 << endl;
-      cout << "2: " << value2 << endl;
-    }
-    return err;
+double error( vector<double> v1, vector<double> v2) {
+  double err, frac;
+  vector <double> tol(7);
+  tol[0] = 1.0e-8;
+  tol[1] = 1.0e-8;
+  tol[2] = 1.0e-8;
+  tol[3] = 1.0e-8;
+  tol[4] = 1.0e-8;
+  tol[5] = 1.0e-8;
+  tol[6] = 1.0e-8;
+  err = 0.0;
+  for (unsigned int i = 0; i < 7; i++){
+    frac = fabs(v1[i] - v2[i]) / (tol[i]+max(abs(v1[i]), abs(v2[i])) * tol[i]);
+    err = err + pow( (1./7.)*pow(frac,2.0),0.5);
+  }
+  //cout << "error " << err << endl;
+  return err;
 }
+
 
 tuple<double, int> error_max(double h, vector <double> V){
     vector <double> errors(7);
     vector <double> order4(7), order5(7);
-    double err_max;
-    int max_index;
 
-    //4th order
-    order4 = new_variables(h, V, false);
-    //5th order
-    order5 = new_variables(h, V, true);
-
-    for (unsigned int i = 0; i < 7; i++){
-        
-        errors[i] = error(order4[i], order5[i]);
-        
-    }
     
-    err_max = *max_element(errors.begin(), errors.end());
-    max_index = max_element(errors.begin(),errors.end()) - errors.begin();
-    //cout << "err max " << err_max << " index  " << max_index << endl;
-    return make_tuple(err_max, max_index);
+    double err;
+    int max_index;
+    bool debug;
+    debug = false;
+    //4th order
+    order4 = new_variables(h, V, false, false);
+    //5th order
+    order5 = new_variables(h, V, true, false);
+
+    err = error(order4, order5);
+    max_index = 0;
+    return make_tuple(err, max_index);
 
 }
 
-vector <double> new_step_size(tuple<double,int> errors, double h_old, int fail_status, vector <double> V){
-  double rho;
+vector <double> new_step_size(tuple<double,int> errors, double h, 
+                              bool reject, vector <double> V, double err_old){
   double h_new;
-  double max_err;
-  double tol1;
- 
+  double err;
+  double alpha, beta, safe;
+  double minscale, maxscale, scale;
+  
+  minscale = 0.2;
+  maxscale = 10.0;
+  safe = 0.90;
+  beta = 0.0;
+  alpha = 0.2 - beta*0.75;
   vector <double> steps;
-  max_err = get<0>(errors);
-  //cout << max_err << "    " << get<1>(errors) << endl;
-  //if (get<1>(errors)<6) {
-    //tol1 = 1.0e-4;
- // } else {
-    //tol1 = 1.0e-7;
-  //}
-  //tol1 = 1.0e-4;
-  //rho = 1.25 * pow((max_err / tol1), 1.0/5.0);
+  err = get<0>(errors);
 
-  if (isnan(max_err)){
+
+  if (isnan(err)){
     cout << "max err is NaN " << endl;
     abort();
   }
 
-  if (max_err <= 1.0) {
+  if (err <= 1.0) {
     //sucessful step choice
-    //cout << "time step worked " << max_err << endl;
-    h_new = (S*h_old) / pow(max_err, 1./5.);
-    steps = {h_old, h_new};
+    if (err == 0.0) {
+        scale = maxscale;
+        
+    } 
+    else{
+        scale = safe * pow(err, -alpha) * pow(err_old, beta);
+        // cout << "safe " << safe << endl;
+        // cout << "pow 1 " << pow(err, -alpha) << endl;
+        // cout << "error old " << err_old << endl;
+        // cout << "beta " << beta << endl;
+        // cout << "pow 2 " << pow(err_old, beta) << endl;
+        if (scale < minscale) {scale = minscale;}
+        if (scale > maxscale) {scale = maxscale;}
+    }
+    if (reject) {
+        h_new = h * min(scale, 1.0);
+    }else{
+        h_new = h * scale;
+        err_old = max(err, 1.0e-4);
+    }
+    
+    if (isinf(h_new) or isnan(h_new)) {
+      cout << "new time step overflows!" << h_new <<  endl;
+      cout << " scale " << scale << endl;
+      cout << " old time step " << h << endl;
+      cout << "error estimated " << err << endl;
+      cout << "old error " << err_old << endl;
+      cout << "aborting " << endl;
+      abort();
+    }
+    
+    steps = {h, h_new, err};
     return steps;
   } else {
     //failed
-      h_new = (S*h_old) / pow(max_err, 1./5.);
-      errors = error_max(h_new, V);
-      return new_step_size(errors, h_new, 1, V);
+    // cout << " failed, error is " << err << endl;
+    // cout << "old error was " << err_old << endl;
+    // cout << "old step was " << h << endl;
+    // cout <<  " scale " <<  safe * pow(err, -alpha) << endl;
+    scale = max(safe * pow(err, -alpha), minscale);
+    h = h* scale;
+    // cout << "new h will be " << h << endl;
+    errors = error_max(h, V);
+    return new_step_size(errors, h, true, V, err_old);
   }
-  /*
-  if (max_err <= tol1){
-    if (rho > 0.2){
-      h_new = h_old / rho;
-      steps = {h_old, h_new};
-      return steps;
-
-    } else {
+    
   
-      h_new = 5.0 * h_old;
-      steps = {h_old, h_new};
-      return steps;
-    }
-  } else {
-    if (fail_status == 0){
-      h_new = max(0.1, 1./rho) * h_old;
-      errors = error_max(h_new, V);
-      return new_step_size(errors, h_new, 1, V);
-    } else {
-      h_new = 0.5 * h_old;
-      errors = error_max(h_new, V);
-      return new_step_size(errors, h_new, 1, V);
-    }
-  }*/
 
 }

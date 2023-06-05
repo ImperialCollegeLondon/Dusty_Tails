@@ -30,11 +30,14 @@ double beta_fn(double k, double tau, double s){
 
 }
 
-double clausius_clap(double s, double x, double y, double z, double tau, double Td){
+double clausius_clap(double s, double x, double y, double z, double tau, double Td, bool debug){
   
   double c1 = -alpha*exp((-A/Td) + Bp)/rho_d;
   double c2 = pow((mu*amu)/(2.0*PI*kb*Td), 0.5)*T;
- 
+  if (debug) {
+    cout << "c1 " << c1 << endl;
+    cout << "c2 " << c2 << endl;
+  }
   return c1*c2;
   }
 

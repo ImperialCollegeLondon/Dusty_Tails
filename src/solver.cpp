@@ -40,7 +40,7 @@ double acceleration( int i, double pos_star, double pos_planet, vector <double> 
 }
 
 
-vector <double> new_variables(double h, vector <double> V, bool order5){
+vector <double> new_variables(double h, vector <double> V, bool order5, bool debug){
     //function to obtain next step values
     vector <double> new_pos(3), new_vel(3), new_vars(8);
     vector <double> V0 = {V[0], V[1], V[2]};
@@ -50,7 +50,7 @@ vector <double> new_variables(double h, vector <double> V, bool order5){
     new_vars.clear();
 
     if (order5 == false) {
-        k_values(h, V, false, k1, k2, k3, k4, k5, k6, k7, k1d, k2d, k3d, k4d, k5d, k6d, k7d);
+        k_values(h, V, false, k1, k2, k3, k4, k5, k6, k7, k1d, k2d, k3d, k4d, k5d, k6d, k7d, debug);
 
         for (unsigned int i = 0; i < 3; i++) {
          new_pos[i] = V0[i] + b1*k1[i] + b3*k3[i] + b4*k4[i] + b5*k5[i] + b6*k6[i];
@@ -59,7 +59,7 @@ vector <double> new_variables(double h, vector <double> V, bool order5){
         s_new = V[6] + b1*ks1 + b3*ks3 + b4*ks4 + b5*ks5 + b6*ks6;
 
     } else {
-        k_values(h, V, true, k1, k2 , k3, k4, k5 , k6, k7, k1d, k2d, k3d, k4d, k5d, k6d, k7d);
+        k_values(h, V, true, k1, k2 , k3, k4, k5 , k6, k7, k1d, k2d, k3d, k4d, k5d, k6d, k7d, debug);
 
         for (unsigned int i = 0; i < 3; i++) {
             new_pos[i] = V0[i] + bs1*k1[i] + bs3*k3[i] + bs4*k4[i] + bs5*k5[i] + bs6*k6[i] + bs7*k7[i];
@@ -75,13 +75,13 @@ vector <double> next_step(double h, vector <double> V){
     //ensure vector is  clear
     vector <double> V_new;
     V_new.clear();
-    V_new = new_variables(h, V, false);
+    V_new = new_variables(h, V, false, false);
     return V_new;
 }
 
 
 vector <double> RK_solver(vector <double> V_0, double t_0, \
-               double del_t, double h_p){
+               double del_t, double h_p, double err_old){
 
     double t = t_0;
     double maximum_err;
@@ -93,14 +93,12 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
     new_vector.clear();
     step_sizes.clear();
     
-    
     errors = error_max(h_p, V_0);
-    step_sizes = new_step_size(errors, h_p, 0, V_0);
+    step_sizes = new_step_size(errors, h_p, false, V_0, err_old);
     //first value is old step size, second value is step size to be used in the next iteration
     old_h = step_sizes[0];
     new_h = step_sizes[1];
-    //cout << "old time step " << old_h << endl;
-    //cout << "new time step " << new_h << endl;
+    err_old = step_sizes[2];
     new_vector = next_step(old_h, V_0);
     t = t + old_h;
     //cout << "del t" << del_t << endl;
@@ -115,9 +113,10 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
         //obtain delta values for the 6 variables
        
         errors = error_max(new_h, new_vector);
-        step_sizes = new_step_size(errors, new_h, 0, new_vector);
+        step_sizes = new_step_size(errors, new_h, false, new_vector, err_old);
         old_h = step_sizes[0];
         new_h = step_sizes[1];
+        err_old = step_sizes[2];
        
         //cout << " old time step " << old_h << endl;
         //cout << " new time step " << new_h << endl;
@@ -131,6 +130,7 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
              new_vector = next_step(del_t - (t-old_h), new_vector);
 
              new_vector.push_back(new_h);
+             new_vector.push_back(err_old);
              return new_vector;
            }
         }

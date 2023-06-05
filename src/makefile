@@ -1,5 +1,5 @@
 C_COMPILER     = g++ -std=c++11
-C_FLAGS        = -O2 -fopenmp -mavx -g -pg
+C_FLAGS        = -O2 -fopenmp -mavx -g 
 OUTPUT         = ../executables/dusty_tails.exe
 LIBS           = -lm
 
