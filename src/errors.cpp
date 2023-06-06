@@ -62,10 +62,10 @@ vector <double> new_step_size(tuple<double,int> errors, double h,
   double alpha, beta, safe;
   double minscale, maxscale, scale;
   
-  minscale = 0.2;
+  minscale = 0.5;
   maxscale = 10.0;
   safe = 0.90;
-  beta = 0.0;
+  beta = 0.04;
   alpha = 0.2 - beta*0.75;
   vector <double> steps;
   err = get<0>(errors);
@@ -91,6 +91,7 @@ vector <double> new_step_size(tuple<double,int> errors, double h,
         // cout << "pow 2 " << pow(err_old, beta) << endl;
         if (scale < minscale) {scale = minscale;}
         if (scale > maxscale) {scale = maxscale;}
+        if (isnan(scale))  {scale = minscale;}
     }
     if (reject) {
         h_new = h * min(scale, 1.0);
