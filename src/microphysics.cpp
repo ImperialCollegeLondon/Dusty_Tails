@@ -89,7 +89,7 @@ double brent(double size, double x, double y, double z, double tau){
   double Ac, Bc, Cc, Dc, Ec;
   double p, q, r, s, tol1, xm;
   double fa, fb, fc, fs;
-  double tol = 1.0e-5;
+  double tol = 1.0e-3;
   double min1, min2;
   dl = scalar((x-star_pos[0]), y, z)*a;
 
@@ -127,6 +127,7 @@ double brent(double size, double x, double y, double z, double tau){
   xm = 0.5*(Cc-Bc);
   //cout << "xm " << xm << endl;
   if (abs(xm) <= tol1 || fb == 0.0){
+    //cout << "Cc " << Cc << " Bc " << Bc << endl;
     return Bc;
   }
   if (abs(Ec) >= tol1 && abs(fa)>abs(fb)) {
