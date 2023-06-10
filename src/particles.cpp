@@ -70,7 +70,7 @@ vector <dust_read> read_data(){
 double s_power(double s_uniform, double n) {
     double power, a ,s;
     double s0, s1;
-    s0 = 0.5;
+    s0 = 1.0;
     s1 = 4.0;
     power = 1.0/(1.0+n);
     a = pow(s1, (1.0+n)) - pow(s0,(1.0+n));
@@ -192,7 +192,7 @@ void add_particles(vector <Particle> &particles, long int &current_particles, lo
             grain.tau_d = 0.001;
         }
         
-        grain.h_updated = 1.0e-6; //initial time step for numerical integrator
+        grain.h_updated = 1.0e-4; //initial time step for numerical integrator
         grain.mass = dust_mass(grain.size); //initial particle mass
         if (s_dist == 1) {
         double opac_abs_init = opac.stellar_abs(grain.size);
@@ -248,6 +248,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
   double current_t = total_t;
   double plot_time = total_t;
   double t_next = total_t; 
+  long int rmd_p;
   //vector which will take updated values of positons, velocitites, size and optimal time step for particle
   vector <double> updated_vector(8); 
   double d_dr = (d_r_max - d_r_min)/ r_cells_d;
@@ -268,7 +269,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     thetas_v = t_grid_to_vector(theta_b);
     phis_v   = p_grid_to_vector(phi_b);
 
-
+  rmd_p = 0;
   while (current_t < end_t) {
     double t_global_min = major_timestep;
     auto start = high_resolution_clock::now();
@@ -331,12 +332,14 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
   }
   #pragma omp barrier
   if (current_t>0.0) {
+    long int noc = 0;
   for( Particle& p : particles) {
         //update all relevant particle components
         //function RK solver calls the numerical solver to obtain the new particle
         //positions, velocities, size (and mass - consequence of the size change)
         updated_vector = RK_solver({p.position[0], p.position[1], p.position[2], \
-        p.velocity[0], p.velocity[1], p.velocity[2], p.size, p.tau_d, p.temp_d}, current_t, t_next, p.h_updated, p.err);
+        p.velocity[0], p.velocity[1], p.velocity[2], p.size, p.tau_d, p.temp_d}, current_t, t_next, p.h_updated, p.err, p.id);
+        if (updated_vector[11] == false) {
         p.position = {updated_vector[0],updated_vector[1], updated_vector[2]};
         p.velocity = {updated_vector[3],updated_vector[4], updated_vector[5]};
         p.size = updated_vector[6];
@@ -345,15 +348,24 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         p.opac_planck = p.opac_abs + p.opac_scat;
         p.gsca = opac.stellar_gsc(p.size);
         p.mass = dust_mass(p.size); 
-        p.h_updated = updated_vector[9];    
+        p.h_updated = updated_vector[9]; 
+       
         p.temp_d = brent( p.size, p.position[0], 
                                 p.position[1], p.position[2], p.tau_d); 
         
         p.pos_spherical = pos_to_spherical(p.position[0], p.position[1], p.position[2]);
         p.err = updated_vector[10];
-        //cout << p.id << endl;
+        } else{
+            cout << "removing particle time step too small " << endl;
+            cout << "particle id " << p.id << endl;
+            rmd_p = rmd_p + 1;
+            p.size = 1.0e-10;
+        }
+       
     }
+    
     rm_particles(particles); //removes particles that are too small
+    cout << "current removed " << rmd_p << " particles" << endl;
   }
     if (abs(current_t-plot_time) < 1.0e-8) { 
       long int total = particles.size();

@@ -79,10 +79,10 @@ void k_values(double h, vector <double> V, bool order5, vector <double> &k1, \
 
 //errors
 
-double error( double value1, double value2);
+double error(vector<double> v1, vector<double> v2, bool print);
 tuple<double, int> error_max(double h, vector <double> V);
 vector <double> new_step_size(tuple<double,int> errors, double h_old, 
-bool reject, vector <double> V, double err);
+bool reject, vector <double> V, double err, int counter);
 
 
 
@@ -96,7 +96,7 @@ double sublimation(double s, double x, double y, double z, double tau);
 vector <double> new_variables(double h, vector <double> V, bool order5, bool debug);
 
 vector <double> RK_solver(vector <double> V_0, double t_0, double del_t, \
-  double h_p, double err);
+  double h_p, double err, long int id);
 
 //ray tracer
 

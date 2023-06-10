@@ -81,9 +81,11 @@ vector <double> next_step(double h, vector <double> V){
 
 
 vector <double> RK_solver(vector <double> V_0, double t_0, \
-               double del_t, double h_p, double err_old){
+               double del_t, double h_p, double err_old, long int id){
 
     double t = t_0;
+    bool print;
+    bool rm_flag;
     double maximum_err;
     tuple <double, int> errors;
     int max_it;
@@ -92,9 +94,9 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
     vector <double> new_vector;
     new_vector.clear();
     step_sizes.clear();
-    
+   
     errors = error_max(h_p, V_0);
-    step_sizes = new_step_size(errors, h_p, false, V_0, err_old);
+    step_sizes = new_step_size(errors, h_p, false, V_0, err_old, 0);
     //first value is old step size, second value is step size to be used in the next iteration
     old_h = step_sizes[0];
     new_h = step_sizes[1];
@@ -111,9 +113,18 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
     while (t < del_t) {
 
         //obtain delta values for the 6 variables
-       
+        if (new_h < 1.0e-8) {
+          cout << "new h small " << new_h << endl;
+          cout << "particle id " << id << endl;
+          new_vector = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                      1.0e-9, 1.0, 2000.0, 1.0e-9, 
+                      1.0e-4, true};
+
+          return new_vector;
+
+        }
         errors = error_max(new_h, new_vector);
-        step_sizes = new_step_size(errors, new_h, false, new_vector, err_old);
+        step_sizes = new_step_size(errors, new_h, false, new_vector, err_old, 0);
         old_h = step_sizes[0];
         new_h = step_sizes[1];
         err_old = step_sizes[2];
@@ -128,9 +139,10 @@ vector <double> RK_solver(vector <double> V_0, double t_0, \
              
            } else {
              new_vector = next_step(del_t - (t-old_h), new_vector);
-
+             rm_flag = false;
              new_vector.push_back(new_h);
              new_vector.push_back(err_old);
+             new_vector.push_back(rm_flag);
              return new_vector;
            }
         }
