@@ -70,8 +70,8 @@ vector <dust_read> read_data(){
 double s_power(double s_uniform, double n) {
     double power, a ,s;
     double s0, s1;
-    s0 = 1.0;
-    s1 = 4.0;
+    s0 = 0.75;
+    s1 = 2.00;
     power = 1.0/(1.0+n);
     a = pow(s1, (1.0+n)) - pow(s0,(1.0+n));
     s = pow( a*s_uniform + pow(s0, n+1.0) ,power);

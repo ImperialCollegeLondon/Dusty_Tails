@@ -51,7 +51,7 @@ vector <double> rad_pressure(vector <double> V){
   v_drag = drag_vel(V);
 
   for (unsigned int i = 0; i < 3; i++) {
-      rad_vector[i] = constant* (1-((d_prod)/c_dim)) *(V[i]-star_pos[i]) - constant*v_drag[i]/c_dim;
+    rad_vector[i] = constant * (1 - ((d_prod) / c_dim)) * (V[i] - star_pos[i]) - constant *scalar(V[0] - star_pos[0], V[1], V[2])*v_drag[i] / c_dim;
  }
   return rad_vector;
 
