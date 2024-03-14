@@ -67,6 +67,7 @@ struct dust {
    double kappa;
    double kappa_scat;
    double size;
+   double tau;
 };
 
 struct dust_read
@@ -412,10 +413,18 @@ using namespace std;
   double mu = 178.538;
   double alpha = 0.1;
 
-   }  else{
+   } else if (composition.substr(0, 4) == "OlSL") {
+   cout << "Dust is composed of Sri Lanka Olivine (Mg1.56 Fe0.4 Si0.91 O4)" << endl;
+   opac_data = "OlivineSL_Z11";
+   double A = 6.53e+4;
+   double Bp = 34.1;
+   rho_d = 3.3;
+   double mu = 149.81;
+   double alpha = 0.1;
+} else {
    cout << "Composition unknown, stopping.";
    abort();
-   }
+}
    if (planet.substr(0,9) == "KIC1255_b") {
       Temp = 4550.0;
       T = 15.68*60.*60.; //planetary period in seconds
@@ -488,6 +497,7 @@ using namespace std;
         particles[counter].kappa_scat = p.kappa_dust_scat;
         particles[counter].size = p.s_dust;
         particles[counter].nmini = p.nmini;
+        particles[counter].tau = p.tau_dust;
 
         counter = counter + 1;
         }
@@ -500,7 +510,7 @@ using namespace std;
       for (dust& p : particles) {
         
         if (p.x_dp > 0.0 && p.timestamp==timestamps[m]) {
-            abs = abs + (opac.particle_abs(p.size, miri_mrs_lambda[i]) * p.m * p.nmini / 
+            abs = abs + (opac.particle_abs(p.size, miri_mrs_lambda[i]) * p.m * p.nmini*exp(-1.0*p.tau) / 
             (4.0*pow(p.x_dp*a_p,2.)+pow(p.y_dp*a_p,2.)+pow(p.z_dp*a_p,2.)));
             
         }
@@ -524,7 +534,7 @@ using namespace std;
 
         if (p.x_dp > 0.0 && p.timestamp == timestamps[m])
         {
-            abs = abs + (opac.particle_abs(p.size, nirspec_prism_lambda[i]) * p.m * p.nmini /
+            abs = abs + (opac.particle_abs(p.size, nirspec_prism_lambda[i]) * p.m * p.nmini * exp(-1.0 * p.tau) /
                          (4.0 * pow(p.x_dp * a_p, 2.) + pow(p.y_dp * a_p, 2.) + pow(p.z_dp * a_p, 2.)));
         }
       }
