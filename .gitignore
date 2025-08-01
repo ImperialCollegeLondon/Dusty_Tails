@@ -7,6 +7,7 @@
 /plots
 /executables
 *run_dustytails*
+/input
 *.exe
 slurm*
 *.mp4
