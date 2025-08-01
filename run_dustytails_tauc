@@ -1,51 +1,59 @@
 #!/bin/bash -l
 # SLURM resource specifications
-#SBATCH --job-name=Mg08 # shows up in the output of ‘squeue’
-#SBATCH --time=2-00:00:00       # specify the requested wall-time
-#SBATCH --partition=astro_long # specify the partition to run on
+#SBATCH --job-name=n500 # shows up in the output of ‘squeue’
+#SBATCH --time=6:00:00       # specify the requested wall-time
+#SBATCH --partition=astro2_short # specify the partition to run on
 #SBATCH --nodes=1              # number of nodes allocated for this job
 #SBATCH --ntasks-per-node=1    # number of MPI ranks per node
 #SBATCH --cpus-per-task=4      # number of OpenMP threads per MPI rank
 #SBATCH --mail-type=ALL
 #SBATCH --array=0-0
-##SBATCH --array=0-0
 echo "now processing task id:: " ${SLURM_ARRAY_TASK_ID}
 
 #all times in terms of orbits
 
 #is the run continuing? 0 - no, 1- yes
-cont=0
+cont=1
 
 #initial time of the run
-tinit=0.0
+tinit=2.0
 
 #previous output time
-tprevious=0.0
+tprevious=1.0
 
 #end time of run
-tend=1.0
+tend=3.0
 #dust composition
 #composition='OlSL'
+#composition='OlSC'
+#composition='MgFeSiO4'
 composition='Mg08Fe12SiO4'
 #composition='Mg2SiO4'
-directory='Mg08Fe12SiO4/jun23/test/'
-
+#composition='Mg095Fe005SiO3'
+#directory='Mg095Fe005SiO3/distributions/'
+#directory='Olivine_SL/distributions/'
+#directory='Mg08Fe12SiO4/jun23/KIC1255b/tauc/'
+directory='Mg08Fe12SiO4/jun23/KIC1255b/tauc/n500/'
+#directory='Olivine_SC/distributions/'
+#directory='MgFeSiO4/distributions/'
+#directory='Mg08Fe12SiO4/K222b/'
+#directory='Mg2SiO4/jan23/'
 #directory='Olivine_SL/K222b/'
 #planet - options are KIC1255b or K222b
 #planet='K222b'
 planet='KIC1255b'
 
 #orbit directory name, previous orbit directory name
-orbit='0th_orb'
-p_orbit='0th_orb'
+orbit='2nd_orb'
+p_orbit='1st_orb'
 
 #particle size distribution
 s_dist=0   #1 for yes, 0 for no
 dist_type=0  #0 for normal dist, 1 for log-normal dist, 2 for power law
 mu=-1.25   #for power law, mu is n
 sigma=0.61  #standard deviation !!! ^^^^
-mdot=2.00
-gm=1 #geometry, 1 sph 0 dayside
+mdot=2.0
+gm=1
 # outdir=/lustre/astro/bmce/Dusty_Tails/simulations/${directory}/mu${mu}_sigma${sigma}_log${lognormal} #only for size distributions
 
 # #create directory if it does not exist
@@ -87,12 +95,12 @@ cp ${SLURM_SUBMIT_DIR}/src/*.o ./
 cp ${SLURM_SUBMIT_DIR}/input/* ./
 cp -r ${SLURM_SUBMIT_DIR}/opacs_jankovic/ ./
 
-#cp distributions.in distributions.in
-#cp n_pow_dist_test.dat n_pow_dist.dat
+cp distributions.in distributions.in
+cp n_pow_dist3.dat n_pow_dist.dat
 
 if [ $s_dist == 0 ]
 then
-cp ${SLURM_SUBMIT_DIR}/input/input_grid_2.csv ./input_grid.csv
+cp ${SLURM_SUBMIT_DIR}/input/input_grid_short2.csv ./input_grid.csv
 elif [ $s_dist == 1 ]
 then
 cp ${SLURM_SUBMIT_DIR}/input/input_grid_short2.csv ./input_grid.csv
@@ -104,8 +112,9 @@ python3 input.py > python.out
 export OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK}
 
 #input with planet, star and optical depth grid info
-cp ./dusty_tails_${planet}.in dusty_tails.in
-
+#cp ./dusty_tails_${planet}_tauc.in dusty_tails.in
+#cp ./dusty_tails_${planet}_n100.in dusty_tails.in
+cp ./dusty_tails_${planet}_n500.in dusty_tails.in
 input_file='input.txt'
 n=1
 while read line; do
@@ -147,11 +156,9 @@ geom_s='sph'
 fi
 echo $geom_s
 
-if [ $s_dist > 0 ]
-then
-outdir=/lustre/astro/bmce/Dusty_Tails/simulations/${directory}/n${mu}_powdist/
+
+outdir=/lustre/astro/bmce/Dusty_Tails/simulations/${directory}/n${mu}_powdist_dist3_tauc_n100_1.0e-9/
 mkdir -p ${outdir}
-fi
 
 if [ $cont == 1 ]
 then
@@ -191,7 +198,7 @@ mv run.in                   ${id_dir}/run.in
 mv run.out                  ${id_dir}/runlog.out
 
 cd ${SLURM_SUBMIT_DIR}
-#cp slurm-${SLURM_JOBID}_0.out ${id_dir}
+cp slurm-${SLURM_JOBID}_0.out ${id_dir}
 #rm -rf slurm-${SLURM_JOBID}_0.out
-#rm -rf ${SCRATCH_DIRECTORY}
+rm -rf ${SCRATCH_DIRECTORY}
 exit 0

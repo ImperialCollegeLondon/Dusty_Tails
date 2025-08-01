@@ -1,50 +1,50 @@
 #!/bin/bash -l
 # SLURM resource specifications
-#SBATCH --job-name=Mg08 # shows up in the output of ‘squeue’
+#SBATCH --job-name=K2_2.5_sph # shows up in the output of ‘squeue’
 #SBATCH --time=2-00:00:00       # specify the requested wall-time
 #SBATCH --partition=astro_long # specify the partition to run on
 #SBATCH --nodes=1              # number of nodes allocated for this job
 #SBATCH --ntasks-per-node=1    # number of MPI ranks per node
 #SBATCH --cpus-per-task=4      # number of OpenMP threads per MPI rank
 #SBATCH --mail-type=ALL
-#SBATCH --array=0-0
+#SBATCH --array=0-7
 ##SBATCH --array=0-0
 echo "now processing task id:: " ${SLURM_ARRAY_TASK_ID}
 
 #all times in terms of orbits
 
 #is the run continuing? 0 - no, 1- yes
-cont=0
+cont=1
 
 #initial time of the run
-tinit=0.0
+tinit=3.0
 
 #previous output time
-tprevious=0.0
+tprevious=2.0
 
 #end time of run
-tend=1.0
+tend=4.0
 #dust composition
 #composition='OlSL'
 composition='Mg08Fe12SiO4'
 #composition='Mg2SiO4'
-directory='Mg08Fe12SiO4/jun23/test/'
+directory='Mg08Fe12SiO4/jun23/K222b'
 
 #directory='Olivine_SL/K222b/'
 #planet - options are KIC1255b or K222b
-#planet='K222b'
-planet='KIC1255b'
+planet='K222b'
+#planet='KIC1255b'
 
 #orbit directory name, previous orbit directory name
-orbit='0th_orb'
-p_orbit='0th_orb'
+orbit='2nd_orb'
+p_orbit='1st_orb'
 
 #particle size distribution
-s_dist=0   #1 for yes, 0 for no
-dist_type=0  #0 for normal dist, 1 for log-normal dist, 2 for power law
+s_dist=1   #1 for yes, 0 for no
+dist_type=2  #0 for normal dist, 1 for log-normal dist, 2 for power law
 mu=-1.25   #for power law, mu is n
 sigma=0.61  #standard deviation !!! ^^^^
-mdot=2.00
+mdot=2.5
 gm=1 #geometry, 1 sph 0 dayside
 # outdir=/lustre/astro/bmce/Dusty_Tails/simulations/${directory}/mu${mu}_sigma${sigma}_log${lognormal} #only for size distributions
 
@@ -180,7 +180,7 @@ fi
 echo ${id_dir}
 mkdir -p ${id_dir}
 
-time ./executables/dusty_tails.exe > run.out
+time ./executables/dusty_tails_K2.exe > run.out
 
 mv ./data/output.bin        ${id_dir}/output_struct.bin
 mv ./data/output_final.bin  ${id_dir}/output_final_struct.bin

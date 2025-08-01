@@ -6,6 +6,10 @@ import pandas as pd
 from numba import jit
 from mpl_toolkits import mplot3d
 
+plt.rcParams['ytick.minor.size'] = 5
+plt.rcParams['xtick.minor.size'] = 5
+plt.rcParams["font.size"] = "12"
+
 @jit(nopython = True)
 def grid(r, t, p) :
     x = []
@@ -24,7 +28,7 @@ def grid(r, t, p) :
 
 dt = np.dtype([('theta', np.float64), ('phi', np.float64), ('od', np.float64)])
 
-data = np.fromfile("./simulations/KIC1255b_Al2O3_03micro_1mdot_day_1orb_tc_optical_depth.bin", dt)
+data = np.fromfile("/lustre/astro/bmce/Dusty_Tails/simulations/Mg08Fe12SiO4/dec22/sdist_mu2.0_sigma1.0_mdot2.0_sph_t0.0_TAU_TEST/tau_data.bin", dt)
 df = pd.DataFrame(data)
 
 #print(df)
@@ -40,24 +44,25 @@ errors = []
 
 #print(df)
 for theta in df['theta'].unique():
-    thetas.append(theta)
+    t = (0.05/25.)*theta + 1.55 
+    thetas.append(t)
 
 #print(thetas)
 for phi in df['phi'].unique():
-    phis.append(phi)
+    p = (0.35/175.)*phi - 0.30
+    phis.append(p)
 
 #print(len(phis))
 
 for od in df['od']:
-    if od == 0.0:
+    #ods.append(od)
+    if od <= 0.001:
         od = np.nan
         ods.append(math.log10(od))
     elif od == np.nan:
         print("od in nan")
         ods.append(math.log10(od))
     else:
-        if (od > 1.0):
-            print(od)
         ods.append(math.log10(od))
 
 # """
@@ -85,26 +90,28 @@ fig = plt.figure()
 #ax = plt.axes(projection='3d')
 ax = fig.add_subplot(111)
 cm = 1/2.54
-plt.figure(figsize=(20.0*cm,15.0*cm))
-o_reshape = np.reshape(ods, (50,190), order = 'C')
+plt.figure(figsize=(30.0*cm,20.0*cm))
+o_reshape = np.reshape(ods, (25,175), order = 'C')
 
 # #print(o_reshape)
 
 # #print(type(o_reshape))
-levels = np.arange(-3.0, 0.3, 0.2)
-plt.contourf(phis, thetas, o_reshape, levels = levels ,cmap='jet', extend='both')
+levels = np.arange(-2.0, 0.8, 0.1)
+plt.contourf(phis, thetas, o_reshape, levels = levels , extend='both')
 
 
 # #ax.scatter3D(df['theta'], df['phi'], df['od'])
 # #plt.scatter(df['radius'], ods, s= 0.01, c = "black")
 # #plt.scatter(df['radius'], ods_a, s=0.01, c = "red")
 
+plt.xlabel('$\\phi$')
+plt.ylabel("$\\theta$")
+#lt.xlim(-0.3, 0.02)
+#plt.ylim(1.565,1.580)
 cbar = plt.colorbar()
-cbar.ax.set_ylabel('log(tau)')
-ax.set_xlabel("phi")
-ax.set_ylabel("theta")
-plt.title('Optical depth at R=1.1a.\n50 cells in $\\theta$, 190 in $\\phi$ and 120 in R.\n$\\dot{M}$=1 $M_{\\oplus}$/Gyr. $s_0$=0.3$\\mu$m.')
-plt.savefig('./plots/optical_depth_test.png')
+cbar.ax.set_ylabel('$log(\\tau_{\\rm{R_{max}}})$')
+#plt.title('Optical depth at R=1.1a.\n50 cells in $\\theta$, 350 in $\\phi$ and 120 in R.\n$\\dot{M}$=1 $M_{\\oplus}$/Gyr. $s_0$=0.3$\\mu$m.')
+plt.savefig('../plots/optical_depth_test.png')
 
 # plt.close()
 

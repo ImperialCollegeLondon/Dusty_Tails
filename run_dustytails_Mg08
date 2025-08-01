@@ -1,34 +1,34 @@
 #!/bin/bash -l
 # SLURM resource specifications
-#SBATCH --job-name=Mg08 # shows up in the output of ‘squeue’
-#SBATCH --time=2-00:00:00       # specify the requested wall-time
-#SBATCH --partition=astro_long # specify the partition to run on
+#SBATCH --job-name=Mg08_day # shows up in the output of ‘squeue’
+#SBATCH --time=3-00:00:00       # specify the requested wall-time
+#SBATCH --partition=astro2_long # specify the partition to run on
 #SBATCH --nodes=1              # number of nodes allocated for this job
 #SBATCH --ntasks-per-node=1    # number of MPI ranks per node
 #SBATCH --cpus-per-task=4      # number of OpenMP threads per MPI rank
 #SBATCH --mail-type=ALL
-#SBATCH --array=0-0
+#SBATCH --array=0-239
 ##SBATCH --array=0-0
 echo "now processing task id:: " ${SLURM_ARRAY_TASK_ID}
 
 #all times in terms of orbits
 
 #is the run continuing? 0 - no, 1- yes
-cont=0
+cont=1
 
 #initial time of the run
-tinit=0.0
+tinit=5.0
 
 #previous output time
-tprevious=0.0
+tprevious=4.0
 
 #end time of run
-tend=1.0
+tend=6.0
 #dust composition
 #composition='OlSL'
 composition='Mg08Fe12SiO4'
 #composition='Mg2SiO4'
-directory='Mg08Fe12SiO4/jun23/test/'
+directory='Mg08Fe12SiO4/sept23/KIC1255b'
 
 #directory='Olivine_SL/K222b/'
 #planet - options are KIC1255b or K222b
@@ -36,15 +36,15 @@ directory='Mg08Fe12SiO4/jun23/test/'
 planet='KIC1255b'
 
 #orbit directory name, previous orbit directory name
-orbit='0th_orb'
-p_orbit='0th_orb'
+orbit='5th_orb'
+p_orbit='4th_orb'
 
 #particle size distribution
 s_dist=0   #1 for yes, 0 for no
-dist_type=0  #0 for normal dist, 1 for log-normal dist, 2 for power law
+dist_type=0  #0 for normal dist or no dist if s_dist=0, 1 for log-normal dist, 2 for power law
 mu=-1.25   #for power law, mu is n
 sigma=0.61  #standard deviation !!! ^^^^
-mdot=2.00
+mdot=2.0
 gm=1 #geometry, 1 sph 0 dayside
 # outdir=/lustre/astro/bmce/Dusty_Tails/simulations/${directory}/mu${mu}_sigma${sigma}_log${lognormal} #only for size distributions
 
@@ -92,7 +92,7 @@ cp -r ${SLURM_SUBMIT_DIR}/opacs_jankovic/ ./
 
 if [ $s_dist == 0 ]
 then
-cp ${SLURM_SUBMIT_DIR}/input/input_grid_2.csv ./input_grid.csv
+cp ${SLURM_SUBMIT_DIR}/input/input_grid_Mg08_sept23_day.csv ./input_grid.csv
 elif [ $s_dist == 1 ]
 then
 cp ${SLURM_SUBMIT_DIR}/input/input_grid_short2.csv ./input_grid.csv
@@ -149,7 +149,7 @@ echo $geom_s
 
 if [ $s_dist > 0 ]
 then
-outdir=/lustre/astro/bmce/Dusty_Tails/simulations/${directory}/n${mu}_powdist/
+outdir=/lustre/astro/bmce/Dusty_Tails/simulations/${directory}/n${mu}_powdist_1.25_to_2.25/
 mkdir -p ${outdir}
 fi
 

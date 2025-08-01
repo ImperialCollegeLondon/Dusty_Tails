@@ -247,8 +247,18 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
 
   double current_t = total_t;
   double plot_time = total_t;
+  double add_time = total_t;
   double t_next = total_t; 
   long int rmd_p;
+  double phase_min, phase_max;
+  double tmin_hres, tmax_hres;
+  phase_min = -0.20;
+  phase_max = 0.20;
+  tmin_hres = phase_min +0.5+(end_t-1.0);
+  tmax_hres = phase_max + 0.5 + (end_t - 1.0);
+  cout << "tmin_hres " << tmin_hres << endl;
+  cout << "tmax_hres " << tmax_hres << endl;
+
   //vector which will take updated values of positons, velocitites, size and optimal time step for particle
   vector <double> updated_vector(8); 
   double d_dr = (d_r_max - d_r_min)/ r_cells_d;
@@ -274,7 +284,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     double t_global_min = major_timestep;
     auto start = high_resolution_clock::now();
     cout << "At time: " << current_t << endl;
-
+    cout << "plot time " << plot_time << endl;
     if (tau_constant == false) {
         memset(extinction, 0.0, sizeof(extinction));
         memset(optical_depth, 0.0, sizeof(optical_depth));
@@ -356,8 +366,8 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         p.pos_spherical = pos_to_spherical(p.position[0], p.position[1], p.position[2]);
         p.err = updated_vector[10];
         } else{
-            cout << "removing particle time step too small " << endl;
-            cout << "particle id " << p.id << endl;
+            //cout << "removing particle time step too small " << endl;
+            //cout << "particle id " << p.id << endl;
             rmd_p = rmd_p + 1;
             p.size = 1.0e-10;
         }
@@ -365,7 +375,7 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
     }
     
     rm_particles(particles); //removes particles that are too small
-    cout << "current removed " << rmd_p << " particles" << endl;
+    //cout << "current removed " << rmd_p << " particles" << endl;
   }
     if (abs(current_t-plot_time) < 1.0e-8) { 
       long int total = particles.size();
@@ -391,15 +401,30 @@ void solve_particles(double total_t, double end_t, vector <Particle>& particles,
         output.write((char*) &p.opac_scat, sizeof(double));
       }
       }
-      current_particles = total_particles;
-      total_particles = total_particles + nparticles;
-      //add particles every 100th of an orbit
-      if ((current_t > 0.0) && (abs(current_t-end_t)>1.0e-8) ){
-      add_particles(particles, current_particles, total_particles, current_t);
+    //   current_particles = total_particles;
+    //   total_particles = total_particles + nparticles;
+    //   //add particles every 100th of an orbit
+    //   if ((current_t > 0.0) && (abs(current_t-end_t)>1.0e-8) ){
+    //   add_particles(particles, current_particles, total_particles, current_t);
+    //   }
+      
+      if ((current_t >= tmin_hres) && (current_t<=tmax_hres)) {
+        plot_time = plot_time + 5.0e-3;
+      } else {
+          plot_time = plot_time + major_timestep;
       }
-      plot_time = plot_time + major_timestep;
      }
+     if (abs(current_t-add_time) < 1.0e-8) {
+         long int total = particles.size();
+         current_particles = total_particles;
+         total_particles = total_particles + nparticles;
+         if ((current_t > 0.0) && (abs(current_t - end_t) > 1.0e-8))
+         {
+             add_particles(particles, current_particles, total_particles, current_t);
+         }
+        add_time = add_time + major_timestep;
 
+     }
      if (abs(t_next-end_t) < 1.0e-8) {
       cout << "End of simulation.. " << endl;
       vector < dust > dust_grains_out;

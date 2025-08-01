@@ -1,24 +1,13 @@
 #!/bin/csh
-#makeinput
-#/dev/shm/uffegj
-
-#KOPIER MARCS TIL $TMPDIR
-# cp ..... $TMPDIR/
-# cd $TMPDIR
-# ...koer marcs...
-# mv mxmodel.dat $CWD/...
-# cd $CWD
-# rm -rf $TMPDIR 
-#
-#
 
 setenv CWD `pwd`
-
-cp ./simulations/Mg08Fe12SiO4/noparticles/500/output_final_struct.bin input.bin
-
+cp /lustre/astro/bmce/Dusty_Tails/simulations/Mg08Fe12SiO4/sept23/K222b/5th_orb/s1.5_mdot3.0_day_t5.0/output_final_struct.bin input.bin
+#cp /lustre/astro/bmce/Dusty_Tails/simulations/Al2O3/jun23/KIC1255b/5th_orb/s5.0_mdot8.0_sph_t5.0/output_final_struct.bin input.bin
+#cp /lustre/astro/bmce/Dusty_Tails/simulations/Olivine_SL/distributions/n-2.0_powdist_dist3/mdot1.5_sph_t4.0/output_final_struct.bin input.bin
 ./spectra/spectra
 
-cp output.bin ./spectra/500.bin
-
+cp output_miri.bin ./spectra/MIRI_3000_Mg08Fe12SiO4_s1.5_mdot3.0_day_5995.bin
+cp output_prism.bin ./spectra/PRISM_100_Mg08Fe12SiO4_s1.5_mdot3.0_day_5995.bin
 rm input.bin
-rm output.bin
+rm output_miri.bin
+rm output_prism.bin

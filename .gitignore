@@ -4,6 +4,9 @@
 /data
 /simulations
 /dust_opac_booth
+/plots
+/executables
+*run_dustytails*
 *.exe
 slurm*
 *.mp4

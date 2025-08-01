@@ -439,7 +439,7 @@ using namespace std;
       cout << "inclination " << inclination << endl;
       r_star = (Rstar*Rsun_cgs)/a_p; //stellar radius in terms of the semimajor axis
    } else {
-      Temp = 3879.0;
+      Temp = 3830.0;
       T = 9.146*60.*60.; //planetary period in seconds
       mbig = (mdot * T * 0.01) / no_p ; // 0.01 dependent on when particles are being thrown out of planet
       m_star = 0.60; //stellar mass in solar masses
@@ -448,7 +448,7 @@ using namespace std;
       a_p = pow((G_cgs*m_star*Msun_cgs* pow(T, 2.0))/ (4.0*pow(PI, 2.0)), 1.0/3.0); //semi major axis in cgs
       inclination = acos((Rstar*Rsun_cgs*b_p)/a_p); //in radians
       r_star = (Rstar*Rsun_cgs)/a_p; //stellar radius in terms of the semimajor axis
-      
+      cout << "rstar" << r_star << endl;
    }
    vector <double> period_steps = {};
    vector <double> miri_mrs_lambda = {};
@@ -509,7 +509,8 @@ using namespace std;
         
       for (dust& p : particles) {
         
-        if (p.x_dp > 0.0 && p.timestamp==timestamps[m]) {
+        if (p.x_dp > 0.0 && p.timestamp==timestamps[m] && ((pow(p.y_dp,2.)+pow(p.z_dp,2.))<pow(r_star,2.0)))
+         {
             abs = abs + (opac.particle_abs(p.size, miri_mrs_lambda[i]) * p.m * p.nmini*exp(-1.0*p.tau) / 
             (4.0*pow(p.x_dp*a_p,2.)+pow(p.y_dp*a_p,2.)+pow(p.z_dp*a_p,2.)));
             
@@ -528,12 +529,11 @@ using namespace std;
       for (int i = 0; i < nirspec_prism_lambda.size(); i++)
       {
       double abs = 0.0;
-
       for (dust &p : particles)
       {
 
-        if (p.x_dp > 0.0 && p.timestamp == timestamps[m])
-        {
+        if (p.x_dp > 0.0 && p.timestamp == timestamps[m] && ((pow(p.y_dp,2.)+pow(p.z_dp,2.))<pow(r_star,2.0))
+         ) {
             abs = abs + (opac.particle_abs(p.size, nirspec_prism_lambda[i]) * p.m * p.nmini * exp(-1.0 * p.tau) /
                          (4.0 * pow(p.x_dp * a_p, 2.) + pow(p.y_dp * a_p, 2.) + pow(p.z_dp * a_p, 2.)));
         }

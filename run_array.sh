@@ -1,13 +1,12 @@
 #!/bin/bash -l
 # SLURM resource specifications
-#SBATCH --job-name=Mg08dist  # shows up in the output of ‘squeue’
-#SBATCH --time=5-00:00:00       # specify the requested wall-time
-#SBATCH --partition=astro2_long # specify the partition to run on
+#SBATCH --job-name=tauc # shows up in the output of ‘squeue’
+#SBATCH --time=5:00:00       # specify the requested wall-time
+#SBATCH --partition=astro2_short # specify the partition to run on
 #SBATCH --nodes=1              # number of nodes allocated for this job
 #SBATCH --ntasks-per-node=1    # number of MPI ranks per node
 #SBATCH --cpus-per-task=4      # number of OpenMP threads per MPI rank
 #SBATCH --mail-type=ALL
-
 #SBATCH --array=0-0
 echo "now processing task id:: " ${SLURM_ARRAY_TASK_ID}
 
@@ -18,15 +17,16 @@ tinit=0.0
 #previous output time
 tprevious=0.0
 #end time of run
-tend=1.0
+tend=2.0
 #dust composition
 composition='Mg08Fe12SiO4'
-directory='Mg08Fe12SiO4/nov22/KIC1255b'
+directory='Mg08Fe12SiO4/tauc/'
 orbit='0th_orb'
 p_orbit='0th_orb'
 #particle size distribution
 s_dist=1
-
+mu=1.75
+sigma=0.5
 # define and create a unique scratch directory
 SCRATCH_DIRECTORY=scratch/${SLURM_JOBID}
 mkdir -p ${SCRATCH_DIRECTORY}
@@ -47,7 +47,10 @@ cp ${SLURM_SUBMIT_DIR}/input.py ./
 
 if [ $s_dist == 0 ]
 then
+#cp ${SLURM_SUBMIT_DIR}/input_grid_short.csv ./input_grid.csv
 cp ${SLURM_SUBMIT_DIR}/input_grid.csv ./input_grid.csv
+#cp ${SLURM_SUBMIT_DIR}/input_grid_MgSiOs.csv ./input_grid.csv
+#cp ${SLURM_SUBMIT_DIR}/input_grid_short.csv ./input_grid.csv
 elif [ $s_dist == 1 ]
 then
 cp ${SLURM_SUBMIT_DIR}/input_grid_short.csv ./input_grid.csv
@@ -57,7 +60,9 @@ mkdir data
 python3 input.py > python.out
 export OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK}
 
-cp ./dusty_tails_KIC1255b.in dusty_tails.in
+#cp ./dusty_tails_KIC1255b.in dusty_tails.in
+cp ./dusty_tails_KIC1255b_tauc.in dusty_tails.in
+#cp ./dusty_tails_KIC1255b_R300_t50_p500.in dusty_tails.in
 
 input_file='input.txt'
 n=1
@@ -95,7 +100,7 @@ then
 
 if [ $s_dist == 1 ]
 then
-input_dir=/lustre/astro/bmce/Dusty_Tails/simulations/${directory}/sdist_1.75_mdot${mdot}_${geom_s}_t${tprevious}
+input_dir=/lustre/astro/bmce/Dusty_Tails/simulations/${directory}/sdist_mu${mu}_sigma${sigma}_mdot${mdot}_${geom_s}_t${tprevious}
 elif [ $s_dist == 0 ]
 then
 input_dir=/lustre/astro/bmce/Dusty_Tails/simulations/${directory}/${p_orbit}/s${s_0}_mdot${mdot}_${geom_s}_t${tprevious}
@@ -110,7 +115,7 @@ then
 id_dir=/lustre/astro/bmce/Dusty_Tails/simulations/${directory}/${orbit}/s${s_0}_mdot${mdot}_${geom_s}_t${tinit}
 elif [ $s_dist == 1 ]
 then
-id_dir=/lustre/astro/bmce/Dusty_Tails/simulations/${directory}/sdist_1.75_mdot${mdot}_${geom_s}_t${tinit}
+id_dir=/lustre/astro/bmce/Dusty_Tails/simulations/${directory}/sdist_mu${mu}_sigma${sigma}_mdot${mdot}_${geom_s}_t${tinit}             
 fi
 
 echo ${id_dir}
@@ -119,13 +124,16 @@ mkdir -p ${id_dir}
 
 time ./executables/dusty_tails.exe > run.out
 
+#time ./executables/dusty_tails_R200_T30_P400.exe > run.out
+
 
 mv ./data/output.bin        ${id_dir}/output_struct.bin
 mv ./data/output_final.bin  ${id_dir}/output_final_struct.bin
 mv ./data/light_curve.bin   ${id_dir}/light_curve.bin
+mv ./data/tau_data.bin      ${id_dir}/tau_data.bin
 mv gmon.out                 ${id_dir}/gmon.out
 mv id.txt                   ${id_dir}/id.txt
-mv run.out                 ${id_dir}/runlog.out
+mv run.out                  ${id_dir}/runlog.out
 
 cd ${SLURM_SUBMIT_DIR}
 rm -rf ${SCRATCH_DIRECTORY}
